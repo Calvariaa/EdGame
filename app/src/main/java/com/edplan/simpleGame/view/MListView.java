@@ -32,8 +32,8 @@ public class MListView extends MViewGroup
 		// TODO: Implement this method
 		super.draw(canvas);
 		canvas.save();
-		canvas.clipRect(basePoint.x,basePoint.y,basePoint.x+getWidth(),basePoint.y+getHeight());
-		canvas.translate(basePoint.x,basePoint.y);
+		//canvas.clipRect(basePoint.x,basePoint.y,basePoint.x+getWidth(),basePoint.y+getHeight());
+		//canvas.translate(basePoint.x,basePoint.y);
 		measurer.measure(this);
 		for(BaseWidget w:children){
 			if(w.basePoint.y>getHeight()){
@@ -57,9 +57,14 @@ public class MListView extends MViewGroup
 		boolean mc=measurer.catchPointer(p);
 		//分发给child
 		
+		Pointer cp=p.clonePointer();
+		cp.transform(basePoint.x,basePoint.y);
+		
 		for(int i=children.size()-1;i>=0;i--){
-			if(children.get(i).ifVisible()&&children.get(i).catchPointer(p)){
+			if(children.get(i).ifVisible()&&children.get(i).catchPointer(cp)){
+				p.registClone(cp);
 				mc=mc||true;
+				//Log.v("pointer","chil catch "+p.getId());
 				break;
 			}
 		}
@@ -127,12 +132,59 @@ public class MListView extends MViewGroup
 		@Override
 		public boolean catchPointer(Pointer p){
 			// TODO: Implement this method
-			if(true)return false;
 			if(inWidget(p.getX(),p.getY())){
 				if(cp==null){
 					cp=p;
 					lastPosition=p.getY();
 					firstPosition=p.getY();
+					cp.addCallback(new Pointer.Callback(){
+
+							@Override
+							public void onMove(Pointer p){
+								// TODO: Implement this method
+								if(draging){
+									position-=p.getY()-lastPosition;
+									if(latestRecode!=0){
+										scrollSpeed=(lastPosition-p.getY())/(System.currentTimeMillis()-latestRecode+1)*1000;
+										latestRecode=System.currentTimeMillis();
+									}else{
+										latestRecode=System.currentTimeMillis();
+									}
+									lastPosition=p.getY();
+								}else{
+									if(Math.abs(p.getY()-firstPosition)>BaseDatas.dpToPixel(2)){
+										draging=true;
+										lastPosition=p.getY();
+									}
+								}
+							}
+
+							@Override
+							public void onUp(Pointer p){
+								// TODO: Implement this method
+								if(draging){
+									draging=false;
+									latestRecode=0;
+									if(Math.abs(scrollSpeed)>BaseDatas.dpToPixel(0)){
+										autoScolling=true;
+									}
+								}
+								cp=null;
+							}
+							
+							@Override
+							public void onCancel(Pointer p){
+								// TODO: Implement this method
+								if(draging){
+									draging=false;
+									latestRecode=0;
+									if(Math.abs(scrollSpeed)>BaseDatas.dpToPixel(0)){
+										autoScolling=true;
+									}
+								}
+								cp=null;
+							}
+						});
 					return true;
 				}else {
 					return false;
@@ -142,7 +194,9 @@ public class MListView extends MViewGroup
 			}
 		}
 
+		
 		//@Override
+		/*
 		public boolean onTouch(MotionEvent event)
 		{
 			// TODO: Implement this method
@@ -182,7 +236,7 @@ public class MListView extends MViewGroup
 			}
 			
 			return true;
-		}
+		}*/
 		
 		public float getPosition(){
 			return position;

@@ -9,8 +9,8 @@ public class ActorTest extends Actor
 	Paint paint;
 	
 	public ActorTest(){
-		setWidth(100);
-		setHeight(100);
+		setWidth(200);
+		setHeight(200);
 		paint=new Paint();
 		paint.setAntiAlias(true);
 		paint.setARGB(255,80,80,80);
@@ -41,7 +41,7 @@ public class ActorTest extends Actor
 						catch (InterruptedException e)
 						{}
 						move(8*d,0);
-						if(getRight()>500){
+						if(getRight()>700){
 							d=-1;
 						}else if(getLeft()<0){
 							d=1;

@@ -75,10 +75,6 @@ public class BaseWidget extends Drawable
 		return visible;
 	}
 	
-	public void setOnTouchListener(MOnTouchListener l){
-		
-	}
-	
 	public void setBasePoint(float x,float y){
 		basePoint.set(x,y);
 	}
@@ -173,10 +169,6 @@ public class BaseWidget extends Drawable
 	{
 		// TODO: Implement this method
 		return 0;
-	}
-	
-	public interface MOnTouchListener{
-		public boolean onTouch(MotionEvent event);
 	}
 	
 	public interface MOnClickListener{

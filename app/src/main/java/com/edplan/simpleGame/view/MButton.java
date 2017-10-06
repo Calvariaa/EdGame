@@ -32,11 +32,11 @@ public class MButton extends BaseWidget
 	public MButton(){
 		paint=new Paint();
 		paint.setAntiAlias(true);
-		paint.setStyle(Paint.Style.FILL_AND_STROKE);
+		paint.setStyle(Paint.Style.FILL);
 		shadowPaint=new Paint();
 		shadowPaint.setColor(0xBB333333);
 		shadowPaint.setAlpha(150);
-		shadowPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+		shadowPaint.setStyle(Paint.Style.FILL);
 		textPaint=new TextPaint();
 		textPaint.setAntiAlias(true);
 		textPaint.setFakeBoldText(true);
@@ -54,9 +54,9 @@ public class MButton extends BaseWidget
 	{
 		// TODO: Implement this method
 		
-		paint.setColor(isTouching()?makeTouchColor():color);
+		paint.setColor(isTouching()?makeTouchColor():makeColor());
 		//textPaint.setColor(makeTextColor());
-		shadowPaint.setAlpha(alpha*(isTouching()?200:140)/200);
+		shadowPaint.setAlpha(alpha*alpha/255*(isTouching()?200:140)/200);
 		drawButton(canvas);
 		drawText(canvas);
 		drawText(canvas);
@@ -74,6 +74,10 @@ public class MButton extends BaseWidget
 		
 	}
 	
+	public void setOnClickListener(MOnClickListener l){
+		onClickListener=l;
+	}
+	
 	public boolean isTouching(){
 		return cPointer!=null;
 	}
@@ -85,6 +89,13 @@ public class MButton extends BaseWidget
 			if(inWidget(p.getX(),p.getY())){
 				cPointer=p;
 				cPointer.addCallback(new Pointer.Callback(){
+
+						@Override
+						public void onCancel(Pointer p){
+							// TODO: Implement this method
+							cPointer=null;
+						}
+
 						@Override
 						public void onMove(Pointer p){
 							// TODO: Implement this method
@@ -121,12 +132,15 @@ public class MButton extends BaseWidget
 	
 	
 	public int makeTextColor(){
-		return Color.argb(Color.alpha(color),Color.blue(color),Color.red(color),Color.green(color));
+		return Color.argb(Color.alpha(color)*alpha/255,Color.blue(color),Color.red(color),Color.green(color));
 	}
 	
+	public int makeColor(){
+		return Color.argb(Color.alpha(color)*alpha/255,Color.red(color),Color.green(color),Color.blue(color));
+	}
 	
 	public int makeTouchColor(){
-		int a=Color.alpha(color);
+		int a=alpha*Color.alpha(color)/255;
 		int r=Color.red(color);
 		int g=Color.green(color);
 		int b=Color.blue(color);

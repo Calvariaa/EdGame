@@ -1,8 +1,9 @@
 package com.edplan.simpleGame.inputs;
 
+import android.util.Log;
 import android.view.MotionEvent;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Pointer{
 
@@ -23,6 +24,12 @@ public class Pointer{
 	public float latestY;
 
 	public List<Callback> callbacks;
+	
+	public List<Pointer> clonedPointers;
+	
+	Pointer(){
+		callbacks=new ArrayList<Callback>();
+	}
 
 	public Pointer(MotionEvent res,int index){
 		acceptEvent(res,index);
@@ -30,23 +37,37 @@ public class Pointer{
 	}
 
 	public boolean acceptEvent(MotionEvent event,int index){
-		action=event.getAction();
+		action=event.getActionMasked();
 		latestRawEvent=event;
 		latestEventIndex=index;
-		latestX=event.getX(index)-transformX;
-		latestY=event.getY(index)-transformY;
-		switch(event.getAction()){
+		latestX=event.getX(index);
+		latestY=event.getY(index);
+		switch(event.getActionMasked()){
 			case MotionEvent.ACTION_DOWN:
+			case MotionEvent.ACTION_POINTER_DOWN:
 				id=event.getPointerId(index);
 				break;
 			case MotionEvent.ACTION_MOVE:
 				callbackMove();
 				break;
 			case MotionEvent.ACTION_UP:
+			case MotionEvent.ACTION_POINTER_UP:
 				callbackUp();
 				break;
+			case MotionEvent.ACTION_CANCEL:
+				callbackCancel();
+				break;
 		}
+		toClonedPointers(event,index);
 		return true;
+	}
+	
+	public void toClonedPointers(MotionEvent e,int index){
+		if(clonedPointers!=null){
+			for(Pointer p:clonedPointers){
+				p.acceptEvent(e,index);
+			}
+		}
 	}
 	
 	private void callbackMove(){
@@ -56,9 +77,32 @@ public class Pointer{
 	}
 	
 	private void callbackUp(){
+		//Log.v("pointer","up "+getId());
 		for(Callback c:callbacks){
 			c.onUp(this);
 		}
+	}
+	
+	private void callbackCancel(){
+		
+	}
+	
+	public Pointer clonePointer(){
+		Pointer p=new Pointer();
+		p.id=getId();
+		p.action=getAction();
+		p.latestEventIndex=getLatestEventIndex();
+		p.latestRawEvent=getEvent();
+		p.latestX=getX();
+		p.latestY=getY();
+		p.transformX=transformX;
+		p.transformY=transformY;
+		return p;
+	}
+	
+	public void registClone(Pointer p){
+		if(clonedPointers==null)clonedPointers=new ArrayList<Pointer>();
+		clonedPointers.add(p);
 	}
 	
 	public void transform(float dx,float dy){
@@ -91,23 +135,26 @@ public class Pointer{
 	}
 
 	public float getX(){
-		return latestX;
+		return latestX-transformX;
 	}
 	
 	public float getY(){
-		return latestY;
+		return latestY-transformY;
 	}
 
 	public void addCallback(Callback callback){
 		this.callbacks.add(callback);
 	}
 	
+	
 	public interface Callback{
 
 		public void onMove(Pointer p);
 
 		public void onUp(Pointer p);
-
+		
+		public void onCancel(Pointer p);
+		
 	}
 	
 	

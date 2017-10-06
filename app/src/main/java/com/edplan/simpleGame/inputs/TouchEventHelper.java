@@ -1,6 +1,7 @@
 package com.edplan.simpleGame.inputs;
+import android.util.Log;
 import android.view.MotionEvent;
-import java.util.List;
+import com.edplan.simpleGame.inputs.Pointer;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -16,10 +17,11 @@ public class TouchEventHelper
 	
 	//返回是否捕捉event
 	public boolean sendEvent(MotionEvent event){
-		switch(event.getAction()){
+		switch(event.getActionMasked()){
 			case MotionEvent.ACTION_DOWN:
-				Pointer p=new Pointer(event,event.getActionIndex());
-				catchedPointer=p;
+			case MotionEvent.ACTION_POINTER_DOWN:
+				Pointer pk=new Pointer(event,event.getActionIndex());
+				catchedPointer=pk;
 				return true;
 			case MotionEvent.ACTION_MOVE:
 				if(postEvent(event)!=null){
@@ -28,6 +30,8 @@ public class TouchEventHelper
 					return false;
 				}
 			case MotionEvent.ACTION_UP:
+			case MotionEvent.ACTION_POINTER_UP:
+			case MotionEvent.ACTION_CANCEL:
 				Pointer pi=postEvent(event);
 				if(pi!=null){
 					removePointer(pi);

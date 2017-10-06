@@ -1,18 +1,23 @@
 package com.edplan.mygame;
 
-import android.app.*;
-import android.os.*;
-import android.graphics.Canvas;
-import com.edplan.simpleGame.view.MButton;
-import android.graphics.Color;
-import android.view.MotionEvent;
-import com.edplan.simpleGame.view.MListView;
+import android.app.Activity;
 import android.content.Context;
-import com.edplan.simpleGame.view.BaseDatas;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.os.Bundle;
 import android.text.TextPaint;
+import android.util.Log;
+import com.edplan.simpleGame.animation.AnimaAdapter;
+import com.edplan.simpleGame.animation.AnimaCallback;
+import com.edplan.simpleGame.animation.MAnimation;
+import com.edplan.simpleGame.animation.interpolator.MaterialInterpolator;
+import com.edplan.simpleGame.view.BaseDatas;
+import com.edplan.simpleGame.view.BaseWidget;
+import com.edplan.simpleGame.view.MButton;
+import com.edplan.simpleGame.view.MListView;
 import com.edplan.simpleGame.view.MStaticViewGroup;
-import com.edplan.simpleGame.view.Stage;
 import com.edplan.simpleGame.view.MTextView;
+import com.edplan.simpleGame.view.Stage;
 
 public class MainActivity extends Activity 
 {
@@ -42,8 +47,18 @@ public class MainActivity extends Activity
 		public MGameSurfaceView(Context c){
 			super(c);
 			mstage.addActor(ac);
-			ac.setBasePoint(0,100);
-			listView.setBasePoint(10,10);
+			mstage.translate(100,-100,0).rotate(70,0,0).applyCamera();
+			mstage.getMatrix().preTranslate(-700,0);
+			mstage.getMatrix().postTranslate(700,0);
+			ac.setBasePoint(0,200);
+			
+			b.text="✪ω✪";
+			b.setWidth(400);
+			b.setHeight(100);
+			b.setCenter(540,0);
+			
+			
+			listView.setBasePoint(100,100);
 			listView.setWidth(500);
 			listView.setHeight(1500);
 			listView.add(createButton());
@@ -87,9 +102,69 @@ public class MainActivity extends Activity
 			tv.setHeight(500);
 			tv.setBasePoint(400,500);
 			
-			msg.add(b);
+			b.setOnClickListener(new BaseWidget.MOnClickListener(){
+				MAnimation anima;
+				@Override
+				public void onClick(BaseWidget view){
+					// TODO: Implement this method
+					if(anima!=null)return;
+					Log.v("anim","creat");
+					anima=new MAnimation();
+					anima.setAdapter(new AnimaAdapter(){
+							float nowP=b.basePoint.y;
+							@Override
+							public void setProgress(float p){
+								// TODO: Implement this method
+								b.setBasePoint(b.basePoint.x,p*400+nowP);
+								b.setAlpha((int)(250*(1-p)+5));
+								Log.v("anim","progress "+p+"|"+(p*600+nowP));
+							}
+						});
+					anima.setInterpolator(new MaterialInterpolator());
+					anima.setDuration(700);
+					anima.setCallback(new AnimaCallback(){
+							long startTime;
+							@Override
+							public void onEnd(){
+								// TODO: Implement this method
+								anima=null;
+								Log.v("anim","end in "+(System.currentTimeMillis()-startTime)+"ms");
+							}
+
+							@Override
+							public void onStart(){
+								// TODO: Implement this method
+								Log.v("anim","start");
+								startTime=System.currentTimeMillis();
+							}
+
+							@Override
+							public void onProgress(float p){
+								// TODO: Implement this method
+								
+							}
+
+							@Override
+							public void onFinish(){
+								// TODO: Implement this method
+								Log.v("anim","finish");
+							}
+
+							@Override
+							public void onStop(float p){
+								// TODO: Implement this method
+							}
+						});
+					anima.start();
+				}
+			});
+			
+			
 			msg.add(listView);
 			msg.add(tv);
+			msg.add(b);
+			
+			this.setContent(msg);
 		}
 		
 		public MButton createButton(){
@@ -103,11 +178,14 @@ public class MainActivity extends Activity
 			return b;
 		}
 
-
+		/*
 		@Override
 		public boolean onTouchEvent(MotionEvent event){
-			return listView.onTouch(event)||b.onTouch(event);
-		}
+			
+			
+			
+			return msg.onTouch(event);
+		}*/
 
 
 		@Override
@@ -119,10 +197,6 @@ public class MainActivity extends Activity
 			//a+=5;
 			
 			//listView.draw(c);
-			b.text="✪ω✪";
-			b.setWidth(400);
-			b.setHeight(100);
-			b.setCenter(c.getWidth()/2,c.getHeight()/2+a);
 			
 			//c.save();
 			//b.draw(b.clipCanvasToThis(c));

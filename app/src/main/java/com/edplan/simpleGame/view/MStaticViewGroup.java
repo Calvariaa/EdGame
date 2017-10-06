@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import com.edplan.simpleGame.utils.TouchUtils;
 import com.edplan.simpleGame.inputs.TouchEventHelper;
 import com.edplan.simpleGame.inputs.Pointer;
+import android.util.Log;
 
 public class MStaticViewGroup extends MViewGroup
 {
@@ -55,7 +56,16 @@ public class MStaticViewGroup extends MViewGroup
 	@Override
 	public boolean catchPointer(Pointer p){
 		// TODO: Implement this method
-		
+		BaseWidget w;
+		for(int i=children.size()-1;i>=0;i--){
+			w=children.get(i);
+			if(w.ifVisible()){
+				if(w.catchPointer(p)){
+					touchHelper.catchPointer(p);
+					return true;
+				}
+			}
+		}
 		return super.catchPointer(p);
 	}
 
@@ -66,11 +76,16 @@ public class MStaticViewGroup extends MViewGroup
 		if(touchHelper.sendEvent(event)){
 			//已被捕捉或直接发送给了pointer
 			Pointer p=touchHelper.getCatchedPointer();
+			//Log.v("pointer","测试新点");
 			if(p!=null){
-				for(BaseWidget w:children){
+				//Log.v("pointer","获取新点 "+p.getX()+"|"+p.getY());
+				BaseWidget w;
+				for(int i=children.size()-1;i>=0;i--){
+					w=children.get(i);
 					if(w.ifVisible()){
 						if(w.catchPointer(p)){
 							touchHelper.catchPointer(p);
+							break;
 						}
 					}
 				}

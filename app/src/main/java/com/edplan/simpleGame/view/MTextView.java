@@ -13,11 +13,16 @@ public class MTextView extends BaseWidget{
 	public TextPaint textPaint;
 	
 	public MTextView(){
+		this("");
+	}
+	
+	public MTextView(String _text){
+		text=_text;
 		textPaint=new TextPaint();
 		textPaint.setAntiAlias(true);
 		textPaint.setTextSize(50);
 		textPaint.setARGB(255,80,80,80);
-		textLayout=buildTextLayout();
+		update();
 		setClipCanvas(true);
 		setHeight(100);
 		setWidth(100);
@@ -27,6 +32,10 @@ public class MTextView extends BaseWidget{
 	public void setWidth(float textWidth){
 		super.setWidth(textWidth);
 		this.textWidth=textWidth;
+		update();
+	}
+	
+	public void update(){
 		textLayout=buildTextLayout();
 	}
 
@@ -36,7 +45,7 @@ public class MTextView extends BaseWidget{
 
 	public void setAlignment(Layout.Alignment alignment){
 		this.alignment=alignment;
-		textLayout=buildTextLayout();
+		update();
 	}
 
 	public Layout.Alignment getAlignment(){
@@ -45,7 +54,7 @@ public class MTextView extends BaseWidget{
 
 	public void setTextPaint(TextPaint textPaint){
 		this.textPaint=textPaint;
-		textLayout=buildTextLayout();
+		update();
 	}
 
 	public TextPaint getTextPaint(){
