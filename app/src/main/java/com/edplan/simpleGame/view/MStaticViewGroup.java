@@ -25,9 +25,9 @@ public class MStaticViewGroup extends MViewGroup
 		super.draw(canvas);
 		canvas.save();
 		
-		if(getHeight()!=0&&getWidth()!=0){
-			clipCanvasToThis(canvas);
-		}
+		//if(getHeight()!=0&&getWidth()!=0){
+		//	clipCanvasToThis(canvas);
+		//}
 		
 		for(BaseWidget w:children){
 			if(w.ifVisible()){
@@ -47,20 +47,25 @@ public class MStaticViewGroup extends MViewGroup
 	
 	
 	@Override
-	public void add(BaseWidget w)
+	public MStaticViewGroup add(BaseWidget w)
 	{
 		// TODO: Implement this method
+		super.add(w);
 		children.add(w);
+		return this;
 	}
 
 	@Override
 	public boolean catchPointer(Pointer p){
 		// TODO: Implement this method
 		BaseWidget w;
+		Pointer cp=p.clonePointer();
+		cp.transform(basePoint.x,basePoint.y);
 		for(int i=children.size()-1;i>=0;i--){
 			w=children.get(i);
 			if(w.ifVisible()){
-				if(w.catchPointer(p)){
+				if(w.catchPointer(cp)){
+					p.registClone(cp);
 					touchHelper.catchPointer(p);
 					return true;
 				}

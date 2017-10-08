@@ -4,6 +4,7 @@ import android.view.MotionEvent;
 import com.edplan.simpleGame.inputs.Pointer;
 import java.util.Map;
 import java.util.TreeMap;
+import com.edplan.simpleGame.utils.TouchUtils;
 
 public class TouchEventHelper
 {
@@ -31,7 +32,6 @@ public class TouchEventHelper
 				}
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_POINTER_UP:
-			case MotionEvent.ACTION_CANCEL:
 				Pointer pi=postEvent(event);
 				if(pi!=null){
 					removePointer(pi);
@@ -39,16 +39,36 @@ public class TouchEventHelper
 				}else{
 					return false;
 				}
-			default:return false;
+			case MotionEvent.ACTION_CANCEL:
+				postEvent(event);
+				pointers.clear();
+				return true;
+			default:
+				postEvent(event);
+				return false;
 		}
 	}
 	
 	private Pointer postEvent(MotionEvent e){
-		Pointer p=pointers.get(getCurrentId(e));
-		if(p!=null){
-			p.acceptEvent(e,e.getActionIndex());
+		
+		switch(e.getActionMasked()){
+			case MotionEvent.ACTION_MOVE:
+			case MotionEvent.ACTION_CANCEL:
+				Pointer pt=null;
+				for(Map.Entry<Integer,Pointer> entry:pointers.entrySet()){
+					if(entry.getValue().acceptEvent(e)){
+						pt=entry.getValue();
+					}
+					//, TouchUtils.indexOfId(pointers.get(i).getId(),e));
+				}
+				return pt;
+			default:
+				Pointer p=pointers.get(getCurrentId(e));
+				if(p!=null){
+					p.acceptEvent(e,e.getActionIndex());
+				}
+				return p;
 		}
-		return p;
 	}
 	
 	

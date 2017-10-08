@@ -7,8 +7,9 @@ import android.graphics.ColorFilter;
 import android.graphics.Canvas;
 import com.edplan.simpleGame.inputs.Pointer;
 
-public class BaseWidget extends Drawable
+public class BaseWidget implements MDrawable
 {
+	public MViewGroup parent;
 	
 	public PointF basePoint;
 	public float height;
@@ -18,6 +19,8 @@ public class BaseWidget extends Drawable
 	
 	public boolean clipCanvas=true;
 	public boolean clipTouch=false;
+	
+	public MOnSizedListener sizedListener;
 	
 	public BaseWidget(){
 		basePoint=new PointF(0,0);
@@ -40,14 +43,33 @@ public class BaseWidget extends Drawable
 		width=w;
 		height=h;
 	}
+
+	public BaseWidget setParent(MViewGroup parent){
+		this.parent=parent;
+		return this;
+	}
+
+	public MViewGroup getParent(){
+		return parent;
+	}
+
+	public BaseWidget setSizedListener(MOnSizedListener sizedListener){
+		this.sizedListener=sizedListener;
+		return this;
+	}
+
+	public MOnSizedListener getSizedListener(){
+		return sizedListener;
+	}
 	
 	public boolean catchPointer(Pointer p){
 		return false;
 	}
 
-	public void setClipTouch(boolean clipTouch)
+	public BaseWidget setClipTouch(boolean clipTouch)
 	{
 		this.clipTouch = clipTouch;
+		return this;
 	}
 
 	public boolean isClipTouch()
@@ -55,9 +77,10 @@ public class BaseWidget extends Drawable
 		return clipTouch;
 	}
 
-	public void setClipCanvas(boolean clipCanvas)
+	public BaseWidget setClipCanvas(boolean clipCanvas)
 	{
 		this.clipCanvas = clipCanvas;
+		return this;
 	}
 
 	public boolean isClipCanvas()
@@ -65,9 +88,10 @@ public class BaseWidget extends Drawable
 		return clipCanvas;
 	}
 
-	public void setVisible(boolean visible)
+	public BaseWidget setVisible(boolean visible)
 	{
 		this.visible = visible;
+		return this;
 	}
 
 	public boolean ifVisible()
@@ -75,29 +99,35 @@ public class BaseWidget extends Drawable
 		return visible;
 	}
 	
-	public void setBasePoint(float x,float y){
+	public BaseWidget setBasePoint(float x,float y){
 		basePoint.set(x,y);
+		return this;
 	}
 	
-	public void setCenter(float x,float y){
+	public BaseWidget setCenter(float x,float y){
 		setBasePoint(x-getWidth()/2,y-getHeight()/2);
+		return this;
 	}
 	
-	public void setCenterX(float x){
+	public BaseWidget setCenterX(float x){
 		setBasePoint(x-getWidth()/2,basePoint.y);
+		return this;
 	}
 	
-	public void setCenterY(float y){
+	public BaseWidget setCenterY(float y){
 		setBasePoint(basePoint.x,y-getHeight()/2);
+		return this;
 	}
 	
-	public void setBottom(float y){
+	public BaseWidget setBottom(float y){
 		setBasePoint(basePoint.x,y-getHeight());
+		return this;
 	}
 	
-	public void setHeight(float height)
+	public BaseWidget setHeight(float height)
 	{
 		this.height = height;
+		return this;
 	}
 
 	public float getHeight()
@@ -105,14 +135,21 @@ public class BaseWidget extends Drawable
 		return height;
 	}
 
-	public void setWidth(float width)
+	public BaseWidget setWidth(float width)
 	{
 		this.width = width;
+		return this;
 	}
 
 	public float getWidth()
 	{
 		return width;
+	}
+	
+	public void sized(float w,float h){
+		setWidth(w);
+		setHeight(h);
+		if(sizedListener!=null)sizedListener.onSized(this,w,h);
 	}
 	
 	public float getTop(){
@@ -131,6 +168,14 @@ public class BaseWidget extends Drawable
 		return basePoint.x+getWidth();
 	}
 	
+	public float getCenterY(){
+		return getTop()+getHeight()/2;
+	}
+	
+	public float getCenterX(){
+		return getLeft()+getWidth()/2;
+	}
+	
 	public boolean onTouch(MotionEvent event){
 		return false;
 	}
@@ -141,7 +186,7 @@ public class BaseWidget extends Drawable
 	}
 	
 	public Canvas clipCanvasToThis(Canvas c){
-		c.clipRect(getLeft(),getTop(),getRight(),getBottom());
+		if(c.getWidth()!=0&&c.getHeight()!=0)c.clipRect(getLeft(),getTop(),getRight(),getBottom());
 		c.translate(basePoint.x,basePoint.y);
 		return c;
 	}
@@ -153,15 +198,17 @@ public class BaseWidget extends Drawable
 	}
 
 	@Override
-	public void setAlpha(int a)
+	public BaseWidget setAlpha(int a)
 	{
 		// TODO: Implement this method
+		return this;
 	}
 
 	@Override
-	public void setColorFilter(ColorFilter p1)
+	public BaseWidget setColorFilter(ColorFilter p1)
 	{
 		// TODO: Implement this method
+		return this;
 	}
 
 	@Override
@@ -169,6 +216,10 @@ public class BaseWidget extends Drawable
 	{
 		// TODO: Implement this method
 		return 0;
+	}
+	
+	public interface MOnSizedListener{
+		public void onSized(BaseWidget widget,float w,float h);
 	}
 	
 	public interface MOnClickListener{

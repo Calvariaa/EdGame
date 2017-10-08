@@ -10,6 +10,7 @@ import android.view.SurfaceView;
 import com.edplan.simpleGame.inputs.Pointer;
 import com.edplan.simpleGame.view.BaseWidget;
 import com.edplan.simpleGame.inputs.TouchEventHelper;
+import com.edplan.simpleGame.GameStatic;
 
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback
 {
@@ -19,6 +20,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 	SurfaceHolder mHolder;
 	DrawThread mDrawThread;
 	Canvas mCanvas;
+	
+	public int clearColor=0xFFFFFFFF;
 	
 	TouchEventHelper touchHelper;
 	
@@ -34,8 +37,17 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		initial();
 	}
 
+	public void setClearColor(int clearColor){
+		this.clearColor=clearColor;
+	}
+
+	public int getClearColor(){
+		return clearColor;
+	}
+
 	public void setSurfaceWidth(int surfaceWidth){
 		this.surfaceWidth=surfaceWidth;
+		content.setWidth(getSurfaceWidth());
 	}
 
 	public int getSurfaceWidth(){
@@ -44,6 +56,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
 	public void setSurfaceHeight(int surfaceHeight){
 		this.surfaceHeight=surfaceHeight;
+		content.setHeight(getSurfaceHeight());
 	}
 
 	public int getSurfaceHeight(){
@@ -65,8 +78,13 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		touchHelper=new TouchEventHelper();
 	}
 	
+	public void setFlag(DrawThread.Flag flag){
+		mDrawThread.setFlag(flag);
+	}
+	
 	public void mDraw(Canvas c){
-		
+		c.drawColor(getClearColor());
+		content.draw(c);
 	}
 
 	@Override
@@ -91,16 +109,17 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 	{
 		// TODO: Implement this method
 		mDrawThread.start();
-		Log.v("surface","created");
+		//Log.v("surface","created");
 	}
 
 	@Override
 	public void surfaceChanged(SurfaceHolder p1, int f, int w, int h)
 	{
 		// TODO: Implement this method
-		Log.v("surface","changed "+f+"|"+w+"|"+h);
+		//Log.v("surface","changed "+f+"|"+w+"|"+h);
 		setSurfaceWidth(w);
 		setSurfaceHeight(h);
+		content.sized(w,h);
 	}
 
 	@Override
@@ -127,6 +146,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 			running=false;
 		}
 		
+		long latestTime=0;
 		long t;
 		@Override
 		public void run()
@@ -141,20 +161,33 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 					}
 					catch (InterruptedException e)
 					{}
+					latestTime=System.currentTimeMillis();
 				}else{
 					//正式绘图
 					t=System.currentTimeMillis();
+					if(latestTime==0){
+						GameStatic.setDrawDeltaTime(0);
+					}else{
+						GameStatic.setDrawDeltaTime((int)(System.currentTimeMillis()-latestTime));
+					}
+					latestTime=System.currentTimeMillis();
 					draw();
 					if(System.currentTimeMillis()-t<4){
 						try
 						{
-							sleep(4);
+							sleep(2);
 						}
 						catch (InterruptedException e)
 						{}
 					}else{
-						if(System.currentTimeMillis()-t>30){
+						int dt=(int)(System.currentTimeMillis()-t);
+						if(dt>30){
 							Log.w("m_render","render cost time : "+(System.currentTimeMillis()-t));
+						}else if(dt<14){
+							//try{
+							//	sleep(14-dt);
+							//}
+							//catch(InterruptedException e){}
 						}
 					}
 				}

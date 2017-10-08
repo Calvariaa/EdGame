@@ -31,6 +31,14 @@ public class Stage extends BaseWidget
 		stageCamera=new Camera();
 		setClipCanvas(false);
 	}
+
+	public void setBackground(Background background){
+		this.background=background;
+	}
+
+	public Background getBackground(){
+		return background;
+	}
 	
 	public synchronized void addActor(Actor ac){
 		actors.add(ac);

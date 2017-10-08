@@ -14,7 +14,7 @@ public class ActorTest extends Actor
 		paint=new Paint();
 		paint.setAntiAlias(true);
 		paint.setARGB(255,80,80,80);
-		operater=new OperaterTest();
+		//operater=new OperaterTest();
 	}
 
 	@Override

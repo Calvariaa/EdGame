@@ -3,6 +3,7 @@ import android.graphics.Canvas;
 import android.text.TextPaint;
 import android.text.StaticLayout;
 import android.text.Layout;
+import android.util.Log;
 
 public class MTextView extends BaseWidget{
 	
@@ -29,10 +30,15 @@ public class MTextView extends BaseWidget{
 	}
 
 	@Override
-	public void setWidth(float textWidth){
+	public MTextView setWidth(float textWidth){
 		super.setWidth(textWidth);
 		this.textWidth=textWidth;
 		update();
+		return this;
+	}
+	
+	public float neededHeight(){
+		return textLayout.getHeight();
 	}
 	
 	public void update(){
@@ -67,10 +73,11 @@ public class MTextView extends BaseWidget{
 			getTextPaint(),
 			(int)getTextWidth(),
 			getAlignment(),
-			1.2f,
+			1.02f,
 			0,
 			false
 		);
+		Log.v("test",s.getHeight()+"");
 		return s;
 	}
 

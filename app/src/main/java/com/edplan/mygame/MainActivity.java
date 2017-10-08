@@ -18,9 +18,19 @@ import com.edplan.simpleGame.view.MListView;
 import com.edplan.simpleGame.view.MStaticViewGroup;
 import com.edplan.simpleGame.view.MTextView;
 import com.edplan.simpleGame.view.Stage;
+import com.edplan.simpleGame.view.Game.Background;
+import android.graphics.Paint;
+import android.graphics.Camera;
+import android.graphics.Matrix;
+import android.graphics.Bitmap;
+import com.edplan.simpleGame.view.MProgressBar;
+import com.edplan.simpleGame.view.advance.widget.OsuTriangleField;
+import com.edplan.simpleGame.view.advance.widget.OsuTriangleManager;
+import com.edplan.simpleGame.view.advance.widget.OsuBaseTriangleManager;
 
 public class MainActivity extends Activity 
 {
+	GameSurfaceView gsv;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -28,9 +38,39 @@ public class MainActivity extends Activity
 		
 		BaseDatas.initial(this);
 		
-		GameSurfaceView gsv=new MGameSurfaceView(this);
+		gsv=new MGameSurfaceView(this);
         setContentView(gsv);
+		gsv.setFlag(GameSurfaceView.DrawThread.Flag.Drawing);
     }
+
+	@Override
+	protected void onPause(){
+		// TODO: Implement this method
+		super.onPause();
+		gsv.setFlag(GameSurfaceView.DrawThread.Flag.Waiting);
+	}
+
+	@Override
+	protected void onStop(){
+		// TODO: Implement this method
+		super.onStop();
+		gsv.setFlag(GameSurfaceView.DrawThread.Flag.Stopped);
+	}
+
+	@Override
+	protected void onResume(){
+		// TODO: Implement this method
+		super.onResume();
+		gsv.setFlag(GameSurfaceView.DrawThread.Flag.Drawing);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public class MGameSurfaceView extends GameSurfaceView{
 		
@@ -40,19 +80,58 @@ public class MainActivity extends Activity
 		
 		MButton b=new MButton();
 		MListView listView=new MListView();
+		MProgressBar pb=new MProgressBar();
 		Stage mstage=new Stage();
 		ActorTest ac=new ActorTest();
 		MTextView tv=new MTextView();
 		
+		
+		Bitmap testBitmap;
+		
+		OsuTriangleManager otm=new OsuBaseTriangleManager();
+		OsuTriangleField otf=new OsuTriangleField(otm);
+		
+		
 		public MGameSurfaceView(Context c){
 			super(c);
-			mstage.addActor(ac);
-			mstage.translate(100,-100,0).rotate(70,0,0).applyCamera();
-			mstage.getMatrix().preTranslate(-700,0);
-			mstage.getMatrix().postTranslate(700,0);
-			ac.setBasePoint(0,200);
 			
-			b.text="✪ω✪";
+			testBitmap=Bitmap.createBitmap(200,200,Bitmap.Config.ARGB_8888);
+			
+			Canvas t=new Canvas(testBitmap);
+			
+			t.drawColor(0x00222222);
+			
+			/*
+			Paint p=new Paint();
+
+			p.setStrokeWidth(6);
+			p.setARGB(255,255,30,30);
+			int y=0;
+			while(y<=200){
+				t.drawLine(0,y,200,y,p);
+				y+=20;
+			}
+
+			p.setARGB(255,30,255,30);
+			int x=0;
+			while(x<=200){
+				t.drawLine(x,0,x,200,p);
+				x+=20;
+			}*/
+			
+			
+			camera.translate(100,-900,0);
+			camera.save();
+			
+			pb.setBasePoint(300,1000);
+			
+			mstage.addActor(ac);
+			mstage.translate(0,0,0).rotate(40,0,0).applyCamera();
+			mstage.getMatrix().preTranslate(-540,0);
+			mstage.getMatrix().postTranslate(540,0);
+			ac.setBasePoint(0,0);
+			
+			b.text="🏅";
 			b.setWidth(400);
 			b.setHeight(100);
 			b.setCenter(540,0);
@@ -97,10 +176,11 @@ public class MainActivity extends Activity
 			listView.add(createButton());
 			listView.add(createButton());
 			
-			tv.setText("Edplan !..............*****\nkkkk\nk");
+			tv.setText("Edplan🔮");
 			tv.setWidth(300);
 			tv.setHeight(500);
 			tv.setBasePoint(400,500);
+			
 			
 			b.setOnClickListener(new BaseWidget.MOnClickListener(){
 				MAnimation anima;
@@ -108,7 +188,7 @@ public class MainActivity extends Activity
 				public void onClick(BaseWidget view){
 					// TODO: Implement this method
 					if(anima!=null)return;
-					Log.v("anim","creat");
+					//Log.v("anim","creat");
 					anima=new MAnimation();
 					anima.setAdapter(new AnimaAdapter(){
 							float nowP=b.basePoint.y;
@@ -117,7 +197,7 @@ public class MainActivity extends Activity
 								// TODO: Implement this method
 								b.setBasePoint(b.basePoint.x,p*400+nowP);
 								b.setAlpha((int)(250*(1-p)+5));
-								Log.v("anim","progress "+p+"|"+(p*600+nowP));
+								//Log.v("anim","progress "+p+"|"+(p*600+nowP));
 							}
 						});
 					anima.setInterpolator(new MaterialInterpolator());
@@ -128,13 +208,13 @@ public class MainActivity extends Activity
 							public void onEnd(){
 								// TODO: Implement this method
 								anima=null;
-								Log.v("anim","end in "+(System.currentTimeMillis()-startTime)+"ms");
+								//Log.v("anim","end in "+(System.currentTimeMillis()-startTime)+"ms");
 							}
 
 							@Override
 							public void onStart(){
 								// TODO: Implement this method
-								Log.v("anim","start");
+								//Log.v("anim","start");
 								startTime=System.currentTimeMillis();
 							}
 
@@ -147,7 +227,7 @@ public class MainActivity extends Activity
 							@Override
 							public void onFinish(){
 								// TODO: Implement this method
-								Log.v("anim","finish");
+								//Log.v("anim","finish");
 							}
 
 							@Override
@@ -159,10 +239,54 @@ public class MainActivity extends Activity
 				}
 			});
 			
-			
+			msg.add(otf);
 			msg.add(listView);
 			msg.add(tv);
 			msg.add(b);
+			msg.add(mstage);
+			msg.add(pb); 
+			
+			msg.setSizedListener(new BaseWidget.MOnSizedListener(){
+					@Override
+					public void onSized(BaseWidget widget, float w, float h){
+						// TODO: Implement this method
+						otf.setWidth(w);
+						otf.setHeight(h);
+						if(otm.getTriangles().size()<100)for(int i=0;i<50;i++){
+							otm.add();
+						}
+					}
+				});
+			
+			Background background=new Background(mstage){
+				@Override
+				public void drawBackground(Canvas c){
+					Paint p=new Paint();
+					p.setAntiAlias(true);
+					p.setStrokeWidth(6);
+					p.setARGB(255,255,30,30);
+					/*
+					
+					int y=0;
+					while(y<2000){
+						c.drawLine(0,y,2000,y,p);
+						y+=100;
+					}
+
+					p.setARGB(255,30,255,30);
+					int x=0;
+					while(x<2000){
+						c.drawLine(x,0,x,2000,p);
+						x+=100;
+					}
+					*/
+					
+					//c.drawBitmap(testBitmap,0,0,p);
+					
+				}
+			};
+			
+			mstage.setBackground(background);
 			
 			this.setContent(msg);
 		}
@@ -186,8 +310,12 @@ public class MainActivity extends Activity
 			
 			return msg.onTouch(event);
 		}*/
-
-
+		
+		
+		Camera camera=new Camera();
+		Matrix matrix=new Matrix();
+		float deg=0;
+		
 		@Override
 		public void mDraw(Canvas c){
 			
@@ -204,9 +332,81 @@ public class MainActivity extends Activity
 			
 			msg.draw(c);
 			
-			mstage.draw(c);
+			//mstage.draw(c);
 			
 			//ac.draw(c);
+			
+			camera.save();
+			c.save();
+			deg+=1;
+			camera.translate(540,-900,0);
+			camera.rotate(deg,0,0);
+			camera.getMatrix(matrix);
+			//matrix.preTranslate(540,990);
+			//matrix.postTranslate(-540,-990);
+			c.setMatrix(matrix);
+			
+			
+			
+			Paint px=new Paint();
+
+			px.setStrokeWidth(6);
+			px.setARGB(255,30,30,255);
+			
+			c.drawBitmap(testBitmap,-100,-100,px);
+			
+			/*
+			float deg=0;
+			
+			while(deg<90){
+				deg+=10;
+				camera.save();
+				camera.rotate(deg,0,0);
+				matrix.reset();
+				camera.getMatrix(matrix);
+				matrix.preTranslate(-540,0);
+				matrix.postTranslate(540,0);
+				c.setMatrix(matrix);
+				c.drawLine(0,0,0,200,px);
+				camera.restore();
+			}
+			
+			camera.save();
+			
+			int x=0;
+			while(x<1080){
+				x+=40;
+				camera.rotate(3,0,0);
+				matrix.reset();
+				camera.getMatrix(matrix);
+				matrix.preTranslate(-540,0);
+				matrix.postTranslate(540,0);
+				c.setMatrix(matrix);
+				//if(x<1000)continue;
+				//c.drawLine(x,0,x,1000,px);
+				c.drawRect(x,0,x+5,100,px);
+			}
+			camera.restore();
+			x=0;
+			while(x<1080){
+				x+=40;
+				camera.rotate(1,0,0);
+				matrix.reset();
+				camera.getMatrix(matrix);
+				matrix.preTranslate(-540,0);
+				matrix.postTranslate(540,0);
+				c.setMatrix(matrix);
+				//if(x<1000)continue;
+				//c.drawLine(x,0,x,1000,px);
+				c.drawRect(x,0,x+5,5000,px);
+			}*/
+			
+			
+			
+			c.restore();
+			camera.restore();
+			
+			
 			
 			TextPaint p=new TextPaint();
 			p.setARGB(255,0,0,0);

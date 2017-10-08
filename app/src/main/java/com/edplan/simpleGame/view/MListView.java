@@ -20,10 +20,12 @@ public class MListView extends MViewGroup
 	
 	//添加的child的basepoint约等于无效
 	@Override
-	public void add(BaseWidget w)
+	public MListView add(BaseWidget w)
 	{
 		// TODO: Implement this method
+		super.add(w);
 		children.add(w);
+		return this;
 	}
 
 	@Override
@@ -140,12 +142,24 @@ public class MListView extends MViewGroup
 					cp.addCallback(new Pointer.Callback(){
 
 							@Override
+							public void onEnd(Pointer p){
+								// TODO: Implement this method
+								cp=null;
+							}
+
+
+							@Override
 							public void onMove(Pointer p){
 								// TODO: Implement this method
 								if(draging){
 									position-=p.getY()-lastPosition;
 									if(latestRecode!=0){
+										//if(autoScolling){
+										//	scrollSpeed+=(lastPosition-p.getY())/(System.currentTimeMillis()-latestRecode+1)*1000*0.5f;
+										//}else{
 										scrollSpeed=(lastPosition-p.getY())/(System.currentTimeMillis()-latestRecode+1)*1000;
+										//}
+										
 										latestRecode=System.currentTimeMillis();
 									}else{
 										latestRecode=System.currentTimeMillis();
@@ -169,20 +183,13 @@ public class MListView extends MViewGroup
 										autoScolling=true;
 									}
 								}
-								cp=null;
+								
 							}
 							
 							@Override
 							public void onCancel(Pointer p){
 								// TODO: Implement this method
-								if(draging){
-									draging=false;
-									latestRecode=0;
-									if(Math.abs(scrollSpeed)>BaseDatas.dpToPixel(0)){
-										autoScolling=true;
-									}
-								}
-								cp=null;
+								
 							}
 						});
 					return true;
@@ -298,7 +305,7 @@ public class MListView extends MViewGroup
 			if(autoScolling){
 				if(latestMeasure!=0){
 					position+=scrollSpeed*(System.currentTimeMillis()-latestMeasure+1f)/1000;
-					scrollSpeed=scrollSpeed*(float)Math.pow(0.3,(System.currentTimeMillis()-latestMeasure+1f)/1000);
+					scrollSpeed=scrollSpeed*(float)Math.pow(0.5,(System.currentTimeMillis()-latestMeasure+1f)/1000);
 					latestMeasure=System.currentTimeMillis();
 					if(Math.abs(scrollSpeed)<BaseDatas.dpToPixel(1)){
 						scrollSpeed=0;

@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import java.util.ArrayList;
 import java.util.List;
+import com.edplan.simpleGame.utils.TouchUtils;
 
 public class Pointer{
 
@@ -35,6 +36,15 @@ public class Pointer{
 		acceptEvent(res,index);
 		callbacks=new ArrayList<Callback>();
 	}
+	
+	public boolean acceptEvent(MotionEvent event){
+		int index=TouchUtils.indexOfId(getId(),event);
+		if(index!=-1){
+			return acceptEvent(event,index);
+		}else{
+			return false;
+		}
+	}
 
 	public boolean acceptEvent(MotionEvent event,int index){
 		action=event.getActionMasked();
@@ -53,9 +63,11 @@ public class Pointer{
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_POINTER_UP:
 				callbackUp();
+				callbackEnd();
 				break;
 			case MotionEvent.ACTION_CANCEL:
 				callbackCancel();
+				callbackEnd();
 				break;
 		}
 		toClonedPointers(event,index);
@@ -84,7 +96,15 @@ public class Pointer{
 	}
 	
 	private void callbackCancel(){
-		
+		for(Callback c:callbacks){
+			c.onCancel(this);
+		}
+	}
+	
+	private void callbackEnd(){
+		for(Callback c:callbacks){
+			c.onEnd(this);
+		}
 	}
 	
 	public Pointer clonePointer(){
@@ -154,6 +174,8 @@ public class Pointer{
 		public void onUp(Pointer p);
 		
 		public void onCancel(Pointer p);
+		
+		public void onEnd(Pointer p);
 		
 	}
 	
