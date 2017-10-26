@@ -1,8 +1,8 @@
 package com.edplan.simpleGame.view;
 import android.graphics.Canvas;
-import android.text.TextPaint;
-import android.text.StaticLayout;
 import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.Log;
 
 public class MTextView extends BaseWidget{
@@ -29,11 +29,23 @@ public class MTextView extends BaseWidget{
 		setWidth(100);
 	}
 
+	public void setTextLayout(StaticLayout textLayout){
+		this.textLayout=textLayout;
+	}
+
+	public StaticLayout getTextLayout(){
+		return textLayout;
+	}
+	
+	public MTextView setTextColor(int color){
+		getTextPaint().setColor(color);
+		return this;
+	}
+
 	@Override
 	public MTextView setWidth(float textWidth){
 		super.setWidth(textWidth);
 		this.textWidth=textWidth;
-		update();
 		return this;
 	}
 	
@@ -51,7 +63,6 @@ public class MTextView extends BaseWidget{
 
 	public void setAlignment(Layout.Alignment alignment){
 		this.alignment=alignment;
-		update();
 	}
 
 	public Layout.Alignment getAlignment(){
@@ -60,7 +71,6 @@ public class MTextView extends BaseWidget{
 
 	public void setTextPaint(TextPaint textPaint){
 		this.textPaint=textPaint;
-		update();
 	}
 
 	public TextPaint getTextPaint(){
@@ -73,11 +83,11 @@ public class MTextView extends BaseWidget{
 			getTextPaint(),
 			(int)getTextWidth(),
 			getAlignment(),
-			1.02f,
+			1.01f,
 			0,
 			false
 		);
-		Log.v("test",s.getHeight()+"");
+		//Log.v("test",s.getHeight()+"");
 		return s;
 	}
 
@@ -88,9 +98,10 @@ public class MTextView extends BaseWidget{
 		textLayout.draw(canvas);
 	}
 	
-	public void setText(String text){
+	public MTextView setText(String text){
 		this.text=text;
 		textLayout=buildTextLayout();
+		return this;
 	}
 
 	public String getText(){

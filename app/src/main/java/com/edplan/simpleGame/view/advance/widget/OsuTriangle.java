@@ -47,6 +47,7 @@ public class OsuTriangle
 		p.lineTo(t.getRight(),t.getBottom());
 		p.lineTo(t.getLeft(),t.getBottom());
 		p.close();
+		
 		return p;
 	}
 	

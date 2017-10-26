@@ -37,6 +37,18 @@ public class Pointer{
 		callbacks=new ArrayList<Callback>();
 	}
 	
+	public void cancelChildren(){
+		if(clonedPointers!=null)
+		{
+			for(Pointer p:clonedPointers){
+				p.cancelChildren();
+			}
+			clonedPointers.clear();
+		}
+		accepAction(MotionEvent.ACTION_CANCEL,-1,null);
+		
+	}
+	
 	public boolean acceptEvent(MotionEvent event){
 		int index=TouchUtils.indexOfId(getId(),event);
 		if(index!=-1){
@@ -52,10 +64,20 @@ public class Pointer{
 		latestEventIndex=index;
 		latestX=event.getX(index);
 		latestY=event.getY(index);
-		switch(event.getActionMasked()){
+		accepAction(event.getActionMasked(),index,event);
+		toClonedPointers(event,index);
+		return true;
+	}
+	
+	public void acceptEvent(int a){
+		accepAction(a,-1,null);
+	}
+	
+	public void accepAction(int actionWrapped,int index,MotionEvent e){
+		switch(actionWrapped){
 			case MotionEvent.ACTION_DOWN:
 			case MotionEvent.ACTION_POINTER_DOWN:
-				id=event.getPointerId(index);
+				if(e!=null)id=e.getPointerId(index);
 				break;
 			case MotionEvent.ACTION_MOVE:
 				callbackMove();
@@ -70,8 +92,6 @@ public class Pointer{
 				callbackEnd();
 				break;
 		}
-		toClonedPointers(event,index);
-		return true;
 	}
 	
 	public void toClonedPointers(MotionEvent e,int index){

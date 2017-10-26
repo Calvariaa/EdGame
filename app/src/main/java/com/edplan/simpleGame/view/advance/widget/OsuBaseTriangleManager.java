@@ -55,7 +55,7 @@ public class OsuBaseTriangleManager implements OsuTriangleManager
 	
 	private Property makeProperty(OsuTriangle t){
 		Property p=new Property();
-		p.speed=(random.nextFloat()*BaseDatas.dpToPixel(2.5f)+BaseDatas.dpToPixel(12)/t.getRadius()+BaseDatas.dpToPixel(1.2f))/16;
+		p.speed=(random.nextFloat()*BaseDatas.dpToPixel(1.3f)+BaseDatas.dpToPixel(9)/t.getRadius()+BaseDatas.dpToPixel(1.2f))/16;
 		p.targetAlpha=t.getPaint().getAlpha();
 		p.alpha=0;
 		p.size=t.getRadius();
@@ -66,11 +66,11 @@ public class OsuBaseTriangleManager implements OsuTriangleManager
 	public void add(){
 		OsuTriangle o=new OsuTriangle();
 		o.setRadius(random.nextFloat()*BaseDatas.dpToPixel(75)+BaseDatas.dpToPixel(18));
-		o.getCenterPoint().set(getHeight()*random.nextFloat(),getHeight()*(1+random.nextFloat())/2);
+		o.getCenterPoint().set(getWidth()*random.nextFloat(),getHeight()*(1+random.nextFloat())/2);
 		Paint p=new Paint();
-		p.setAntiAlias(true);
 		p.setColor(getColor());
 		p.setAlpha((int)(10+100*random.nextFloat()));
+		o.setPaint(p);
 		add(o);
 	}
 	
@@ -121,14 +121,15 @@ public class OsuBaseTriangleManager implements OsuTriangleManager
 			if(e.getKey().getBottom()<0){
 				reset(e.getKey(),e.getValue());
 			}
-			t.getPaint().setAlpha((int)p.alpha);
+			t.getPaint().setARGB(255,(int)p.alpha,(int)p.alpha,(int)p.alpha);
+			//t.getPaint().setAlpha((int)p.alpha);
 		}
 	}
 	
 	private void reset(OsuTriangle t,Property p){
-		t.getCenterPoint().set(getHeight()*random.nextFloat(),getHeight()+t.getRadius());
+		t.getCenterPoint().set(getWidth()*random.nextFloat(),getHeight()+t.getRadius());
 		//+0*getHeight()*(1+random.nextFloat())/2);
-		p.targetAlpha=(int)(10+random.nextFloat()*100);
+		p.targetAlpha=(int)(70+((int)(random.nextFloat()*5))*27);
 		p.alpha=0;
 		p.size=t.getRadius();
 	}

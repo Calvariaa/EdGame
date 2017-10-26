@@ -14,7 +14,15 @@ public class MListView extends MViewGroup
 
 	public MListView(){
 		children=new ArrayList<BaseWidget>();
-		measurer=new BaseChildMeasurer();
+		measurer=new BaseChildMeasurer(this);
+	}
+
+	public void setMeasurer(ChildMeasurer measurer){
+		this.measurer=measurer;
+	}
+
+	public ChildMeasurer getMeasurer(){
+		return measurer;
 	}
 	
 	
@@ -29,14 +37,14 @@ public class MListView extends MViewGroup
 	}
 
 	@Override
-	public void draw(Canvas canvas)
+	public synchronized void draw(Canvas canvas)
 	{
 		// TODO: Implement this method
 		super.draw(canvas);
 		canvas.save();
 		//canvas.clipRect(basePoint.x,basePoint.y,basePoint.x+getWidth(),basePoint.y+getHeight());
 		//canvas.translate(basePoint.x,basePoint.y);
-		measurer.measure(this);
+		measurer.measure();
 		for(BaseWidget w:children){
 			if(w.basePoint.y>getHeight()){
 				continue;
@@ -73,48 +81,9 @@ public class MListView extends MViewGroup
 		return mc;
 	}
 
-	
-	/*
-	@Override
-	public boolean onTouch(MotionEvent event)
-	{
-		// TODO: Implement this method
-		
-		
-		
-		if(touching){
-			//if(getCatchedPointId()!=event.getPointerId(event.getActionIndex())){
-			//	return false;
-			//}else if(event.getAction()==MotionEvent.ACTION_UP){
-			//	touching=false;
-			//	setCatchedPointId(-1);
-			//}
-			event.setLocation(event.getX()-basePoint.x,event.getY()-basePoint.y);
-			if(!measurer.onTouch(event)){
-				event.setLocation(event.getX()+basePoint.x,event.getY()+basePoint.y);
-				return false;
-			}else{
-				return true;
-			}
-		}else{
-			if(event.getAction()==MotionEvent.ACTION_DOWN&&inWidget(event.getX(),event.getY())){
-				touching=true;
-				event.setLocation(event.getX()-basePoint.x,event.getY()-basePoint.y);
-				if(!measurer.onTouch(event)){
-					event.setLocation(event.getX()+basePoint.x,event.getY()+basePoint.y);
-					return false;
-				}else{
-					return true;
-				}
-			}
-		}
-		return false;
-	}*/
-	
-	
-	
 	public class BaseChildMeasurer extends ChildMeasurer
 	{
+		public MListView view;
 		public float deltaDistance=BaseDatas.dpToPixel(2);
 		
 		float position=0;
@@ -128,8 +97,13 @@ public class MListView extends MViewGroup
 		long latestRecode=0;
 		
 		boolean autoScolling=false;
+		float a_scrollSpeed=0;
 		
 		Pointer cp;
+		
+		public BaseChildMeasurer(MListView _view){
+			view=_view;
+		}
 
 		@Override
 		public boolean catchPointer(Pointer p){
@@ -157,7 +131,7 @@ public class MListView extends MViewGroup
 										//if(autoScolling){
 										//	scrollSpeed+=(lastPosition-p.getY())/(System.currentTimeMillis()-latestRecode+1)*1000*0.5f;
 										//}else{
-										scrollSpeed=(lastPosition-p.getY())/(System.currentTimeMillis()-latestRecode+1)*1000;
+										a_scrollSpeed=(lastPosition-p.getY())/(System.currentTimeMillis()-latestRecode+1)*1000;
 										//}
 										
 										latestRecode=System.currentTimeMillis();
@@ -168,6 +142,7 @@ public class MListView extends MViewGroup
 								}else{
 									if(Math.abs(p.getY()-firstPosition)>BaseDatas.dpToPixel(2)){
 										draging=true;
+										p.cancelChildren();
 										lastPosition=p.getY();
 									}
 								}
@@ -179,7 +154,7 @@ public class MListView extends MViewGroup
 								if(draging){
 									draging=false;
 									latestRecode=0;
-									if(Math.abs(scrollSpeed)>BaseDatas.dpToPixel(0)){
+									if(Math.abs(scrollSpeed)>BaseDatas.dpToPixel(5)){
 										autoScolling=true;
 									}
 								}
@@ -201,50 +176,6 @@ public class MListView extends MViewGroup
 			}
 		}
 
-		
-		//@Override
-		/*
-		public boolean onTouch(MotionEvent event)
-		{
-			// TODO: Implement this method
-			if(event.getAction()==MotionEvent.ACTION_DOWN){
-				lastPosition=event.getY();
-				firstPosition=event.getY();
-			}else if(event.getAction()==MotionEvent.ACTION_MOVE){
-				if(draging){
-					position-=event.getY()-lastPosition;
-					if(latestRecode!=0){
-						scrollSpeed=(lastPosition-event.getY())/(System.currentTimeMillis()-latestRecode+1)*1000;
-						latestRecode=System.currentTimeMillis();
-					}else{
-						latestRecode=System.currentTimeMillis();
-					}
-					lastPosition=event.getY();
-				}else{
-					if(Math.abs(event.getY()-firstPosition)>BaseDatas.dpToPixel(2)){
-						draging=true;
-						lastPosition=event.getY();
-					}
-				}
-			}else if(event.getAction()==MotionEvent.ACTION_UP){
-				if(draging){
-					draging=false;
-					latestRecode=0;
-					if(Math.abs(scrollSpeed)>BaseDatas.dpToPixel(0)){
-						autoScolling=true;
-					}
-				}
-			}
-			
-			for(BaseWidget w:children){
-				if(w.onTouch(event)){
-					return true;
-				}
-			}
-			
-			return true;
-		}*/
-		
 		public float getPosition(){
 			return position;
 		}
@@ -252,23 +183,21 @@ public class MListView extends MViewGroup
 		public void setPosition(float _position){
 			position=_position;
 		}
+
+		@Override
+		public void toView(BaseWidget viewTo){
+			// TODO: Implement this method
+			baseMeasure();
+			if(viewTo.getBottom()>view.getHeight()){
+				setPosition(viewTo.getBottom()-view.getHeight());
+			}
+		}
 		
 		long latestMeasure;
 		
-		@Override
-		public void measure(MListView view)
-		{
-			// TODO: Implement this method
+		public void baseMeasure(){
 			BaseWidget w;
 			BaseWidget pre;
-			
-			if(position<0){
-				scrollSpeed=0;
-				float speed=-position/5+4;
-				position+=speed;
-				if(position>0)position=0;
-			}
-			
 			for(int i=0;i<view.children.size();i++){
 				w=view.children.get(i);
 				if(i==0){
@@ -278,9 +207,20 @@ public class MListView extends MViewGroup
 					w.setBasePoint(0,pre.basePoint.y+pre.getHeight()+deltaDistance);
 				}
 			}
+		}
+		
+		@Override
+		public void measure()
+		{
+			// TODO: Implement this method
 			
-			for(BaseWidget bw:view.children){
-				bw.setBasePoint(bw.basePoint.x,bw.basePoint.y-position);
+			baseMeasure();
+			
+			if(position<0){
+				scrollSpeed=0;
+				float speed=-position/5+4;
+				position+=speed;
+				if(position>0)position=0;
 			}
 			
 			if((view.children.get(view.children.size()-1).getBottom()-view.children.get(0).getTop())<view.getHeight()){
@@ -291,7 +231,7 @@ public class MListView extends MViewGroup
 					if(position<0)position=0;
 				}
 			}else if(view.children.size()>0&&view.children.get(view.children.size()-1).getBottom()<view.getHeight()){
-				float d=view.getHeight()-view.children.get(view.children.size()-1).getBottom();
+				float d=view.getHeight()-(view.children.get(view.children.size()-1).getBottom()-position);
 				float speed=d/5+5;
 				scrollSpeed=0;
 				if(speed>d){
@@ -301,13 +241,12 @@ public class MListView extends MViewGroup
 				}
 			}
 			
-			
 			if(autoScolling){
 				if(latestMeasure!=0){
-					position+=scrollSpeed*(System.currentTimeMillis()-latestMeasure+1f)/1000;
-					scrollSpeed=scrollSpeed*(float)Math.pow(0.5,(System.currentTimeMillis()-latestMeasure+1f)/1000);
+					position+=a_scrollSpeed*(System.currentTimeMillis()-latestMeasure+1f)/1000;
+					a_scrollSpeed=a_scrollSpeed*(float)Math.pow(0.5,(System.currentTimeMillis()-latestMeasure+1f)/1000);
 					latestMeasure=System.currentTimeMillis();
-					if(Math.abs(scrollSpeed)<BaseDatas.dpToPixel(1)){
+					if(Math.abs(a_scrollSpeed)<BaseDatas.dpToPixel(1)){
 						scrollSpeed=0;
 						autoScolling=false;
 						latestMeasure=0;
@@ -317,6 +256,9 @@ public class MListView extends MViewGroup
 				}
 			}
 			
+			for(BaseWidget bw:view.children){
+				bw.setBasePoint(bw.basePoint.x,bw.basePoint.y-position);
+			}
 		}
 	}
 	
@@ -324,7 +266,9 @@ public class MListView extends MViewGroup
 		
 		public abstract boolean catchPointer(Pointer p);
 		
-		public abstract void measure(MListView view);
+		public abstract void measure();
+		
+		public abstract void toView(BaseWidget view);
 	}
 	
 }
