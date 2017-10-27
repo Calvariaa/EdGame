@@ -20,6 +20,7 @@ import com.edplan.superutils.TestClock;
 import com.edplan.superutils.U;
 import java.io.File;
 import java.util.Arrays;
+import com.edplan.nso.osb.base.Origin;
 
 public class MainGamePage extends MStaticViewGroup
 {
@@ -79,7 +80,7 @@ public class MainGamePage extends MStaticViewGroup
 			String l="AudioFilename: No Poi!.mp3";
 			String[] entry=U.divide(l,l.indexOf(":"));
 			cf.addText(Arrays.toString(entry));
-			
+			cf.addText(Origin.valueOf("@ssg").toString());
 			
 			
 			/*
