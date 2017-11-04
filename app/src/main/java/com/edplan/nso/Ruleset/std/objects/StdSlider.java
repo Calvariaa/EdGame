@@ -1,4 +1,4 @@
-package com.edplan.nso.Ruleset.std.object;
+package com.edplan.nso.Ruleset.std.objects;
 
 import com.edplan.superutils.Math.Vct2;
 import java.util.List;
@@ -50,4 +50,13 @@ public class StdSlider extends StdHitObject
 	public StdPath getPath(){
 		return path;
 	}
+
+	@Override
+	public StdHitObjectType getResType(){
+		// TODO: Implement this method
+		return StdHitObjectType.Slider;
+	}
+
+	
+	
 }

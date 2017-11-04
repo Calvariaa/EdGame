@@ -4,12 +4,13 @@ import com.edplan.nso.Ruleset.amodel.parser.HitObjectParser;
 import com.edplan.nso.Ruleset.amodel.object.HitObjects;
 import com.edplan.nso.Ruleset.ModeManager;
 import com.edplan.nso.NsoException;
-import com.edplan.nso.Ruleset.std.object.StdHitObjects;
+import com.edplan.nso.Ruleset.std.objects.StdHitObjects;
 import com.edplan.nso.Ruleset.amodel.object.HitObject;
 import com.edplan.nso.Ruleset.amodel.parser.HitObjectReparser;
 import com.edplan.nso.Ruleset.std.parser.StdHitObjectReparser;
 import android.util.Log;
 import com.edplan.superutils.U;
+import com.edplan.nso.Ruleset.mania.objects.ManiaHitObjects;
 
 public class PartHitObjects implements OsuFilePart
 {
@@ -24,6 +25,9 @@ public class PartHitObjects implements OsuFilePart
 		switch(mode){
 			case ModeManager.MODE_STD:
 				hitObjects=new StdHitObjects();
+				break;
+			case ModeManager.MODE_MANIA:
+				hitObjects=new ManiaHitObjects();
 				break;
 			default:
 				throw new NsoException("invalid mode : "+mode);

@@ -1,10 +1,11 @@
 package com.edplan.simpleGame.view;
 import android.graphics.Canvas;
+import com.edplan.simpleGame.MContext;
 
 public class MFlatButton extends MButton
 {
-	public MFlatButton(){
-		super();
+	public MFlatButton(MContext con){
+		super(con);
 	}
 
 	@Override

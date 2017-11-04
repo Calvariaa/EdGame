@@ -21,6 +21,7 @@ public class HitObjectsParser implements PartParser
 		part.initial(mode);
 		switch(mode){
 			case ModeManager.MODE_STD:
+			case ModeManager.MODE_MANIA:
 				parser=new StdHitObjectParser(parsingBeatmap);
 				break;
 			default:

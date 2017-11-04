@@ -6,13 +6,15 @@ import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.util.Log;
 import com.edplan.simpleGame.inputs.Pointer;
+import com.edplan.simpleGame.MContext;
 
 public class MListView extends MViewGroup
 {
 	ChildMeasurer measurer;
 	List<BaseWidget> children;
 
-	public MListView(){
+	public MListView(MContext con){
+		super(con);
 		children=new ArrayList<BaseWidget>();
 		measurer=new BaseChildMeasurer(this);
 	}
@@ -131,7 +133,7 @@ public class MListView extends MViewGroup
 										//if(autoScolling){
 										//	scrollSpeed+=(lastPosition-p.getY())/(System.currentTimeMillis()-latestRecode+1)*1000*0.5f;
 										//}else{
-										a_scrollSpeed=(lastPosition-p.getY())/(System.currentTimeMillis()-latestRecode+1)*1000;
+										scrollSpeed=(lastPosition-p.getY())/(System.currentTimeMillis()-latestRecode+1)*1000;
 										//}
 										
 										latestRecode=System.currentTimeMillis();
@@ -156,6 +158,7 @@ public class MListView extends MViewGroup
 									latestRecode=0;
 									if(Math.abs(scrollSpeed)>BaseDatas.dpToPixel(5)){
 										autoScolling=true;
+										a_scrollSpeed=scrollSpeed;
 									}
 								}
 								
@@ -216,10 +219,16 @@ public class MListView extends MViewGroup
 			
 			baseMeasure();
 			
+			float dt=(System.currentTimeMillis()-latestMeasure+1f)/1000;
+			float autoScolling_m=1;
 			if(position<0){
-				scrollSpeed=0;
-				float speed=-position/5+4;
-				position+=speed;
+				if(autoScolling){
+					dt*=20;
+					autoScolling_m=0.1f;
+				}else{
+					float speed=-position/5+4;
+					position+=speed;
+				}
 				if(position>0)position=0;
 			}
 			
@@ -227,13 +236,13 @@ public class MListView extends MViewGroup
 				if(position>0){
 					float speed=position/5+4;
 					position-=speed;
-					scrollSpeed=0;
+					a_scrollSpeed=0;
 					if(position<0)position=0;
 				}
 			}else if(view.children.size()>0&&view.children.get(view.children.size()-1).getBottom()<view.getHeight()){
 				float d=view.getHeight()-(view.children.get(view.children.size()-1).getBottom()-position);
 				float speed=d/5+5;
-				scrollSpeed=0;
+				a_scrollSpeed=0;
 				if(speed>d){
 					position-=d;
 				}else{
@@ -243,8 +252,8 @@ public class MListView extends MViewGroup
 			
 			if(autoScolling){
 				if(latestMeasure!=0){
-					position+=a_scrollSpeed*(System.currentTimeMillis()-latestMeasure+1f)/1000;
-					a_scrollSpeed=a_scrollSpeed*(float)Math.pow(0.5,(System.currentTimeMillis()-latestMeasure+1f)/1000);
+					position+=a_scrollSpeed*dt*autoScolling_m;
+					a_scrollSpeed=a_scrollSpeed*(float)Math.pow(0.2,dt);
 					latestMeasure=System.currentTimeMillis();
 					if(Math.abs(a_scrollSpeed)<BaseDatas.dpToPixel(1)){
 						scrollSpeed=0;

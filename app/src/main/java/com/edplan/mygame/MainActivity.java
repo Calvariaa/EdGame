@@ -9,7 +9,7 @@ import android.text.TextPaint;
 import android.util.Log;
 import com.edplan.simpleGame.animation.AnimaAdapter;
 import com.edplan.simpleGame.animation.AnimaCallback;
-import com.edplan.simpleGame.animation.MAnimation;
+import com.edplan.simpleGame.animation.MAnimation_old;
 import com.edplan.simpleGame.animation.interpolator.MaterialInterpolator;
 import com.edplan.simpleGame.view.BaseDatas;
 import com.edplan.simpleGame.view.BaseWidget;
@@ -27,6 +27,7 @@ import com.edplan.simpleGame.view.MProgressBar;
 import com.edplan.simpleGame.view.advance.widget.OsuTriangleField;
 import com.edplan.simpleGame.view.advance.widget.OsuTriangleManager;
 import com.edplan.simpleGame.view.advance.widget.OsuBaseTriangleManager;
+import com.edplan.superutils.classes.MLooperThread;
 
 public class MainActivity extends Activity 
 {
@@ -37,31 +38,31 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
 		
 		BaseDatas.initial(this);
-		
+		/*
 		gsv=new MGameSurfaceView(this);
         setContentView(gsv);
-		gsv.setFlag(GameSurfaceView.DrawThread.Flag.Drawing);
+		gsv.setFlag(MLooperThread.TFlag.Running);*/
     }
 
 	@Override
 	protected void onPause(){
 		// TODO: Implement this method
 		super.onPause();
-		gsv.setFlag(GameSurfaceView.DrawThread.Flag.Waiting);
+		gsv.setFlag(MLooperThread.TFlag.Waiting);
 	}
 
 	@Override
 	protected void onStop(){
 		// TODO: Implement this method
 		super.onStop();
-		gsv.setFlag(GameSurfaceView.DrawThread.Flag.Stopped);
+		gsv.setFlag(MLooperThread.TFlag.Stop);
 	}
 
 	@Override
 	protected void onResume(){
 		// TODO: Implement this method
 		super.onResume();
-		gsv.setFlag(GameSurfaceView.DrawThread.Flag.Drawing);
+		gsv.setFlag(MLooperThread.TFlag.Running);
 	}
 	
 	
@@ -70,7 +71,7 @@ public class MainActivity extends Activity
 	
 	
 	
-	
+	/*
 	
 	public class MGameSurfaceView extends GameSurfaceView{
 		
@@ -117,7 +118,7 @@ public class MainActivity extends Activity
 			while(x<=200){
 				t.drawLine(x,0,x,200,p);
 				x+=20;
-			}*/
+			}
 			
 			
 			camera.translate(100,-900,0);
@@ -183,13 +184,13 @@ public class MainActivity extends Activity
 			
 			
 			b.setOnClickListener(new BaseWidget.MOnClickListener(){
-				MAnimation anima;
+				MAnimation_old anima;
 				@Override
 				public void onClick(BaseWidget view){
 					// TODO: Implement this method
 					if(anima!=null)return;
 					//Log.v("anim","creat");
-					anima=new MAnimation();
+					anima=new MAnimation_old();
 					anima.setAdapter(new AnimaAdapter(){
 							float nowP=b.basePoint.y;
 							@Override
@@ -279,7 +280,7 @@ public class MainActivity extends Activity
 						c.drawLine(x,0,x,2000,p);
 						x+=100;
 					}
-					*/
+					
 					
 					//c.drawBitmap(testBitmap,0,0,p);
 					
@@ -309,7 +310,7 @@ public class MainActivity extends Activity
 			
 			
 			return msg.onTouch(event);
-		}*/
+		}
 		
 		
 		Camera camera=new Camera();
@@ -399,7 +400,7 @@ public class MainActivity extends Activity
 				//if(x<1000)continue;
 				//c.drawLine(x,0,x,1000,px);
 				c.drawRect(x,0,x+5,5000,px);
-			}*/
+			}
 			
 			
 			
@@ -418,7 +419,7 @@ public class MainActivity extends Activity
 			c.drawText((System.currentTimeMillis()-t)+"",500,200,p);
 		}
 	}
-	
+	*/
 }
 
 

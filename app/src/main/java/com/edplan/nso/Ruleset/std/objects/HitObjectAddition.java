@@ -1,4 +1,4 @@
-package com.edplan.nso.Ruleset.std.object;
+package com.edplan.nso.Ruleset.std.objects;
 
 public class HitObjectAddition
 {
@@ -7,8 +7,6 @@ public class HitObjectAddition
 	private int customIndex;
 	private int sampleVolume;
 	private String overrideSampleFile;
-	
-	
 	
 	public boolean hasOverrideSampleFile(){
 		return overrideSampleFile!=null;

@@ -1,7 +1,7 @@
-package com.edplan.nso.Ruleset.std.object;
+package com.edplan.nso.Ruleset.std.objects;
 import com.edplan.nso.Ruleset.amodel.object.HitObject;
 
-public class StdHitObject extends HitObject
+public abstract class StdHitObject extends HitObject
 {
 	private int startX;
 	private int startY;
@@ -10,6 +10,8 @@ public class StdHitObject extends HitObject
 	private int comboColorsSkip;
 	private int hitSound;
 	private HitObjectAddition addition;
+	
+	public abstract StdHitObjectType getResType();
 	
 	public void setAddition(HitObjectAddition addition){
 		this.addition=addition;

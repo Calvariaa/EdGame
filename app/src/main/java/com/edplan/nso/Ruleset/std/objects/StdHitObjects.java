@@ -1,7 +1,8 @@
-package com.edplan.nso.Ruleset.std.object;
+package com.edplan.nso.Ruleset.std.objects;
+import com.edplan.nso.Ruleset.amodel.object.HitObject;
 import com.edplan.nso.Ruleset.amodel.object.HitObjects;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class StdHitObjects extends HitObjects<StdHitObject>
 {
@@ -12,9 +13,11 @@ public class StdHitObjects extends HitObjects<StdHitObject>
 	}
 
 	@Override
-	public void addHitObject(StdHitObject t){
+	public void addHitObject(HitObject t){
 		// TODO: Implement this method
-		hitObjects.add(t);
+		if(t instanceof StdHitObject){
+			hitObjects.add((StdHitObject)t);
+		}
 	}
 
 	@Override

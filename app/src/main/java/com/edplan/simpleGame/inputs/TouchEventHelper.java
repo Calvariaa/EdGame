@@ -25,11 +25,13 @@ public class TouchEventHelper
 				catchedPointer=pk;
 				return true;
 			case MotionEvent.ACTION_MOVE:
-				if(postEvent(event)!=null){
+				/*if(postEvent(event)!=null){
 					return true;
 				}else{
 					return false;
-				}
+				}*/
+				postEvent(event);
+				return true;
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_POINTER_UP:
 				Pointer pi=postEvent(event);
@@ -56,6 +58,14 @@ public class TouchEventHelper
 			case MotionEvent.ACTION_CANCEL:
 				Pointer pt=null;
 				for(Map.Entry<Integer,Pointer> entry:pointers.entrySet()){
+					if(
+						Math.hypot(
+							entry.getValue().getX()-e.getX(findIndex(entry.getValue().getId(),e))*e.getXPrecision(),
+							entry.getValue().getY()-e.getY(findIndex(entry.getValue().getId(),e))*e.getYPrecision()
+						)>100
+					){
+						continue;
+					}
 					if(entry.getValue().acceptEvent(e)){
 						pt=entry.getValue();
 					}
@@ -91,5 +101,10 @@ public class TouchEventHelper
 		return e.getPointerId(e.getActionIndex());
 	}
 	
-	
+	public static int findIndex(int id,MotionEvent e){
+		for(int i=0;i<e.getPointerCount();i++){
+			if(e.getPointerId(i)==id)return i;
+		}
+		return -1;
+	}
 }

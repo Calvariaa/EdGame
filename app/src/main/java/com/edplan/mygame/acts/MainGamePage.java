@@ -3,7 +3,7 @@ import android.graphics.Color;
 import android.util.Log;
 import com.edplan.mygame.GameSurfaceView;
 import com.edplan.nso.ParsingBeatmap;
-import com.edplan.nso.Ruleset.std.object.StdHitObject;
+import com.edplan.nso.Ruleset.std.objects.StdHitObject;
 import com.edplan.nso.Ruleset.std.parser.StdHitObjectParser;
 import com.edplan.nso.filepart.PartGeneral;
 import com.edplan.nso.parser.StdBeatmapParser;
@@ -21,12 +21,15 @@ import com.edplan.superutils.U;
 import java.io.File;
 import java.util.Arrays;
 import com.edplan.nso.osb.base.Origin;
+import com.edplan.mygame.test.TestCursorField;
+import com.edplan.simpleGame.MContext;
 
 public class MainGamePage extends MStaticViewGroup
 {
 	public GameSurfaceView suface;
 	
-	public MainGamePage(GameSurfaceView res){
+	public MainGamePage(MContext con,GameSurfaceView res){
+		super(con);
 		suface=res;
 	}
 
@@ -43,7 +46,7 @@ public class MainGamePage extends MStaticViewGroup
 
 	CommandField cf;
 	public void initialGame(){
-		cf=new CommandField();
+		cf=new CommandField(getContext());
 		cf.setWidth(getWidth()*0.9f).setHeight(getHeight());
 		cf.setBasePoint(BaseDatas.dpToPixel(15),0);
 		cf.addText("start command field",0xFF0077FF);
@@ -66,7 +69,8 @@ public class MainGamePage extends MStaticViewGroup
 			
 			cf.addText("------------------------------------------------------------------------------------------------");
 			
-			StdBeatmapParser p=new StdBeatmapParser(new File("/storage/emulated/0/MyDisk/WorkBench/data/test beatmaps/std/Petit Rabbit's - No Poi! (walaowey) [Insane].osu"));
+			StdBeatmapParser p=new StdBeatmapParser(new File("/storage/emulated/0/MyDisk/WorkBench/data/test beatmaps/mania/Primary - in the Garden (Mat) [Julie's 4K Hard].osu"));
+			//"/storage/emulated/0/MyDisk/WorkBench/data/test beatmaps/std/Petit Rabbit's - No Poi! (walaowey) [Insane].osu"));
 			clock.start();
 			p.parse();
 			clock.end();
@@ -80,7 +84,7 @@ public class MainGamePage extends MStaticViewGroup
 			String l="AudioFilename: No Poi!.mp3";
 			String[] entry=U.divide(l,l.indexOf(":"));
 			cf.addText(Arrays.toString(entry));
-			cf.addText(Origin.valueOf("@ssg").toString());
+			//cf.addText(Origin.valueOf("@ssg").toString());
 			
 			
 			/*
@@ -138,10 +142,14 @@ public class MainGamePage extends MStaticViewGroup
 		
 		t.start();
 		*/
-		add(cf);
 		
-		/*
+		TestCursorField tcf=new TestCursorField(getContext());
+		tcf.setHeight(getHeight());
+		tcf.setWidth(getWidth());
 		setUpTriangleBackground();
+		add(cf);
+		add(tcf);
+		/*
 		setUpTitleField();
 		setUpMainButtonField();*/
 	}
@@ -160,7 +168,7 @@ public class MainGamePage extends MStaticViewGroup
 	
 	public void setUpTriangleBackground(){
 		otm=new OsuBaseTriangleManager();
-		otf=new OsuTriangleField(otm);
+		otf=new OsuTriangleField(getContext(),otm);
 		otf.setHeight(getHeight());
 		otf.setWidth(getWidth());
 		
@@ -176,9 +184,9 @@ public class MainGamePage extends MStaticViewGroup
 		MTextView titleTextView;
 	
 	public void setUpTitleField(){
-		titleField=new MStaticViewGroup();
-		titleBackground=new MFlatButton();
-			titleTextView=new MTextView();
+		titleField=new MStaticViewGroup(getContext());
+		titleBackground=new MFlatButton(getContext());
+			titleTextView=new MTextView(getContext());
 	}
 
 	MStaticViewGroup mainButtonField;
@@ -189,12 +197,12 @@ public class MainGamePage extends MStaticViewGroup
 		MButton settingButton;
 	
 	public void setUpMainButtonField(){
-		mainButtonField=new MStaticViewGroup();
-		fieldBackground=new MButton();
-		startPlayButton=new MButton();
-		backpackButton=new MButton();
-		storeButton=new MButton();
-		settingButton=new MButton();
+		mainButtonField=new MStaticViewGroup(getContext());
+		fieldBackground=new MButton(getContext());
+		startPlayButton=new MButton(getContext());
+		backpackButton=new MButton(getContext());
+		storeButton=new MButton(getContext());
+		settingButton=new MButton(getContext());
 
 		float w1=getWidth()*0.3f;
 		float h1=getHeight()*0.08f;

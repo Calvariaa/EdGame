@@ -8,6 +8,7 @@ import android.text.TextPaint;
 import android.view.MotionEvent;
 import com.edplan.simpleGame.math.PointF;
 import com.edplan.simpleGame.inputs.Pointer;
+import com.edplan.simpleGame.MContext;
 
 public class MButton extends BaseWidget
 {
@@ -33,7 +34,8 @@ public class MButton extends BaseWidget
 	
 	public boolean clickable=true;
 	
-	public MButton(){
+	public MButton(MContext con){
+		super(con);
 		buttonPaint=new Paint();
 		buttonPaint.setAntiAlias(true);
 		buttonPaint.setStyle(Paint.Style.FILL);

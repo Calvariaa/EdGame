@@ -11,9 +11,14 @@ import com.edplan.simpleGame.inputs.Pointer;
 import com.edplan.simpleGame.view.BaseWidget;
 import com.edplan.simpleGame.inputs.TouchEventHelper;
 import com.edplan.simpleGame.GameStatic;
+import com.edplan.superutils.classes.MLooperThread;
+import com.edplan.superutils.MTimer;
+import com.edplan.simpleGame.MContext;
 
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback
 {
+	private int RENDER_WARNING_TIME=40;
+	
 	public int surfaceWidth=0;
 	public int surfaceHeight=0;
 	
@@ -27,6 +32,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 	
 	BaseWidget content;
 	
+	private MContext context;
+	
 	public GameSurfaceView(Context context,AttributeSet attr){
 		super(context,attr);
 		initial();
@@ -36,6 +43,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		super(context);
 		initial();
 	}
+	
+	
 
 	public void setClearColor(int clearColor){
 		this.clearColor=clearColor;
@@ -76,9 +85,15 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		mHolder.addCallback(this);
 		mDrawThread=new DrawThread();
 		touchHelper=new TouchEventHelper();
+		context=new MContext();
+		context.setLoopThread(mDrawThread);
 	}
 	
-	public void setFlag(DrawThread.Flag flag){
+	public MContext getGameContext(){
+		return context;
+	}
+	
+	public void setFlag(MLooperThread.TFlag flag){
 		mDrawThread.setFlag(flag);
 	}
 	
@@ -126,12 +141,35 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 	public void surfaceDestroyed(SurfaceHolder p1)
 	{
 		// TODO: Implement this method
-		if(mDrawThread!=null)mDrawThread.setFlag(DrawThread.Flag.Stopped);
+		if(mDrawThread!=null)mDrawThread.setFlag(MLooperThread.TFlag.Stop);
 	}
 	
+	private void idraw(){
+		try{
+			mCanvas=mHolder.lockCanvas();
+			if(mCanvas!=null)GameSurfaceView.this.mDraw(mCanvas);
+		}finally{
+			if(mCanvas!=null){
+				mHolder.unlockCanvasAndPost(mCanvas);
+			}
+		}
+	}
 	
+	public class DrawThread extends MLooperThread{
+		
+		@Override
+		public void onFrame(int time){
+			// TODO: Implement this method
+			GameStatic.setDrawDeltaTime(time);
+			super.onFrame(time);
+			idraw();
+			if(time>RENDER_WARNING_TIME){
+				Log.w("m_render","render cost time : "+time);
+			}
+		}
+	}
 	
-	public class DrawThread extends Thread
+	public class DrawThread_old extends Thread
 	{
 		public enum Flag{
 			Drawing,Waiting,Stopped
@@ -141,7 +179,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		
 		public boolean running;
 		
-		public DrawThread(){
+		public DrawThread_old(){
 			flag=Flag.Waiting;
 			running=false;
 		}
@@ -171,7 +209,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 						GameStatic.setDrawDeltaTime((int)(System.currentTimeMillis()-latestTime));
 					}
 					latestTime=System.currentTimeMillis();
-					draw();
+					
 					if(System.currentTimeMillis()-t<4){
 						try
 						{
@@ -182,7 +220,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 					}else{
 						int dt=(int)(System.currentTimeMillis()-t);
 						if(dt>30){
-							Log.w("m_render","render cost time : "+(System.currentTimeMillis()-t));
+							
 						}else if(dt<14){
 							//try{
 							//	sleep(14-dt);
@@ -194,16 +232,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 			}
 		}
 		
-		public void draw(){
-			try{
-				mCanvas=mHolder.lockCanvas();
-				if(mCanvas!=null)GameSurfaceView.this.mDraw(mCanvas);
-			}finally{
-				if(mCanvas!=null){
-					mHolder.unlockCanvasAndPost(mCanvas);
-				}
-			}
-		}
+		
 
 		@Override
 		public void start()

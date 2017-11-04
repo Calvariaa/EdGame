@@ -87,10 +87,9 @@ public class OsuBaseTriangleManager implements OsuTriangleManager
 	}
 	
 	long latestTime=0;
-	int deltaTime;
 
 	@Override
-	public void measure(Canvas c){
+	public void measure(Canvas c,int deltaTime){
 		// TODO: Implement this method
 		
 		/*
@@ -101,9 +100,6 @@ public class OsuBaseTriangleManager implements OsuTriangleManager
 			deltaTime=(int)(System.currentTimeMillis()-latestTime);
 			latestTime=System.currentTimeMillis();
 		}*/
-		
-		deltaTime=GameStatic.getDrawDeltaTime();
-		
 		OsuTriangle t;
 		Property p;
 		for(Map.Entry<OsuTriangle,Property> e:triangles.entrySet()){
@@ -129,7 +125,7 @@ public class OsuBaseTriangleManager implements OsuTriangleManager
 	private void reset(OsuTriangle t,Property p){
 		t.getCenterPoint().set(getWidth()*random.nextFloat(),getHeight()+t.getRadius());
 		//+0*getHeight()*(1+random.nextFloat())/2);
-		p.targetAlpha=(int)(70+((int)(random.nextFloat()*5))*27);
+		p.targetAlpha=(int)(50+((int)(random.nextFloat()*3))*17);
 		p.alpha=0;
 		p.size=t.getRadius();
 	}

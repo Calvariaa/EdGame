@@ -1,72 +1,46 @@
 package com.edplan.simpleGame.animation;
+import com.edplan.superutils.interfaces.Function;
+import com.edplan.superutils.interfaces.Loopable;
+import com.edplan.superutils.MTimer;
+import com.edplan.superutils.interfaces.Loopable.Flag;
+import com.edplan.simpleGame.animation.interpolator.LinearInterpolator;
+import com.edplan.superutils.classes.MLooperThread;
+import com.edplan.superutils.interfaces.Setter;
+import com.edplan.superutils.classes.MLooper;
 
-public class MAnimation{
-	public int duration;
+public class MAnimation implements Loopable
+{
+	private AnimaInterpolator interpolator;
+	
+	private Setter<Float> setter;
+	
+	private Callback callback;
+	
+	private MLooper looper;
+	
+	private Flag flag;
+	
+	private boolean hasFinished=false;
+	
+	private boolean hasStart=false;
+	
+	private float callbackRate=0;
 
-	public int deltaTime;
+	private float nextcallback=0;
+	
+	private float progress;
+	
+	private int timepassed;
 
-	public AnimaAdapter adapter;
-
-	public AnimaCallback callback;
-
-	public AnimaInterpolator interpolator;
-
-	public AnimaThread thread;
-
+	private int duration;
+	
 	public MAnimation(){
-
-	}
-
-	public MAnimation setDeltaTime(int deltaTime){
-		this.deltaTime=deltaTime;
-		return this;
-	}
-
-	public int getDeltaTime(){
-		return deltaTime;
-	}
-
-	public void start(){
-		thread=new AnimaThread();
-		thread.start();
-	}
-
-	public void skip(){
-		setFlag(Flag.SKIP);
+		initial();
 	}
 	
-	public void setFlag(Flag f){
-		if(thread!=null){
-			thread.setFlag(f);
-		}
-	}
-
-	public MAnimation setDuration(int duration){
-		this.duration=duration;
-		setDeltaTime(Math.min(5,duration/100));
-		return this;
-	}
-
-	public int getDuration(){
-		return duration;
-	}
-
-	public MAnimation setAdapter(AnimaAdapter adapter){
-		this.adapter=adapter;
-		return this;
-	}
-
-	public AnimaAdapter getAdapter(){
-		return adapter;
-	}
-
-	public MAnimation setCallback(AnimaCallback callback){
-		this.callback=callback;
-		return this;
-	}
-
-	public AnimaCallback getCallback(){
-		return callback;
+	public MAnimation(Setter<Float> setter){
+		this();
+		this.setter=setter;
 	}
 
 	public MAnimation setInterpolator(AnimaInterpolator interpolator){
@@ -77,96 +51,207 @@ public class MAnimation{
 	public AnimaInterpolator getInterpolator(){
 		return interpolator;
 	}
+	
+	public boolean ifHasStart(){
+		return hasStart;
+	}
 
-	public enum Flag{
-		SKIP,STOP,PAUSE,RUN
+	public MAnimation setCallbackRate(float callbackRate){
+		this.callbackRate=callbackRate;
+		this.nextcallback=callbackRate;
+		return this;
+	}
+
+	public float getCallbackRate(){
+		return callbackRate;
+	}
+	
+	public MAnimation runOnLoopThread(MLooperThread t){
+		return runOnLooper(t.getLooper());
+	}
+	
+	public MAnimation runOnLooper(MLooper l){
+		l.addLoopable(this);
+		return this;
+	}
+	
+	public void creatThreadAndRun(){
+		MLooperThread t=new MLooperThread();
+		t.start();
+		runOnLoopThread(t);
+	}
+	
+	public MAnimation setFlag(Flag f){
+		flag=f;
+		return this;
+	}
+	
+	public void stop(){
+		setFlag(Flag.Stop);
+	}
+	
+	public int getTimepassed(){
+		return timepassed;
+	}
+
+	public MAnimation setDuration(int duration){
+		this.duration=duration;
+		return this;
+	}
+
+	public int getDuration(){
+		return duration;
+	}
+
+	private void setProgress(float progress){
+		this.progress=progress;
+		setter.set(interpolator.getInterpolation(getProgress()));
+	}
+
+	public float getProgress(){
+		return progress;
+	}
+
+	public MAnimation setCallback(Callback callback){
+		this.callback=callback;
+		return this;
+	}
+
+	public Callback getCallback(){
+		return callback;
+	}
+
+	private void initial(){
+		flag=Flag.Skip;
+		
+	}
+
+	public void checkProperty(){
+		if(setter==null){
+			throw new NullPointerException("MAnimation.setter shouldn't be null");
+		}else if(looper==null){
+			throw new NullPointerException("MAnimation.looper shouldn't be null");
+		}else if(duration<=0){
+			throw new IllegalArgumentException("MAnimation.duration should >0");
+		}else{
+			if(interpolator==null){
+				interpolator=LinearInterpolator.getDefInterpolator();
+			}
 		}
+	}
 
-	public class AnimaThread extends Thread{
+	public MAnimation setSetter(Setter<Float> setter){
+		this.setter=setter;
+		return this;
+	}
 
-		Flag flag=Flag.RUN;
+	public Setter<Float> getSetter(){
+		return setter;
+	}
 
-		public float progress=0;
-
-		public int runnedTime;
-
-		public long startTime;
-
-		public long latestTime;
-
-		public void setFlag(Flag flag){
-			this.flag=flag;
+	public void start(){
+		checkProperty();
+		flag=Flag.Run;
+	}
+	
+	protected void onProgress(){
+		if(callback!=null){
+			callback.onProgress(this);
 		}
-
-		public Flag getFlag(){
-			return flag;
+	}
+	
+	protected void onStart(){
+		if(callback!=null){
+			callback.onStart(this);
 		}
-
-		@Override
-		public void run(){
-			// TODO: Implement this method
-			super.run();
-			doAnimation();
+	}
+	
+	protected void onEnd(){
+		if(callback!=null){
+			callback.onEnd(this);
 		}
+	}
+	
+	protected void onFinish(){
+		if(callback!=null){
+			callback.onFinnish(this);
+		}
+	}
+	
+	public MLooper getLooper(){
+		return looper;
+	}
 
-		private void doAnimation(){
-			runnedTime=0;
-			startTime=System.currentTimeMillis();
-			latestTime=System.currentTimeMillis();
-			if(callback!=null)callback.onStart();
-			setProgress(0);
-			while(true){
-				switch(flag){
-					case RUN:
-						try{
-							sleep(deltaTime);
-							runnedTime=(int)(System.currentTimeMillis()-startTime);
-							progress+=((float)(System.currentTimeMillis()-latestTime))/duration;
-							latestTime=System.currentTimeMillis();
-							if(progress>=1){
-								progress=1;
-								setProgress(progress);
-								if(callback!=null){
-									callback.onFinish();
-									callback.onEnd();
-								}
-								return;
-							}else{
-								setProgress(progress);
-							}
-						}
-						catch(InterruptedException e){}
-						break;
-					case SKIP:
-						setProgress(1);
-						if(callback!=null){
-							callback.onFinish();
-							callback.onEnd();
-						}
-						return;
-					case STOP:
-						if(callback!=null){
-							callback.onStop(progress);
-							callback.onEnd();
-						}
-						return;
-					case PAUSE:
-						try{
-							sleep(10);
-						}
-						catch(InterruptedException e){}
-						latestTime=System.currentTimeMillis();
-						break;
+	@Override
+	public void setLooper(MLooper lp){
+		// TODO: Implement this method
+		looper=lp;
+	}
+	
+	@Override
+	public void onLoop(int deltaTime){
+		// TODO: Implement this method
+		if(!ifHasStart()){
+			hasStart=true;
+			onStart();
+		}
+		timepassed+=deltaTime;
+		if(timepassed>=duration){
+			timepassed=duration;
+		}
+		setProgress(((float)timepassed)/duration);
+		
+		if(callbackRate==0){
+			onProgress();
+		}else if(callbackRate<0){
+			
+		}else{
+			if(getProgress()>nextcallback){
+				onProgress();
+				while(getProgress()>nextcallback){
+					nextcallback+=callbackRate;
 				}
 			}
 		}
-
-		private void setProgress(float p){
-			if(adapter!=null){
-				adapter.setProgress((interpolator!=null)?interpolator.getInterpolation(p):p);
-			}
-			if(callback!=null)callback.onProgress(p);
+		
+		if(timepassed>=duration){
+			//anima end
+			hasFinished=true;
+			setFlag(Flag.Stop);
+			onFinish();
+			onEnd();
 		}
+	}
 
+	
+	@Override
+	public Flag getFlag(){
+		// TODO: Implement this method
+		return flag;
+	}
+
+	@Override
+	public void onRecycle(){
+		// TODO: Implement this method
+		if(!hasFinished){
+			onEnd();
+		}
+	}
+	
+	public MAnimation copy(){
+		MAnimation anim=new MAnimation(getSetter());
+		anim.setDuration(getDuration());
+		anim.setInterpolator(getInterpolator());
+		return anim;
+	}
+	
+	public interface Callback{
+		public void onStart(MAnimation a);
+		
+		public void onProgress(MAnimation a);
+		
+		public void onFinnish(MAnimation a);
+		
+		public void onEnd(MAnimation a);
 	}
 }

@@ -9,7 +9,7 @@ import com.edplan.nso.filepart.PartHitObjects;
 import com.edplan.nso.filepart.PartMetadata;
 import com.edplan.nso.filepart.PartTimingPoints;
 import com.edplan.nso.Beatmap.StdBeatmapBindingData;
-import com.edplan.nso.Ruleset.std.object.StdHitObjects;
+import com.edplan.nso.Ruleset.std.objects.StdHitObjects;
 
 public class StdBeatmap extends OsuBeatmap
 {

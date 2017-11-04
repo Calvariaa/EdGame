@@ -7,13 +7,15 @@ import com.edplan.simpleGame.utils.TouchUtils;
 import com.edplan.simpleGame.inputs.TouchEventHelper;
 import com.edplan.simpleGame.inputs.Pointer;
 import android.util.Log;
+import com.edplan.simpleGame.MContext;
 
 public class MStaticViewGroup extends MViewGroup
 {
 	TouchEventHelper touchHelper;
 	List<BaseWidget> children;
 	
-	public MStaticViewGroup(){
+	public MStaticViewGroup(MContext con){
+		super(con);
 		children=new ArrayList<BaseWidget>();
 		touchHelper=new TouchEventHelper();
 	}

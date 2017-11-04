@@ -60,10 +60,18 @@ public class Pointer{
 
 	public boolean acceptEvent(MotionEvent event,int index){
 		action=event.getActionMasked();
+		/*
+		if(action!=MotionEvent.ACTION_DOWN){
+			float wx=event.getX(index)*event.getXPrecision()-getX();
+			float wy=event.getY(index)*event.getYPrecision()-getY();
+			if(wx*wx+wy*wy>2500){
+				return false;
+			}
+		}*/
 		latestRawEvent=event;
 		latestEventIndex=index;
-		latestX=event.getX(index);
-		latestY=event.getY(index);
+		latestX=event.getX(index)*event.getXPrecision();
+		latestY=event.getY(index)*event.getYPrecision();
 		accepAction(event.getActionMasked(),index,event);
 		toClonedPointers(event,index);
 		return true;
@@ -74,6 +82,7 @@ public class Pointer{
 	}
 	
 	public void accepAction(int actionWrapped,int index,MotionEvent e){
+		
 		switch(actionWrapped){
 			case MotionEvent.ACTION_DOWN:
 			case MotionEvent.ACTION_POINTER_DOWN:

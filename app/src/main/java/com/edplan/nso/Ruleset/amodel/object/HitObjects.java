@@ -6,6 +6,6 @@ public abstract class HitObjects<T extends HitObject>{
 	
 	public abstract List<T> getHitObjectList();
 	
-	public abstract void addHitObject(T t);
+	public abstract void addHitObject(HitObject t);
 	
 }

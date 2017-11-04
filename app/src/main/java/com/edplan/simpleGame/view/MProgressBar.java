@@ -2,6 +2,7 @@ package com.edplan.simpleGame.view;
 import android.graphics.Paint;
 import android.graphics.Canvas;
 import com.edplan.simpleGame.inputs.Pointer;
+import com.edplan.simpleGame.MContext;
 
 public class MProgressBar extends BaseWidget
 {
@@ -16,10 +17,11 @@ public class MProgressBar extends BaseWidget
 	
 	public float progress=0;
 	
-	public MProgressBar(){
+	public MProgressBar(MContext con){
+		super(con);
 		setWidth(500);
 		setHeight(40);
-		dragButton=new MButton();
+		dragButton=new MButton(getContext());
 		pPaint=new Paint();
 		pPaint.setAntiAlias(true);
 		pPaint.setARGB(255,50,150,240);

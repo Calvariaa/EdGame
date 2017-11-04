@@ -17,7 +17,7 @@ public interface OsuTriangleManager
 	
 	public void add();
 	
-	public void measure(Canvas c);
+	public void measure(Canvas c,int deltaTime);
 	
 	public Set<OsuTriangle> getTriangles();
 }

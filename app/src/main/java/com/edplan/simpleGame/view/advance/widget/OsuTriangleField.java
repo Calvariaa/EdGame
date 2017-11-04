@@ -2,12 +2,14 @@ package com.edplan.simpleGame.view.advance.widget;
 import android.graphics.Bitmap;
 import com.edplan.simpleGame.view.BaseWidget;
 import android.graphics.Canvas;
+import com.edplan.simpleGame.MContext;
 
 public class OsuTriangleField extends BaseWidget
 {
 	public OsuTriangleManager triangleManager;
 	
-	public OsuTriangleField(OsuTriangleManager om){
+	public OsuTriangleField(MContext con,OsuTriangleManager om){
+		super(con);
 		triangleManager=om;
 	}
 
@@ -23,7 +25,7 @@ public class OsuTriangleField extends BaseWidget
 	public void draw(Canvas canvas){
 		// TODO: Implement this method
 		super.draw(canvas);
-		triangleManager.measure(canvas);
+		triangleManager.measure(canvas,getContext().getFrameDeltaTime());
 		for(OsuTriangle t:triangleManager.getTriangles()){
 			t.drawOnCanvas(canvas);
 		}

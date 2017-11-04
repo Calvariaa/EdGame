@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.ColorFilter;
 import android.graphics.Canvas;
 import com.edplan.simpleGame.inputs.Pointer;
+import com.edplan.simpleGame.MContext;
 
 public class BaseWidget implements MDrawable
 {
@@ -22,16 +23,14 @@ public class BaseWidget implements MDrawable
 	
 	public MOnSizedListener sizedListener;
 	
-	public BaseWidget(){
+	private MContext context;
+	
+	public BaseWidget(MContext _context){
 		basePoint=new PointF(0,0);
+		setContext(_context);
 	}
 	
-	public BaseWidget(float w,float h){
-		this();
-		width=w;
-		height=h;
-	}
-	
+	/*
 	public BaseWidget(float w,float h,String dw){
 		this();
 		switch(dw){
@@ -42,6 +41,14 @@ public class BaseWidget implements MDrawable
 		}
 		width=w;
 		height=h;
+	}*/
+
+	public void setContext(MContext context){
+		this.context=context;
+	}
+
+	public MContext getContext(){
+		return context;
 	}
 
 	public BaseWidget setParent(MViewGroup parent){
@@ -197,21 +204,21 @@ public class BaseWidget implements MDrawable
 		// TODO: Implement this method
 	}
 
-	@Override
+	
 	public BaseWidget setAlpha(int a)
 	{
 		// TODO: Implement this method
 		return this;
 	}
 
-	@Override
+	
 	public BaseWidget setColorFilter(ColorFilter p1)
 	{
 		// TODO: Implement this method
 		return this;
 	}
 
-	@Override
+	
 	public int getOpacity()
 	{
 		// TODO: Implement this method

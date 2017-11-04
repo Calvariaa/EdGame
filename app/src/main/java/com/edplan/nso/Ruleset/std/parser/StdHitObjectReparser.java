@@ -1,12 +1,13 @@
 package com.edplan.nso.Ruleset.std.parser;
 import com.edplan.nso.Ruleset.amodel.parser.HitObjectReparser;
-import com.edplan.nso.Ruleset.std.object.StdHitObject;
+import com.edplan.nso.Ruleset.std.objects.StdHitObject;
 import com.edplan.nso.NsoException;
-import com.edplan.nso.Ruleset.std.object.StdHitCircle;
-import com.edplan.nso.Ruleset.std.object.StdSlider;
-import com.edplan.nso.Ruleset.std.object.StdSpinner;
-import com.edplan.nso.Ruleset.std.object.StdPath;
+import com.edplan.nso.Ruleset.std.objects.StdHitCircle;
+import com.edplan.nso.Ruleset.std.objects.StdSlider;
+import com.edplan.nso.Ruleset.std.objects.StdSpinner;
+import com.edplan.nso.Ruleset.std.objects.StdPath;
 import com.edplan.superutils.Math.Vct2;
+import com.edplan.nso.Ruleset.mania.objects.ManiaHolder;
 
 public class StdHitObjectReparser implements HitObjectReparser<StdHitObject>
 {
@@ -28,6 +29,10 @@ public class StdHitObjectReparser implements HitObjectReparser<StdHitObject>
 			buildAddition(sb,s);
 		}else if(t instanceof StdSpinner){
 			StdSpinner s=(StdSpinner)t;
+			sb.append(s.getEndTime()).append(",");
+			buildAddition(sb,s);
+		}else if(t instanceof ManiaHolder){
+			ManiaHolder s=(ManiaHolder)t;
 			sb.append(s.getEndTime()).append(",");
 			buildAddition(sb,s);
 		}

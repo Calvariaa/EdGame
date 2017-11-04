@@ -2,20 +2,21 @@ package com.edplan.nso.Ruleset.std.parser;
 import com.edplan.nso.NsoException;
 import com.edplan.nso.ParsingBeatmap;
 import com.edplan.nso.Ruleset.amodel.parser.HitObjectParser;
-import com.edplan.nso.Ruleset.std.object.HitObjectAddition;
-import com.edplan.nso.Ruleset.std.object.StdHitCircle;
-import com.edplan.nso.Ruleset.std.object.StdHitObject;
-import com.edplan.nso.Ruleset.std.object.StdHitObjectType;
-import com.edplan.nso.Ruleset.std.object.StdPath;
-import com.edplan.nso.Ruleset.std.object.StdSlider;
+import com.edplan.nso.Ruleset.std.objects.HitObjectAddition;
+import com.edplan.nso.Ruleset.std.objects.StdHitCircle;
+import com.edplan.nso.Ruleset.std.objects.StdHitObject;
+import com.edplan.nso.Ruleset.std.objects.StdHitObjectType;
+import com.edplan.nso.Ruleset.std.objects.StdPath;
+import com.edplan.nso.Ruleset.std.objects.StdSlider;
 import com.edplan.superutils.Math.Vct2;
 import com.edplan.superutils.U;
 import com.edplan.superutils.classes.strings.StringSpliter;
 import java.util.ArrayList;
 import java.util.List;
-import com.edplan.nso.Ruleset.std.object.StdSpinner;
+import com.edplan.nso.Ruleset.std.objects.StdSpinner;
 import com.edplan.nso.Ruleset.std.parser.StdHitObjectParser.HitObjectBaseDatas;
 import android.util.Log;
+import com.edplan.nso.Ruleset.mania.objects.ManiaHolder;
 
 /**
  *Official format wikipage:
@@ -69,6 +70,12 @@ public class StdHitObjectParser implements HitObjectParser<StdHitObject>
 						spn.setEndTime(U.toInt(spl.next()));
 						spn.setAddition(parseAddition(spl));
 						return spn;
+					case ManiaHolder:
+						ManiaHolder mh=new ManiaHolder();
+						injectBaseDatas(bd,mh);
+						mh.setEndTime(U.toInt(spl.next()));
+						mh.setAddition(parseAddition(spl));
+						return mh;
 					default:
 						return null;
 				}

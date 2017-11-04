@@ -15,7 +15,7 @@ public class PartGeneral implements OsuFilePart
 	public static final String Mode="Mode";
 	public static final String LetterboxInBreaks="LetterboxInBreaks";
 	public static final String WidescreenStoryboard="WidescreenStoryboard";
-	
+	public static final String SpecialStyle="SpecialStyle";
 	
 	
 	public static final String TAG="General";
@@ -29,12 +29,19 @@ public class PartGeneral implements OsuFilePart
 	private int mode=-1;
 	private boolean letterboxInBreaks=false;
 	private boolean widescreenStoryboard=false;
-
+	private boolean specialStyle=false;
+	
 	public PartGeneral(){
 		//Map<String,Object> map=U.makeMap(String.class,Object.class,);
 	}
-	
-	
+
+	public void setSpecialStyle(boolean specialStyle){
+		this.specialStyle=specialStyle;
+	}
+
+	public boolean isSpecialStyle(){
+		return specialStyle;
+	}
 	
 	public void setWidescreenStoryboard(boolean widescreenStoryboard){
 		this.widescreenStoryboard=widescreenStoryboard;

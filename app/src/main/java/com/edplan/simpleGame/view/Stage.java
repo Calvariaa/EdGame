@@ -5,6 +5,7 @@ import android.graphics.Matrix;
 import java.util.ArrayList;
 import java.util.List;
 import com.edplan.simpleGame.view.Game.Background;
+import com.edplan.simpleGame.MContext;
 
 /**
  *Stage，用于承载Actor的类，直接使用父容器的Canvas，不进行裁剪
@@ -25,7 +26,8 @@ public class Stage extends BaseWidget
 	
 	List<Actor> actors;
 	
-	public Stage(){
+	public Stage(MContext con){
+		super(con);
 		actors=new ArrayList<Actor>();
 		stageMatrix=new Matrix();
 		stageCamera=new Camera();

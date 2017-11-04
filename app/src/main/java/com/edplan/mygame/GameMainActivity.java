@@ -18,7 +18,7 @@ public class GameMainActivity extends Activity
 		GameSurfaceView gsv=new GameSurfaceView(this);
 		gsv.setClearColor(0xFF333333);
         setContentView(gsv);
-		mainPage=new MainGamePage(gsv);
+		mainPage=new MainGamePage(gsv.getGameContext(),gsv);
 		gsv.setContent(mainPage);
 		
 		

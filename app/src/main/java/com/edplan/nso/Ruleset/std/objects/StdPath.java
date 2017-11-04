@@ -1,4 +1,4 @@
-package com.edplan.nso.Ruleset.std.object;
+package com.edplan.nso.Ruleset.std.objects;
 import com.edplan.superutils.Math.Vct2;
 import java.util.List;
 import java.util.ArrayList;

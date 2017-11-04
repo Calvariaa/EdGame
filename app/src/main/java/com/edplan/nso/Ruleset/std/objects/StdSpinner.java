@@ -1,4 +1,4 @@
-package com.edplan.nso.Ruleset.std.object;
+package com.edplan.nso.Ruleset.std.objects;
 
 public class StdSpinner extends StdHitObject
 {
@@ -11,5 +11,11 @@ public class StdSpinner extends StdHitObject
 
 	public int getEndTime(){
 		return endTime;
+	}
+
+	@Override
+	public StdHitObjectType getResType(){
+		// TODO: Implement this method
+		return StdHitObjectType.Spinner;
 	}
 }

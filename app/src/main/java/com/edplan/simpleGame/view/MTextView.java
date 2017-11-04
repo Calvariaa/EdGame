@@ -4,6 +4,7 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.Log;
+import com.edplan.simpleGame.MContext;
 
 public class MTextView extends BaseWidget{
 	
@@ -13,11 +14,12 @@ public class MTextView extends BaseWidget{
 	public Layout.Alignment alignment=Layout.Alignment.ALIGN_NORMAL;
 	public TextPaint textPaint;
 	
-	public MTextView(){
-		this("");
+	public MTextView(MContext con){
+		this(con,"");
 	}
 	
-	public MTextView(String _text){
+	public MTextView(MContext con,String _text){
+		super(con);
 		text=_text;
 		textPaint=new TextPaint();
 		textPaint.setAntiAlias(true);
