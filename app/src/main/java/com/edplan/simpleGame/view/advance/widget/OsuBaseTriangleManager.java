@@ -125,7 +125,7 @@ public class OsuBaseTriangleManager implements OsuTriangleManager
 	private void reset(OsuTriangle t,Property p){
 		t.getCenterPoint().set(getWidth()*random.nextFloat(),getHeight()+t.getRadius());
 		//+0*getHeight()*(1+random.nextFloat())/2);
-		p.targetAlpha=(int)(50+((int)(random.nextFloat()*3))*17);
+		p.targetAlpha=(50+((int)(random.nextFloat()*3))*17);
 		p.alpha=0;
 		p.size=t.getRadius();
 	}
