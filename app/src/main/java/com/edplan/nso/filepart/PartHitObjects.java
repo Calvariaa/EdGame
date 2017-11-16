@@ -11,6 +11,7 @@ import com.edplan.nso.Ruleset.std.parser.StdHitObjectReparser;
 import android.util.Log;
 import com.edplan.superutils.U;
 import com.edplan.nso.Ruleset.mania.objects.ManiaHitObjects;
+import java.util.List;
 
 public class PartHitObjects implements OsuFilePart
 {
@@ -36,6 +37,10 @@ public class PartHitObjects implements OsuFilePart
 	
 	public void addHitObject(HitObject obj){
 		hitObjects.addHitObject(obj);
+	}
+	
+	public List<HitObject> getHitObjectList(){
+		return hitObjects.getHitObjectList();
 	}
 	
 	

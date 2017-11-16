@@ -1,11 +1,11 @@
 package com.edplan.mygame.test;
-import com.edplan.simpleGame.view.BaseWidget;
+import com.edplan.framework.view.BaseWidget;
 import android.graphics.Canvas;
 import android.graphics.RectF;
-import com.edplan.simpleGame.inputs.Pointer;
-import com.edplan.simpleGame.math.PointF;
+import com.edplan.framework.inputs.Pointer;
+import com.edplan.framework.math.Vec2;
 import android.graphics.Paint;
-import com.edplan.simpleGame.MContext;
+import com.edplan.framework.MContext;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.PorterDuff;
@@ -18,7 +18,7 @@ public class TestCursorField extends BaseWidget
 	
 	private Pointer pointer;
 	
-	private PointF cursorPoint;
+	private Vec2 cursorPoint;
 	
 	private Paint touchFieldPaint;
 	
@@ -32,7 +32,7 @@ public class TestCursorField extends BaseWidget
 		super(con);
 		touchField=new RectF();
 		canvasField=new RectF();
-		cursorPoint=new PointF(0,0);
+		cursorPoint=new Vec2(0,0);
 		touchFieldPaint=new Paint();
 		touchFieldPaint.setARGB(100,240,100,100);
 		cursorPaint=new Paint();
@@ -115,7 +115,7 @@ public class TestCursorField extends BaseWidget
 		return this;
 	}
 	
-	private void reflectToCanvas(float x,float y,RectF raw,RectF target,PointF p){
+	private void reflectToCanvas(float x,float y,RectF raw,RectF target,Vec2 p){
 		float xr=(raw.width()!=0)?((x-raw.left)/raw.width()):0;
 		float yr=(raw.height()!=0)?((y-raw.top)/raw.height()):0;
 		p.set(target.left+target.width()*xr,target.top+target.height()*yr);
@@ -129,26 +129,26 @@ public class TestCursorField extends BaseWidget
 			buffered=Bitmap.createBitmap(canvas.getWidth(),canvas.getHeight(),Bitmap.Config.ARGB_8888);
 			nowBitmap=Bitmap.createBitmap(canvas.getWidth(),canvas.getHeight(),Bitmap.Config.ARGB_8888);
 		}
-		Canvas bc=new Canvas(buffered);
-		Canvas nc=new Canvas(nowBitmap);
+		//Canvas bc=new Canvas(buffered);
+		//Canvas nc=new Canvas(nowBitmap);
 		
-		Paint p=new Paint();
-		p.setAlpha(200);
+		//Paint p=new Paint();
+		//p.setAlpha(200);
 		
-		Paint p2=new Paint();
-		p2.setAlpha(255);
+		//Paint p2=new Paint();
+		//p2.setAlpha(255);
 		
-		Paint pc=new Paint();
-		pc.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+		//Paint pc=new Paint();
+		//pc.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 		
-		nc.drawRect(0,0,nc.getWidth(),nc.getHeight(),pc);
-		nc.drawBitmap(buffered,0,0,p);
-		nc.drawCircle(cursorPoint.x,cursorPoint.y,20,cursorPaint);
+		//nc.drawRect(0,0,nc.getWidth(),nc.getHeight(),pc);
+		//nc.drawBitmap(buffered,0,0,p);
+		canvas.drawCircle(cursorPoint.x,cursorPoint.y,20,cursorPaint);
 		
-		bc.drawRect(0,0,bc.getWidth(),bc.getHeight(),pc);
-		bc.drawBitmap(nowBitmap,0,0,p2);
+		//bc.drawRect(0,0,bc.getWidth(),bc.getHeight(),pc);
+		//bc.drawBitmap(nowBitmap,0,0,p2);
 		
-		canvas.drawBitmap(nowBitmap,0,0,p2);
+		//canvas.drawBitmap(nowBitmap,0,0,p2);
 		//canvas.drawRect(touchField,touchFieldPaint);
 	}
 }

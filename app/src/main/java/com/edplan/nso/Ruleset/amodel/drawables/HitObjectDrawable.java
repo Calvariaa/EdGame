@@ -1,5 +1,5 @@
 package com.edplan.nso.Ruleset.amodel.drawables;
-import com.edplan.simpleGame.view.MDrawable;
+import com.edplan.framework.view.MDrawable;
 import com.edplan.nso.Ruleset.amodel.object.HitObject;
 import com.edplan.superutils.interfaces.TimeBasedObject;
 

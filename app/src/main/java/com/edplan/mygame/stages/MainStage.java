@@ -1,6 +1,6 @@
 package com.edplan.mygame.stages;
-import com.edplan.simpleGame.view.Stage;
-import com.edplan.simpleGame.MContext;
+import com.edplan.framework.view.Stage;
+import com.edplan.framework.MContext;
 
 public class MainStage extends Stage
 {

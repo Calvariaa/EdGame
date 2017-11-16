@@ -1,28 +1,39 @@
 package com.edplan.mygame.acts;
 import android.graphics.Color;
 import android.util.Log;
+import com.edplan.framework.MContext;
+import com.edplan.framework.view.BaseDatas;
+import com.edplan.framework.view.MButton;
+import com.edplan.framework.view.MFlatButton;
+import com.edplan.framework.view.MStaticViewGroup;
+import com.edplan.framework.view.MTextView;
+import com.edplan.framework.view.advance.text.CommandField;
+import com.edplan.framework.view.advance.widget.OsuBaseTriangleManager;
+import com.edplan.framework.view.advance.widget.OsuTriangleField;
+import com.edplan.framework.view.advance.widget.OsuTriangleManager;
 import com.edplan.mygame.GameSurfaceView;
+import com.edplan.mygame.test.TestCursorField;
 import com.edplan.nso.ParsingBeatmap;
+import com.edplan.nso.Ruleset.amodel.object.HitObject;
 import com.edplan.nso.Ruleset.std.objects.StdHitObject;
 import com.edplan.nso.Ruleset.std.parser.StdHitObjectParser;
 import com.edplan.nso.filepart.PartGeneral;
+import com.edplan.nso.filepart.PartHitObjects;
 import com.edplan.nso.parser.StdBeatmapParser;
-import com.edplan.simpleGame.view.BaseDatas;
-import com.edplan.simpleGame.view.MButton;
-import com.edplan.simpleGame.view.MFlatButton;
-import com.edplan.simpleGame.view.MStaticViewGroup;
-import com.edplan.simpleGame.view.MTextView;
-import com.edplan.simpleGame.view.advance.text.CommandField;
-import com.edplan.simpleGame.view.advance.widget.OsuBaseTriangleManager;
-import com.edplan.simpleGame.view.advance.widget.OsuTriangleField;
-import com.edplan.simpleGame.view.advance.widget.OsuTriangleManager;
 import com.edplan.superutils.TestClock;
 import com.edplan.superutils.U;
 import java.io.File;
 import java.util.Arrays;
-import com.edplan.nso.osb.base.Origin;
-import com.edplan.mygame.test.TestCursorField;
-import com.edplan.simpleGame.MContext;
+import com.edplan.nso.Ruleset.std.objects.StdSlider;
+import com.edplan.framework.graphics.line.approximator.BezierApproximator;
+import com.edplan.nso.Ruleset.std.objects.StdPath;
+import com.edplan.framework.math.Vec2;
+import java.util.List;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
+import java.io.FileOutputStream;
 
 public class MainGamePage extends MStaticViewGroup
 {
@@ -69,7 +80,9 @@ public class MainGamePage extends MStaticViewGroup
 			
 			cf.addText("------------------------------------------------------------------------------------------------");
 			
-			StdBeatmapParser p=new StdBeatmapParser(new File("/storage/emulated/0/MyDisk/WorkBench/data/test beatmaps/mania/Primary - in the Garden (Mat) [Julie's 4K Hard].osu"));
+			StdBeatmapParser p=new StdBeatmapParser(new File("/storage/emulated/0/MyDisk/WorkBench/data/test beatmaps/std/Halozy - Kikoku Doukoku Jigokuraku (Hollow Wings) [Notch Hell].osu"));
+			//"/storage/emulated/0/MyDisk/WorkBench/data/test beatmaps/std/Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"));
+			//"/storage/emulated/0/MyDisk/WorkBench/data/test beatmaps/mania/Primary - in the Garden (Mat) [Julie's 4K Hard].osu"));
 			//"/storage/emulated/0/MyDisk/WorkBench/data/test beatmaps/std/Petit Rabbit's - No Poi! (walaowey) [Insane].osu"));
 			clock.start();
 			p.parse();
@@ -85,7 +98,58 @@ public class MainGamePage extends MStaticViewGroup
 			String[] entry=U.divide(l,l.indexOf(":"));
 			cf.addText(Arrays.toString(entry));
 			//cf.addText(Origin.valueOf("@ssg").toString());
-			
+			cf.addText("------------------------------------------------------------------------------------------------");
+			TestClock tc2=new TestClock();
+			clock.start();
+			int count=0;
+			float ttt=0;
+			List<Vec2> ls;
+			Bitmap pbp=Bitmap.createBitmap(500,500,Bitmap.Config.ARGB_8888);
+			Canvas c=new Canvas(pbp);
+			Paint paint=new Paint();
+			paint.setAntiAlias(true);
+			paint.setStyle(Paint.Style.STROKE);
+			for(HitObject o:((PartHitObjects)(p.getHitObjectsParser().getPart())).getHitObjectList()){
+				if(o instanceof StdSlider){
+					StdSlider sld=(StdSlider)o;
+					if(sld.getPath().getType()!=StdPath.Type.Bezier)continue;
+					tc2.start();
+					ls=(new BezierApproximator(sld.getPath().getControlPoints())).createBezier();
+					tc2.end();
+					ttt+=tc2.getTime();
+					count++;
+					cf.addText(count+"|"+tc2.getTime()+"|"+ls.size()+"|"+Arrays.toString(ls.toArray()));
+					
+					
+					
+					c.drawColor(0xffffffff);
+					Path path=new Path();
+					path.moveTo(ls.get(0).x,ls.get(0).y);
+					for(Vec2 vc:ls){
+						path.lineTo(vc.x,vc.y);
+					}
+					
+					
+					paint.setStrokeWidth(2);
+					paint.setARGB(255,0,0,0);
+					c.drawPath(path,paint);
+					paint.setStrokeWidth(1);
+					paint.setARGB(100,255,0,0);
+					for(Vec2 v:ls){
+						c.drawCircle(v.x,v.y,2,paint);
+					}
+					
+					File dir=new File("/storage/emulated/0/MyDisk/WorkBench/data/test out");
+					File npng=new File(dir,dir.list().length+".png");
+					npng.createNewFile();
+					pbp.compress(Bitmap.CompressFormat.PNG,100,new FileOutputStream(npng));
+					
+				}
+			}
+			clock.end();
+			cf.addText("------");
+			cf.addText("Total time : "+clock.getTime());
+			cf.addText("pt : "+ttt);
 			
 			/*
 			String testString="osu file format v14";
@@ -146,12 +210,11 @@ public class MainGamePage extends MStaticViewGroup
 		TestCursorField tcf=new TestCursorField(getContext());
 		tcf.setHeight(getHeight());
 		tcf.setWidth(getWidth());
-		setUpTriangleBackground();
+		//setUpTriangleBackground();
 		add(cf);
-		add(tcf);
-		/*
-		setUpTitleField();
-		setUpMainButtonField();*/
+		//add(tcf);
+		//setUpTitleField();
+		//setUpMainButtonField();
 	}
 	
 	MStaticViewGroup dataBar;

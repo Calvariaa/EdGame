@@ -56,11 +56,20 @@ public class GeneralParser implements PartParser
 					case PartGeneral.SampleSet:
 						part.setSampleSet(SampleSet.parse(entry[1]));
 						return true;
+					case PartGeneral.SampleVolume:
+						part.setSampleVolume(U.toInt(entry[1]));
+						return true;
 					case PartGeneral.StackLeniency:
 						part.setStackLeniency(U.toFloat(entry[1]));
 						return true;
 					case PartGeneral.WidescreenStoryboard:
 						part.setWidescreenStoryboard(U.toBool(entry[1]));
+						return true;
+					case PartGeneral.SpecialStyle:
+						part.setSpecialStyle(U.toBool(entry[1]));
+						return true;
+					case PartGeneral.EpilepsyWarning:
+						part.setEpilepsyWarning(U.toBool(entry[1]));
 						return true;
 					default:
 						//handler err post

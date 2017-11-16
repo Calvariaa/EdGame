@@ -2,18 +2,17 @@ package com.edplan.mygame;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import com.edplan.simpleGame.inputs.Pointer;
-import com.edplan.simpleGame.view.BaseWidget;
-import com.edplan.simpleGame.inputs.TouchEventHelper;
-import com.edplan.simpleGame.GameStatic;
+import com.edplan.framework.MContext;
+import com.edplan.framework.inputs.Pointer;
+import com.edplan.framework.inputs.TouchEventHelper;
+import com.edplan.framework.view.BaseWidget;
 import com.edplan.superutils.classes.MLooperThread;
-import com.edplan.superutils.MTimer;
-import com.edplan.simpleGame.MContext;
 
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback
 {
@@ -33,6 +32,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 	BaseWidget content;
 	
 	private MContext context;
+	
+	private boolean drawDetails=true;
 	
 	public GameSurfaceView(Context context,AttributeSet attr){
 		super(context,attr);
@@ -84,6 +85,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		mHolder=getHolder();
 		mHolder.addCallback(this);
 		mDrawThread=new DrawThread();
+		mDrawThread.setFramTimeMillions(5);
 		touchHelper=new TouchEventHelper();
 		context=new MContext();
 		context.setLoopThread(mDrawThread);
@@ -97,9 +99,33 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		mDrawThread.setFlag(flag);
 	}
 	
+	Paint tp=new Paint();
+	Paint fp=new Paint();
+	int[] timelist=new int[20];
 	public void mDraw(Canvas c){
 		c.drawColor(getClearColor());
 		content.draw(c);
+		if(drawDetails){
+			tp.setARGB(255,255,255,255);
+			tp.setTextSize(30);
+			tp.setStrokeWidth(7);
+			fp.setARGB(255,0,0,0);
+			c.save();
+			c.clipRect(c.getWidth()-200,c.getHeight()-200,c.getWidth(),c.getHeight());
+			c.translate(c.getWidth()-200,c.getHeight()-200);
+			c.drawARGB(255,0,0,0);
+			c.drawText("DeltaTime: "+context.getFrameDeltaTime(),10,30,tp);
+			c.drawLine(10,50,10+18*6,50,tp);
+			c.drawLine(10,60,10+context.getFrameDeltaTime()*6,60,tp);
+			for(int i=timelist.length-1;i>0;i--){
+				timelist[i]=timelist[i-1];
+			}
+			timelist[0]=context.getFrameDeltaTime();
+			for(int i=0;i<timelist.length;i++){
+				c.drawLine(10,55+5*i,10+timelist[i]*6,55+5*i,tp);
+			}
+			c.restore();
+		}
 	}
 
 	@Override
@@ -160,7 +186,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		@Override
 		public void onFrame(int time){
 			// TODO: Implement this method
-			GameStatic.setDrawDeltaTime(time);
 			super.onFrame(time);
 			idraw();
 			if(time>RENDER_WARNING_TIME){
@@ -203,11 +228,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 				}else{
 					//正式绘图
 					t=System.currentTimeMillis();
-					if(latestTime==0){
-						GameStatic.setDrawDeltaTime(0);
-					}else{
-						GameStatic.setDrawDeltaTime((int)(System.currentTimeMillis()-latestTime));
-					}
 					latestTime=System.currentTimeMillis();
 					
 					if(System.currentTimeMillis()-t<4){

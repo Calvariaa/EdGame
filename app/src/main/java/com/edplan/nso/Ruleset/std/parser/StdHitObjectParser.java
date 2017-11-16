@@ -8,7 +8,7 @@ import com.edplan.nso.Ruleset.std.objects.StdHitObject;
 import com.edplan.nso.Ruleset.std.objects.StdHitObjectType;
 import com.edplan.nso.Ruleset.std.objects.StdPath;
 import com.edplan.nso.Ruleset.std.objects.StdSlider;
-import com.edplan.superutils.Math.Vct2;
+import com.edplan.superutils.math.Vct2;
 import com.edplan.superutils.U;
 import com.edplan.superutils.classes.strings.StringSpliter;
 import java.util.ArrayList;
@@ -17,6 +17,7 @@ import com.edplan.nso.Ruleset.std.objects.StdSpinner;
 import com.edplan.nso.Ruleset.std.parser.StdHitObjectParser.HitObjectBaseDatas;
 import android.util.Log;
 import com.edplan.nso.Ruleset.mania.objects.ManiaHolder;
+import com.edplan.framework.math.Vec2;
 
 /**
  *Official format wikipage:
@@ -148,13 +149,18 @@ public class StdHitObjectParser implements HitObjectParser<StdHitObject>
 			spl=new StringSpliter(spl.next(),"\\|");
 			p.setType(StdPath.Type.forName(spl.next()));
 			while(spl.hasNext()){
-				p.addControlPoint(parseVct2II(spl.next()));
+				p.addControlPoint(parseVec2FF(spl.next()));
 			}
 			return p;
 		}
 		catch(Exception e){
 			throw new NsoException("err parsing sliderpath. msg: "+e.getMessage(),e);
 		}
+	}
+	
+	public Vec2 parseVec2FF(String s)throws Exception{
+		String[] sp=s.split(":");
+		return new Vec2(U.toInt(sp[0]),U.toInt(sp[1]));
 	}
 	
 	public Vct2<Integer,Integer> parseVct2II(String s)throws Exception{

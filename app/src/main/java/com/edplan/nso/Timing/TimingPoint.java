@@ -1,6 +1,7 @@
 package com.edplan.nso.Timing;
 import com.edplan.superutils.interfaces.StringMakeable;
 import com.edplan.superutils.U;
+import com.edplan.nso.beatmapComponent.SampleSet;
 
 public class TimingPoint implements StringMakeable
 {
@@ -12,19 +13,29 @@ public class TimingPoint implements StringMakeable
 	
 	private int sampleType;
 	
-	private int sampleSet;
+	private SampleSet sampleSet=SampleSet.None;
 	
-	private int volume;
+	private int volume=100;
 	
-	private boolean inherited;
+	private boolean inherited=true;
 	
-	private boolean kiaiMode;
+	private boolean kiaiMode=false;
+	
+	private boolean omitFirstBarSignature=false;
 
-	public void setSampleSet(int sampleSet){
+	public void setOmitFirstBarSignature(boolean omitFirstBarSignature) {
+		this.omitFirstBarSignature=omitFirstBarSignature;
+	}
+
+	public boolean isOmitFirstBarSignature() {
+		return omitFirstBarSignature;
+	}
+
+	public void setSampleSet(SampleSet sampleSet){
 		this.sampleSet=sampleSet;
 	}
 
-	public int getSampleSet(){
+	public SampleSet getSampleSet(){
 		return sampleSet;
 	}
 
@@ -94,7 +105,7 @@ public class TimingPoint implements StringMakeable
 		sb.append(getSampleType()            ).append(",");
 		sb.append(getSampleSet()             ).append(",");
 		sb.append(U.toVString(isInherited()) ).append(",");
-		sb.append(U.toVString(isKiaiMode())  );
+		sb.append(((isKiaiMode())?1:0)+((isOmitFirstBarSignature())?8:0));
 		return sb.toString();
 	}
 }

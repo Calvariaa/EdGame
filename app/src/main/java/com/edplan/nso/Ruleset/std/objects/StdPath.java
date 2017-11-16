@@ -1,23 +1,24 @@
 package com.edplan.nso.Ruleset.std.objects;
-import com.edplan.superutils.Math.Vct2;
+import com.edplan.superutils.math.Vct2;
 import java.util.List;
 import java.util.ArrayList;
+import com.edplan.framework.math.Vec2;
 
 public class StdPath
 {
 	private Type type;
-	private List<Vct2<Integer,Integer>> controlPoints;
+	private List<Vec2> controlPoints;
 	
 	public StdPath(){
-		controlPoints=new ArrayList<Vct2<Integer,Integer>>();
+		controlPoints=new ArrayList<Vec2>();
 	}
 	
-	public void addControlPoint(Vct2<Integer,Integer> p){
+	public void addControlPoint(Vec2 p){
 		controlPoints.add(p);
 	}
 	
-	public void addControlPoint(int x,int y){
-		addControlPoint(new Vct2<Integer,Integer>(x,y));
+	public void addControlPoint(float x,float y){
+		addControlPoint(new Vec2(x,y));
 	}
 
 	public void setType(Type type){
@@ -28,11 +29,11 @@ public class StdPath
 		return type;
 	}
 
-	public void setControlPoints(List<Vct2<Integer, Integer>> controlPoints){
+	public void setControlPoints(List<Vec2> controlPoints){
 		this.controlPoints=controlPoints;
 	}
 
-	public List<Vct2<Integer, Integer>> getControlPoints(){
+	public List<Vec2> getControlPoints(){
 		return controlPoints;
 	}
 	

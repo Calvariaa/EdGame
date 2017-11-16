@@ -4,6 +4,7 @@ import com.edplan.nso.filepart.PartTimingPoints;
 import com.edplan.nso.Timing.TimingPoint;
 import com.edplan.superutils.classes.strings.StringSpliter;
 import com.edplan.superutils.U;
+import com.edplan.nso.beatmapComponent.SampleSet;
 
 public class TimingPointsParser implements PartParser
 {
@@ -20,10 +21,12 @@ public class TimingPointsParser implements PartParser
 		t.setMillionsecondsPerBeat(U.toDouble(sp.next()));
 		t.setMeter(U.toInt(sp.next()));
 		t.setSampleType(U.toInt(sp.next()));
-		t.setSampleSet(U.toInt(sp.next()));
+		t.setSampleSet(SampleSet.parse(sp.next()));
 		t.setVolume(U.toInt(sp.next()));
 		t.setInherited(U.toBool(sp.next()));
-		t.setKiaiMode(U.toBool(sp.next()));
+		int eff=U.toInt(sp.next());
+		t.setKiaiMode((eff&1)>0);
+		t.setOmitFirstBarSignature((eff&8)>0);
 		return t;
 	}
 	

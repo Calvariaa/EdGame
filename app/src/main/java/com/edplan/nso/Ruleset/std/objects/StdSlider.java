@@ -1,6 +1,6 @@
 package com.edplan.nso.Ruleset.std.objects;
 
-import com.edplan.superutils.Math.Vct2;
+import com.edplan.superutils.math.Vct2;
 import java.util.List;
 
 public class StdSlider extends StdHitObject

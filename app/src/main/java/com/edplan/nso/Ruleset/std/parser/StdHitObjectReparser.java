@@ -6,8 +6,9 @@ import com.edplan.nso.Ruleset.std.objects.StdHitCircle;
 import com.edplan.nso.Ruleset.std.objects.StdSlider;
 import com.edplan.nso.Ruleset.std.objects.StdSpinner;
 import com.edplan.nso.Ruleset.std.objects.StdPath;
-import com.edplan.superutils.Math.Vct2;
+import com.edplan.superutils.math.Vct2;
 import com.edplan.nso.Ruleset.mania.objects.ManiaHolder;
+import com.edplan.framework.math.Vec2;
 
 public class StdHitObjectReparser implements HitObjectReparser<StdHitObject>
 {
@@ -57,8 +58,8 @@ public class StdHitObjectReparser implements HitObjectReparser<StdHitObject>
 	
 	public void buildSliderPath(StringBuilder sb,StdPath path){
 		sb.append(path.getType().getTag());
-		for(Vct2<Integer,Integer> v :path.getControlPoints()){
-			sb.append("|").append(v.getX()).append(":").append(v.getY());
+		for(Vec2 v :path.getControlPoints()){
+			sb.append("|").append((int)v.x).append(":").append((int)v.y);
 		}
 		sb.append(",");
 	}

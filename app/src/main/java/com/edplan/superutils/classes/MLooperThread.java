@@ -35,6 +35,14 @@ public class MLooperThread extends Thread
 	public MLooperThread(){
 		this(new MLooper());
 	}
+
+	public void setFramTimeMillions(int framTimeMillions){
+		this.framTimeMillions=framTimeMillions;
+	}
+
+	public int getFramTimeMillions(){
+		return framTimeMillions;
+	}
 	
 	private void initial(){
 		timer=new MTimer();

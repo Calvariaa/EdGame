@@ -3,7 +3,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import com.edplan.mygame.acts.MainGamePage;
-import com.edplan.simpleGame.view.BaseDatas;
+import com.edplan.framework.view.BaseDatas;
 
 public class GameMainActivity extends Activity
 {

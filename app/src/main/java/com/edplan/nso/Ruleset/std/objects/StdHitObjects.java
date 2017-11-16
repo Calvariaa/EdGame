@@ -4,12 +4,12 @@ import com.edplan.nso.Ruleset.amodel.object.HitObjects;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StdHitObjects extends HitObjects<StdHitObject>
+public class StdHitObjects extends HitObjects
 {
-	private List<StdHitObject> hitObjects;
+	private List<HitObject> hitObjects;
 	
 	public StdHitObjects(){
-		hitObjects=new ArrayList<StdHitObject>();
+		hitObjects=new ArrayList<HitObject>();
 	}
 
 	@Override
@@ -21,7 +21,7 @@ public class StdHitObjects extends HitObjects<StdHitObject>
 	}
 
 	@Override
-	public List<StdHitObject> getHitObjectList(){
+	public List<HitObject> getHitObjectList(){
 		// TODO: Implement this method
 		return hitObjects;
 	}

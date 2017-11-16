@@ -1,10 +1,10 @@
 package com.edplan.nso.osb.base;
-import com.edplan.simpleGame.math.PointF;
+import com.edplan.framework.math.Vec2;
 
 public class OsbObject
 {
 	
 	
-	public PointF point;
+	public Vec2 point;
 	
 }

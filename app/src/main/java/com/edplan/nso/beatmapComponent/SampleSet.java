@@ -1,10 +1,55 @@
 package com.edplan.nso.beatmapComponent;
 import com.edplan.superutils.interfaces.StringMakeable;
 
-public class SampleSet implements StringMakeable
+public enum SampleSet implements StringMakeable
 {
-	private Type type;
+	None("None"),Soft("Soft"),Normal("Normal"),Drum("Drum")
+	;
+	private final String value;
+
+	public SampleSet(String v){
+		value=v;
+	}
+
+	public String value(){
+		return value;
+	}
+
+	public static SampleSet parse(String s){
+		switch(s){
+			case "0":
+			case "None":
+				return None;
+			case "1":
+			case "Normal":
+				return Normal;
+			case "2":
+			case "Soft":
+				return Soft;
+			case "3":
+			case "Drum":
+				return Drum;
+			default:
+				return null;
+		}
+	}
+
+	public static SampleSet fromName(String s){
+		switch(s){
+			case "None":
+				return None;
+			case "Normal":
+				return Normal;
+			case "Soft":
+				return Soft;
+			case "Drum":
+				return Drum;
+			default:
+				return null;
+		}
+	}
 	
+	/*
 	public SampleSet(){
 		
 	}
@@ -19,43 +64,11 @@ public class SampleSet implements StringMakeable
 
 	public Type getType(){
 		return type;
-	}
+	}*/
 	
 	@Override
 	public String makeString(){
 		// TODO: Implement this method
-		return (type!=null)?type.value():"{@SampleSet}"; 
-	}
-	
-	public static SampleSet parse(String line){
-		return new SampleSet(Type.fromName(line));
-	}
-	
-	
-	public enum Type{
-		Soft("Soft"),Normal("Normal"),Drum("Drum")
-		;
-		private final String value;
-
-		public Type(String v){
-			value=v;
-		}
-
-		public String value(){
-			return value;
-		}
-
-		public static Type fromName(String s){
-			switch(s){
-				case "Soft":
-					return Soft;
-				case "Normal":
-					return Normal;
-				case "Drum":
-					return Drum;
-				default:
-					return null;
-			}
-		}
+		return value; 
 	}
 }

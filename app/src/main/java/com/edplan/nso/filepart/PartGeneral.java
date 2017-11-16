@@ -11,12 +11,13 @@ public class PartGeneral implements OsuFilePart
 	public static final String PreviewTime="PreviewTime";
 	public static final String Countdown="Countdown";
 	public static final String SampleSet="SampleSet";
+	public static final String SampleVolume="SampleVolume";
 	public static final String StackLeniency="StackLeniency";
 	public static final String Mode="Mode";
 	public static final String LetterboxInBreaks="LetterboxInBreaks";
 	public static final String WidescreenStoryboard="WidescreenStoryboard";
 	public static final String SpecialStyle="SpecialStyle";
-	
+	public static final String EpilepsyWarning="EpilepsyWarning";
 	
 	public static final String TAG="General";
 	
@@ -25,14 +26,32 @@ public class PartGeneral implements OsuFilePart
 	private int previewTime=0;
 	private boolean countdown=false;
 	private SampleSet sampleSet=null;
+	private int sampleVolume=100;
 	private float stackLeniency=0;
 	private int mode=-1;
 	private boolean letterboxInBreaks=false;
 	private boolean widescreenStoryboard=false;
 	private boolean specialStyle=false;
+	private boolean epilepsyWarning=false;
 	
 	public PartGeneral(){
 		//Map<String,Object> map=U.makeMap(String.class,Object.class,);
+	}
+
+	public void setEpilepsyWarning(boolean epilepsyWarning) {
+		this.epilepsyWarning=epilepsyWarning;
+	}
+
+	public boolean isEpilepsyWarning() {
+		return epilepsyWarning;
+	}
+
+	public void setSampleVolume(int sampleVolume) {
+		this.sampleVolume=sampleVolume;
+	}
+
+	public int getSampleVolume() {
+		return sampleVolume;
 	}
 
 	public void setSpecialStyle(boolean specialStyle){
@@ -130,10 +149,16 @@ public class PartGeneral implements OsuFilePart
 		U.appendProperty(sb,PartGeneral.PreviewTime          ,getPreviewTime()                      ).append(U.NEXT_LINE);
 		U.appendProperty(sb,PartGeneral.Countdown            ,U.toVString(ifCountdown())            ).append(U.NEXT_LINE);
 		U.appendProperty(sb,PartGeneral.SampleSet            ,getSampleSet().makeString()           ).append(U.NEXT_LINE);
+		U.appendProperty(sb,PartGeneral.SampleVolume         ,getSampleVolume()                     ).append(U.NEXT_LINE);
 		U.appendProperty(sb,PartGeneral.StackLeniency        ,getStackLeniency()                    ).append(U.NEXT_LINE);
 		U.appendProperty(sb,PartGeneral.Mode                 ,getMode()                             ).append(U.NEXT_LINE);
 		U.appendProperty(sb,PartGeneral.LetterboxInBreaks    ,U.toVString(isLetterboxInBreaks())    ).append(U.NEXT_LINE);
-		U.appendProperty(sb,PartGeneral.WidescreenStoryboard ,U.toVString(isWidescreenStoryboard()) ).append(U.NEXT_LINE);
+		if(isSpecialStyle())
+			U.appendProperty(sb,PartGeneral.SpecialStyle         ,U.toVString(isSpecialStyle())         ).append(U.NEXT_LINE);
+		if(isEpilepsyWarning())
+			U.appendProperty(sb,PartGeneral.EpilepsyWarning      ,U.toVString(isEpilepsyWarning())      ).append(U.NEXT_LINE);
+		if(isWidescreenStoryboard())
+			U.appendProperty(sb,PartGeneral.WidescreenStoryboard ,U.toVString(isWidescreenStoryboard()) ).append(U.NEXT_LINE);
 		
 		return sb.toString();
 	}

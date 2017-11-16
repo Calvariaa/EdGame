@@ -1,6 +1,6 @@
 package com.edplan.nso.inputs;
 
-import com.edplan.simpleGame.inputs.MAction;
+import com.edplan.framework.inputs.MAction;
 
 public class OsuAction implements MAction
 {

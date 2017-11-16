@@ -1,6 +1,6 @@
 package com.edplan.mygame;
-import com.edplan.simpleGame.view.Actor;
-import com.edplan.simpleGame.view.Operater;
+import com.edplan.framework.view.Actor;
+import com.edplan.framework.view.Operater;
 import android.graphics.Paint;
 import android.graphics.Canvas;
 

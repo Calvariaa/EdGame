@@ -10,17 +10,18 @@ public class ManiaNote extends StdHitCircle
 	
 	public ManiaNote(StdHitCircle hc){
 		super();
-		setSampleSetAddition(hc.getSampleSetAddition());
-		setStartTime(hc.getStartTime());
-		setCustomIndex(hc.getCustomIndex());
 		setAddition(hc.getAddition());
-		setOverrideSampleFile(hc.getOverrideSampleFile());
+		//setSampleSetAddition(hc.getSampleSetAddition());
+		setStartTime(hc.getStartTime());
+		//setCustomIndex(hc.getCustomIndex());
+		setAddition(hc.getAddition());
+		//setOverrideSampleFile(hc.getOverrideSampleFile());
 		setIsNewCombo(hc.isNewCombo());
 		setComboColorsSkip(hc.getComboColorsSkip());
-		setSampleSet(hc.getSampleSet());
+		//setSampleSet(hc.getSampleSet());
 		setHitSound(hc.getHitSound());
 		setStartX(hc.getStartX());
-		setSampleVolume(hc.getSampleVolume());
+		//setSampleVolume(hc.getSampleVolume());
 		setStartY(hc.getStartY());
 	}
 	
