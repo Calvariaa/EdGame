@@ -25,6 +25,14 @@ public class LinePath
 		positions=new ArrayList<Vec2>();
 	}
 
+	public int size(){
+		return positions.size();
+	}
+	
+	public Vec2 get(int index){
+		return positions.get(index);
+	}
+
 	public void setWidth(float width) {
 		this.width=width;
 		recomputeBounds();

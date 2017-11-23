@@ -64,6 +64,15 @@ public class Vec2
 		return zoom(o.x,o.y,zoomTimesX,zoomTimesY);
 	}
 	
+	public Vec2 rotate(float r){
+		float c=(float)Math.cos(r);
+		float s=(float)Math.sin(r);
+		float tmpX=x;
+		x=x*c-y*s;
+		y=y*c+tmpX*s;
+		return this;
+	}
+	
 	//顺时针，弧度
 	public Vec2 rotate(Vec2 o,float r){
 		float c=(float)Math.cos(r);
@@ -75,8 +84,19 @@ public class Vec2
 		return this;
 	}
 	
+	public Vec2 postMatrix(Matrix2 m){
+		float tmpX=x;
+		x=x*m.data[0][0]+y*m.data[1][0];
+		y=tmpX*m.data[1][0]+y*m.data[1][1];
+		return this;
+	}
+	
 	public Vec2 toNormal(){
 		return zoom(length());
+	}
+	
+	public Vec2 toOrthogonalDirectionNormal(){
+		return toNormal().rotate(FMath.Pi/2);
 	}
 	
 	public float length(){
@@ -87,12 +107,21 @@ public class Vec2
 		return lengthSquared(x,y);
 	}
 	
+	public float theta(){
+		return FMath.atan2(x,y);
+	}
+	
 	public Vec2 copy(){
 		return new Vec2(this);
 	}
 	
 	public Vec3 toVec3(float z){
 		return new Vec3(this,z);
+	}
+	
+	public static Vec2 lineOthNormal(Vec2 ps,Vec2 pe){
+		Vec2 v=pe.copy().minus(ps).toOrthogonalDirectionNormal();
+		return v;
 	}
 	
 	public static float lengthSquared(float x,float y){
@@ -109,6 +138,10 @@ public class Vec2
 	
 	public static Vec2 atCircle(float ang){
 		return new Vec2((float)Math.cos(ang),(float)Math.sin(ang));
+	}
+	
+	public static float calTheta(Vec2 start,Vec2 end){
+		return FMath.atan2(end.x-start.x,end.y-start.y);
 	}
 
 	@Override

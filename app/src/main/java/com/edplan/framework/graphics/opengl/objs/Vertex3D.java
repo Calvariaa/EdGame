@@ -3,16 +3,22 @@ import com.edplan.framework.math.Vec3;
 
 public class Vertex3D
 {
+	public static final Color4 DEF_COLOR=new Color4(1.0f,1.0f,1.0f,1.0f);
+	
+	public static final Vec3 DEF_POSITION=new Vec3(0,0,0);
+	
 	public Vec3 position;
 	
 	public Color4 color;
 	
 	public Vertex3D(){
-		
+		position=DEF_POSITION;
+		color=DEF_COLOR;
 	}
 	
 	public Vertex3D(Vec3 p){
 		this.position=p;
+		color=DEF_COLOR;
 	}
 	
 	public Vertex3D(float x,float y,float z){

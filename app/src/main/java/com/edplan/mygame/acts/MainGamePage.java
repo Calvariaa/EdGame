@@ -34,6 +34,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import java.io.FileOutputStream;
+import com.edplan.framework.view.MProgressBar;
 
 public class MainGamePage extends MStaticViewGroup
 {
@@ -109,7 +110,8 @@ public class MainGamePage extends MStaticViewGroup
 			Paint paint=new Paint();
 			paint.setAntiAlias(true);
 			paint.setStyle(Paint.Style.STROKE);
-			for(HitObject o:((PartHitObjects)(p.getHitObjectsParser().getPart())).getHitObjectList()){
+			
+			if(false)for(HitObject o:((PartHitObjects)(p.getHitObjectsParser().getPart())).getHitObjectList()){
 				if(o instanceof StdSlider){
 					StdSlider sld=(StdSlider)o;
 					if(sld.getPath().getType()!=StdPath.Type.Bezier)continue;
@@ -215,6 +217,15 @@ public class MainGamePage extends MStaticViewGroup
 		//add(tcf);
 		//setUpTitleField();
 		//setUpMainButtonField();
+		
+		
+		MProgressBar mpb=new MProgressBar(getContext());
+		
+		mpb.setWidth(getWidth());
+		mpb.setHeight(80);
+		mpb.setBottom(getHeight());
+		
+		add(mpb);
 	}
 	
 	MStaticViewGroup dataBar;
