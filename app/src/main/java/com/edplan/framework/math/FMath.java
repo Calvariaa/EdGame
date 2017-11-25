@@ -4,6 +4,11 @@ public class FMath
 {
 	public static final float Pi=(float)Math.PI;
 	
+	public static final float Pi2=(float)(Math.PI*2);
+	
+
+	public static final float PiHalf=(float)(Math.PI*0.5);
+	
 	public static float sin(double v){
 		return (float)Math.sin(v);
 	}

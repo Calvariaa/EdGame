@@ -7,6 +7,10 @@ public class Vec2
 	
 	public float x,y;
 	
+	public Vec2(){
+		
+	}
+	
 	public Vec2(float x,float y){
 		this.x=x;
 		this.y=y;
@@ -48,6 +52,16 @@ public class Vec2
 		y+=offsetY;
 		
 		return this;
+	}
+	
+	public Vec2 divide(float dx,float dy){
+		this.x/=dx;
+		this.y/=dy;
+		return this;
+	}
+	
+	public Vec2 divide(float d){
+		return divide(d,d);
 	}
 	
 	public Vec2 zoom(float zt){
@@ -97,6 +111,10 @@ public class Vec2
 	
 	public Vec2 toOrthogonalDirectionNormal(){
 		return toNormal().rotate(FMath.Pi/2);
+	}
+	
+	public float dot(Vec2 v){
+		return this.x*v.x+this.y*v.y;
 	}
 	
 	public float length(){

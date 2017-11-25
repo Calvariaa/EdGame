@@ -8,7 +8,7 @@ import com.edplan.framework.graphics.opengl.objs.GLTexture;
 /**
  *通过FBO，完全分离的绘制，最后的结果是一个Texture
  */
-public abstract class BufferedLayer extends GLDrawable
+public abstract class BufferedLayer
 {
 	private FrameBufferObject frameBuffer;
 	
@@ -44,17 +44,12 @@ public abstract class BufferedLayer extends GLDrawable
 	
 	public abstract void renderThisLayer();
 	
-	@Override
-	public void prepareForDraw() {
+	//When rendering, the viewport should be sat by parent layer allready.
+	
+	public void render() {
 		// TODO: Implement this method
 		//make sure the width and height are right when drawing.
 		checkChange();
-	}
-
-	//When rendering, the viewport should be sat by parent layer allready.
-	@Override
-	public void render(DrawInfo info) {
-		// TODO: Implement this method
 		frameBuffer.bind();
 		renderThisLayer();
 		frameBuffer.unBind();
