@@ -35,6 +35,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import java.io.FileOutputStream;
 import com.edplan.framework.view.MProgressBar;
+import com.edplan.nso.Ruleset.std.objects.drawables.DrawableStdSlider;
 
 public class MainGamePage extends MStaticViewGroup
 {
@@ -105,23 +106,24 @@ public class MainGamePage extends MStaticViewGroup
 			int count=0;
 			float ttt=0;
 			List<Vec2> ls;
-			Bitmap pbp=Bitmap.createBitmap(500,500,Bitmap.Config.ARGB_8888);
+			Bitmap pbp=Bitmap.createBitmap(700,700,Bitmap.Config.ARGB_8888);
 			Canvas c=new Canvas(pbp);
 			Paint paint=new Paint();
 			paint.setAntiAlias(true);
 			paint.setStyle(Paint.Style.STROKE);
 			
-			if(false)for(HitObject o:((PartHitObjects)(p.getHitObjectsParser().getPart())).getHitObjectList()){
+			if(false)
+			for(HitObject o:((PartHitObjects)(p.getHitObjectsParser().getPart())).getHitObjectList()){
 				if(o instanceof StdSlider){
 					StdSlider sld=(StdSlider)o;
-					if(sld.getPath().getType()!=StdPath.Type.Bezier)continue;
+					if(sld.getPath().getType()!=StdPath.Type.Perfect)continue;
 					tc2.start();
-					ls=(new BezierApproximator(sld.getPath().getControlPoints())).createBezier();
+					ls=(new DrawableStdSlider(sld.getPath())).calculatePath().getAll();
 					tc2.end();
 					ttt+=tc2.getTime();
 					count++;
 					cf.addText(count+"|"+tc2.getTime()+"|"+ls.size()+"|"+Arrays.toString(ls.toArray()));
-					
+					if(count>100)break;
 					
 					
 					c.drawColor(0xffffffff);
@@ -140,6 +142,21 @@ public class MainGamePage extends MStaticViewGroup
 					for(Vec2 v:ls){
 						c.drawCircle(v.x,v.y,2,paint);
 					}
+					
+					paint.setARGB(255,0,0,255);
+					paint.setStrokeWidth(10);
+					for(Vec2 v:sld.getPath().getControlPoints()){
+						c.drawCircle(v.x,v.y,6,paint);
+					}
+					
+					MTextView mtv=new MTextView(getContext());
+					mtv.setTextSize(15);
+					mtv.setWidth(pbp.getWidth());
+					mtv.setText(Arrays.toString(ls.toArray()));
+					c.save();
+					c.translate(0,400);
+					mtv.draw(c);
+					c.restore();
 					
 					File dir=new File("/storage/emulated/0/MyDisk/WorkBench/data/test out");
 					File npng=new File(dir,dir.list().length+".png");

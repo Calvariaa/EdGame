@@ -5,9 +5,15 @@ import com.edplan.framework.graphics.opengl.buffer.Vec3Buffer;
 import com.edplan.framework.graphics.opengl.objs.TextureVertex3D;
 import java.util.ArrayList;
 import java.util.List;
+import com.edplan.framework.graphics.opengl.objs.GLTexture;
+import com.edplan.framework.graphics.opengl.shader.GLProgram;
 
 public class Texture3DBatch
 {
+	private GLTexture texture;
+	
+	private GLProgram program;
+	
 	private List<TextureVertex3D> vertexs;
 	
 	public Texture3DBatch(){

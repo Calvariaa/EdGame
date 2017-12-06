@@ -10,10 +10,13 @@ package com.edplan.framework.main;
  *		   
  */
 import com.edplan.framework.graphics.opengl.GLLooper;
+import com.edplan.framework.graphics.ui.BufferedLayer;
 
 public class GameContext 
 {
 	private GLLooper glLooper;
+	
+	private BufferedLayer rootLayer;
 	
 	
 	

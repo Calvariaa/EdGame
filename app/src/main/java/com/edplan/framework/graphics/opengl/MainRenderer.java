@@ -7,6 +7,7 @@ import com.edplan.framework.main.GameContext;
 public class MainRenderer implements GLSurfaceView.Renderer
 {
 	private GLLooper looper;
+	
 	private GameContext context;
 	
 	@Override
@@ -15,13 +16,14 @@ public class MainRenderer implements GLSurfaceView.Renderer
 	}
 
 	@Override
-	public void onSurfaceChanged(GL10 p1,int p2,int p3) {
+	public void onSurfaceChanged(GL10 p1,int width,int heigth) {
 		// TODO: Implement this method
 	}
 
 	@Override
 	public void onDrawFrame(GL10 p1) {
 		// TODO: Implement this method
+		
 	}
 
 }

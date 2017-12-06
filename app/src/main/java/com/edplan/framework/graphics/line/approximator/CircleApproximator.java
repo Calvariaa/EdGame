@@ -29,13 +29,13 @@ public class CircleApproximator
 		
 		float s=aSp*(bSp+cSp-aSp);
 		float t=bSp*(aSp+cSp-bSp);
-		float u=cSp*(aSp+cSp-cSp);
+		float u=cSp*(aSp+bSp-cSp);
 		
 		float sum=s+t+u;
 		
 		Vec2 center=p1.copy().zoom(s)
-				 .add(p1.copy().zoom(s))
-				 .add(p1.copy().zoom(s))
+				 .add(p2.copy().zoom(t))
+				 .add(p3.copy().zoom(u))
 				 .divide(sum);
 				 
 		Vec2 dA=p1.copy().minus(center);
@@ -65,7 +65,7 @@ public class CircleApproximator
 		float currTheta;
 		for(int i=0;i<amountPoints;i++){
 			currTheta=thetaStart+dir*i/(amountPoints-1)*thetaRange;
-			output.add((new Vec2(FMath.cos(currTheta),FMath.sin(currTheta))).zoom(r));
+			output.add((new Vec2(FMath.cos(currTheta),FMath.sin(currTheta))).zoom(r).add(center));
 		}
 		return output;
 	}

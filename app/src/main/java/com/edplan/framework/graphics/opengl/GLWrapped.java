@@ -1,5 +1,6 @@
 package com.edplan.framework.graphics.opengl;
 import android.opengl.GLES20;
+import android.util.Log;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 
 public class GLWrapped
@@ -24,5 +25,17 @@ public class GLWrapped
 	
 	public static void clearColor(Color4 c){
 		GLES20.glClearColor(c.r,c.g,c.b,c.a);
+	}
+	
+	public static void clearDepthBuffer(){
+		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT);
+	}
+	
+	public static void checkGlError(String op) {
+        int error;
+        while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
+            Log.e("ES20_ERROR", op + ": glError " + error);
+            throw new GLException(op + ": glError " + error);
+        }
 	}
 }

@@ -35,6 +35,13 @@ public class FrameBufferObject
 		height=h;
 	}
 	
+	public void clearDepthBuffer(){
+		checkCurrent();
+		if(hasDepthAttachment()){
+			getDepthAttachment().clear();
+		}
+	}
+	
 	private void setDepthAttachment(DepthBufferObject depthAttachment) {
 		this.depthAttachment=depthAttachment;
 	}
@@ -155,6 +162,9 @@ public class FrameBufferObject
 				setBind(true);
 				previousFBO=currentFBO();
 				setCurrentFBO(this);
+				if(hasDepthAttachment()){
+					getDepthAttachment().bind();
+				}
 			}
 		}
 	}
@@ -164,6 +174,10 @@ public class FrameBufferObject
 			setBind(false);
 			checkCurrent();
 			setCurrentFBO(previousFBO);
+			previousFBO=null;
+			if(hasDepthAttachment()){
+				getDepthAttachment().unBind();
+			}
 		}else{
 			throw new GLException("You unbind a unbinded obj!! Maybe you forget to call this.bind() ");
 		}

@@ -2,6 +2,7 @@ package com.edplan.framework.graphics.opengl.bufferObjects;
 
 import android.opengl.GLES20;
 import com.edplan.framework.graphics.opengl.GLException;
+import com.edplan.framework.graphics.opengl.GLWrapped;
 
 public class DepthBufferObject 
 {
@@ -33,6 +34,11 @@ public class DepthBufferObject
 		GLES20.glGenRenderbuffers(1,id,0);
 		dbo.bufferId=id[0];
 		return dbo;
+	}
+	
+	public void clear(){
+		checkCurrent();
+		GLWrapped.clearDepthBuffer();
 	}
 	
 	/**

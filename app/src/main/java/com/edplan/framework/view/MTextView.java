@@ -8,7 +8,7 @@ import com.edplan.framework.MContext;
 
 public class MTextView extends BaseWidget{
 	
-	public float textWidth=100;
+	public float textFieldWidth=100;
 	public StaticLayout textLayout;
 	public String text="";
 	public Layout.Alignment alignment=Layout.Alignment.ALIGN_NORMAL;
@@ -24,14 +24,14 @@ public class MTextView extends BaseWidget{
 		text=_text;
 		textPaint=new TextPaint();
 		textPaint.setAntiAlias(true);
-		textPaint.setTextSize(50);
+		textPaint.setTextSize(40);
 		textPaint.setARGB(255,80,80,80);
 		update();
 		setClipCanvas(true);
 		setHeight(100);
 		setWidth(100);
 	}
-
+	
 	public void setTextLayout(StaticLayout textLayout){
 		this.textLayout=textLayout;
 	}
@@ -44,11 +44,16 @@ public class MTextView extends BaseWidget{
 		getTextPaint().setColor(color);
 		return this;
 	}
-
+	
+	public MTextView setTextSize(float size){
+		getTextPaint().setTextSize(size);
+		return this;
+	}
+	
 	@Override
-	public MTextView setWidth(float textWidth){
-		super.setWidth(textWidth);
-		this.textWidth=textWidth;
+	public MTextView setWidth(float textFieldWidth){
+		super.setWidth(textFieldWidth);
+		this.textFieldWidth=textFieldWidth;
 		return this;
 	}
 	
@@ -60,8 +65,8 @@ public class MTextView extends BaseWidget{
 		textLayout=buildTextLayout();
 	}
 
-	public float getTextWidth(){
-		return textWidth;
+	public float getTextFieldWidth(){
+		return textFieldWidth;
 	}
 
 	public void setAlignment(Layout.Alignment alignment){
@@ -84,7 +89,7 @@ public class MTextView extends BaseWidget{
 		StaticLayout s=new StaticLayout(
 			getText(),
 			getTextPaint(),
-			(int)getTextWidth(),
+			(int)getTextFieldWidth(),
 			getAlignment(),
 			1.01f,
 			0,

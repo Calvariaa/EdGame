@@ -1,7 +1,6 @@
 package com.edplan.framework.graphics.line;
 import com.edplan.framework.graphics.opengl.drawui.DrawInfo;
 import com.edplan.framework.graphics.opengl.drawui.GLDrawable;
-import com.edplan.framework.graphics.opengl.wrapped.GLShader;
 import com.edplan.framework.graphics.opengl.buffer.Vec3Buffer;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
@@ -11,7 +10,7 @@ import com.edplan.framework.graphics.batch.Texture3DBatch;
 import com.edplan.framework.graphics.opengl.objs.TextureVertex3D;
 import com.edplan.framework.math.Vec3;
 
-public class DrawLinePath extends GLDrawable
+public class DrawLinePath
 {
 	public static final int MAXRES=24;
 	
@@ -23,21 +22,19 @@ public class DrawLinePath extends GLDrawable
 	
 	private LinePath path;
 	
-	private GLShader fs;
-	
-	private GLShader vs;
-	
-	private GLTexture texture;
-	
-	private Vec3Buffer vertexBuffer;
-	
-	private Vec3Buffer texturePointBuffer;
-
 	private Vec2 textureStart=new Vec2(0,0);
 	
 	private Vec2 textureEnd=new Vec2(1,0);
 	
 	private DrawInfo info;
+
+	public void setBatch(Texture3DBatch batch) {
+		this.batch=batch;
+	}
+
+	public Texture3DBatch getBatch() {
+		return batch;
+	}
 	
 	private void addLineCap(Vec2 org,float theta,float thetaDiff){
 		final float step=FMath.Pi/MAXRES;
@@ -211,16 +208,4 @@ public class DrawLinePath extends GLDrawable
 		}
 		addLineCap(path.get(max_i-1),preTheta,FMath.Pi);
 	}
-
-	@Override
-	public void prepareForDraw() {
-		// TODO: Implement this method
-	}
-	
-	@Override
-	public void render(DrawInfo info) {
-		// TODO: Implement this method
-		
-	}
-
 }

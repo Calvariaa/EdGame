@@ -32,6 +32,14 @@ public class LinePath
 	public Vec2 get(int index){
 		return positions.get(index);
 	}
+	
+	public Vec2 getLast(){
+		return get(size()-1);
+	}
+	
+	public List<Vec2> getAll(){
+		return positions;
+	}
 
 	public void setWidth(float width) {
 		this.width=width;

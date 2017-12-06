@@ -98,10 +98,10 @@ public class Vec2
 		return this;
 	}
 	
-	public Vec2 postMatrix(Matrix2 m){
+	public Vec2 postMatrix(Mat2 m){
 		float tmpX=x;
-		x=x*m.data[0][0]+y*m.data[1][0];
-		y=tmpX*m.data[1][0]+y*m.data[1][1];
+		x=x*m.get(0,0)+y*m.get(1,0);
+		y=tmpX*m.get(1,0)+y*m.get(1,1);
 		return this;
 	}
 	
@@ -160,6 +160,17 @@ public class Vec2
 	
 	public static float calTheta(Vec2 start,Vec2 end){
 		return FMath.atan2(end.x-start.x,end.y-start.y);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		// TODO: Implement this method
+		if(obj instanceof Vec2){
+			Vec2 v=(Vec2)obj;
+			return v.x==x&&v.y==y;
+		}else{
+			return false;
+		}
 	}
 
 	@Override

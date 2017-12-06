@@ -18,13 +18,26 @@ public abstract class BufferedLayer
 	
 	private int height;
 	
-	private Color4 clearColor;
-	
 	public BufferedLayer(int width,int height,boolean hasDepthBuffer){
 		this.width=width;
 		this.height=height;
 		this.hasDepthBuffer=hasDepthBuffer;
-		clearColor=new Color4(0,0,0,0);
+	}
+
+	public void setWidth(int width) {
+		this.width=width;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setHeight(int height) {
+		this.height=height;
+	}
+
+	public int getHeight() {
+		return height;
 	}
 	
 	private void reCreateBuffer(){

@@ -1,23 +1,22 @@
 package com.edplan.nso.Ruleset.std.parser;
+import android.util.Log;
+import com.edplan.framework.math.Vec2;
 import com.edplan.nso.NsoException;
 import com.edplan.nso.ParsingBeatmap;
 import com.edplan.nso.Ruleset.amodel.parser.HitObjectParser;
+import com.edplan.nso.Ruleset.mania.objects.ManiaHolder;
 import com.edplan.nso.Ruleset.std.objects.HitObjectAddition;
 import com.edplan.nso.Ruleset.std.objects.StdHitCircle;
 import com.edplan.nso.Ruleset.std.objects.StdHitObject;
 import com.edplan.nso.Ruleset.std.objects.StdHitObjectType;
 import com.edplan.nso.Ruleset.std.objects.StdPath;
 import com.edplan.nso.Ruleset.std.objects.StdSlider;
-import com.edplan.superutils.math.Vct2;
+import com.edplan.nso.Ruleset.std.objects.StdSpinner;
 import com.edplan.superutils.U;
 import com.edplan.superutils.classes.strings.StringSpliter;
+import com.edplan.superutils.math.Vct2;
 import java.util.ArrayList;
 import java.util.List;
-import com.edplan.nso.Ruleset.std.objects.StdSpinner;
-import com.edplan.nso.Ruleset.std.parser.StdHitObjectParser.HitObjectBaseDatas;
-import android.util.Log;
-import com.edplan.nso.Ruleset.mania.objects.ManiaHolder;
-import com.edplan.framework.math.Vec2;
 
 /**
  *Official format wikipage:
@@ -58,7 +57,7 @@ public class StdHitObjectParser implements HitObjectParser<StdHitObject>
 					case Slider:
 						StdSlider s=new StdSlider();
 						injectBaseDatas(bd,s);
-						s.setPath(parsePath(spl));
+						s.setPath(parsePath(new Vec2(s.getStartX(),s.getStartY()),spl));
 						s.setRepeat(U.toInt(spl.next()));
 						s.setPixelLength(U.toDouble(spl.next()));
 						s.setEdgeHitsounds(parseEdgeHitsounds(spl));
@@ -143,9 +142,10 @@ public class StdHitObjectParser implements HitObjectParser<StdHitObject>
 		obj.setHitSound(bd.hitSound);
 	}
 	
-	public StdPath parsePath(StringSpliter spl) throws NsoException{
+	public StdPath parsePath(Vec2 startPoint,StringSpliter spl) throws NsoException{
 		try{
 			StdPath p=new StdPath();
+			p.addControlPoint(startPoint);
 			spl=new StringSpliter(spl.next(),"\\|");
 			p.setType(StdPath.Type.forName(spl.next()));
 			while(spl.hasNext()){
@@ -160,7 +160,7 @@ public class StdHitObjectParser implements HitObjectParser<StdHitObject>
 	
 	public Vec2 parseVec2FF(String s)throws Exception{
 		String[] sp=s.split(":");
-		return new Vec2(U.toInt(sp[0]),U.toInt(sp[1]));
+		return new Vec2(U.toFloat(sp[0]),U.toFloat(sp[1]));
 	}
 	
 	public Vct2<Integer,Integer> parseVct2II(String s)throws Exception{

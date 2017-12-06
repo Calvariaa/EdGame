@@ -9,6 +9,7 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
 import com.edplan.framework.math.Vec2;
+import java.nio.IntBuffer;
 
 public class GLTexture
 {
@@ -83,12 +84,23 @@ public class GLTexture
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,textureId);
 	}
 
-	public Vec2 toTexture(int x,int y){
+	public Vec2 toTexturePosition(int x,int y){
 		return new Vec2(glWidth*x/width,glHeight*y/height);
 	}
 	
 	public void delete(){
 		GLES20.glDeleteTextures(1,new int[]{textureId},0);
+	}
+	
+	public Bitmap toBitmap(){
+		int[] b=new int[getWidth()*getHeight()];
+		IntBuffer buffer=IntBuffer.wrap(b);
+		buffer.position(0);
+		GLES20.glReadPixels(0,0,getWidth(),getHeight(),GLES20.GL_RGBA,GLES20.GL_UNSIGNED_BYTE,buffer);
+		Bitmap bmp=Bitmap.createBitmap(getWidth(),getHeight(),Bitmap.Config.ARGB_8888);
+		bmp.copyPixelsFromBuffer(buffer);
+		buffer.clear();
+		return bmp;
 	}
 	
 	public static GLTexture createGPUTexture(int w,int h){
