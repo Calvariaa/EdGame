@@ -4,7 +4,7 @@ import android.content.Context;
 
 public class BaseGLSurfaceView extends GLSurfaceView
 {
-	Renderer mRenderer;
+	MainRenderer mRenderer;
 	
 	public BaseGLSurfaceView(Context con){
 		super(con);
@@ -12,5 +12,9 @@ public class BaseGLSurfaceView extends GLSurfaceView
 		mRenderer=new MainRenderer();
 		this.setRenderer(mRenderer);
 		this.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+	}
+	
+	public MainRenderer getMainRenderer(){
+		return mRenderer;
 	}
 }

@@ -27,5 +27,11 @@ public class UniformMat4 implements DataUniform<Mat4>
 		// TODO: Implement this method
 		return program;
 	}
-
+	
+	public static UniformMat4 findUniform(GLProgram program,String name){
+		UniformMat4 um=new UniformMat4();
+		um.handle=GLES20.glGetUniformLocation(program.getProgramId(),name);
+		um.program=program;
+		return um;
+	}
 }

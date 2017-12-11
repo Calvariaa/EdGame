@@ -87,7 +87,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		mDrawThread=new DrawThread();
 		mDrawThread.setFramTimeMillions(5);
 		touchHelper=new TouchEventHelper();
-		context=new MContext();
+		context=new MContext(getContext().getApplicationContext());
 		context.setLoopThread(mDrawThread);
 	}
 	

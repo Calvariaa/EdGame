@@ -1,10 +1,16 @@
 package com.edplan.mygame.acts;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.util.Log;
 import com.edplan.framework.MContext;
+import com.edplan.framework.math.Vec2;
 import com.edplan.framework.view.BaseDatas;
 import com.edplan.framework.view.MButton;
 import com.edplan.framework.view.MFlatButton;
+import com.edplan.framework.view.MProgressBar;
 import com.edplan.framework.view.MStaticViewGroup;
 import com.edplan.framework.view.MTextView;
 import com.edplan.framework.view.advance.text.CommandField;
@@ -16,6 +22,9 @@ import com.edplan.mygame.test.TestCursorField;
 import com.edplan.nso.ParsingBeatmap;
 import com.edplan.nso.Ruleset.amodel.object.HitObject;
 import com.edplan.nso.Ruleset.std.objects.StdHitObject;
+import com.edplan.nso.Ruleset.std.objects.StdPath;
+import com.edplan.nso.Ruleset.std.objects.StdSlider;
+import com.edplan.nso.Ruleset.std.objects.drawables.DrawableStdSlider;
 import com.edplan.nso.Ruleset.std.parser.StdHitObjectParser;
 import com.edplan.nso.filepart.PartGeneral;
 import com.edplan.nso.filepart.PartHitObjects;
@@ -23,19 +32,9 @@ import com.edplan.nso.parser.StdBeatmapParser;
 import com.edplan.superutils.TestClock;
 import com.edplan.superutils.U;
 import java.io.File;
-import java.util.Arrays;
-import com.edplan.nso.Ruleset.std.objects.StdSlider;
-import com.edplan.framework.graphics.line.approximator.BezierApproximator;
-import com.edplan.nso.Ruleset.std.objects.StdPath;
-import com.edplan.framework.math.Vec2;
-import java.util.List;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Path;
 import java.io.FileOutputStream;
-import com.edplan.framework.view.MProgressBar;
-import com.edplan.nso.Ruleset.std.objects.drawables.DrawableStdSlider;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainGamePage extends MStaticViewGroup
 {
@@ -116,14 +115,14 @@ public class MainGamePage extends MStaticViewGroup
 			for(HitObject o:((PartHitObjects)(p.getHitObjectsParser().getPart())).getHitObjectList()){
 				if(o instanceof StdSlider){
 					StdSlider sld=(StdSlider)o;
-					if(sld.getPath().getType()!=StdPath.Type.Perfect)continue;
+					if(sld.getPath().getType()!=StdPath.Type.Bezier)continue;
 					tc2.start();
 					ls=(new DrawableStdSlider(sld.getPath())).calculatePath().getAll();
 					tc2.end();
 					ttt+=tc2.getTime();
 					count++;
 					cf.addText(count+"|"+tc2.getTime()+"|"+ls.size()+"|"+Arrays.toString(ls.toArray()));
-					if(count>100)break;
+					//if(count>100)break;
 					
 					
 					c.drawColor(0xffffffff);
@@ -149,6 +148,7 @@ public class MainGamePage extends MStaticViewGroup
 						c.drawCircle(v.x,v.y,6,paint);
 					}
 					
+					/*
 					MTextView mtv=new MTextView(getContext());
 					mtv.setTextSize(15);
 					mtv.setWidth(pbp.getWidth());
@@ -157,6 +157,8 @@ public class MainGamePage extends MStaticViewGroup
 					c.translate(0,400);
 					mtv.draw(c);
 					c.restore();
+					*/
+					
 					
 					File dir=new File("/storage/emulated/0/MyDisk/WorkBench/data/test out");
 					File npng=new File(dir,dir.list().length+".png");

@@ -2,27 +2,24 @@ package com.edplan.framework.graphics.opengl.shader.uniforms;
 import com.edplan.framework.graphics.opengl.shader.DataUniform;
 import com.edplan.framework.graphics.opengl.shader.GLProgram;
 import android.opengl.GLES20;
-import com.edplan.framework.math.Mat2;
 
-public class UniformMat2 implements DataUniform<Mat2>
+public class UniformFloat implements DataUniform<Float>
 {
 	private String name;
-	
+
 	private int handle;
-	
+
 	private GLProgram program;
-	
-	public UniformMat2(String name,GLProgram program){
-		this.program=program;
-		this.name=name;
+
+	public UniformFloat(){
 		
 	}
-	
+
 	@Override
-	public void loadData(Mat2 mat){
-		GLES20.glUniformMatrix2fv(getHandle(),1,false,mat.data,0);
+	public void loadData(Float t){
+		GLES20.glUniform1f(getHandle(),t);
 	}
-	
+
 	@Override
 	public int getHandle() {
 		// TODO: Implement this method
@@ -33,5 +30,13 @@ public class UniformMat2 implements DataUniform<Mat2>
 	public GLProgram getProgram() {
 		// TODO: Implement this method
 		return program;
+	}
+	
+	public static UniformFloat findUniform(GLProgram program,String name){
+		UniformFloat um=new UniformFloat();
+		um.handle=GLES20.glGetUniformLocation(program.getProgramId(),name);
+		um.program=program;
+		um.name=name;
+		return um;
 	}
 }

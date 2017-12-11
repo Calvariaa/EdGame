@@ -6,7 +6,7 @@ import com.edplan.framework.math.Vec2;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.math.FMath;
 import com.edplan.framework.graphics.opengl.objs.Color4;
-import com.edplan.framework.graphics.batch.Texture3DBatch;
+import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
 import com.edplan.framework.graphics.opengl.objs.TextureVertex3D;
 import com.edplan.framework.math.Vec3;
 
