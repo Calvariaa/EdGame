@@ -2,7 +2,6 @@ package com.edplan.framework.graphics.opengl.shader.advance;
 import com.edplan.framework.graphics.opengl.shader.GLProgram;
 import com.edplan.framework.graphics.opengl.shader.GLShader;
 import com.edplan.framework.graphics.opengl.shader.advance.interfaces.ITexturedVertex3DShader;
-
 import com.edplan.framework.graphics.opengl.shader.uniforms.UniformMat4;
 import com.edplan.framework.graphics.opengl.shader.VertexAttrib;
 import com.edplan.framework.graphics.opengl.shader.Unif;
@@ -12,12 +11,16 @@ import com.edplan.framework.graphics.opengl.buffer.Vec3Buffer;
 import com.edplan.framework.graphics.opengl.buffer.Color4Buffer;
 import com.edplan.framework.graphics.opengl.buffer.Vec2Buffer;
 import com.edplan.framework.graphics.opengl.shader.uniforms.UniformFloat;
+import com.edplan.framework.graphics.opengl.shader.uniforms.UniformSample2D;
+import com.edplan.framework.graphics.opengl.objs.GLTexture;
 
 public class Texture3DShader extends GLProgram
 {
 	private UniformMat4 uMVPMatrix;
 	
 	private UniformFloat uColorMixRate;
+	
+	private UniformSample2D uTexture;
 	
 	private VertexAttrib vPosition;
 	
@@ -29,9 +32,14 @@ public class Texture3DShader extends GLProgram
 		super(program.getVertexShader(),program.getFragmentShader(),program.getProgramId());
 		uMVPMatrix=UniformMat4.findUniform(this,Unif.MVPMatrix);
 		uColorMixRate=UniformFloat.findUniform(this,Unif.ColorMixRate);
+		uTexture=UniformSample2D.findUniform(this,Unif.Texture0,0);
 		vPosition=VertexAttrib.findAttrib(this,Attr.Position,VertexAttrib.Type.VEC3);
 		vTexturePosition=VertexAttrib.findAttrib(this,Attr.Texturesition,VertexAttrib.Type.VEC2);
 		vColor=VertexAttrib.findAttrib(this,Attr.Color,VertexAttrib.Type.VEC4);
+	}
+	
+	public void loadTexture(GLTexture texture){
+		uTexture.loadData(texture);
 	}
 	
 	public void loadMVPMatrix(Mat4 mvp){

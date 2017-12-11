@@ -7,6 +7,11 @@ public class Mat4
 	
 	public float[] data;
 	
+	public Mat4(float[] d){
+		this();
+		set(d);
+	}
+	
 	public Mat4(){
 		data=new float[16];
 	}
@@ -108,13 +113,17 @@ public class Mat4
 		return this;
     }
 	
-	public Mat4 post(Mat4 mat){
+	public Mat4 pre(Mat4 mat){
 		Matrix.multiplyMM(data,0,data,0,mat.data,0);
 		return this;
 	}
 	
-	public Mat4 pre(Mat4 mat){
+	public Mat4 post(Mat4 mat){
 		Matrix.multiplyMM(data,0,mat.data,0,data,0);
 		return this;
+	}
+	
+	public Mat4 copy(){
+		return new Mat4(this.data);
 	}
 }

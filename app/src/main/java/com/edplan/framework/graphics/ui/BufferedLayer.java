@@ -24,6 +24,18 @@ public abstract class BufferedLayer
 		this.hasDepthBuffer=hasDepthBuffer;
 	}
 
+	public void setFrameBuffer(FrameBufferObject frameBuffer) {
+		this.frameBuffer=frameBuffer;
+	}
+
+	public FrameBufferObject getFrameBuffer() {
+		return frameBuffer;
+	}
+	
+	public boolean isBind(){
+		return getFrameBuffer().isBind();
+	}
+
 	public void setWidth(int width) {
 		this.width=width;
 	}
@@ -53,6 +65,14 @@ public abstract class BufferedLayer
 	
 	public GLTexture getTexture(){
 		return frameBuffer.getColorAttachment();
+	}
+	
+	public void bind(){
+		getFrameBuffer().bind();
+	}
+	
+	public void unbind(){
+		getFrameBuffer().unBind();
 	}
 	
 	public abstract void renderThisLayer();

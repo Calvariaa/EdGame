@@ -12,9 +12,23 @@ import com.edplan.framework.graphics.opengl.shader.advance.Texture3DShader;
 public class Texture3DBatch
 {
 	private List<TextureVertex3D> vertexs;
-
+	
+	private float colorMixRate;
+	
 	public Texture3DBatch(){
 		vertexs=new ArrayList<TextureVertex3D>();
+	}
+	
+	public int getVertexCount(){
+		return vertexs.size();
+	}
+
+	public void setColorMixRate(float colorMixRate) {
+		this.colorMixRate=colorMixRate;
+	}
+
+	public float getColorMixRate() {
+		return colorMixRate;
 	}
 
 	public Texture3DBatch add(TextureVertex3D v){
