@@ -6,26 +6,29 @@ import com.edplan.framework.graphics.opengl.shader.GLProgram;
 import com.edplan.framework.graphics.opengl.shader.advance.Texture3DShader;
 import com.edplan.framework.graphics.ui.BufferedLayer;
 import com.edplan.framework.math.Mat4;
+import java.util.Stack;
+import com.edplan.framework.MContext;
+import com.edplan.framework.math.RectF;
 
 public class GLCanvas
 {
 	private BufferedLayer layer;
 	
-	private CanvasData data;
+	protected Stack<CanvasData> savedDatas;
+	
+	protected int currentId=0;
+	
+	protected CanvasData data;
 	
 	private Mat4 mProjMatrix;
-	
-	private Mat4 mVMatrix;
-	
-	//private boolean prepared;
 	
 	public GLCanvas(BufferedLayer layer){
 		this.layer=layer;
 		mProjMatrix=new Mat4();
 		mProjMatrix.setOrtho(0,layer.getWidth(),0,layer.getHeight(),1,100);
-		//prepared=false;
-		mVMatrix=new Mat4();
-		mVMatrix.setIden();
+		savedDatas=new Stack<CanvasData>();
+		data=new CanvasData();
+		data.setDefault();
 	}
 
 	public void setMProjMatrix(Mat4 mProjMatrix) {
@@ -36,16 +39,30 @@ public class GLCanvas
 		return mProjMatrix;
 	}
 
-	private void setData(CanvasData data) {
-		this.data=data;
+	public int save(){
+		savedDatas.push(data);
+		data=new CanvasData(data);
+		currentId++;
+		return currentId-1;
+	}
+	
+	public void restore(){
+		data=savedDatas.pop();
+		currentId--;
+	}
+	
+	public void restoreToCount(int id){
+		if(id>0&&id<=currentId){
+			while(currentId>id){
+				restore();
+			}
+		}else{
+			throw new IllegalArgumentException("id should >0&&<=currentId");
+		}
 	}
 
 	private CanvasData getData() {
 		return data;
-	}
-
-	public void setLayer(BufferedLayer layer) {
-		this.layer=layer;
 	}
 
 	public BufferedLayer getLayer() {
@@ -76,10 +93,20 @@ public class GLCanvas
 		getLayer().unbind();
 	}
 	
+	public void post(){
+		checkPrepared("when post canvas, canvas should be prepared",true);
+		unprepare();
+	}
+	
 	private void checkCanDraw(){
 		checkPrepared(
 			"canvas hasn't prepared for draw",
 			true);	
+	}
+	
+	public void setGLProgram(GLProgram p){
+		checkPrepared("you can only change shader when canvas isn't prepared",false); 
+		getData().setGlProgram(p);
 	}
 	
 	public GLProgram getGLProgram(){
@@ -90,14 +117,13 @@ public class GLCanvas
 		return getMProjMatrix().copy().post(getData().getCurrentMatrix());
 	}
 	
-	
-	
-	public void drawTexture3DBatch(Texture3DBatch batch,GLTexture texture){
+	public void drawTexture3DBatch(Texture3DBatch batch,GLTexture texture,float alpha){
 		checkCanDraw();
 		if(getGLProgram() instanceof Texture3DShader){
 			Texture3DShader shader=(Texture3DShader)getGLProgram();
 			shader.useThis();
 			shader.loadColorMixRate(batch.getColorMixRate());
+			shader.loadAlpha(alpha);
 			shader.loadMVPMatrix(getFinalMatrix());
 			shader.loadTexture(texture);
 			shader.loadPosition(batch.makePositionBuffer());
@@ -109,11 +135,38 @@ public class GLCanvas
 		}
 	}
 	
+	public void drawTexture(GLTexture texture,RectF res,RectF dst,float z){
+		
+	}
+	
+	public MContext getContext(){
+		return getLayer().getContext();
+	}
+	
+	public GLProgram getDefGLProgram(){
+		return getContext().getShaderManager().getStdTexture3DShader();
+	}
+	
 	private class CanvasData{
 		
 		private Mat4 currentMatrix;
 		
 		private GLProgram glProgram;
+		
+		public CanvasData(CanvasData c){
+			this.currentMatrix=c.getCurrentMatrix();
+			this.glProgram=c.getGlProgram();
+		}
+		
+		public CanvasData(){
+			
+		}
+		
+		public void setDefault(){
+			glProgram=getDefGLProgram();
+			currentMatrix=new Mat4();
+			currentMatrix.setIden();
+		}
 		
 		public void setCurrentMatrix(Mat4 currentMatrix) {
 			this.currentMatrix=currentMatrix;

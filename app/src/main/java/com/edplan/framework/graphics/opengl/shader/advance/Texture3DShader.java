@@ -20,6 +20,8 @@ public class Texture3DShader extends GLProgram
 	
 	private UniformFloat uColorMixRate;
 	
+	private UniformFloat uFinalAlpha;
+	
 	private UniformSample2D uTexture;
 	
 	private VertexAttrib vPosition;
@@ -32,6 +34,7 @@ public class Texture3DShader extends GLProgram
 		super(program.getVertexShader(),program.getFragmentShader(),program.getProgramId());
 		uMVPMatrix=UniformMat4.findUniform(this,Unif.MVPMatrix);
 		uColorMixRate=UniformFloat.findUniform(this,Unif.ColorMixRate);
+		uFinalAlpha=UniformFloat.findUniform(this,Unif.FinalAlpha);
 		uTexture=UniformSample2D.findUniform(this,Unif.Texture0,0);
 		vPosition=VertexAttrib.findAttrib(this,Attr.Position,VertexAttrib.Type.VEC3);
 		vTexturePosition=VertexAttrib.findAttrib(this,Attr.Texturesition,VertexAttrib.Type.VEC2);
@@ -60,6 +63,10 @@ public class Texture3DShader extends GLProgram
 	
 	public void loadColorMixRate(float f){
 		uColorMixRate.loadData(f);
+	}
+	
+	public void loadAlpha(float a){
+		uFinalAlpha.loadData(a);
 	}
 	
 	public static Texture3DShader create(String vs,String fs){

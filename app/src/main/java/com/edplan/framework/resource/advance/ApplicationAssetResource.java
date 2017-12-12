@@ -15,4 +15,12 @@ public class ApplicationAssetResource extends AssetResource
 		shaderResource=this.subResource(DefR.shaders);
 		textureResource=this.subResource(DefR.textures);
 	}
+
+	public IResource getShaderResource() {
+		return shaderResource;
+	}
+	
+	public IResource getTextureResource() {
+		return textureResource;
+	}
 }

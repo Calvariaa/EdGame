@@ -6,6 +6,7 @@ import android.content.Context;
 import com.edplan.framework.resource.IResource;
 import com.edplan.framework.resource.AssetResource;
 import com.edplan.framework.resource.advance.ApplicationAssetResource;
+import com.edplan.framework.graphics.opengl.ShaderManager;
 
 public class MContext
 {
@@ -15,7 +16,7 @@ public class MContext
 	
 	private MTimer looperTimer;
 	
-	
+	private ShaderManager shaderManager;
 	
 	private Context androidContext;
 	
@@ -28,6 +29,11 @@ public class MContext
 	
 	public void initial(){
 		assetResource=new ApplicationAssetResource(getNativeContext().getAssets());
+		shaderManager=new ShaderManager(getAssetResource().getShaderResource());
+	}
+	
+	public ShaderManager getShaderManager() {
+		return shaderManager;
 	}
 	
 	public Context getNativeContext(){

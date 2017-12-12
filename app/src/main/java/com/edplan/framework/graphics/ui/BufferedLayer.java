@@ -4,12 +4,15 @@ import com.edplan.framework.graphics.opengl.drawui.GLDrawable;
 import com.edplan.framework.graphics.opengl.drawui.DrawInfo;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
+import com.edplan.framework.MContext;
 
 /**
  *通过FBO，完全分离的绘制，最后的结果是一个Texture
  */
 public abstract class BufferedLayer
 {
+	private MContext context;
+	
 	private FrameBufferObject frameBuffer;
 	
 	private boolean hasDepthBuffer;
@@ -18,10 +21,15 @@ public abstract class BufferedLayer
 	
 	private int height;
 	
-	public BufferedLayer(int width,int height,boolean hasDepthBuffer){
+	public BufferedLayer(MContext contex,int width,int height,boolean hasDepthBuffer){
+		this.context=contex;
 		this.width=width;
 		this.height=height;
 		this.hasDepthBuffer=hasDepthBuffer;
+	}
+	
+	public MContext getContext(){
+		return context;
 	}
 
 	public void setFrameBuffer(FrameBufferObject frameBuffer) {
