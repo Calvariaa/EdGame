@@ -30,12 +30,22 @@ public class Texture3DBatch
 	public float getColorMixRate() {
 		return colorMixRate;
 	}
+	
+	public Texture3DBatch add(TextureVertex3D... vs){
+		for(TextureVertex3D v:vs)
+			add(v);
+		return this;
+	}
 
 	public Texture3DBatch add(TextureVertex3D v){
 		vertexs.add(v);
 		return this;
 	}
 
+	//public void removeAll(){
+	//	vertexs.
+	//}
+	
 	public void clear(){
 		vertexs.clear();
 	}

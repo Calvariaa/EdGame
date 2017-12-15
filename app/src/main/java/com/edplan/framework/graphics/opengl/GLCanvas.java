@@ -1,14 +1,17 @@
 package com.edplan.framework.graphics.opengl;
 import android.opengl.GLES20;
+import com.edplan.framework.MContext;
 import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.graphics.opengl.shader.GLProgram;
 import com.edplan.framework.graphics.opengl.shader.advance.Texture3DShader;
 import com.edplan.framework.graphics.ui.BufferedLayer;
 import com.edplan.framework.math.Mat4;
-import java.util.Stack;
-import com.edplan.framework.MContext;
 import com.edplan.framework.math.RectF;
+import java.util.Stack;
+import com.edplan.framework.graphics.opengl.objs.TextureVertex3D;
+import com.edplan.framework.math.Vec3;
+import com.edplan.framework.graphics.opengl.objs.Color4;
 
 public class GLCanvas
 {
@@ -21,6 +24,8 @@ public class GLCanvas
 	protected CanvasData data;
 	
 	private Mat4 mProjMatrix;
+	
+	private Texture3DBatch tmpBatch=new Texture3DBatch();
 	
 	public GLCanvas(BufferedLayer layer){
 		this.layer=layer;
@@ -73,6 +78,9 @@ public class GLCanvas
 		return getLayer().isBind();
 	}
 	
+	/**
+	 *@param p:当前应该是的状态
+	 */
 	public void checkPrepared(String msg,boolean p){
 		if(p!=isPrepared()){
 			throw new GLException("prepare err [n,c]=["+p+","+isPrepared()+"] msg: "+msg);
@@ -103,6 +111,17 @@ public class GLCanvas
 			"canvas hasn't prepared for draw",
 			true);	
 	}
+	
+	public void delete(){
+		checkPrepared("you delete a prepared canvas!",false);
+		savedDatas.clear();
+	}
+	
+//	private void checkGLProgram(Class<? extends GLProgram> c){
+//		if(!c.isInstance(getGLProgram())){
+//			
+//		}
+//	}
 	
 	public void setGLProgram(GLProgram p){
 		checkPrepared("you can only change shader when canvas isn't prepared",false); 
@@ -135,7 +154,43 @@ public class GLCanvas
 		}
 	}
 	
-	public void drawTexture(GLTexture texture,RectF res,RectF dst,float z){
+	/**
+	 *@param res:此处为Texture范围，使用实际像素坐标（原点左上）
+	 *@param dst:绘制在canvas上的坐标，也是实际像素坐标（原点左下）
+	 */
+	public void drawTexture(GLTexture texture,RectF res,RectF dst,Color4 color,float colorMixRate,float z,float alpha){
+		checkCanDraw();
+		tmpBatch.clear();
+		tmpBatch.setColorMixRate(colorMixRate);
+		//  3          2
+		//   ┌────┐
+		//   └────┘
+		//  0          1
+		TextureVertex3D v0=
+			TextureVertex3D
+				 .atPosition(new Vec3(dst.getPoint(0,0),z))
+				 .setColor(color)
+				 .setTexturePoint(texture.toTexturePosition(res.getX1(),res.getY2()));
+		TextureVertex3D v1=
+			TextureVertex3D
+				 .atPosition(new Vec3(dst.getPoint(1,0),z))
+				 .setColor(color)
+				 .setTexturePoint(texture.toTexturePosition(res.getX2(),res.getY2()));
+		TextureVertex3D v2=
+			TextureVertex3D
+				 .atPosition(new Vec3(dst.getPoint(1,1),z))
+				 .setColor(color)
+				 .setTexturePoint(texture.toTexturePosition(res.getX2(),res.getY1()));
+		TextureVertex3D v3=
+			TextureVertex3D
+				 .atPosition(new Vec3(dst.getPoint(0,1),z))
+				 .setColor(color)
+				 .setTexturePoint(texture.toTexturePosition(res.getX1(),res.getY1()));
+		tmpBatch.add(v0,v1,v2,v0,v2,v3);
+		drawTexture3DBatch(tmpBatch,texture,alpha);
+	}
+	
+	public void drawTexture(GLTexture texture,float x,float y){
 		
 	}
 	

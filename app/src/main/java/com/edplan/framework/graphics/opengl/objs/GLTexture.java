@@ -84,7 +84,7 @@ public class GLTexture
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,textureId);
 	}
 
-	public Vec2 toTexturePosition(int x,int y){
+	public Vec2 toTexturePosition(float x,float y){
 		return new Vec2(glWidth*x/width,glHeight*y/height);
 	}
 	

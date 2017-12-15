@@ -26,6 +26,26 @@ public class RectF
 		getBasePoint().set(x,y);
 	}
 
+	public Vec2 getPoint(float x,float y){
+		return basePoint.copy().add(x*width,y*height);
+	}
+	
+	public float getX1(){
+		return basePoint.x;
+	}
+	
+	public float getX2(){
+		return basePoint.x+width;
+	}
+	
+	public float getY1(){
+		return basePoint.y;
+	}
+	
+	public float getY2(){
+		return basePoint.y+width;
+	}
+	
 	public float getTop(){
 		return basePoint.y;
 	}
