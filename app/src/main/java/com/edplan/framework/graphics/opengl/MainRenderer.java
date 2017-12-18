@@ -18,6 +18,7 @@ public class MainRenderer implements GLSurfaceView.Renderer
 	@Override
 	public void onSurfaceChanged(GL10 p1,int width,int heigth) {
 		// TODO: Implement this method
+		
 	}
 
 	@Override

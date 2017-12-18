@@ -2,16 +2,16 @@ package com.edplan.framework.graphics.opengl;
 import android.opengl.GLES20;
 import com.edplan.framework.MContext;
 import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
+import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
+import com.edplan.framework.graphics.opengl.objs.TextureVertex3D;
 import com.edplan.framework.graphics.opengl.shader.GLProgram;
 import com.edplan.framework.graphics.opengl.shader.advance.Texture3DShader;
 import com.edplan.framework.graphics.ui.BufferedLayer;
 import com.edplan.framework.math.Mat4;
 import com.edplan.framework.math.RectF;
-import java.util.Stack;
-import com.edplan.framework.graphics.opengl.objs.TextureVertex3D;
 import com.edplan.framework.math.Vec3;
-import com.edplan.framework.graphics.opengl.objs.Color4;
+import java.util.Stack;
 
 public class GLCanvas
 {
@@ -134,6 +134,11 @@ public class GLCanvas
 	
 	public Mat4 getFinalMatrix(){
 		return getMProjMatrix().copy().post(getData().getCurrentMatrix());
+	}
+	
+	public void drawColor(Color4 color){
+		GLWrapped.setClearColor(color.r,color.g,color.b,color.a);
+		GLWrapped.clearColorBuffer();
 	}
 	
 	public void drawTexture3DBatch(Texture3DBatch batch,GLTexture texture,float alpha){

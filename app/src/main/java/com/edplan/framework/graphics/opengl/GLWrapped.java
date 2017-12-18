@@ -12,6 +12,26 @@ public class GLWrapped
 		GLES20.glDisable(GLES20.GL_DEPTH_TEST);
 	}
 	
+	public static void setViewport(int x1,int y1,int x2,int y2){
+		GLES20.glViewport(x1,y1,x2,y2);
+	}
+	
+	public static void setClearColor(float r,float g,float b,float a){
+		GLES20.glClearColor(r,g,b,a);
+	}
+	
+	public static void clearColorBuffer(){
+		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+	}
+	
+	public static void clearDepthBuffer(){
+		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT);
+	}
+	
+	public static void clearDepthAndColorBuffer(){
+		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT|GLES20.GL_DEPTH_BUFFER_BIT);
+	}
+	
 	public static void setDepthTest(boolean f){
 		if(f!=depthTest){
 			if(f){
@@ -26,11 +46,7 @@ public class GLWrapped
 	public static void clearColor(Color4 c){
 		GLES20.glClearColor(c.r,c.g,c.b,c.a);
 	}
-	
-	public static void clearDepthBuffer(){
-		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT);
-	}
-	
+		
 	public static void checkGlError(String op) {
         int error;
         while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {

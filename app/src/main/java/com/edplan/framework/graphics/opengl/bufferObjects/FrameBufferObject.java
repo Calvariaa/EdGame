@@ -5,6 +5,7 @@ import com.edplan.framework.graphics.opengl.objs.GLTexture;
 
 public class FrameBufferObject
 {
+	
 	private DepthBufferObject depthAttachment;
 	
 	private GLTexture colorAttachment;
@@ -17,6 +18,11 @@ public class FrameBufferObject
 	
 	FrameBufferObject(){
 		
+	}
+	
+	FrameBufferObject(int width,int height){
+		this.width=width;
+		this.height=height;
 	}
 
 	public int getWidth(){
@@ -206,10 +212,20 @@ public class FrameBufferObject
 		GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER,id);
 	}
 	
-	private static class SystemFrameBuffer extends FrameBufferObject {
+	public static class SystemFrameBuffer extends FrameBufferObject {
 		
 		private static final int SYSTEM_FRAMEBUFFER_ID=0;
-
+		
+		public SystemFrameBuffer(int width,int height){
+			super(width,height);
+		}
+		
+		@Override
+		public boolean hasDepthAttachment(){
+			// TODO: Implement this method
+			return true;
+		}
+		
 		@Override
 		public boolean isBind() {
 			// TODO: Implement this method
