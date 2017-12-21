@@ -24,7 +24,7 @@ public class MContext
 	
 	public MContext(Context androidContext){
 		this.androidContext=androidContext;
-		initial();
+		//initial();
 	}
 	
 	public void initial(){

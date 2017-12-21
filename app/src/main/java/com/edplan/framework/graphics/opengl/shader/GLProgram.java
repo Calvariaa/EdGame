@@ -66,6 +66,7 @@ public class GLProgram
 				throw new GLException("err link GLProgram");
             }
         }else{
+			Log.e("ES20_ERROR", GLES20.glGetProgramInfoLog(program));
 			throw new GLException("err create GLProgram");
 		}
 		

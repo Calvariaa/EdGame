@@ -148,7 +148,7 @@ public class FrameBufferObject
 	
 	private FrameBufferObject previousFBO;
 	
-	private boolean binded=false;
+	protected boolean binded=false;
 
 	public boolean isBind(){
 		return binded;
@@ -197,6 +197,10 @@ public class FrameBufferObject
 		}
 	}
 	
+	public static void bindInitial(SystemFrameBuffer sysFrameBuffer){
+		CURRENT_FRAMEBUFFER=sysFrameBuffer;
+	}
+	
 	public static FrameBufferObject CURRENT_FRAMEBUFFER;
 	
 	public static FrameBufferObject currentFBO(){
@@ -227,12 +231,6 @@ public class FrameBufferObject
 		}
 		
 		@Override
-		public boolean isBind() {
-			// TODO: Implement this method
-			return true;
-		}
-		
-		@Override
 		public int getFBOId() {
 			// TODO: Implement this method
 			return SYSTEM_FRAMEBUFFER_ID;
@@ -241,6 +239,8 @@ public class FrameBufferObject
 		@Override
 		public void bind() {
 			// TODO: Implement this method
+			binded=true;
+			bindInitial(this);
 			FrameBufferObject.bind(SYSTEM_FRAMEBUFFER_ID);
 		}
 
@@ -248,6 +248,7 @@ public class FrameBufferObject
 		public void unBind() {
 			// TODO: Implement this method
 			//解绑根FBO不会进行任何操作
+			this.binded=false;
 		}
 
 		@Override

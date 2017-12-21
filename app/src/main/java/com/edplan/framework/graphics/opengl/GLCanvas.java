@@ -30,12 +30,14 @@ public class GLCanvas
 	public GLCanvas(BufferedLayer layer){
 		this.layer=layer;
 		mProjMatrix=new Mat4();
-		mProjMatrix.setOrtho(0,layer.getWidth(),0,layer.getHeight(),1,100);
+		mProjMatrix.setOrtho(0,layer.getWidth(),0,layer.getHeight(),-100,100);
 		savedDatas=new Stack<CanvasData>();
 		data=new CanvasData();
 		data.setDefault();
 	}
 
+	
+	
 	public void setMProjMatrix(Mat4 mProjMatrix) {
 		this.mProjMatrix=mProjMatrix;
 	}
@@ -141,11 +143,20 @@ public class GLCanvas
 		GLWrapped.clearColorBuffer();
 	}
 	
-	public void drawTexture3DBatch(Texture3DBatch batch,GLTexture texture,float alpha){
+	public void clearDepthBuffer(){
+		GLWrapped.clearDepthBuffer();
+	}
+	
+	public void clearBuffer(){
+		GLWrapped.clearDepthAndColorBuffer();
+	}
+	
+	public void drawTexture3DBatch(Texture3DBatch batch,GLTexture texture,float alpha,Color4 mixColor){
 		checkCanDraw();
 		if(getGLProgram() instanceof Texture3DShader){
 			Texture3DShader shader=(Texture3DShader)getGLProgram();
 			shader.useThis();
+			shader.loadMixColor(mixColor);
 			shader.loadColorMixRate(batch.getColorMixRate());
 			shader.loadAlpha(alpha);
 			shader.loadMVPMatrix(getFinalMatrix());
@@ -163,7 +174,7 @@ public class GLCanvas
 	 *@param res:此处为Texture范围，使用实际像素坐标（原点左上）
 	 *@param dst:绘制在canvas上的坐标，也是实际像素坐标（原点左下）
 	 */
-	public void drawTexture(GLTexture texture,RectF res,RectF dst,Color4 color,float colorMixRate,float z,float alpha){
+	public void drawTexture(GLTexture texture,RectF res,RectF dst,Color4 mixColor,Color4 color,float colorMixRate,float z,float alpha){
 		checkCanDraw();
 		tmpBatch.clear();
 		tmpBatch.setColorMixRate(colorMixRate);
@@ -192,7 +203,7 @@ public class GLCanvas
 				 .setColor(color)
 				 .setTexturePoint(texture.toTexturePosition(res.getX1(),res.getY1()));
 		tmpBatch.add(v0,v1,v2,v0,v2,v3);
-		drawTexture3DBatch(tmpBatch,texture,alpha);
+		drawTexture3DBatch(tmpBatch,texture,alpha,mixColor);
 	}
 	
 	public void drawTexture(GLTexture texture,float x,float y){

@@ -9,7 +9,7 @@ public class BaseGLSurfaceView extends GLSurfaceView
 	public BaseGLSurfaceView(Context con){
 		super(con);
 		this.setEGLContextClientVersion(2);
-		mRenderer=new MainRenderer();
+		mRenderer=new MainRenderer(getContext());
 		this.setRenderer(mRenderer);
 		this.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
 	}

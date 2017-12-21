@@ -10,6 +10,13 @@ import android.opengl.GLUtils;
 import android.util.Log;
 import com.edplan.framework.math.Vec2;
 import java.nio.IntBuffer;
+import java.io.InputStream;
+import android.graphics.BitmapFactory;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import com.edplan.framework.resource.IResource;
+import java.io.IOException;
 
 public class GLTexture
 {
@@ -136,6 +143,30 @@ public class GLTexture
 		tex.glWidth=tex.width/(float)bmp.getHeight();
 		GLUtils.texImage2D(GLES20.GL_TEXTURE_2D,0,bmp,0);
 		return tex;
+	}
+	
+	public static GLTexture decodeStream(InputStream in){
+		return create(BitmapFactory.decodeStream(in),true);
+	}
+	
+	public static GLTexture decodeStream(InputStream in,boolean ifClose) throws IOException{
+		GLTexture t=decodeStream(in);
+		if(ifClose)in.close();
+		return t;
+	}
+	
+	public static GLTexture decodeFile(File f) throws FileNotFoundException, IOException{
+		return decodeStream(new FileInputStream(f),true);
+	}
+	
+	public static GLTexture decodeResource(IResource res,String name) throws IOException{
+		return decodeStream(res.openInput(name),true);
+	}
+	
+	public static GLTexture create(Bitmap bmp,boolean ifDispos){
+		GLTexture t=create(bmp);
+		if(ifDispos)bmp.recycle();
+		return t;
 	}
 	
 	public static GLTexture create(Bitmap bmp){
