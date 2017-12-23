@@ -51,4 +51,10 @@ public class TextureVertex3D extends Vertex3D
 	public static TextureVertex3D atPosition(Vec3 pos){
 		return new TextureVertex3D(pos);
 	}
+
+	@Override
+	public String toString() {
+		// TODO: Implement this method
+		return super.toString();
+	}
 }

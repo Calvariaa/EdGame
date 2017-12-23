@@ -14,8 +14,8 @@ public class RectF
 	
 	public RectF(float l,float t,float w,float h){
 		setBasePoint(l,t);
-		setWidth(width);
-		setHeight(height);
+		setWidth(w);
+		setHeight(h);
 	}
 	
 	public Vec2 getBasePoint(){

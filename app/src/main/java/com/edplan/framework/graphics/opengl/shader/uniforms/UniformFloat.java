@@ -1,7 +1,8 @@
 package com.edplan.framework.graphics.opengl.shader.uniforms;
+import android.opengl.GLES20;
+import com.edplan.framework.graphics.opengl.GLException;
 import com.edplan.framework.graphics.opengl.shader.DataUniform;
 import com.edplan.framework.graphics.opengl.shader.GLProgram;
-import android.opengl.GLES20;
 
 public class UniformFloat implements DataUniform<Float>
 {
@@ -37,6 +38,7 @@ public class UniformFloat implements DataUniform<Float>
 		um.handle=GLES20.glGetUniformLocation(program.getProgramId(),name);
 		um.program=program;
 		um.name=name;
+		if(um.handle==-1)throw new GLException("handle "+name+" NOT found");
 		return um;
 	}
 }

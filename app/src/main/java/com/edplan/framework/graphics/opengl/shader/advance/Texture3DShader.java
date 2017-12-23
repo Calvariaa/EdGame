@@ -39,7 +39,7 @@ public class Texture3DShader extends GLProgram
 		uMVPMatrix=UniformMat4.findUniform(this,Unif.MVPMatrix);
 		uColorMixRate=UniformFloat.findUniform(this,Unif.ColorMixRate);
 		uFinalAlpha=UniformFloat.findUniform(this,Unif.FinalAlpha);
-		uTexture=UniformSample2D.findUniform(this,Unif.Texture0,0);
+		uTexture=UniformSample2D.findUniform(this,Unif.Texture,0);
 		uMixColor=UniformColor4.findUniform(this,Unif.MixColor);
 		vPosition=VertexAttrib.findAttrib(this,Attr.Position,VertexAttrib.Type.VEC3);
 		vTexturePosition=VertexAttrib.findAttrib(this,Attr.Texturesition,VertexAttrib.Type.VEC2);

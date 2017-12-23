@@ -1,15 +1,18 @@
 package com.edplan.framework.graphics.opengl;
+import android.content.Context;
+import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import com.edplan.framework.MContext;
-import com.edplan.framework.graphics.ui.DefBufferedLayer;
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
-import android.content.Context;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
-import java.io.IOException;
+import com.edplan.framework.graphics.ui.DefBufferedLayer;
+import com.edplan.framework.math.Mat4;
 import com.edplan.framework.math.RectF;
-import android.util.Log;
+import com.edplan.framework.utils.MLog;
+import java.io.IOException;
+import java.util.Arrays;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
 
 public class MainRenderer implements GLSurfaceView.Renderer
 {
@@ -34,6 +37,7 @@ public class MainRenderer implements GLSurfaceView.Renderer
 		// TODO: Implement this method
 		try {
 			context.initial();
+			GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 			testPng=
 				GLTexture.decodeStream(
 					context
@@ -66,12 +70,17 @@ public class MainRenderer implements GLSurfaceView.Renderer
 			new RectF(0,0,testPng.getWidth(),testPng.getHeight()),
 			new RectF(0,0,testPng.getWidth(),testPng.getHeight()),
 			new Color4(1,1,1,1),
-			new Color4(0,0,0,0),
+			new Color4(1,1,1,1),
 			0,
-			0,
+			1,
 			1);
 		
+		Mat4 m=canvas.getFinalMatrix();
+		//Log.v("gl_test",Arrays.toString(m.data));
 		//Log.v("gl_test","draw once");
+		MLog.test.vOnce("mvp Matrix","gl_test",Arrays.toString(m.data));
+		MLog.test.vOnce("Canvas data","gl_test","testPng: "+testPng.getTextureId());
+		
 		canvas.unprepare();
 	}
 

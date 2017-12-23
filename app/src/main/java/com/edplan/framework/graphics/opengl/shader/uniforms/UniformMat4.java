@@ -3,6 +3,7 @@ import com.edplan.framework.graphics.opengl.shader.DataUniform;
 import com.edplan.framework.graphics.opengl.shader.GLProgram;
 import com.edplan.framework.math.Mat4;
 import android.opengl.GLES20;
+import com.edplan.framework.graphics.opengl.GLException;
 
 public class UniformMat4 implements DataUniform<Mat4>
 {
@@ -32,6 +33,7 @@ public class UniformMat4 implements DataUniform<Mat4>
 		UniformMat4 um=new UniformMat4();
 		um.handle=GLES20.glGetUniformLocation(program.getProgramId(),name);
 		um.program=program;
+		if(um.handle==-1)throw new GLException("handle "+name+" NOT found");
 		return um;
 	}
 }

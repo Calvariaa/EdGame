@@ -12,6 +12,7 @@ import com.edplan.framework.math.Mat4;
 import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.Vec3;
 import java.util.Stack;
+import com.edplan.framework.utils.MLog;
 
 public class GLCanvas
 {
@@ -30,7 +31,7 @@ public class GLCanvas
 	public GLCanvas(BufferedLayer layer){
 		this.layer=layer;
 		mProjMatrix=new Mat4();
-		mProjMatrix.setOrtho(0,layer.getWidth(),0,layer.getHeight(),-100,100);
+		mProjMatrix.setOrtho(0,layer.getWidth(),0,layer.getHeight(),1,100);
 		savedDatas=new Stack<CanvasData>();
 		data=new CanvasData();
 		data.setDefault();
@@ -204,6 +205,8 @@ public class GLCanvas
 				 .setTexturePoint(texture.toTexturePosition(res.getX1(),res.getY1()));
 		tmpBatch.add(v0,v1,v2,v0,v2,v3);
 		drawTexture3DBatch(tmpBatch,texture,alpha,mixColor);
+		MLog.test.vOnce("vdata1","gl_test","v2: "+(new Vec3(dst.getPoint(1,1),z)).toString()+" t: "+texture.toTexturePosition(res.getX2(),res.getY1()).toString());
+		MLog.test.vOnce("vdata2","gl_test","v1: "+(new Vec3(dst.getPoint(1,0),z)).toString()+" t: "+texture.toTexturePosition(res.getX2(),res.getY2()).toString());
 	}
 	
 	public void drawTexture(GLTexture texture,float x,float y){
@@ -216,6 +219,11 @@ public class GLCanvas
 	
 	public GLProgram getDefGLProgram(){
 		return getContext().getShaderManager().getStdTexture3DShader();
+	}
+	
+	public void recycle(){
+		savedDatas.clear();
+		tmpBatch.clear();
 	}
 	
 	private class CanvasData{

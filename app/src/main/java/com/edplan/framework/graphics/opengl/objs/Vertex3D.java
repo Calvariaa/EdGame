@@ -42,4 +42,12 @@ public class Vertex3D
 	public Vec3 getPosition() {
 		return position;
 	}
+
+	@Override
+	public String toString() {
+		// TODO: Implement this method
+		return (new StringBuilder())
+			 .append("pos: ").append(position.toString()).append("\n")
+			 .append("color: ").append(color.toString()).append("\n").toString();
+	}
 }

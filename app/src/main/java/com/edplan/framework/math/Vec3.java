@@ -118,5 +118,10 @@ public class Vec3
 	public static float distance(Vec3 p1,Vec3 p2){
 		return distance(p1.x-p2.x,p1.y-p2.y,p1.z-p2.z);
 	}
-	
+
+	@Override
+	public String toString() {
+		// TODO: Implement this method
+		return (new StringBuilder("(")).append(x).append(",").append(y).append(",").append(z).append(")").toString();
+	}
 }

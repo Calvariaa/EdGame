@@ -1,8 +1,10 @@
 package com.edplan.framework.graphics.opengl.shader.uniforms;
-import com.edplan.framework.graphics.opengl.shader.DataUniform;
-import com.edplan.framework.graphics.opengl.objs.GLTexture;
-import com.edplan.framework.graphics.opengl.shader.GLProgram;
 import android.opengl.GLES20;
+import android.util.Log;
+import com.edplan.framework.graphics.opengl.GLException;
+import com.edplan.framework.graphics.opengl.objs.GLTexture;
+import com.edplan.framework.graphics.opengl.shader.DataUniform;
+import com.edplan.framework.graphics.opengl.shader.GLProgram;
 
 public class UniformSample2D implements DataUniform<GLTexture>
 {
@@ -35,6 +37,9 @@ public class UniformSample2D implements DataUniform<GLTexture>
 		u.program=program;
 		u.textureIndex=index;
 		u.handle=GLES20.glGetUniformLocation(program.getProgramId(),name);
+		if(u.handle==-1){
+			throw new GLException("handle "+name+" NOT found");
+		}
 		return u;
 	}
 }
