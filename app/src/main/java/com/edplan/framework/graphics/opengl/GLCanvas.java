@@ -13,7 +13,6 @@ import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.Vec3;
 import java.util.Stack;
 import com.edplan.framework.utils.MLog;
-import com.edplan.opengl.es20.MatrixState;
 
 public class GLCanvas
 {

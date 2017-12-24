@@ -10,7 +10,8 @@ public class TestGLActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO: Implement this method
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.mains);
+		//setContentView(R.layout.mains);
+		setContentView(new BaseGLSurfaceView(this));
 	}
 	
 }
