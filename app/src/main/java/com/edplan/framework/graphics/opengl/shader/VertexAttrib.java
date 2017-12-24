@@ -64,6 +64,7 @@ public class VertexAttrib
 			getType().step,   
 			datas
 		);
+		GLES20.glEnableVertexAttribArray(getHandle());
 	}
 	
 	public void loadData(Vec2Buffer buffer){
