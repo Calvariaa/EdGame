@@ -2,6 +2,7 @@ package com.edplan.framework.graphics.line;
 import com.edplan.framework.math.Vec2;
 import java.util.List;
 import java.util.ArrayList;
+import com.edplan.framework.math.RectF;
 
 public class LinePath
 {
@@ -15,6 +16,8 @@ public class LinePath
 	
 	public LinePath(List<Vec2> ps,float width){
 		positions=ps;
+		this.width=width;
+		this.hwidth=width/2;
 		recomputeBounds();
 	}
 	
@@ -42,6 +45,18 @@ public class LinePath
 	
 	public List<Vec2> getAll(){
 		return positions;
+	}
+	
+	public RectF getDrawArea(){
+		return new RectF(minX,minY,getAreaWidth(),getAreaHeight());
+	}
+	
+	public float getAreaWidth(){
+		return maxX-minX;
+	}
+	
+	public float getAreaHeight(){
+		return maxY-minY;
 	}
 
 	public void setWidth(float width) {
@@ -78,10 +93,10 @@ public class LinePath
 	}
 	
 	private void expandBounds(Vec2 v){
-		if(v.x-width<minX)minX=v.x-width;
-		if(v.x+width>maxX)maxX=v.x+width;
-		if(v.y-width<minY)minY=v.y-width;
-		if(v.y+width>maxY)minX=v.y+width;
+		if(v.x-hwidth<minX)minX=v.x-hwidth;
+		if(v.x+hwidth>maxX)maxX=v.x+hwidth;
+		if(v.y-hwidth<minY)minY=v.y-hwidth;
+		if(v.y+hwidth>maxY)minX=v.y+hwidth;
 	}
 	
 	private void recomputeBounds(){
