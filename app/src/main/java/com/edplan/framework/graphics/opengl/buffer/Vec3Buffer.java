@@ -10,6 +10,8 @@ public class Vec3Buffer
 {
 	public List<Vec3> bufferList;
 	
+	public FloatBuffer buffer;
+	
 	public Vec3Buffer(){
 		initial();
 	}
@@ -25,15 +27,17 @@ public class Vec3Buffer
 	
 	public void clear(){
 		bufferList.clear();
+		if(buffer!=null)buffer.clear();
 	}
 	
 	public FloatBuffer makeBuffer(){
-		FloatBuffer fb=createFloatBuffer(bufferList.size()*3);
+		if(buffer!=null)buffer.clear();
+		buffer=createFloatBuffer(bufferList.size()*3);
 		for(Vec3 t:bufferList){
-			fb.put(t.x).put(t.y).put(t.z);
+			buffer.put(t.x).put(t.y).put(t.z);
 		}
-		fb.position(0);
-		return fb;
+		buffer.position(0);
+		return buffer;
 	}
 	
 	public static FloatBuffer createFloatBuffer(int floatCount){

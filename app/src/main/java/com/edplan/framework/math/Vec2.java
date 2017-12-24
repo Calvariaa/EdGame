@@ -106,11 +106,11 @@ public class Vec2
 	}
 	
 	public Vec2 toNormal(){
-		return zoom(length());
+		return divide(length());
 	}
 	
 	public Vec2 toOrthogonalDirectionNormal(){
-		return toNormal().rotate(FMath.Pi/2);
+		return toNormal().rotate(FMath.PiHalf);
 	}
 	
 	public float dot(Vec2 v){
@@ -126,8 +126,12 @@ public class Vec2
 	}
 	
 	public float theta(){
-		return FMath.atan2(x,y);
+		return FMath.atan2(y,x);
 	}
+	
+	//public float thetaX(){
+	//	return -theta();
+	//}
 	
 	public Vec2 copy(){
 		return new Vec2(this);
@@ -159,7 +163,7 @@ public class Vec2
 	}
 	
 	public static float calTheta(Vec2 start,Vec2 end){
-		return FMath.atan2(end.x-start.x,end.y-start.y);
+		return FMath.atan2(end.y-start.y,end.x-start.x);
 	}
 
 	@Override

@@ -13,6 +13,7 @@ import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.Vec3;
 import java.util.Stack;
 import com.edplan.framework.utils.MLog;
+import com.edplan.opengl.es20.MatrixState;
 
 public class GLCanvas
 {
@@ -31,7 +32,7 @@ public class GLCanvas
 	public GLCanvas(BufferedLayer layer){
 		this.layer=layer;
 		mProjMatrix=new Mat4();
-		mProjMatrix.setOrtho(0,layer.getWidth(),0,layer.getHeight(),1,100);
+		mProjMatrix.setOrtho(0,layer.getWidth(),0,layer.getHeight(),-100,100);
 		savedDatas=new Stack<CanvasData>();
 		data=new CanvasData();
 		data.setDefault();

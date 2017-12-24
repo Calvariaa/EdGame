@@ -9,6 +9,7 @@ import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
 import com.edplan.framework.graphics.opengl.objs.TextureVertex3D;
 import com.edplan.framework.math.Vec3;
+import com.edplan.framework.utils.MLog;
 
 public class DrawLinePath
 {
@@ -24,9 +25,21 @@ public class DrawLinePath
 	
 	private Vec2 textureStart=new Vec2(0,0);
 	
-	private Vec2 textureEnd=new Vec2(1,0);
+	private Vec2 textureEnd=new Vec2(1,1);
 	
 	private DrawInfo info;
+	
+	public DrawLinePath(LinePath p){
+		path=p;
+	}
+	
+	public void setWidth(float f){
+		path.setWidth(f);
+	}
+	
+	public void setDrawInfo(DrawInfo i){
+		info=i;
+	}
 
 	public void setBatch(Texture3DBatch batch) {
 		this.batch=batch;
@@ -41,14 +54,14 @@ public class DrawLinePath
 		
 		float dir=Math.signum(thetaDiff);
 		thetaDiff*=dir;
-		
+		//MLog.test.vOnce("dir","gl_test","dir: "+dir);
 		int amountPoints=(int)Math.ceil(thetaDiff/step);
 		
 		if(dir<0)
 			theta+=FMath.Pi;
 		
 		/* current = org + atCircle(...)*width */
-		Vec2 current=Vec2.atCircle(theta).zoom(path.getWidth()).add(org);
+		Vec2 current=Vec2.atCircle(theta).zoom(path.getHWidth()).add(org);
 		current=info.toLayerPosition(current);
 		Color4 currentColor=info.getMaskColor(current);
 		
@@ -70,8 +83,9 @@ public class DrawLinePath
 			
 			float angularOffset=Math.min(i*step,thetaDiff);
 			/* current = org+atCircle(...)*width*/
-			current=info.toLayerPosition(
-				Vec2.atCircle(theta+dir*angularOffset).zoom(path.getWidth()).add(org));
+			current=
+			info.toLayerPosition(
+				Vec2.atCircle(theta+dir*angularOffset).zoom(path.getHWidth()).add(org));
 			currentColor=info.getMaskColor(current);
 			
 			batch.add(
@@ -83,7 +97,7 @@ public class DrawLinePath
 	}
 	
 	private void addLineQuads(Vec2 ps,Vec2 pe){
-		Vec2 oth_expand=Vec2.lineOthNormal(ps,pe).zoom(path.getWidth());
+		Vec2 oth_expand=Vec2.lineOthNormal(ps,pe).zoom(path.getHWidth());
 		
 		Vec2 startL=info.toLayerPosition(ps.copy().add(oth_expand));
 		Vec2 startR=info.toLayerPosition(ps.copy().minus(oth_expand));
@@ -187,10 +201,10 @@ public class DrawLinePath
 		}
 		
 		float theta=Vec2.calTheta(path.get(0),path.get(1));
-		addLineCap(path.get(0),theta+FMath.Pi,FMath.Pi);
+		addLineCap(path.get(0),theta+FMath.PiHalf,FMath.Pi);
 		addLineQuads(path.get(0),path.get(1));
 		if(path.size()==2){
-			addLineCap(path.get(1),theta,FMath.Pi);
+			addLineCap(path.get(1),theta-FMath.PiHalf,FMath.Pi);
 			return;
 		}
 		Vec2 nowPoint=path.get(1);
@@ -201,11 +215,11 @@ public class DrawLinePath
 		for(int i=2;i<max_i;i++){
 			nextPoint=path.get(i);
 			nextTheta=Vec2.calTheta(nowPoint,nextPoint);
-			addLineCap(nowPoint,preTheta,nextTheta-preTheta);
+			addLineCap(nowPoint,preTheta-FMath.PiHalf,nextTheta-preTheta);
 			addLineQuads(nowPoint,nextPoint);
 			nowPoint=nextPoint;
 			preTheta=nextTheta;
 		}
-		addLineCap(path.get(max_i-1),preTheta,FMath.Pi);
+		addLineCap(path.get(max_i-1),preTheta-FMath.PiHalf,FMath.Pi);
 	}
 }

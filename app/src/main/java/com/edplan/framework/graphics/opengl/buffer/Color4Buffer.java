@@ -11,6 +11,8 @@ import android.util.Log;
 public class Color4Buffer 
 {
 	public List<Color4> bufferList;
+	
+	public FloatBuffer buffer;
 
 	public Color4Buffer(){
 		initial();
@@ -22,6 +24,7 @@ public class Color4Buffer
 	
 	public void clear(){
 		bufferList.clear();
+		if(buffer!=null)buffer.clear();
 	}
 
 	public Color4Buffer add(Color4 t){
@@ -30,13 +33,14 @@ public class Color4Buffer
 	}
 
 	public FloatBuffer makeBuffer(){
-		FloatBuffer fb=createFloatBuffer(bufferList.size()*4);
+		if(buffer!=null)buffer.clear();
+		buffer=createFloatBuffer(bufferList.size()*4);
 		//Log.v("gl_test","color count: "+bufferList.size());
 		for(Color4 t:bufferList){
-			fb.put(t.r).put(t.g).put(t.b).put(t.a);
+			buffer.put(t.r).put(t.g).put(t.b).put(t.a);
 		}
-		fb.position(0);
-		return fb;
+		buffer.position(0);
+		return buffer;
 	}
 
 	public static FloatBuffer createFloatBuffer(int floatCount){

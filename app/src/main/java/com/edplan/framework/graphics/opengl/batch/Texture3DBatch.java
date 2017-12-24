@@ -19,6 +19,10 @@ public class Texture3DBatch
 		vertexs=new ArrayList<TextureVertex3D>();
 	}
 	
+	public TextureVertex3D get(int idx){
+		return vertexs.get(idx);
+	}
+	
 	public int getVertexCount(){
 		return vertexs.size();
 	}
@@ -50,28 +54,34 @@ public class Texture3DBatch
 		vertexs.clear();
 	}
 
+	private Color4Buffer colorBuffer;
 	public Color4Buffer makeColorBuffer(){
-		Color4Buffer buf=new Color4Buffer();
+		if(colorBuffer!=null)colorBuffer.clear();
+		colorBuffer=new Color4Buffer();
 		for(TextureVertex3D t:vertexs){
-			buf.add(t.getColor());
+			colorBuffer.add(t.getColor());
 		}
-		return buf;
+		return colorBuffer;
 	}
 
+	private Vec2Buffer texturePointBuffer;
 	public Vec2Buffer makeTexturePositionBuffer(){
-		Vec2Buffer buf=new Vec2Buffer();
+		if(texturePointBuffer!=null)texturePointBuffer.clear();
+		texturePointBuffer=new Vec2Buffer();
 		for(TextureVertex3D t:vertexs){
-			buf.add(t.getTexturePoint());
+			texturePointBuffer.add(t.getTexturePoint());
 		}
-		return buf;
+		return texturePointBuffer;
 	}
 
+	private Vec3Buffer positionBuffer;
 	public Vec3Buffer makePositionBuffer(){
-		Vec3Buffer buf=new Vec3Buffer();
+		if(positionBuffer!=null)positionBuffer.clear();
+		positionBuffer=new Vec3Buffer();
 		for(TextureVertex3D t:vertexs){
-			buf.add(t.getPosition());
+			positionBuffer.add(t.getPosition());
 		}
-		return buf;
+		return positionBuffer;
 	}
 
 }

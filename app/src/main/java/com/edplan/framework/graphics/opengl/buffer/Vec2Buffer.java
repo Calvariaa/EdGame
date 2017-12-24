@@ -9,6 +9,8 @@ import java.util.List;
 public class Vec2Buffer
 {
 	public List<Vec2> bufferList;
+	
+	public FloatBuffer buffer;
 
 	public Vec2Buffer(){
 		initial();
@@ -25,16 +27,18 @@ public class Vec2Buffer
 	
 	public void clear(){
 		bufferList.clear();
+		if(buffer!=null)buffer.clear();
 	}
 	
 
 	public FloatBuffer makeBuffer(){
-		FloatBuffer fb=createFloatBuffer(bufferList.size()*2);
+		if(buffer!=null)buffer.clear();
+		buffer=createFloatBuffer(bufferList.size()*2);
 		for(Vec2 t:bufferList){
-			fb.put(t.x).put(t.y);
+			buffer.put(t.x).put(t.y);
 		}
-		fb.position(0);
-		return fb;
+		buffer.position(0);
+		return buffer;
 	}
 
 	public static FloatBuffer createFloatBuffer(int floatCount){

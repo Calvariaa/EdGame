@@ -133,11 +133,11 @@ public class GLTexture
 		return tex;
 	}
 	
-	public static GLTexture createNotChecked(Bitmap bmp){
+	public static GLTexture createNotChecked(Bitmap bmp,int w,int h){
 		GLTexture tex=new GLTexture();
 		tex.textureId=createTexture();
-		tex.width=bmp.getWidth();
-		tex.height=bmp.getHeight();
+		tex.width=w;
+		tex.height=h;
 
 		tex.glHeight=tex.height/(float)bmp.getWidth();
 		tex.glWidth=tex.width/(float)bmp.getHeight();
@@ -182,10 +182,10 @@ public class GLTexture
 			Paint p=new Paint();
 			p.setAntiAlias(false);
 			c.drawBitmap(bmp,0,0,p);
-			tex=createNotChecked(nb);
+			tex=createNotChecked(nb,bmp.getWidth(),bmp.getHeight());
 			nb.recycle();
 		}else{
-			tex=createNotChecked(bmp);
+			tex=createNotChecked(bmp,bmp.getWidth(),bmp.getHeight());
 		}
 		return tex;
 	}

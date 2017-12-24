@@ -110,12 +110,13 @@ public class MainGamePage extends MStaticViewGroup
 			Paint paint=new Paint();
 			paint.setAntiAlias(true);
 			paint.setStyle(Paint.Style.STROKE);
-			
+			int cx=0;
 			if(false)
 			for(HitObject o:((PartHitObjects)(p.getHitObjectsParser().getPart())).getHitObjectList()){
 				if(o instanceof StdSlider){
 					StdSlider sld=(StdSlider)o;
 					if(sld.getPath().getType()!=StdPath.Type.Bezier)continue;
+					cx++;
 					tc2.start();
 					ls=(new DrawableStdSlider(sld.getPath())).calculatePath().getAll();
 					tc2.end();
@@ -148,16 +149,16 @@ public class MainGamePage extends MStaticViewGroup
 						c.drawCircle(v.x,v.y,6,paint);
 					}
 					
-					/*
+					
 					MTextView mtv=new MTextView(getContext());
 					mtv.setTextSize(15);
 					mtv.setWidth(pbp.getWidth());
-					mtv.setText(Arrays.toString(ls.toArray()));
+					mtv.setText(""+cx);
 					c.save();
 					c.translate(0,400);
 					mtv.draw(c);
 					c.restore();
-					*/
+					
 					
 					
 					File dir=new File("/storage/emulated/0/MyDisk/WorkBench/data/test out");

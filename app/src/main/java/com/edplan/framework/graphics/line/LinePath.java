@@ -11,6 +11,8 @@ public class LinePath
 	
 	private float width;
 	
+	private float hwidth;
+	
 	public LinePath(List<Vec2> ps,float width){
 		positions=ps;
 		recomputeBounds();
@@ -19,6 +21,7 @@ public class LinePath
 	public LinePath(float width){
 		positions=new ArrayList<Vec2>();
 		this.width=width;
+		this.hwidth=width/2;
 	}
 	
 	public LinePath(){
@@ -43,11 +46,16 @@ public class LinePath
 
 	public void setWidth(float width) {
 		this.width=width;
+		this.hwidth=width/2;
 		recomputeBounds();
 	}
 
 	public float getWidth() {
 		return width;
+	}
+	
+	public float getHWidth(){
+		return hwidth;
 	}
 	
 	public void set(List<Vec2> ps){
