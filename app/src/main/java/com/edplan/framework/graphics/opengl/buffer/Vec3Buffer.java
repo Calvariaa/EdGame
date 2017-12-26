@@ -9,8 +9,7 @@ import java.util.List;
 public class Vec3Buffer
 {
 	public List<Vec3> bufferList;
-	
-	
+
 	public FloatBuffer buffer;
 	
 	public Vec3Buffer(){

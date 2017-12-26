@@ -141,6 +141,14 @@ public class Vec2
 		return new Vec3(this,z);
 	}
 	
+	public static Vec2 onLine(Vec2 v1,Vec2 v2,float p){
+		return v1.copy().zoom(1-p).add(v2.copy().zoom(p));
+	}
+	
+	public static Vec2 onLineLength(Vec2 v1,Vec2 v2,float l){
+		return onLine(v1,v2,l/length(v1,v2));
+	}
+	
 	public static Vec2 lineOthNormal(Vec2 ps,Vec2 pe){
 		Vec2 v=pe.copy().minus(ps).toOrthogonalDirectionNormal();
 		return v;

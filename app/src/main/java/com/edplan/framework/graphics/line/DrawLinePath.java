@@ -1,6 +1,5 @@
 package com.edplan.framework.graphics.line;
 import com.edplan.framework.graphics.opengl.drawui.DrawInfo;
-import com.edplan.framework.graphics.opengl.drawui.GLDrawable;
 import com.edplan.framework.graphics.opengl.buffer.Vec3Buffer;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;

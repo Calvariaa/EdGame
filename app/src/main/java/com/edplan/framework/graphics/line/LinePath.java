@@ -106,4 +106,10 @@ public class LinePath
 		}
 	}
 	
+	
+	
+	public LinePath cutPath(float start,float end){
+		return null;
+	}
+	
 }

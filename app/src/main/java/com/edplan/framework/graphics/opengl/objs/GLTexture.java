@@ -50,7 +50,7 @@ public class GLTexture
 
 	private int textureId;
 	
-	GLTexture(){
+	public GLTexture(){
 		
 	}
 
