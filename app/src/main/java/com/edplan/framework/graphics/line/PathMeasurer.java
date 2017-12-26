@@ -17,7 +17,14 @@ public class PathMeasurer
 	
 	private Vec2 endPoint;
 	
-	private float tolerance=0.1f;
+	public PathMeasurer(LinePath path){
+		this.path=path;
+	}
+	
+	public void clear(){
+		lengthes.clear();
+		path=null;
+	}
 	
 	private void measureLengthes(){
 		if(lengthes==null){
@@ -58,15 +65,9 @@ public class PathMeasurer
 		}else{
 			int s=binarySearch(l);
 			float ls=lengthes.get(s);
-			if(FMath.allmostEqual(ls,l,tolerance)){
-				return path.get(s);
-			}else{
-				return Vec2.onLineLength(path.get(s),path.get(s+1),l-ls);
-			}
+			return Vec2.onLineLength(path.get(s),path.get(s+1),l-ls);
 		}
 	}
-	
-	
 	
 	public int binarySearch(float l){
 		return binarySearch(l,0,lengthes.size()-1);

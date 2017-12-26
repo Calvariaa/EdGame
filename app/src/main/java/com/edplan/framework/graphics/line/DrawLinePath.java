@@ -20,7 +20,7 @@ public class DrawLinePath
 	
 	private Texture3DBatch batch;
 	
-	private LinePath path;
+	private AbstractPath path;
 	
 	private Vec2 textureStart=new Vec2(0,0);
 	
@@ -28,14 +28,10 @@ public class DrawLinePath
 	
 	private DrawInfo info;
 	
-	public DrawLinePath(LinePath p){
+	public DrawLinePath(AbstractPath p){
 		path=p;
 	}
-	
-	public void setWidth(float f){
-		path.setWidth(f);
-	}
-	
+
 	public void setDrawInfo(DrawInfo i){
 		info=i;
 	}
@@ -60,7 +56,7 @@ public class DrawLinePath
 			theta+=FMath.Pi;
 		
 		/* current = org + atCircle(...)*width */
-		Vec2 current=Vec2.atCircle(theta).zoom(path.getHWidth()).add(org);
+		Vec2 current=Vec2.atCircle(theta).zoom(path.getWidth()).add(org);
 		current=info.toLayerPosition(current);
 		Color4 currentColor=info.getMaskColor(current);
 		
@@ -84,7 +80,7 @@ public class DrawLinePath
 			/* current = org+atCircle(...)*width*/
 			current=
 			info.toLayerPosition(
-				Vec2.atCircle(theta+dir*angularOffset).zoom(path.getHWidth()).add(org));
+				Vec2.atCircle(theta+dir*angularOffset).zoom(path.getWidth()).add(org));
 			currentColor=info.getMaskColor(current);
 			
 			batch.add(
@@ -96,7 +92,7 @@ public class DrawLinePath
 	}
 	
 	private void addLineQuads(Vec2 ps,Vec2 pe){
-		Vec2 oth_expand=Vec2.lineOthNormal(ps,pe).zoom(path.getHWidth());
+		Vec2 oth_expand=Vec2.lineOthNormal(ps,pe).zoom(path.getWidth());
 		
 		Vec2 startL=info.toLayerPosition(ps.copy().add(oth_expand));
 		Vec2 startR=info.toLayerPosition(ps.copy().minus(oth_expand));

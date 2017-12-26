@@ -141,6 +141,10 @@ public class Vec2
 		return new Vec3(this,z);
 	}
 	
+	public static boolean near(Vec2 v1,Vec2 v2,float t){
+		return lengthSquared(v1,v2)<t;
+	}
+	
 	public static Vec2 onLine(Vec2 v1,Vec2 v2,float p){
 		return v1.copy().zoom(1-p).add(v2.copy().zoom(p));
 	}
@@ -156,6 +160,10 @@ public class Vec2
 	
 	public static float lengthSquared(float x,float y){
 		return x*x+y*y;
+	}
+	
+	public static float lengthSquared(Vec2 v1,Vec2 v2){
+		return lengthSquared(v1.x-v2.x,v1.y-v2.y);
 	}
 	
 	public static float length(float x,float y){

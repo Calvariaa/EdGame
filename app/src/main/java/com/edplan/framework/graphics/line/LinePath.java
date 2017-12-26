@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import com.edplan.framework.math.RectF;
 
-public class LinePath
+public class LinePath implements AbstractPath
 {
 	private List<Vec2> positions;
 	
@@ -12,29 +12,39 @@ public class LinePath
 	
 	private float width;
 	
-	private float hwidth;
+	private PathMeasurer measurer;
+	
+	private float tolerance=0.1f;
 	
 	public LinePath(List<Vec2> ps,float width){
 		positions=ps;
 		this.width=width;
-		this.hwidth=width/2;
 		recomputeBounds();
 	}
 	
 	public LinePath(float width){
 		positions=new ArrayList<Vec2>();
 		this.width=width;
-		this.hwidth=width/2;
 	}
 	
 	public LinePath(){
 		positions=new ArrayList<Vec2>();
 	}
+	
+	public void measure(){
+		if(measurer!=null){
+			measurer.clear();
+		}
+		measurer=new PathMeasurer(this);
+		measurer.measure();
+	}
 
+	@Override
 	public int size(){
 		return positions.size();
 	}
 	
+	@Override
 	public Vec2 get(int index){
 		return positions.get(index);
 	}
@@ -61,18 +71,14 @@ public class LinePath
 
 	public void setWidth(float width) {
 		this.width=width;
-		this.hwidth=width/2;
 		recomputeBounds();
 	}
 
+	@Override
 	public float getWidth() {
 		return width;
 	}
-	
-	public float getHWidth(){
-		return hwidth;
-	}
-	
+
 	public void set(List<Vec2> ps){
 		positions=ps;
 		recomputeBounds();
@@ -93,10 +99,10 @@ public class LinePath
 	}
 	
 	private void expandBounds(Vec2 v){
-		if(v.x-hwidth<minX)minX=v.x-hwidth;
-		if(v.x+hwidth>maxX)maxX=v.x+hwidth;
-		if(v.y-hwidth<minY)minY=v.y-hwidth;
-		if(v.y+hwidth>maxY)minX=v.y+hwidth;
+		if(v.x-width<minX)minX=v.x-width;
+		if(v.x+width>maxX)maxX=v.x+width;
+		if(v.y-width<minY)minY=v.y-width;
+		if(v.y+width>maxY)minX=v.y+width;
 	}
 	
 	private void recomputeBounds(){
@@ -105,11 +111,171 @@ public class LinePath
 			expandBounds(v);
 		}
 	}
-	
-	
-	
-	public LinePath cutPath(float start,float end){
-		return null;
+
+	public AbstractPath cutPath(float start,float end){
+		int s=measurer.binarySearch(start)+1;
+		int e=measurer.binarySearch(end);
+		Vec2 startPoint=measurer.atLength(start);
+		Vec2 endPoint=measurer.atLength(end);
+		if(Vec2.near(get(s),startPoint,tolerance)){
+			if(Vec2.near(get(e),endPoint,tolerance)){
+				return new SubLinePath(s,e);
+			}else{
+				return new SubLinePathR(endPoint,s,e);
+			}
+		}else{
+			if(Vec2.near(get(e),endPoint,tolerance)){
+				return new SubLinePathL(startPoint,s,e);
+			}else{
+				return new SubLinePathLR(startPoint,endPoint,s,e);
+			}
+		}
 	}
 	
+	public class SubLinePath implements  AbstractPath {
+
+		private int startIndex;
+
+		private int size;
+
+		public SubLinePath(int startIndex,int endIndex){
+			this.startIndex=startIndex;
+			this.size=endIndex-startIndex+1;
+		}
+
+		@Override
+		public Vec2 get(int idx) {
+			// TODO: Implement this method
+			return LinePath.this.get(startIndex+idx);
+		}
+
+		@Override
+		public int size() {
+			// TODO: Implement this method
+			return size;
+		}
+
+		@Override
+		public float getWidth() {
+			// TODO: Implement this method
+			return LinePath.this.getWidth();
+		}
+	}
+	
+	public class SubLinePathL implements  AbstractPath {
+		
+		private Vec2 startPoint;
+		
+		private int startIndex;
+		
+		private int startIndexM1;
+		
+		private int size;
+		
+		public SubLinePathL(Vec2 startPoint,int startIndex,int endIndex){
+			this.startPoint=startPoint;
+			this.startIndex=startIndex;
+			startIndexM1=startIndex-1;
+			this.size=endIndex-startIndex+2;
+		}
+		
+		@Override
+		public Vec2 get(int idx) {
+			// TODO: Implement this method
+			return (idx==0)?startPoint:LinePath.this.get(startIndexM1+idx);
+		}
+
+		@Override
+		public int size() {
+			// TODO: Implement this method
+			return size;
+		}
+
+		@Override
+		public float getWidth() {
+			// TODO: Implement this method
+			return LinePath.this.getWidth();
+		}
+	}
+	
+	public class SubLinePathR implements  AbstractPath {
+
+		private Vec2 endPoint;
+
+		private int startIndex;
+		
+		private int endIndexA1;
+
+		private int size;
+
+		public SubLinePathR(Vec2 endPoint,int startIndex,int endIndex){
+			this.endPoint=endPoint;
+			this.startIndex=startIndex;
+			this.endIndexA1=endIndex+1;
+			this.size=endIndex-startIndex+2;
+		}
+
+		@Override
+		public Vec2 get(int idx) {
+			// TODO: Implement this method
+			return (idx==endIndexA1)?endPoint:LinePath.this.get(startIndex+idx);
+		}
+
+		@Override
+		public int size() {
+			// TODO: Implement this method
+			return size;
+		}
+
+		@Override
+		public float getWidth() {
+			// TODO: Implement this method
+			return LinePath.this.getWidth();
+		}
+	}
+	
+	public class SubLinePathLR implements  AbstractPath {
+
+		private Vec2 startPoint;
+		
+		private Vec2 endPoint;
+
+		private int endPointIdx;
+		
+		private int startIndexM1;
+
+		private int size;
+
+		public SubLinePathLR(Vec2 startPoint,Vec2 endPoint,int startIndex,int endIndex){
+			this.endPoint=endPoint;
+			this.startPoint=startPoint;
+			this.startIndexM1=startIndex-1;
+			this.endPointIdx=endIndex+1;
+			this.size=endIndex-startIndex+3;
+		}
+
+		@Override
+		public Vec2 get(int idx) {
+			// TODO: Implement this method
+			if(idx==0){
+				return startPoint;
+			}else if(idx==endPointIdx){
+				return endPoint;
+			}else{
+				return LinePath.this.get(startIndexM1+idx);
+			}
+		}
+
+		@Override
+		public int size() {
+			// TODO: Implement this method
+			return size;
+		}
+
+		@Override
+		public float getWidth() {
+			// TODO: Implement this method
+			return LinePath.this.getWidth();
+		}
+	}
 }
