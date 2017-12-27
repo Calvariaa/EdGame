@@ -69,8 +69,13 @@ public class PathMeasurer
 		}
 	}
 	
+	//l>=0
 	public int binarySearch(float l){
-		return binarySearch(l,0,lengthes.size()-1);
+		if(l>=maxLength()){
+			return lengthes.size()-1;
+		}else{
+			return binarySearch(l,0,lengthes.size()-1);
+		}
 	}
 	
 	//l>=0&&l<maxLength

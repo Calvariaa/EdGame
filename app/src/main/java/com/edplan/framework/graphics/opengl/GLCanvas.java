@@ -227,6 +227,11 @@ public class GLCanvas
 		drawTexture3DBatch(tmpBatch,texture,alpha,mixColor);
 	}
 	
+	private float defZ=0;
+	public void drawTexture(GLTexture texture,RectF res,RectF dst,Color4 mixColor,Color4 color,float colorMixRate,float alpha){
+		drawTexture(texture,res,dst,mixColor,color,colorMixRate,defZ,alpha);
+	}
+	
 	public void drawTexture(TextureRegion texture,RectF res,RectF dst,Color4 mixColor,Color4 color,float colorMixRate,float z,float alpha){
 		checkCanDraw();
 		tmpBatch.clear();
@@ -257,6 +262,10 @@ public class GLCanvas
 			.setTexturePoint(texture.toTexturePosition(res.getX1(),res.getY1()));
 		tmpBatch.add(v0,v1,v2,v0,v2,v3);
 		drawTexture3DBatch(tmpBatch,texture,alpha,mixColor);
+	}
+	
+	public void drawTexture(TextureRegion texture,RectF res,RectF dst,Color4 mixColor,Color4 color,float colorMixRate,float alpha){
+		drawTexture(texture,res,dst,mixColor,color,colorMixRate,defZ,alpha);
 	}
 	
 	public MContext getContext(){
