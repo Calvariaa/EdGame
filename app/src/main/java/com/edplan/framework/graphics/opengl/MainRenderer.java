@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+import com.edplan.framework.math.FMath;
 
 public class MainRenderer implements GLSurfaceView.Renderer
 {
@@ -59,27 +60,44 @@ public class MainRenderer implements GLSurfaceView.Renderer
 	@Override
 	public void onDrawFrame(GL10 p1) {
 		// TODO: Implement this method
+		//GLWrapped.enableBlend();
 		a+=0.01;
-		GLCanvas canvas=new GLCanvas(rootLayer);
+		GLCanvas2D canvas=new GLCanvas2D(rootLayer);
 		canvas.prepare();
 		float c=Math.abs(a%2-1);
 		canvas.drawColor(new Color4(c,c,c,1.0f));
 		canvas.clearDepthBuffer();
+		
+		canvas.save();
+		canvas.getMaskMatrix().translate(100+testPng.getWidth()/2,100+testPng.getHeight()/2,0).rotate(c*90,0,0,1);
+		//.post((new Mat4()).translate(10,10,0));
 		canvas.drawTexture(
 			testPng,
 			new RectF(0,0,testPng.getWidth(),testPng.getHeight()),
-			new RectF(0,0,testPng.getWidth(),testPng.getHeight()),
+			new RectF(-testPng.getWidth()/2,-testPng.getWidth()/2,testPng.getWidth(),testPng.getHeight()),
 			new Color4(1,1,1,1),
 			new Color4(1,1,1,1),
 			0,
 			1,
 			1);
 		
-		Mat4 m=canvas.getFinalMatrix();
+		canvas.restore();
+		canvas.drawTexture(
+			testPng,
+			new RectF(0,0,testPng.getWidth(),testPng.getHeight()),
+			new RectF(0,0,100,100),
+			new Color4(1,1,1,1),
+			new Color4(1,1,1,1),
+			0,
+			1,
+			1);
+		
+		
+		//Mat4 m=canvas.getFinalMatrix();
 		//Log.v("gl_test",Arrays.toString(m.data));
 		//Log.v("gl_test","draw once");
-		MLog.test.vOnce("mvp Matrix","gl_test",Arrays.toString(m.data));
-		MLog.test.vOnce("Canvas data","gl_test","testPng: "+testPng.getTextureId());
+		//MLog.test.vOnce("mvp Matrix","gl_test",Arrays.toString(m.data));
+		//MLog.test.vOnce("Canvas data","gl_test","testPng: "+testPng.getTextureId());
 		
 		canvas.unprepare();
 	}

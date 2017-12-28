@@ -12,6 +12,12 @@ public class GLWrapped
 		GLES20.glDisable(GLES20.GL_DEPTH_TEST);
 	}
 	
+	public static void enableBlend(){
+		GLES20.glEnable(GLES20.GL_BLEND);
+		GLES20.glBlendFunc(GLES20.GL_ONE,GLES20.GL_ONE_MINUS_SRC_ALPHA);
+		//GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA,GLES20.GL_DST_ALPHA);
+	}
+	
 	public static void setViewport(int x1,int y1,int x2,int y2){
 		GLES20.glViewport(x1,y1,x2,y2);
 	}

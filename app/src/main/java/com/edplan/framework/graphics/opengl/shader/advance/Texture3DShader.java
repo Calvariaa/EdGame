@@ -15,10 +15,13 @@ import com.edplan.framework.graphics.opengl.shader.uniforms.UniformSample2D;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.graphics.opengl.shader.uniforms.UniformColor4;
 import com.edplan.framework.graphics.opengl.objs.Color4;
+import com.edplan.framework.interfaces.Recycleable;
 
 public class Texture3DShader extends GLProgram
 {
 	private UniformMat4 uMVPMatrix;
+	
+	private UniformMat4 uMaskMatrix;
 	
 	private UniformFloat uColorMixRate;
 	
@@ -37,6 +40,7 @@ public class Texture3DShader extends GLProgram
 	protected Texture3DShader(GLProgram program){
 		super(program.getVertexShader(),program.getFragmentShader(),program.getProgramId());
 		uMVPMatrix=UniformMat4.findUniform(this,Unif.MVPMatrix);
+		uMaskMatrix=UniformMat4.findUniform(this,Unif.MaskMatrix);
 		uColorMixRate=UniformFloat.findUniform(this,Unif.ColorMixRate);
 		uFinalAlpha=UniformFloat.findUniform(this,Unif.FinalAlpha);
 		uTexture=UniformSample2D.findUniform(this,Unif.Texture,0);
@@ -56,6 +60,10 @@ public class Texture3DShader extends GLProgram
 	
 	public void loadMVPMatrix(Mat4 mvp){
 		uMVPMatrix.loadData(mvp);
+	}
+	
+	public void loadMaskMatrix(Mat4 mpm){
+		uMaskMatrix.loadData(mpm);
 	}
 	
 	public void loadPosition(Vec3Buffer buffer){

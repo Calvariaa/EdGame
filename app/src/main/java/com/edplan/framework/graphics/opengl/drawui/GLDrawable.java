@@ -1,5 +1,5 @@
 package com.edplan.framework.graphics.opengl.drawui;
-import com.edplan.framework.graphics.opengl.GLCanvas;
+import com.edplan.framework.graphics.opengl.GLCanvas2D;
 
 
 /**
@@ -11,5 +11,5 @@ public abstract class GLDrawable
 	
 	public abstract void prepareForDraw();
 	
-	public abstract void render(GLCanvas canvas);
+	public abstract void render(GLCanvas2D canvas);
 }

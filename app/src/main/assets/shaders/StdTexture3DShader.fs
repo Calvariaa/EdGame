@@ -1,14 +1,18 @@
 precision mediump float;
+
 varying vec3 f_Position;
 varying vec2 f_TexturePosition;
 varying vec4 f_Color;
+varying vec3 f_MaskPosition;
+
 uniform float u_ColorMixRate;
 uniform float u_FinalAlpha;
 uniform vec4 u_MixColor;
 uniform sampler2D u_Texture;
 
 void main(){
-	vec4 c=u_MixColor*mix(texture2D(u_Texture,f_TexturePosition),f_Color,u_ColorMixRate);
+	vec4 t=texture2D(u_Texture,f_TexturePosition);
+	vec4 c=u_MixColor*mix(t,f_Color,u_ColorMixRate);
 	c.a=c.a*u_FinalAlpha;
 	gl_FragColor=c;
 }

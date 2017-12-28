@@ -1,9 +1,12 @@
 package com.edplan.framework.math;
 import android.opengl.Matrix;
+import com.edplan.framework.interfaces.Recycleable;
 
-public class Mat4
+public class Mat4 implements Recycleable
 {
 	public static final int WIDTH=4;
+	
+	public static final Mat4 IDENTITY_MAT4=(new Mat4()).setIden();
 	
 	public float[] data;
 	
@@ -16,11 +19,11 @@ public class Mat4
 		data=new float[16];
 	}
 	
-	public void setIden(){
-		setDiag(1,1,1,1);
+	public Mat4 setIden(){
+		return setDiag(1,1,1,1);
 	}
 	
-	public void set(float... datas){
+	public Mat4 set(float... datas){
 		if(datas.length!=16){
 			throw new IllegalArgumentException("Mat4.set(float...) should put 16 var");
 		}else{
@@ -28,13 +31,14 @@ public class Mat4
 				data[i]=datas[i];
 			}
 		}
+		return this;
 	}
 	
-	public void set(Mat4 mat){
-		set(mat.data);
+	public Mat4 set(Mat4 mat){
+		return set(mat.data);
 	}
 	
-	public void setDiag(float v11,float v22,float v33,float v44){
+	public Mat4 setDiag(float v11,float v22,float v33,float v44){
 		float[] tmp={v11,v22,v33,v44};
 		for(int i=0;i<WIDTH;i++){
 			for(int j=0;j<WIDTH;j++){
@@ -45,10 +49,12 @@ public class Mat4
 				}
 			}
 		}
+		return this;
 	}
 	
-	public void set(int x,int y,float d){
+	public Mat4 set(int x,int y,float d){
 		data[x+WIDTH*y]=d;
+		return this;
 	}
 	
 	public float get(int x,int y){
@@ -64,6 +70,14 @@ public class Mat4
     	Matrix.rotateM(data,0,angle,x,y,z);
 		return this;
     }
+	
+	//默认以(0,0,1)旋转
+	public Mat4 rotate2D(float ox,float oy,float angel,boolean isClockwise){
+		return this
+				 .translate(ox,oy,0)
+				 .rotate(angel,0,0,(isClockwise)?1:-1)
+				 .translate(-ox,-oy,0);
+	}
 	
 	public Mat4 setCamera
     (
@@ -125,5 +139,23 @@ public class Mat4
 	
 	public Mat4 copy(){
 		return new Mat4(this.data);
+	}
+	
+	public static Mat4 rotation(float angel,float dx,float dy,float dz){
+		return createIdentity().rotate(angel,dx,dy,dz);
+	}
+	
+	public static Mat4 translation(float tx,float ty,float tz){
+		return createIdentity().translate(tx,ty,tx);
+	}
+	
+	public static Mat4 createIdentity(){
+		return IDENTITY_MAT4.copy();
+	}
+
+	@Override
+	public void recycle() {
+		// TODO: Implement this method
+		this.data=null;
 	}
 }
