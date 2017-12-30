@@ -38,7 +38,7 @@ public class UniformFloat implements DataUniform<Float>
 		um.handle=GLES20.glGetUniformLocation(program.getProgramId(),name);
 		um.program=program;
 		um.name=name;
-		if(um.handle==-1)throw new GLException("handle "+name+" NOT found");
+		//if(um.handle==-1)throw new GLException("handle "+name+" NOT found");
 		return um;
 	}
 }

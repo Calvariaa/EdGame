@@ -12,10 +12,16 @@ public class RectF
 		
 	}
 	
+	public RectF(RectF r){
+		basePoint=r.basePoint.copy();
+		this.width=r.width;
+		this.height=r.height;
+	}
+	
 	public RectF(float l,float t,float w,float h){
 		setBasePoint(l,t);
-		setWidth(w);
-		setHeight(h);
+		this.width=w;
+		this.height=h;
 	}
 	
 	public Vec2 getBasePoint(){
@@ -43,7 +49,7 @@ public class RectF
 	}
 	
 	public float getY2(){
-		return basePoint.y+width;
+		return basePoint.y+height;
 	}
 	
 	public float getTop(){
@@ -55,7 +61,7 @@ public class RectF
 	}
 	
 	public float getBottom(){
-		return getTop()+getWidth();
+		return getTop()+getHeight();
 	}
 	
 	public float getRight(){
@@ -80,5 +86,16 @@ public class RectF
 	
 	public void move(float dx,float dy){
 		getBasePoint().add(dx,dy);
+	}
+	
+	public RectF padding(float padding){
+		move(padding,padding);
+		width-=2*padding;
+		height-=2*padding;
+		return this;
+	}
+	
+	public RectF copy(){
+		return new RectF(this);
 	}
 }

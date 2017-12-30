@@ -41,6 +41,13 @@ public class GLTexture
 		GLES20.GL_TEXTURE17,
 		GLES20.GL_TEXTURE18
 	};
+	
+	public static BitmapFactory.Options DEF_CREATE_OPTIONS;
+	
+	static{
+		DEF_CREATE_OPTIONS=new BitmapFactory.Options();
+		DEF_CREATE_OPTIONS.inPremultiplied=false;
+	}
 
 	private int width,height;
 
@@ -139,14 +146,14 @@ public class GLTexture
 		tex.width=w;
 		tex.height=h;
 
-		tex.glHeight=tex.height/(float)bmp.getWidth();
-		tex.glWidth=tex.width/(float)bmp.getHeight();
+		tex.glHeight=tex.height/(float)bmp.getHeight();
+		tex.glWidth=tex.width/(float)bmp.getWidth();
 		GLUtils.texImage2D(GLES20.GL_TEXTURE_2D,0,bmp,0);
 		return tex;
 	}
 	
 	public static GLTexture decodeStream(InputStream in){
-		return create(BitmapFactory.decodeStream(in),true);
+		return create(BitmapFactory.decodeStream(in,null,DEF_CREATE_OPTIONS),true);
 	}
 	
 	public static GLTexture decodeStream(InputStream in,boolean ifClose) throws IOException{
@@ -175,15 +182,19 @@ public class GLTexture
 		int h=1;
 		while(w<bmp.getWidth())w*=2;
 		while(h<bmp.getHeight())h*=2;
-		if(w!=bmp.getWidth()||h!=bmp.getHeight()){
-			Bitmap nb=Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888);
-			Canvas c=new Canvas(nb);
-			c.drawColor(0x00000000);
-			Paint p=new Paint();
-			p.setAntiAlias(false);
-			c.drawBitmap(bmp,0,0,p);
-			tex=createNotChecked(nb,bmp.getWidth(),bmp.getHeight());
-			nb.recycle();
+		if(DEF_CREATE_OPTIONS.inPremultiplied){
+			if(w!=bmp.getWidth()||h!=bmp.getHeight()){
+				Bitmap nb=Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888);
+				Canvas c=new Canvas(nb);
+				c.drawColor(0x00000000);
+				Paint p=new Paint();
+				p.setAntiAlias(false);
+				c.drawBitmap(bmp,0,0,p);
+				tex=createNotChecked(nb,bmp.getWidth(),bmp.getHeight());
+				nb.recycle();
+			}else{
+				tex=createNotChecked(bmp,bmp.getWidth(),bmp.getHeight());
+			}
 		}else{
 			tex=createNotChecked(bmp,bmp.getWidth(),bmp.getHeight());
 		}

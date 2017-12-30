@@ -27,6 +27,8 @@ public abstract class SRable<T extends Copyable> implements Recycleable
 		return currentData;
 	}
 	
+	
+	@SuppressWarnings({"unchecked"})
 	public int save(){
 		onSave(currentData);
 		saves.push(currentData);

@@ -37,9 +37,7 @@ public class UniformSample2D implements DataUniform<GLTexture>
 		u.program=program;
 		u.textureIndex=index;
 		u.handle=GLES20.glGetUniformLocation(program.getProgramId(),name);
-		if(u.handle==-1){
-			throw new GLException("handle "+name+" NOT found");
-		}
+		//if(u.handle==-1)throw new GLException("handle "+name+" NOT found");
 		return u;
 	}
 }

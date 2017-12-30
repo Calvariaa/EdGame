@@ -9,17 +9,17 @@ import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.graphics.opengl.shader.GLProgram;
 import com.edplan.framework.graphics.opengl.shader.advance.Texture3DShader;
 
-public class Texture3DBatch
+public class Texture3DBatch<T extends TextureVertex3D>
 {
-	private List<TextureVertex3D> vertexs;
+	protected List<T> vertexs;
 	
 	private float colorMixRate;
 	
 	public Texture3DBatch(){
-		vertexs=new ArrayList<TextureVertex3D>();
+		vertexs=new ArrayList<T>();
 	}
 	
-	public TextureVertex3D get(int idx){
+	public T get(int idx){
 		return vertexs.get(idx);
 	}
 	
@@ -35,13 +35,13 @@ public class Texture3DBatch
 		return colorMixRate;
 	}
 	
-	public Texture3DBatch add(TextureVertex3D... vs){
-		for(TextureVertex3D v:vs)
+	public Texture3DBatch add(T... vs){
+		for(T v:vs)
 			add(v);
 		return this;
 	}
 
-	public Texture3DBatch add(TextureVertex3D v){
+	public Texture3DBatch add(T v){
 		vertexs.add(v);
 		return this;
 	}
@@ -58,7 +58,7 @@ public class Texture3DBatch
 	public Color4Buffer makeColorBuffer(){
 		if(colorBuffer!=null)colorBuffer.clear();
 		colorBuffer=new Color4Buffer();
-		for(TextureVertex3D t:vertexs){
+		for(T t:vertexs){
 			colorBuffer.add(t.getColor());
 		}
 		return colorBuffer;
@@ -68,7 +68,7 @@ public class Texture3DBatch
 	public Vec2Buffer makeTexturePositionBuffer(){
 		if(texturePointBuffer!=null)texturePointBuffer.clear();
 		texturePointBuffer=new Vec2Buffer();
-		for(TextureVertex3D t:vertexs){
+		for(T t:vertexs){
 			texturePointBuffer.add(t.getTexturePoint());
 		}
 		return texturePointBuffer;
@@ -78,7 +78,7 @@ public class Texture3DBatch
 	public Vec3Buffer makePositionBuffer(){
 		if(positionBuffer!=null)positionBuffer.clear();
 		positionBuffer=new Vec3Buffer();
-		for(TextureVertex3D t:vertexs){
+		for(T t:vertexs){
 			positionBuffer.add(t.getPosition());
 		}
 		return positionBuffer;

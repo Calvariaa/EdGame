@@ -33,18 +33,22 @@ public class MainRenderer implements GLSurfaceView.Renderer
 	
 	
 	private GLTexture testPng;
+	private GLTexture cardPng;
 	@Override
 	public void onSurfaceCreated(GL10 p1,EGLConfig p2) {
 		// TODO: Implement this method
 		try {
 			context.initial();
-			GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+			//GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+			GLWrapped.setDepthTest(false);
+			GLWrapped.enableBlend();
 			testPng=
 				GLTexture.decodeStream(
 					context
 						 .getAssetResource()
 						 .getTextureResource()
 						 .openInput("ic_launcher.png"));
+			cardPng=GLTexture.decodeResource(context.getAssetResource().getTextureResource(),"card.jpg");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -60,8 +64,7 @@ public class MainRenderer implements GLSurfaceView.Renderer
 	@Override
 	public void onDrawFrame(GL10 p1) {
 		// TODO: Implement this method
-		//GLWrapped.enableBlend();
-		a+=0.01;
+		a+=0.005;
 		GLCanvas2D canvas=new GLCanvas2D(rootLayer);
 		canvas.prepare();
 		float c=Math.abs(a%2-1);
@@ -69,7 +72,7 @@ public class MainRenderer implements GLSurfaceView.Renderer
 		canvas.clearDepthBuffer();
 		
 		canvas.save();
-		canvas.getMaskMatrix().translate(100+testPng.getWidth()/2,100+testPng.getHeight()/2,0).rotate(c*90,0,0,1);
+		canvas.getMaskMatrix().translate(500+testPng.getWidth()/2,500+testPng.getHeight()/2,0).rotate(c*90,0,0,1);
 		//.post((new Mat4()).translate(10,10,0));
 		canvas.drawTexture(
 			testPng,
@@ -77,22 +80,42 @@ public class MainRenderer implements GLSurfaceView.Renderer
 			new RectF(-testPng.getWidth()/2,-testPng.getWidth()/2,testPng.getWidth(),testPng.getHeight()),
 			new Color4(1,1,1,1),
 			new Color4(1,1,1,1),
-			0,
+			0f,
 			1,
-			1);
+			1f);
 		
 		canvas.restore();
 		canvas.drawTexture(
 			testPng,
-			new RectF(0,0,testPng.getWidth(),testPng.getHeight()),
-			new RectF(0,0,100,100),
+			new RectF(0,0,testPng.getWidth()/2,testPng.getHeight()),
+			new RectF(0,0,500,500),
 			new Color4(1,1,1,1),
 			new Color4(1,1,1,1),
-			0,
 			1,
-			1);
+			1,
+			1f);
 		
+		GLPaint paint=new GLPaint();
+		paint.setColorMixRate(0);
+		paint.setFinalAlpha(0.5f);
+		paint.setMixColor(new Color4(1,1,1,1));
+		paint.setPadding(c*cardPng.getHeight());
+		paint.setVaryingColor(new Color4(0,0,0,0));
 		
+		canvas.drawRectTexture(
+			cardPng,
+			new RectF(0,0,cardPng.getWidth(),cardPng.getHeight()),
+			new RectF(100,100,cardPng.getWidth()*2,cardPng.getHeight()*2),
+			paint);
+		/*
+		paint.setPadding(10);
+		canvas.drawRectTexture(
+			cardPng,
+			new RectF(0,0,cardPng.getWidth(),cardPng.getHeight()),
+			new RectF(1000,500,cardPng.getWidth()*2,cardPng.getHeight()*2),
+			paint);*/
+		
+		MLog.test.vOnce("jpgwh","jpgwh","w:"+cardPng.getWidth()+" h:"+cardPng.getHeight());
 		//Mat4 m=canvas.getFinalMatrix();
 		//Log.v("gl_test",Arrays.toString(m.data));
 		//Log.v("gl_test","draw once");
