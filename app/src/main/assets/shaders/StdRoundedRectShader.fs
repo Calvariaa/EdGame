@@ -39,15 +39,15 @@ float distanceFromRoundedRect(){
 
 void main(){
 	float dis=distanceFromRoundedRect();
-	
 	float r_alpha=dis>0.0?pow(u_GlowFactor,dis):1.0;
-	
 	vec4 t=texture2D(u_Texture,f_TexturePosition);
-	if(dis>0.0){
-		t=mix(u_GlowColor,t,t.a);
-	}
+	float edgeFactor=1.0-pow(0.2,dis);
+	
 	vec4 c=u_MixColor*vec4(mix(t.rgb,f_VaryingColor.rgb,u_ColorMixRate*f_VaryingColor.a),t.a);
 	
+	if(dis>0.0){
+		c=mix(c,u_GlowColor,u_GlowColor.a*edgeFactor);
+	}
 	c.a*=r_alpha*u_FinalAlpha;
 	gl_FragColor=c;
 }

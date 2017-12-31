@@ -13,9 +13,35 @@ public class GLPaint
 	
 	public float padding=0;
 	
+	public float roundedRadius=0;
+	
 	public float glowFactor=0.5f;
 	
-	public Color4 glowColor=new Color4(1,1,1,0.2f);
+	public Color4 glowColor=new Color4(1, 1, 1, 0.2f);
+
+	public void setRoundedRadius(float roundedRadius) {
+		this.roundedRadius=roundedRadius;
+	}
+
+	public float getRoundedRadius() {
+		return roundedRadius;
+	}
+
+	public void setGlowFactor(float glowFactor) {
+		this.glowFactor=glowFactor;
+	}
+
+	public float getGlowFactor() {
+		return glowFactor;
+	}
+
+	public void setGlowColor(Color4 glowColor) {
+		this.glowColor=glowColor;
+	}
+
+	public Color4 getGlowColor() {
+		return glowColor;
+	}
 
 	public void setPadding(float padding) {
 		this.padding=padding;

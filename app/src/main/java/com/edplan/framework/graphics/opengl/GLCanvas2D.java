@@ -15,9 +15,9 @@ import com.edplan.framework.graphics.ui.BufferedLayer;
 import com.edplan.framework.math.Mat4;
 import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.Vec3;
-import com.edplan.framework.utils.SRable;
+import com.edplan.framework.utils.AbstractSRable;
 
-public class GLCanvas2D extends SRable<CanvasData>
+public class GLCanvas2D extends AbstractSRable<CanvasData>
 {
 	private BufferedLayer layer;
 
@@ -253,6 +253,15 @@ public class GLCanvas2D extends SRable<CanvasData>
 		drawRectBatch(tmpRectBatch,texture,dst,paint);
 	}
 	
+	public void drawRoundedRectTexture(GLTexture texture,RectF res,RectF dst,GLPaint paint){
+		checkCanDraw();
+		tmpRectBatch.clear();
+		tmpRectBatch.setColorMixRate(paint.getColorMixRate());
+		RectVertex[] v=createRectVertexs(texture,res,dst,paint.getVaryingColor(),defZ);
+		tmpRectBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
+		drawRoundedRectBatch(tmpRectBatch,texture,dst,paint);
+	}
+	
 	public void drawTexture(TextureRegion texture,RectF res,RectF dst,GLPaint paint){
 		drawTexture(texture,res,dst,paint.getMixColor(),paint.getVaryingColor(),paint.getColorMixRate(),defZ,paint.getFinalAlpha());
 	}
@@ -266,6 +275,14 @@ public class GLCanvas2D extends SRable<CanvasData>
 		RectShader shader=getContext().getShaderManager().getRectShader();
 		injectData(batch,texture,paint.getFinalAlpha(),paint.getMixColor(),shader);
 		injectRectData(batch,dst,paint.getPadding(),shader);
+		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, batch.getVertexCount());
+	}
+	
+	public void drawRoundedRectBatch(RectVertexBatch batch,GLTexture texture,RectF dst,GLPaint paint){
+		checkCanDraw();
+		RoundedRectShader shader=getContext().getShaderManager().getRoundedRectShader();
+		injectData(batch,texture,paint.getFinalAlpha(),paint.getMixColor(),shader);
+		injectRoundedRectData(batch,dst,paint.getPadding(),paint.getRoundedRadius(),paint.getGlowColor(),paint.getGlowFactor(),shader);
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, batch.getVertexCount());
 	}
 	

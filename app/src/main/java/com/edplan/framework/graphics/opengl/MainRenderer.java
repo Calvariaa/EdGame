@@ -40,7 +40,7 @@ public class MainRenderer implements GLSurfaceView.Renderer
 		try {
 			context.initial();
 			//GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-			GLWrapped.setDepthTest(false);
+			GLWrapped.depthTest.set(false);
 			GLWrapped.enableBlend();
 			testPng=
 				GLTexture.decodeStream(
@@ -64,11 +64,12 @@ public class MainRenderer implements GLSurfaceView.Renderer
 	@Override
 	public void onDrawFrame(GL10 p1) {
 		// TODO: Implement this method
-		a+=0.005;
+		a+=0.02;
 		GLCanvas2D canvas=new GLCanvas2D(rootLayer);
 		canvas.prepare();
 		float c=Math.abs(a%2-1);
-		canvas.drawColor(new Color4(c,c,c,1.0f));
+		canvas.drawColor(new Color4(1f,1f,1f,1));
+		//new Color4(c,c,c,1.0f));
 		canvas.clearDepthBuffer();
 		
 		canvas.save();
@@ -95,17 +96,27 @@ public class MainRenderer implements GLSurfaceView.Renderer
 			1,
 			1f);
 		
+		
 		GLPaint paint=new GLPaint();
 		paint.setColorMixRate(0);
-		paint.setFinalAlpha(0.5f);
+		paint.setFinalAlpha(1f);
 		paint.setMixColor(new Color4(1,1,1,1));
-		paint.setPadding(c*cardPng.getHeight());
+		paint.setPadding(30);
 		paint.setVaryingColor(new Color4(0,0,0,0));
+		paint.setRoundedRadius(40);
+		paint.setGlowFactor(0.47f+c*0.3f);
+		paint.setGlowColor(Color4.gray(0.1f));
 		
-		canvas.drawRectTexture(
+		canvas.drawRoundedRectTexture(
 			cardPng,
 			new RectF(0,0,cardPng.getWidth(),cardPng.getHeight()),
-			new RectF(100,100,cardPng.getWidth()*2,cardPng.getHeight()*2),
+			new RectF(500,100,cardPng.getWidth()*1.5f,cardPng.getHeight()*1.5f),
+			paint);
+		canvas.getMaskMatrix().rotate(30,0,0,1);
+		canvas.drawRoundedRectTexture(
+			cardPng,
+			new RectF(0,0,cardPng.getWidth(),cardPng.getHeight()),
+			new RectF(500,100,cardPng.getWidth()*1.5f,cardPng.getHeight()*1.5f),
 			paint);
 		/*
 		paint.setPadding(10);
