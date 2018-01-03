@@ -1,6 +1,7 @@
 package com.edplan.framework.math;
+import com.edplan.framework.interfaces.Copyable;
 
-public class RectF
+public class RectF implements Copyable
 {
 	private Vec2 basePoint=new Vec2();
 	
@@ -22,6 +23,13 @@ public class RectF
 		setBasePoint(l,t);
 		this.width=w;
 		this.height=h;
+	}
+	
+	public RectF set(RectF rect){
+		setBasePoint(rect.getLeft(),rect.getTop());
+		width=rect.getWidth();
+		height=rect.getHeight();
+		return this;
 	}
 	
 	public Vec2 getBasePoint(){
@@ -95,6 +103,18 @@ public class RectF
 		return this;
 	}
 	
+	public RectF padding(float pl,float pt,float pr,float pb){
+		move(pl,pt);
+		width-=pl+pr;
+		height-=pt+pb;
+		return this;
+	}
+	
+	public RectF padding(Vec4 p){
+		return padding(p.r,p.g,p.b,p.a);
+	}
+	
+	@Override
 	public RectF copy(){
 		return new RectF(this);
 	}

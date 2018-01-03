@@ -1,6 +1,6 @@
 package com.edplan.nso.parser;
 import android.util.Log;
-import com.edplan.nso.Beatmap.StdBeatmapBindingData;
+import com.edplan.nso.beatmap.StdBeatmapBindingData;
 import com.edplan.nso.NsoBeatmapParsingException;
 import com.edplan.nso.ParsingBeatmap;
 import com.edplan.nso.filepart.PartColours;

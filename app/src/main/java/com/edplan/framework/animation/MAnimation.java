@@ -1,12 +1,11 @@
 package com.edplan.framework.animation;
-import com.edplan.superutils.interfaces.Function;
 import com.edplan.superutils.interfaces.Loopable;
 import com.edplan.superutils.MTimer;
 import com.edplan.superutils.interfaces.Loopable.Flag;
 import com.edplan.framework.animation.interpolator.LinearInterpolator;
 import com.edplan.superutils.classes.MLooperThread;
-import com.edplan.superutils.interfaces.Setter;
 import com.edplan.superutils.classes.MLooper;
+import com.edplan.framework.interfaces.Setter;
 
 public class MAnimation implements Loopable
 {

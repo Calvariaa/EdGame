@@ -79,6 +79,11 @@ public class Mat4 implements Recycleable
 				 .translate(-ox,-oy,0);
 	}
 	
+	public Mat4 scale(float sx,float sy,float sz){
+		Matrix.scaleM(data,0,sx,sy,sz);
+		return this;
+	}
+	
 	public Mat4 setCamera
     (
 		float cx,float cy,float cz,   

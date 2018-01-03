@@ -1,16 +1,16 @@
 package com.edplan.nso.filepart;
 import com.edplan.nso.OsuFilePart;
-import com.edplan.nso.Ruleset.amodel.parser.HitObjectParser;
-import com.edplan.nso.Ruleset.amodel.object.HitObjects;
-import com.edplan.nso.Ruleset.ModeManager;
+import com.edplan.nso.ruleset.amodel.parser.HitObjectParser;
+import com.edplan.nso.ruleset.amodel.object.HitObjects;
+import com.edplan.nso.ruleset.ModeManager;
 import com.edplan.nso.NsoException;
-import com.edplan.nso.Ruleset.std.objects.StdHitObjects;
-import com.edplan.nso.Ruleset.amodel.object.HitObject;
-import com.edplan.nso.Ruleset.amodel.parser.HitObjectReparser;
-import com.edplan.nso.Ruleset.std.parser.StdHitObjectReparser;
+import com.edplan.nso.ruleset.std.objects.StdHitObjects;
+import com.edplan.nso.ruleset.amodel.object.HitObject;
+import com.edplan.nso.ruleset.amodel.parser.HitObjectReparser;
+import com.edplan.nso.ruleset.std.parser.StdHitObjectReparser;
 import android.util.Log;
 import com.edplan.superutils.U;
-import com.edplan.nso.Ruleset.mania.objects.ManiaHitObjects;
+import com.edplan.nso.ruleset.mania.objects.ManiaHitObjects;
 import java.util.List;
 
 public class PartHitObjects implements OsuFilePart

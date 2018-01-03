@@ -1,7 +1,7 @@
 package com.edplan.nso.parser.partParsers;
 import com.edplan.nso.OsuFilePart;
 import com.edplan.nso.filepart.PartTimingPoints;
-import com.edplan.nso.Timing.TimingPoint;
+import com.edplan.nso.timing.TimingPoint;
 import com.edplan.superutils.classes.strings.StringSpliter;
 import com.edplan.superutils.U;
 import com.edplan.nso.beatmapComponent.SampleSet;

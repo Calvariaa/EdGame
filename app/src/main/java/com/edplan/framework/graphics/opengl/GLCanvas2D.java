@@ -1,6 +1,7 @@
 package com.edplan.framework.graphics.opengl;
 import android.opengl.GLES20;
 import com.edplan.framework.MContext;
+import com.edplan.framework.graphics.layer.BufferedLayer;
 import com.edplan.framework.graphics.opengl.batch.RectVertexBatch;
 import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
 import com.edplan.framework.graphics.opengl.objs.Color4;
@@ -8,13 +9,13 @@ import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.graphics.opengl.objs.TextureVertex3D;
 import com.edplan.framework.graphics.opengl.objs.texture.TextureRegion;
 import com.edplan.framework.graphics.opengl.objs.vertex.RectVertex;
-import com.edplan.framework.graphics.opengl.shader.advance.RectShader;
-import com.edplan.framework.graphics.opengl.shader.advance.RoundedRectShader;
+import com.edplan.framework.graphics.opengl.shader.advance.RectTextureShader;
+import com.edplan.framework.graphics.opengl.shader.advance.RoundedRectTextureShader;
 import com.edplan.framework.graphics.opengl.shader.advance.Texture3DShader;
-import com.edplan.framework.graphics.ui.BufferedLayer;
 import com.edplan.framework.math.Mat4;
 import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.Vec3;
+import com.edplan.framework.math.Vec4;
 import com.edplan.framework.utils.AbstractSRable;
 
 public class GLCanvas2D extends AbstractSRable<CanvasData>
@@ -30,6 +31,8 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	public GLCanvas2D(BufferedLayer layer){
 		this.layer=layer;
 		initial();
+		getData().setWidth(layer.getWidth());
+		getData().setHeight(layer.getHeight());
 	}
 	
 	public void setMProjMatrix(Mat4 mProjMatrix) {
@@ -42,6 +45,10 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	
 	public Mat4 getMaskMatrix(){
 		return getData().getCurrentMaskMatrix();
+	}
+	
+	public void reflectCanvas(RectF area){
+		
 	}
 
 	@Override
@@ -142,13 +149,13 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		shader.loadTexturePosition(batch.makeTexturePositionBuffer());
 	}
 	
-	public void injectRectData(RectVertexBatch batch,RectF drawingRect,float padding,RectShader shader){
+	public void injectRectData(RectVertexBatch batch,RectF drawingRect,Vec4 padding,RectTextureShader shader){
 		shader.useThis();
 		shader.loadRectData(drawingRect,padding);
 		shader.loadRectPositions(batch.makeRectPositionBuffer());
 	}
 	
-	public void injectRoundedRectData(RectVertexBatch batch,RectF drawingRect,float padding,float radius,Color4 glowColor,float glowFactor,RoundedRectShader shader){
+	public void injectRoundedRectData(RectVertexBatch batch,RectF drawingRect,Vec4 padding,float radius,Color4 glowColor,float glowFactor,RoundedRectTextureShader shader){
 		shader.useThis();
 		shader.loadRectData(drawingRect,padding,radius,glowColor,glowFactor);
 		shader.loadRectPositions(batch.makeRectPositionBuffer());
@@ -272,7 +279,7 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	
 	public void drawRectBatch(RectVertexBatch batch,GLTexture texture,RectF dst,GLPaint paint){
 		checkCanDraw();
-		RectShader shader=getContext().getShaderManager().getRectShader();
+		RectTextureShader shader=getContext().getShaderManager().getRectShader();
 		injectData(batch,texture,paint.getFinalAlpha(),paint.getMixColor(),shader);
 		injectRectData(batch,dst,paint.getPadding(),shader);
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, batch.getVertexCount());
@@ -280,7 +287,7 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	
 	public void drawRoundedRectBatch(RectVertexBatch batch,GLTexture texture,RectF dst,GLPaint paint){
 		checkCanDraw();
-		RoundedRectShader shader=getContext().getShaderManager().getRoundedRectShader();
+		RoundedRectTextureShader shader=getContext().getShaderManager().getRoundedRectShader();
 		injectData(batch,texture,paint.getFinalAlpha(),paint.getMixColor(),shader);
 		injectRoundedRectData(batch,dst,paint.getPadding(),paint.getRoundedRadius(),paint.getGlowColor(),paint.getGlowFactor(),shader);
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, batch.getVertexCount());
@@ -296,7 +303,8 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	
 	public Mat4 createDefProjMatrix(){
 		Mat4 projMatrix=new Mat4();
-		return projMatrix.setOrtho(0,layer.getWidth(),layer.getHeight(),0,-100,100);
+		projMatrix.setOrtho(0,layer.getWidth(),layer.getHeight(),0,-100,100);
+		return projMatrix;
 	}
 	
 	@Override

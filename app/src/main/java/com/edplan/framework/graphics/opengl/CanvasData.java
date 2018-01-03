@@ -7,6 +7,10 @@ import com.edplan.framework.math.Mat4;
 
 public class CanvasData implements Recycleable,Copyable {
 
+	private float width;
+
+	private float height;
+	
 	private Mat4 currentMaskMatrix;
 
 	private Mat4 currentProjMatrix;
@@ -17,11 +21,29 @@ public class CanvasData implements Recycleable,Copyable {
 		this.currentMaskMatrix=c.getCurrentMaskMatrix().copy();
 		this.texture3DShader=c.texture3DShader;
 		this.currentProjMatrix=c.currentProjMatrix.copy();
+		this.width=c.width;
+		this.height=c.height;
 	}
 
 	public CanvasData(){
 		currentProjMatrix=new Mat4();
 		currentMaskMatrix=new Mat4();
+	}
+
+	public void setWidth(float width) {
+		this.width=width;
+	}
+
+	public float getWidth() {
+		return width;
+	}
+
+	public void setHeight(float height) {
+		this.height=height;
+	}
+
+	public float getHeight() {
+		return height;
 	}
 
 	public void setCurrentProjMatrix(Mat4 projMatrix) {

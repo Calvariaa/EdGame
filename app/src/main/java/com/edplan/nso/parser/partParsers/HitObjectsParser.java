@@ -1,10 +1,10 @@
 package com.edplan.nso.parser.partParsers;
 import com.edplan.nso.OsuFilePart;
-import com.edplan.nso.Ruleset.std.parser.StdHitObjectParser;
+import com.edplan.nso.ruleset.std.parser.StdHitObjectParser;
 import com.edplan.nso.ParsingBeatmap;
 import com.edplan.nso.NsoException;
 import com.edplan.nso.filepart.PartHitObjects;
-import com.edplan.nso.Ruleset.ModeManager;
+import com.edplan.nso.ruleset.ModeManager;
 
 public class HitObjectsParser implements PartParser
 {

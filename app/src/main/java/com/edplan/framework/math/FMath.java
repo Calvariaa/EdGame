@@ -28,4 +28,8 @@ public class FMath
 	public static boolean allmostEqual(float f1,float f2,float t){
 		return Math.abs(f1-f2)<=t;
 	}
+	
+	public static float sqrt(double v){
+		return (float)Math.sqrt(v);
+	}
 }

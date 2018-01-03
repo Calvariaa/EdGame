@@ -11,6 +11,11 @@ public class Vec4 extends Color4
 	public Vec4(Color4 r){
 		super(r);
 	}
+	
+	public Vec4 add(float f){
+		add(f,f,f,f);
+		return this;
+	}
 
 	@Override
 	public Vec4 copyNew() {

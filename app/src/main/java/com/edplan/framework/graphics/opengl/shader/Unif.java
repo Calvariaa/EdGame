@@ -12,7 +12,7 @@ public final class Unif{
 	
 	
 	public static final @GLType(Type.MAT2)     String DrawingRect="u_DrawingRect";
-	public static final @GLType(Type.FLOAT)    String Padding="u_Padding";
+	public static final @GLType(Type.VEC4)    String Padding="u_Padding";
 	public static final @GLType(Type.FLOAT)    String RoundedRidaus="u_Ridaus";
 	public static final @GLType(Type.FLOAT)    String GlowFactor="u_GlowFactor";
 	public static final @GLType(Type.VEC4)     String GlowColor="u_GlowColor";

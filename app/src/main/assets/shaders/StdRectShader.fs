@@ -12,7 +12,7 @@ uniform vec4 u_MixColor;
 uniform sampler2D u_Texture;
 uniform vec4 u_DrawingRect;
 uniform vec4 u_InnerRect;
-uniform float u_Padding;
+uniform vec4 u_Padding;
 
 bool outOfRect(vec2 p,vec4 r){
 	return p.x<r.x||p.x>r.z||p.y<r.y||p.y>r.w;

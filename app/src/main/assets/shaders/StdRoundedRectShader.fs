@@ -1,4 +1,4 @@
-precision mediump float;
+precision highp float;
 
 varying vec3 f_Position;
 varying vec2 f_TexturePosition;
@@ -12,7 +12,7 @@ uniform vec4 u_MixColor;
 uniform sampler2D u_Texture;
 uniform vec4 u_DrawingRect;
 uniform vec4 u_InnerRect;
-uniform float u_Padding;
+uniform vec4 u_Padding;
 uniform vec4 u_RoundedInner;
 uniform float u_Ridaus;
 uniform float u_GlowFactor;
@@ -39,7 +39,8 @@ float distanceFromRoundedRect(){
 
 void main(){
 	float dis=distanceFromRoundedRect();
-	float r_alpha=dis>0.0?pow(u_GlowFactor,dis):1.0;
+	float u_GlowWidth=10.0;
+	float r_alpha=dis>0.0?max(pow(u_GlowFactor,dis)*(1.0-dis/u_GlowWidth),0.0):1.0;
 	vec4 t=texture2D(u_Texture,f_TexturePosition);
 	float edgeFactor=1.0-pow(0.2,dis);
 	
@@ -48,6 +49,13 @@ void main(){
 	if(dis>0.0){
 		c=mix(c,u_GlowColor,u_GlowColor.a*edgeFactor);
 	}
+	
+	
+	float w=2.0; 
+	if(dis<w&&dis>-w){
+		c.a=mix(c.a,1.0,((w-dis)/w/2.0));
+	}
+	
 	c.a*=r_alpha*u_FinalAlpha;
 	gl_FragColor=c;
 }

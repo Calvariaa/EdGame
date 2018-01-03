@@ -4,25 +4,25 @@ import com.edplan.framework.main.GameContext;
 import com.edplan.framework.MContext;
 import java.io.IOException;
 import com.edplan.framework.resource.IResource;
-import com.edplan.framework.graphics.opengl.shader.advance.RectShader;
-import com.edplan.framework.graphics.opengl.shader.advance.RoundedRectShader;
+import com.edplan.framework.graphics.opengl.shader.advance.RectTextureShader;
+import com.edplan.framework.graphics.opengl.shader.advance.RoundedRectTextureShader;
 
 public class ShaderManager
 {
 
-	public void setRectShader(RectShader rectShader) {
+	public void setRectShader(RectTextureShader rectShader) {
 		this.rectShader=rectShader;
 	}
 
-	public RectShader getRectShader() {
+	public RectTextureShader getRectShader() {
 		return rectShader;
 	}
 
-	public void setRoundedRectShader(RoundedRectShader roundedRectShader) {
+	public void setRoundedRectShader(RoundedRectTextureShader roundedRectShader) {
 		this.roundedRectShader=roundedRectShader;
 	}
 
-	public RoundedRectShader getRoundedRectShader() {
+	public RoundedRectTextureShader getRoundedRectShader() {
 		return roundedRectShader;
 	}
 	public static class PATH{
@@ -36,9 +36,9 @@ public class ShaderManager
 	
 	private Texture3DShader texture3DShader;
 	
-	private RectShader rectShader;
+	private RectTextureShader rectShader;
 	
-	private RoundedRectShader roundedRectShader;
+	private RoundedRectTextureShader roundedRectShader;
 	
 	private IResource res;
 	
@@ -58,11 +58,11 @@ public class ShaderManager
 					res.loadText(PATH.PATH_Texture3DShader + ".vs"),
 					res.loadText(PATH.PATH_Texture3DShader + ".fs"));
 			rectShader=
-				RectShader.create(
+				RectTextureShader.create(
 					res.loadText(PATH.PATH_RectShader_VS),
 					res.loadText(PATH.PATH_RectShader_FS));
 			roundedRectShader=
-				RoundedRectShader.create(
+				RoundedRectTextureShader.create(
 					res.loadText(PATH.PATH_RectShader_VS),
 					res.loadText(PATH.PATH_RoundedRectShader_FS));
 		}catch(IOException e){

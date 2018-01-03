@@ -1,7 +1,7 @@
 package com.edplan.nso.filepart;
 import com.edplan.nso.OsuFilePart;
-import com.edplan.nso.Timing.TimingPoints;
-import com.edplan.nso.Timing.TimingPoint;
+import com.edplan.nso.timing.TimingPoints;
+import com.edplan.nso.timing.TimingPoint;
 
 public class PartTimingPoints implements OsuFilePart
 {

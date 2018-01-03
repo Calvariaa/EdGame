@@ -1,5 +1,6 @@
 package com.edplan.framework.graphics.opengl;
 import com.edplan.framework.graphics.opengl.objs.Color4;
+import com.edplan.framework.math.Vec4;
 
 public class GLPaint
 {
@@ -11,7 +12,7 @@ public class GLPaint
 	
 	public float finalAlpha=1;
 	
-	public float padding=0;
+	public Vec4 padding=new Vec4(0,0,0,0);
 	
 	public float roundedRadius=0;
 	
@@ -44,10 +45,10 @@ public class GLPaint
 	}
 
 	public void setPadding(float padding) {
-		this.padding=padding;
+		this.padding.set(padding,padding,padding,padding);
 	}
 
-	public float getPadding() {
+	public Vec4 getPadding() {
 		return padding;
 	}
 
