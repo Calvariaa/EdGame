@@ -1,25 +1,33 @@
 package com.edplan.framework.graphics.opengl.objs;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.opengl.GLES20;
+import android.opengl.GLES30;
 import android.opengl.GLUtils;
-import android.util.Log;
 import com.edplan.framework.math.Vec2;
-import java.nio.IntBuffer;
-import java.io.InputStream;
-import android.graphics.BitmapFactory;
+import com.edplan.framework.resource.IResource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import com.edplan.framework.resource.IResource;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.IntBuffer;
 
 public class GLTexture
 {
+	public static BitmapFactory.Options DEF_CREATE_OPTIONS;
+
+	public static GLTexture White;
+	public static GLTexture Alpha;
+	public static GLTexture Black;
+	
+	static{
+		initial();
+	}
+	
 	public static final int[] glTexIndex=new int[]{
 		GLES20.GL_TEXTURE0,
 		GLES20.GL_TEXTURE1,
@@ -41,13 +49,6 @@ public class GLTexture
 		GLES20.GL_TEXTURE17,
 		GLES20.GL_TEXTURE18
 	};
-	
-	public static BitmapFactory.Options DEF_CREATE_OPTIONS;
-	
-	static{
-		DEF_CREATE_OPTIONS=new BitmapFactory.Options();
-		DEF_CREATE_OPTIONS.inPremultiplied=false;
-	}
 
 	private int width,height;
 
@@ -116,6 +117,13 @@ public class GLTexture
 		buffer.clear();
 		return bmp;
 	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		// TODO: Implement this method
+		delete();
+		super.finalize();
+	}
 	
 	public static GLTexture createGPUTexture(int w,int h){
 		int[] t=new int[1];
@@ -170,6 +178,11 @@ public class GLTexture
 		return decodeStream(res.openInput(name),true);
 	}
 	
+	public static GLTexture create1pxTexture(Color4 color){
+		Bitmap bmp=Bitmap.createBitmap(new int[]{color.toIntBit()},1,1,Bitmap.Config.ARGB_8888);
+		return create(bmp,true);
+	}
+	
 	public static GLTexture create(Bitmap bmp,boolean ifDispos){
 		GLTexture t=create(bmp);
 		if(ifDispos)bmp.recycle();
@@ -214,5 +227,13 @@ public class GLTexture
 		GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
 							   GLES20.GL_TEXTURE_WRAP_T,GLES20.GL_CLAMP_TO_EDGE);
 		return t[0];
+	}
+	
+	public static void initial(){
+		DEF_CREATE_OPTIONS=new BitmapFactory.Options();
+		DEF_CREATE_OPTIONS.inPremultiplied=false;
+		White=create1pxTexture(Color4.White);
+		Alpha=create1pxTexture(Color4.Alpha);
+		Black=create1pxTexture(Color4.Black);
 	}
 }

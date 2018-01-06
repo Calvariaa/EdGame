@@ -8,6 +8,7 @@ import com.edplan.framework.utils.SRable.SROperation;
 import com.edplan.framework.utils.advance.BooleanCopyable;
 import com.edplan.framework.utils.advance.BooleanSetting;
 import com.edplan.framework.interfaces.Setter;
+import com.edplan.framework.graphics.opengl.objs.GLTexture;
 
 public class GLWrapped
 {
@@ -24,65 +25,11 @@ public class GLWrapped
 			}
 		},
 		false).initial();
-	
-	
-	/*
-	public static class depthTest{
-		private static SRable<BooleanCopyable> saves;
-		static{
-			saves=new SRable<BooleanCopyable>(new SROperation<BooleanCopyable>(){
-					@Override
-					public void onSave(BooleanCopyable v) {
-						// TODO: Implement this method
-					}
-
-					@Override
-					public void onRestore(BooleanCopyable now,BooleanCopyable pre) {
-						// TODO: Implement this method
-						set(now.getValue());
-					}
-
-					@Override
-					public BooleanCopyable getDefData() {
-						// TODO: Implement this method
-						return new BooleanCopyable(false);
-					}
-				});
-			saves.initial();
-		}
 		
-		public static void set(boolean v){
-			if(saves.getData().getValue()!=v){
-				if(v){
-					GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-				}else{
-					GLES20.glDisable(GLES20.GL_DEPTH_TEST);
-				}
-				saves.getData().setValue(v);
-			}
-		}
-		
-		public static int save(){
-			return saves.save();
-		}
-		
-		public static void restore(){
-			saves.restore();
-		}
-		
-		public static void restorToCount(int id){
-			saves.restoreToCount(id);
-		}
-	}*/
-	
-	
-	
-	
-	//private static boolean depthTest=false;
-	
 	public static void initial(){
 		//depthTest=false;
 		//GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+		GLTexture.initial();
 	}
 	
 	public static void enableBlend(){

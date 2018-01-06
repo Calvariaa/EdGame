@@ -9,8 +9,11 @@ import com.edplan.framework.math.RectF;
 import com.edplan.framework.graphics.opengl.buffer.Vec2Buffer;
 import com.edplan.framework.graphics.opengl.shader.uniforms.UniformColor4;
 import com.edplan.framework.math.Vec4;
+import com.edplan.framework.graphics.opengl.objs.TextureVertex3D;
+import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
+import com.edplan.framework.graphics.opengl.batch.RectVertexBatch;
 
-public class RectTextureShader extends Texture3DShader
+public class RectTextureShader<T extends RectVertexBatch> extends Texture3DShader<T>
 {
 	private VertexAttrib vRectPosition;
 	
@@ -37,8 +40,15 @@ public class RectTextureShader extends Texture3DShader
 	public void loadRectPositions(Vec2Buffer buffer){
 		vRectPosition.loadData(buffer);
 	}
+
+	@Override
+	public void loadBatch(T batch) {
+		// TODO: Implement this method
+		super.loadBatch(batch);
+		loadRectPositions(batch.makeRectPositionBuffer());
+	}
 	
-	public static RectTextureShader create(String vs,String fs){
-		return new RectTextureShader(GLProgram.createProgram(vs,fs));
+	public static final <T extends RectVertexBatch> RectTextureShader<T> createRTS(String vs,String fs,Class<T> klass){
+		return new RectTextureShader<T>(GLProgram.createProgram(vs,fs));
 	}
 }

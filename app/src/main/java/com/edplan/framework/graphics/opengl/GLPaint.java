@@ -4,6 +4,7 @@ import com.edplan.framework.math.Vec4;
 
 public class GLPaint
 {
+	//#Base Data，每一种绘制都会使用的
 	public Color4 mixColor=new Color4(1,1,1,1);
 	
 	public Color4 varyingColor=new Color4(0,0,0,0);
@@ -11,7 +12,9 @@ public class GLPaint
 	public float colorMixRate=0;
 	
 	public float finalAlpha=1;
+	//#end Base Data
 	
+	//#Rect Data，绘制材质矩形时的参数
 	public Vec4 padding=new Vec4(0,0,0,0);
 	
 	public float roundedRadius=0;
@@ -19,7 +22,20 @@ public class GLPaint
 	public float glowFactor=0.5f;
 	
 	public Color4 glowColor=new Color4(1, 1, 1, 0.2f);
+	//#end Rect Data
+	
+	//#Line Data，绘制线时的各种参数
+	public float strokeWidth=1f;
+	//#end Line Data
 
+	public void setStrokeWidth(float strokeWidth) {
+		this.strokeWidth=strokeWidth;
+	}
+
+	public float getStrokeWidth() {
+		return strokeWidth;
+	}
+	
 	public void setRoundedRadius(float roundedRadius) {
 		this.roundedRadius=roundedRadius;
 	}

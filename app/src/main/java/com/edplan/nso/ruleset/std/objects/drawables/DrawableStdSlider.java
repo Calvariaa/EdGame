@@ -10,6 +10,8 @@ import com.edplan.framework.graphics.line.approximator.BezierApproximator;
 
 public class DrawableStdSlider
 {
+	private float baseSize=64;
+	
 	private StdPath slider;
 	
 	private LinePath path;

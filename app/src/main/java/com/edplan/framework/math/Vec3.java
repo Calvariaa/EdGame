@@ -26,6 +26,10 @@ public class Vec3
 		
 	}
 	
+	public Vec3 set(Vec3 v){
+		return set(v.x,v.y,v.z);
+	}
+	
 	public Vec3 set(float x,float y,float z){
 		this.x=x;
 		this.y=y;

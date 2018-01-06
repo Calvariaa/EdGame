@@ -14,8 +14,10 @@ import com.edplan.framework.graphics.opengl.shader.uniforms.UniformFloat;
 import com.edplan.framework.graphics.opengl.shader.uniforms.UniformMat4;
 import com.edplan.framework.graphics.opengl.shader.uniforms.UniformSample2D;
 import com.edplan.framework.math.Mat4;
+import com.edplan.framework.graphics.opengl.GLPaint;
+import com.edplan.framework.graphics.opengl.batch.BaseColorBatch;
 
-public class ColorShader extends GLProgram 
+public class ColorShader<T extends BaseColorBatch> extends GLProgram 
 {
 	private UniformMat4 uMVPMatrix;
 	
@@ -25,15 +27,11 @@ public class ColorShader extends GLProgram
 	
 	private UniformFloat uFinalAlpha;
 	
-	private UniformSample2D uTexture;
-	
 	private UniformColor4 uMixColor;
 	
 	private VertexAttrib vPosition;
 	
 	private VertexAttrib vColor;
-	
-	private VertexAttrib vTexturePosition;
 	
 	protected ColorShader(GLProgram program){
 		super(program.getVertexShader(),program.getFragmentShader(),program.getProgramId());
@@ -41,19 +39,29 @@ public class ColorShader extends GLProgram
 		uMaskMatrix=UniformMat4.findUniform(this,Unif.MaskMatrix);
 		uColorMixRate=UniformFloat.findUniform(this,Unif.ColorMixRate);
 		uFinalAlpha=UniformFloat.findUniform(this,Unif.FinalAlpha);
-		uTexture=UniformSample2D.findUniform(this,Unif.Texture,0);
 		uMixColor=UniformColor4.findUniform(this,Unif.MixColor);
 		vPosition=VertexAttrib.findAttrib(this,Attr.Position,VertexAttrib.Type.VEC3);
-		vTexturePosition=VertexAttrib.findAttrib(this,Attr.Texturesition,VertexAttrib.Type.VEC2);
 		vColor=VertexAttrib.findAttrib(this,Attr.Color,VertexAttrib.Type.VEC4);
+	}
+	
+	public void loadPaint(GLPaint paint){
+		loadMixColor(paint.getMixColor());
+		loadAlpha(paint.getFinalAlpha());
+		loadColorMixRate(paint.getColorMixRate());
+	}
+	
+	public void loadBatch(T batch){
+		loadColor(batch.makeColorBuffer());
+		loadPosition(batch.makePositionBuffer());
+	}
+	
+	public void loadMatrix(Mat4 mvp,Mat4 mask){
+		loadMVPMatrix(mvp);
+		loadMaskMatrix(mask);
 	}
 	
 	public void loadMixColor(Color4 c){
 		uMixColor.loadData(c);
-	}
-	
-	public void loadTexture(GLTexture texture){
-		uTexture.loadData(texture);
 	}
 	
 	public void loadMVPMatrix(Mat4 mvp){
@@ -72,10 +80,6 @@ public class ColorShader extends GLProgram
 		vColor.loadData(buffer);
 	}
 	
-	public void loadTexturePosition(Vec2Buffer buffer){
-		vTexturePosition.loadData(buffer);
-	}
-	
 	public void loadColorMixRate(float f){
 		uColorMixRate.loadData(f);
 	}
@@ -84,7 +88,7 @@ public class ColorShader extends GLProgram
 		uFinalAlpha.loadData(a);
 	}
 	
-	public static Texture3DShader create(String vs,String fs){
-		return new Texture3DShader(GLProgram.createProgram(vs,fs));
+	public static final <T extends BaseColorBatch> ColorShader<T> createCS(String vs,String fs,Class<T> klass){
+		return new ColorShader<T>(GLProgram.createProgram(vs,fs));
 	}
 }

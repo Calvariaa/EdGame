@@ -10,14 +10,27 @@ import com.edplan.framework.utils.MLog;
 import java.io.IOException;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+import android.view.View.OnTouchListener;
+import android.view.MotionEvent;
+import android.view.View;
+import com.edplan.framework.math.Vec2;
+import android.util.Log;
 
-public class MainRenderer implements GLSurfaceView.Renderer
+public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 {
 	private GLLooper looper;
 	
 	private MContext context;
 	
 	private DefBufferedLayer rootLayer;
+	
+	private Vec2 point=new Vec2();
+	
+	private Vec2 pre=new Vec2();
+	
+	private int pointer;
+	
+	private float scaleRate=1.2f;
 	
 	public MainRenderer(Context con){
 		context=new MContext(con);
@@ -26,18 +39,45 @@ public class MainRenderer implements GLSurfaceView.Renderer
 	public DefBufferedLayer getRootLayer() {
 		return rootLayer;
 	}
+
+	@Override
+	public boolean onTouch(View p1,MotionEvent e) {
+		// TODO: Implement this method
+		switch(e.getActionMasked()){
+			case MotionEvent.ACTION_DOWN:
+				pre.set(e.getX(),e.getY());
+				point.set(pre.x,pre.y);
+				break;
+			case MotionEvent.ACTION_MOVE:
+				Vec2 v=(new Vec2(e.getX(),e.getY())).minus(pre);
+				float l=v.length();
+				v.toNormal().zoom(l*scaleRate);
+				//point.set(pre.x+v.x,pre.y+v.y);
+				point.set(e.getX(),e.getY());
+				pre.set(e.getX(),e.getY());
+				break;
+			case MotionEvent.ACTION_UP:
+				
+				break;
+		}
+		return true;
+	}
 	
 	
 	private GLTexture testPng;
 	private GLTexture cardPng;
+	private int initialCount=0;
 	@Override
 	public void onSurfaceCreated(GL10 p1,EGLConfig p2) {
 		// TODO: Implement this method
 		try {
 			context.initial();
+			GLWrapped.initial();
 			//GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 			GLWrapped.depthTest.set(false);
 			GLWrapped.enableBlend();
+			initialCount++;
+			Log.v("gl_initial","initial id: "+initialCount);
 			testPng=
 				GLTexture.decodeStream(
 					context
@@ -53,6 +93,7 @@ public class MainRenderer implements GLSurfaceView.Renderer
 		}
 	}
 
+	
 	@Override
 	public void onSurfaceChanged(GL10 p1,int width,int heigth) {
 		// TODO: Implement this method
@@ -60,6 +101,7 @@ public class MainRenderer implements GLSurfaceView.Renderer
 	}
 
 	float a=0;
+	long lt=0;
 	@Override
 	public void onDrawFrame(GL10 p1) {
 		// TODO: Implement this method
@@ -67,7 +109,7 @@ public class MainRenderer implements GLSurfaceView.Renderer
 		GLCanvas2D canvas=new GLCanvas2D(rootLayer);
 		canvas.prepare();
 		float c=Math.abs(a%2-1);
-		canvas.drawColor(Color4.White);
+		canvas.drawColor(Color4.Black);
 		//new Color4(c,c,c,1.0f));
 		canvas.clearDepthBuffer();
 		
@@ -76,6 +118,7 @@ public class MainRenderer implements GLSurfaceView.Renderer
 		canvas.save();
 		canvas.getMaskMatrix().translate(500+testPng.getWidth()/2,500+testPng.getHeight()/2,0).rotate(c*90,0,0,1);
 		//.post((new Mat4()).translate(10,10,0));
+		
 		canvas.drawTexture(
 			testPng,
 			new RectF(0,0,testPng.getWidth(),testPng.getHeight()),
@@ -87,6 +130,7 @@ public class MainRenderer implements GLSurfaceView.Renderer
 			1f);
 		
 		canvas.restore();
+		/*
 		canvas.drawTexture(
 			testPng,
 			new RectF(0,0,testPng.getWidth()/2,testPng.getHeight()),
@@ -95,7 +139,10 @@ public class MainRenderer implements GLSurfaceView.Renderer
 			new Color4(1,1,1,1),
 			0.5f,
 			1,
-			1f);
+			1f);*/
+			
+		
+		
 		
 		float dh=50;
 		GLPaint paint=new GLPaint();
@@ -108,109 +155,133 @@ public class MainRenderer implements GLSurfaceView.Renderer
 		paint.setGlowFactor
 		//(0.1f);
 		(0.9f+c*0.3f*0);
-		paint.setGlowColor(Color4.rgba(0,0,0,0.7f));
+		paint.setGlowColor(Color4.rgba(0,0,0,0.9f));
 		
-		/*canvas.drawRoundedRectTexture(
+		canvas.drawRoundedRectTexture(
 			cardPng,
-			new RectF(0,0,cardPng.getWidth(),cardPng.getHeight()),
-			new RectF(500,100,cardPng.getWidth()*1.5f,cardPng.getHeight()*1.5f),
+			new RectF(0,0,80,80),
+			new RectF(point.x-40,point.y-40,80,80),
+			paint);
+			
+		if(lt!=0){
+			canvas.getMaskMatrix().rotate(6,0,0,1);
+			paint.setColorMixRate(0);
+			paint.setVaryingColor(Color4.White);
+			canvas.drawTexture(
+				GLTexture.White,
+				new RectF(0,0,1,1),
+				new RectF(0,rootLayer.getHeight()/2f,rootLayer.getWidth(),20),
+				paint);
+			paint.setVaryingColor(Color4.rgba(1,0,0,1));
+			paint.setColorMixRate(0);
+			canvas.drawTexture(
+				GLTexture.White,
+				new RectF(0,0,1,1),
+				new RectF(0,0,20,rootLayer.getHeight()/2f/18f*(System.currentTimeMillis()-lt)),
+				paint);
+			MLog.test.vOnce("gl bind debug","gl_test","ids: "+testPng.getTextureId()+"|"+GLTexture.White.getTextureId());
+			if(GLTexture.White.getTextureId()==testPng.getTextureId()){
+				MLog.test.vOnce("gl bind bug","gl_test","err id=id "+testPng.getTextureId());
+			}
+		}
+		lt=System.currentTimeMillis();
+		/*
+		
+		canvas.drawRoundedRectTexture(
+			cardPng,
+			new RectF(0,0,cardPng.getWidth(),dh),
+			new RectF(500,100,cardPng.getWidth()*3f,dh*3f),
+			paint);
+		canvas.drawRoundedRectTexture(
+			cardPng,
+			new RectF(0,0,cardPng.getWidth(),dh),
+			new RectF(500,100+dh*3f,cardPng.getWidth()*3f,dh*3f),
+			paint);
+		canvas.drawRoundedRectTexture(
+			cardPng,
+			new RectF(0,0,cardPng.getWidth(),dh),
+			new RectF(500,100+dh*3f*2,cardPng.getWidth()*3f,dh*3f),
+			paint);
+			
+		canvas.drawRoundedRectTexture(
+			cardPng,
+			new RectF(0,0,cardPng.getWidth(),dh),
+			new RectF(500,100,cardPng.getWidth()*3f,dh*3f),
+			paint);
+		canvas.drawRoundedRectTexture(
+			cardPng,
+			new RectF(0,0,cardPng.getWidth(),dh),
+			new RectF(500,100+dh*3f,cardPng.getWidth()*3f,dh*3f),
+			paint);
+		canvas.drawRoundedRectTexture(
+			cardPng,
+			new RectF(0,0,cardPng.getWidth(),dh),
+			new RectF(500,100+dh*3f*2,cardPng.getWidth()*3f,dh*3f),
+			paint);
+		
+		canvas.drawRoundedRectTexture(
+			cardPng,
+			new RectF(0,0,cardPng.getWidth(),dh),
+			new RectF(500,100,cardPng.getWidth()*3f,dh*3f),
+			paint);
+		canvas.drawRoundedRectTexture(
+			cardPng,
+			new RectF(0,0,cardPng.getWidth(),dh),
+			new RectF(500,100+dh*3f,cardPng.getWidth()*3f,dh*3f),
+			paint);
+		canvas.drawRoundedRectTexture(
+			cardPng,
+			new RectF(0,0,cardPng.getWidth(),dh),
+			new RectF(500,100+dh*3f*2,cardPng.getWidth()*3f,dh*3f),
+			paint);
+			
+		canvas.drawRoundedRectTexture(
+			cardPng,
+			new RectF(0,0,cardPng.getWidth(),dh),
+			new RectF(500,100,cardPng.getWidth()*3f,dh*3f),
+			paint);
+		canvas.drawRoundedRectTexture(
+			cardPng,
+			new RectF(0,0,cardPng.getWidth(),dh),
+			new RectF(500,100+dh*3f,cardPng.getWidth()*3f,dh*3f),
+			paint);
+		canvas.drawRoundedRectTexture(
+			cardPng,
+			new RectF(0,0,cardPng.getWidth(),dh),
+			new RectF(500,100+dh*3f*2,cardPng.getWidth()*3f,dh*3f),
+			paint);
+			
+		canvas.drawRoundedRectTexture(
+			cardPng,
+			new RectF(0,0,cardPng.getWidth(),dh),
+			new RectF(500,100,cardPng.getWidth()*3f,dh*3f),
+			paint);
+		canvas.drawRoundedRectTexture(
+			cardPng,
+			new RectF(0,0,cardPng.getWidth(),dh),
+			new RectF(500,100+dh*3f,cardPng.getWidth()*3f,dh*3f),
+			paint);
+		canvas.drawRoundedRectTexture(
+			cardPng,
+			new RectF(0,0,cardPng.getWidth(),dh),
+			new RectF(500,100+dh*3f*2,cardPng.getWidth()*3f,dh*3f),
+			paint);
+			
+		canvas.drawRoundedRectTexture(
+			cardPng,
+			new RectF(0,0,cardPng.getWidth(),dh),
+			new RectF(500,100,cardPng.getWidth()*3f,dh*3f),
+			paint);
+		canvas.drawRoundedRectTexture(
+			cardPng,
+			new RectF(0,0,cardPng.getWidth(),dh),
+			new RectF(500,100+dh*3f,cardPng.getWidth()*3f,dh*3f),
+			paint);
+		canvas.drawRoundedRectTexture(
+			cardPng,
+			new RectF(0,0,cardPng.getWidth(),dh),
+			new RectF(500,100+dh*3f*2,cardPng.getWidth()*3f,dh*3f),
 			paint);*/
-		canvas.getMaskMatrix().rotate(3,0,0,1);
-		canvas.drawRoundedRectTexture(
-			cardPng,
-			new RectF(0,0,cardPng.getWidth(),dh),
-			new RectF(500,100,cardPng.getWidth()*3f,dh*3f),
-			paint);
-		canvas.drawRoundedRectTexture(
-			cardPng,
-			new RectF(0,0,cardPng.getWidth(),dh),
-			new RectF(500,100+dh*3f,cardPng.getWidth()*3f,dh*3f),
-			paint);
-		canvas.drawRoundedRectTexture(
-			cardPng,
-			new RectF(0,0,cardPng.getWidth(),dh),
-			new RectF(500,100+dh*3f*2,cardPng.getWidth()*3f,dh*3f),
-			paint);
-			
-		canvas.drawRoundedRectTexture(
-			cardPng,
-			new RectF(0,0,cardPng.getWidth(),dh),
-			new RectF(500,100,cardPng.getWidth()*3f,dh*3f),
-			paint);
-		canvas.drawRoundedRectTexture(
-			cardPng,
-			new RectF(0,0,cardPng.getWidth(),dh),
-			new RectF(500,100+dh*3f,cardPng.getWidth()*3f,dh*3f),
-			paint);
-		canvas.drawRoundedRectTexture(
-			cardPng,
-			new RectF(0,0,cardPng.getWidth(),dh),
-			new RectF(500,100+dh*3f*2,cardPng.getWidth()*3f,dh*3f),
-			paint);
-		
-		canvas.drawRoundedRectTexture(
-			cardPng,
-			new RectF(0,0,cardPng.getWidth(),dh),
-			new RectF(500,100,cardPng.getWidth()*3f,dh*3f),
-			paint);
-		canvas.drawRoundedRectTexture(
-			cardPng,
-			new RectF(0,0,cardPng.getWidth(),dh),
-			new RectF(500,100+dh*3f,cardPng.getWidth()*3f,dh*3f),
-			paint);
-		canvas.drawRoundedRectTexture(
-			cardPng,
-			new RectF(0,0,cardPng.getWidth(),dh),
-			new RectF(500,100+dh*3f*2,cardPng.getWidth()*3f,dh*3f),
-			paint);
-			
-		canvas.drawRoundedRectTexture(
-			cardPng,
-			new RectF(0,0,cardPng.getWidth(),dh),
-			new RectF(500,100,cardPng.getWidth()*3f,dh*3f),
-			paint);
-		canvas.drawRoundedRectTexture(
-			cardPng,
-			new RectF(0,0,cardPng.getWidth(),dh),
-			new RectF(500,100+dh*3f,cardPng.getWidth()*3f,dh*3f),
-			paint);
-		canvas.drawRoundedRectTexture(
-			cardPng,
-			new RectF(0,0,cardPng.getWidth(),dh),
-			new RectF(500,100+dh*3f*2,cardPng.getWidth()*3f,dh*3f),
-			paint);
-			
-		canvas.drawRoundedRectTexture(
-			cardPng,
-			new RectF(0,0,cardPng.getWidth(),dh),
-			new RectF(500,100,cardPng.getWidth()*3f,dh*3f),
-			paint);
-		canvas.drawRoundedRectTexture(
-			cardPng,
-			new RectF(0,0,cardPng.getWidth(),dh),
-			new RectF(500,100+dh*3f,cardPng.getWidth()*3f,dh*3f),
-			paint);
-		canvas.drawRoundedRectTexture(
-			cardPng,
-			new RectF(0,0,cardPng.getWidth(),dh),
-			new RectF(500,100+dh*3f*2,cardPng.getWidth()*3f,dh*3f),
-			paint);
-			
-		canvas.drawRoundedRectTexture(
-			cardPng,
-			new RectF(0,0,cardPng.getWidth(),dh),
-			new RectF(500,100,cardPng.getWidth()*3f,dh*3f),
-			paint);
-		canvas.drawRoundedRectTexture(
-			cardPng,
-			new RectF(0,0,cardPng.getWidth(),dh),
-			new RectF(500,100+dh*3f,cardPng.getWidth()*3f,dh*3f),
-			paint);
-		canvas.drawRoundedRectTexture(
-			cardPng,
-			new RectF(0,0,cardPng.getWidth(),dh),
-			new RectF(500,100+dh*3f*2,cardPng.getWidth()*3f,dh*3f),
-			paint);
 		/*
 		paint.setPadding(10);
 		canvas.drawRectTexture(

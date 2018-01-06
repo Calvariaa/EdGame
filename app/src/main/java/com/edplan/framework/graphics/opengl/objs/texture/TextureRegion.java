@@ -13,6 +13,14 @@ public class TextureRegion
 		this.texture=t;
 		this.area=area;
 	}
+
+	public void setArea(RectF _area) {
+		this.area.set(_area);
+	}
+
+	public RectF getArea() {
+		return area;
+	}
 	
 	public Vec2 toTexturePosition(float x,float y) {
 		return texture.toTexturePosition(area.getX1()+x,area.getY1()+y);

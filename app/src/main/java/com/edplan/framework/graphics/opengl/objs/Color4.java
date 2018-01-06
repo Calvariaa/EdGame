@@ -12,8 +12,6 @@ public class Color4
 	
 	public static final Color4 Blue=Color4.rgb(0,0,1);
 	
-	
-	
 	public float r,g,b,a;
 
 	public Color4(){
@@ -26,6 +24,10 @@ public class Color4
 
 	public Color4(Color4 c){
 		set(c.r,c.g,c.b,c.a);
+	}
+	
+	public Color4 set(Color4 c){
+		return set(c.r,c.g,c.b,c.a);
 	}
 
 	public Color4 set(float r,float g,float b,float a){
@@ -82,6 +84,26 @@ public class Color4
 	
 	public Vec4 toVec4(){
 		return new Vec4(this);
+	}
+	
+	public int getA255(){
+		return (int)(a*255);
+	}
+	
+	public int getR255(){
+		return (int)(r*255);
+	}
+	
+	public int getG255(){
+		return (int)(g*255);
+	}
+	
+	public int getB255(){
+		return (int)(b*255);
+	}
+	
+	public int toIntBit(){
+		return Color.argb(getA255(),getR255(),getG255(),getB255());
 	}
 	
 	public static Color4 max(Color4 c1,Color4 c2){

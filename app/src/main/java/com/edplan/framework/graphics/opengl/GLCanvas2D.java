@@ -2,11 +2,13 @@ package com.edplan.framework.graphics.opengl;
 import android.opengl.GLES20;
 import com.edplan.framework.MContext;
 import com.edplan.framework.graphics.layer.BufferedLayer;
+import com.edplan.framework.graphics.opengl.batch.BaseColorBatch;
 import com.edplan.framework.graphics.opengl.batch.RectVertexBatch;
 import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.graphics.opengl.objs.TextureVertex3D;
+import com.edplan.framework.graphics.opengl.objs.Vertex3D;
 import com.edplan.framework.graphics.opengl.objs.texture.TextureRegion;
 import com.edplan.framework.graphics.opengl.objs.vertex.RectVertex;
 import com.edplan.framework.graphics.opengl.shader.advance.RectTextureShader;
@@ -14,9 +16,11 @@ import com.edplan.framework.graphics.opengl.shader.advance.RoundedRectTextureSha
 import com.edplan.framework.graphics.opengl.shader.advance.Texture3DShader;
 import com.edplan.framework.math.Mat4;
 import com.edplan.framework.math.RectF;
+import com.edplan.framework.math.Vec2;
 import com.edplan.framework.math.Vec3;
 import com.edplan.framework.math.Vec4;
 import com.edplan.framework.utils.AbstractSRable;
+import com.edplan.framework.graphics.opengl.shader.advance.ColorShader;
 
 public class GLCanvas2D extends AbstractSRable<CanvasData>
 {
@@ -27,6 +31,8 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	private Texture3DBatch<TextureVertex3D> tmpBatch=new Texture3DBatch<TextureVertex3D>();
 	
 	private RectVertexBatch<RectVertex> tmpRectBatch=new RectVertexBatch<RectVertex>();
+	
+	private BaseColorBatch<Vertex3D> tmpColorBatch=new BaseColorBatch<Vertex3D>();
 	
 	public GLCanvas2D(BufferedLayer layer){
 		this.layer=layer;
@@ -242,11 +248,11 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		drawTexture(texture,res,dst,mixColor,color,colorMixRate,defZ,alpha);
 	}
 	
-	public void drawTexture(TextureRegion texture,RectF res,RectF dst,Color4 mixColor,Color4 color,float colorMixRate,float z,float alpha){
+	public void drawTexture(TextureRegion texture,RectF dst,Color4 mixColor,Color4 color,float colorMixRate,float z,float alpha){
 		checkCanDraw();
 		tmpRectBatch.clear();
 		tmpRectBatch.setColorMixRate(colorMixRate);
-		RectVertex[] v=createRectVertexs(texture,res,dst,color,z);
+		RectVertex[] v=createRectVertexs(texture,texture.getArea(),dst,color,z);
 		tmpRectBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
 		drawTexture3DBatch(tmpRectBatch,texture,alpha,mixColor);
 	}
@@ -269,12 +275,12 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		drawRoundedRectBatch(tmpRectBatch,texture,dst,paint);
 	}
 	
-	public void drawTexture(TextureRegion texture,RectF res,RectF dst,GLPaint paint){
-		drawTexture(texture,res,dst,paint.getMixColor(),paint.getVaryingColor(),paint.getColorMixRate(),defZ,paint.getFinalAlpha());
+	public void drawTexture(TextureRegion texture,RectF dst,GLPaint paint){
+		drawTexture(texture,dst,paint.getMixColor(),paint.getVaryingColor(),paint.getColorMixRate(),defZ,paint.getFinalAlpha());
 	}
 	
-	public void drawTexture(TextureRegion texture,RectF res,RectF dst,Color4 mixColor,Color4 color,float colorMixRate,float alpha){
-		drawTexture(texture,res,dst,mixColor,color,colorMixRate,defZ,alpha);
+	public void drawTexture(TextureRegion texture,RectF dst,Color4 mixColor,Color4 color,float colorMixRate,float alpha){
+		drawTexture(texture,dst,mixColor,color,colorMixRate,defZ,alpha);
 	}
 	
 	public void drawRectBatch(RectVertexBatch batch,GLTexture texture,RectF dst,GLPaint paint){
@@ -293,12 +299,59 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, batch.getVertexCount());
 	}
 	
+	public Vertex3D[] createLineRectVertex(Vec2 start,Vec2 end,float w,Color4 color){
+		Vec2 dirt=end.copy().minus(start);
+		dirt.toOrthogonalDirectionNormal().zoom(w);
+		Vertex3D v1=Vertex3D
+			 .atPosition(new Vec3(start.copy().add(dirt),defZ))
+			 .setColor(color);
+		Vertex3D v2=Vertex3D
+			 .atPosition(new Vec3(start.copy().minus(dirt),defZ))
+			 .setColor(color);
+		Vertex3D v3=Vertex3D
+			 .atPosition(new Vec3(end.copy().add(dirt),defZ))
+			 .setColor(color);
+		Vertex3D v4=Vertex3D
+			 .atPosition(new Vec3(end.copy().minus(dirt),defZ))
+			 .setColor(color);
+		return new Vertex3D[]{v1,v2,v4,v1,v4,v3};
+	}
+	
+	public void addToColorBatch(Vertex3D[] v){
+		tmpColorBatch.add(v);
+	}
+	
+	public void postColorBatch(GLPaint paint){
+		ColorShader shader=getContext().getShaderManager().getColorShader();
+		shader.loadPaint(paint);
+		shader.loadMatrix(getFinalMatrix(),getMaskMatrix());
+		shader.loadBatch(tmpColorBatch);
+		GLES20.glDrawArrays(GLES20.GL_TRIANGLES,0,tmpColorBatch.getVertexCount());
+	}
+	
+	public void drawLines(float[] lines,GLPaint paint){
+		tmpColorBatch.clear();
+		for(int i=0;i<lines.length;i+=4){
+			addToColorBatch(
+				createLineRectVertex(
+					new Vec2(lines[i],lines[i+1]),
+					new Vec2(lines[i+2],lines[i+3]),
+					paint.getStrokeWidth(),
+					paint.getMixColor()
+				)
+			);
+		}
+		postColorBatch(paint);
+	}
+	
+	
+	
 	public MContext getContext(){
 		return getLayer().getContext();
 	}
 	
 	public Texture3DShader getDefTexture3DShader(){
-		return getContext().getShaderManager().getStdTexture3DShader();
+		return getContext().getShaderManager().getTexture3DShader();
 	}
 	
 	public Mat4 createDefProjMatrix(){
