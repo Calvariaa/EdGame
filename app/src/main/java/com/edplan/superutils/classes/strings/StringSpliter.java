@@ -1,5 +1,6 @@
 package com.edplan.superutils.classes.strings;
 import com.edplan.superutils.classes.strings.StringSpliter.ErrIndexException;
+import com.edplan.superutils.U;
 
 public class StringSpliter
 {
@@ -40,6 +41,10 @@ public class StringSpliter
 	
 	public boolean hasNext(){
 		return i1!=-1;
+	}
+	
+	public int nextInt(){
+		return U.toInt(next());
 	}
 	
 	public void reset(){
