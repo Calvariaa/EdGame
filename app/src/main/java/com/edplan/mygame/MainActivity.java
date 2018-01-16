@@ -12,7 +12,7 @@ import com.edplan.framework.animation.AnimaCallback;
 import com.edplan.framework.animation.MAnimation_old;
 import com.edplan.framework.animation.interpolator.MaterialInterpolator;
 import com.edplan.framework.view.BaseDatas;
-import com.edplan.framework.view.BaseWidget;
+import com.edplan.framework.view.BaseView;
 import com.edplan.framework.view.MButton;
 import com.edplan.framework.view.MListView;
 import com.edplan.framework.view.MStaticViewGroup;

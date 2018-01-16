@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import com.edplan.framework.inputs.Pointer;
 import com.edplan.framework.MContext;
 
-public class MProgressBar extends BaseWidget
+public class MProgressBar extends BaseView
 {
 	MButton dragButton;
 	

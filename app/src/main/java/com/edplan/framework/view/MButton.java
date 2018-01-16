@@ -10,7 +10,7 @@ import com.edplan.framework.math.Vec2;
 import com.edplan.framework.inputs.Pointer;
 import com.edplan.framework.MContext;
 
-public class MButton extends BaseWidget
+public class MButton extends BaseView
 {
 	public String text="";
 	

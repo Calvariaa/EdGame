@@ -12,11 +12,11 @@ import com.edplan.framework.MContext;
 public class MStaticViewGroup extends MViewGroup
 {
 	TouchEventHelper touchHelper;
-	List<BaseWidget> children;
+	List<BaseView> children;
 	
 	public MStaticViewGroup(MContext con){
 		super(con);
-		children=new ArrayList<BaseWidget>();
+		children=new ArrayList<BaseView>();
 		touchHelper=new TouchEventHelper();
 	}
 
@@ -31,7 +31,7 @@ public class MStaticViewGroup extends MViewGroup
 		//	clipCanvasToThis(canvas);
 		//}
 		
-		for(BaseWidget w:children){
+		for(BaseView w:children){
 			if(w.ifVisible()){
 				if(w.isClipCanvas()){
 					canvas.save();
@@ -49,7 +49,7 @@ public class MStaticViewGroup extends MViewGroup
 	
 	
 	@Override
-	public MStaticViewGroup add(BaseWidget w)
+	public MStaticViewGroup add(BaseView w)
 	{
 		// TODO: Implement this method
 		super.add(w);
@@ -60,7 +60,7 @@ public class MStaticViewGroup extends MViewGroup
 	@Override
 	public boolean catchPointer(Pointer p){
 		// TODO: Implement this method
-		BaseWidget w;
+		BaseView w;
 		Pointer cp=p.clonePointer();
 		cp.transform(getLeft(),getTop());
 		for(int i=children.size()-1;i>=0;i--){
@@ -86,7 +86,7 @@ public class MStaticViewGroup extends MViewGroup
 			//Log.v("pointer","测试新点");
 			if(p!=null){
 				//Log.v("pointer","获取新点 "+p.getX()+"|"+p.getY());
-				BaseWidget w;
+				BaseView w;
 				for(int i=children.size()-1;i>=0;i--){
 					w=children.get(i);
 					if(w.ifVisible()){

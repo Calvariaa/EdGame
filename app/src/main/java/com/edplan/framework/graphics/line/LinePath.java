@@ -3,6 +3,7 @@ import com.edplan.framework.math.Vec2;
 import java.util.List;
 import java.util.ArrayList;
 import com.edplan.framework.math.RectF;
+import com.edplan.framework.utils.MLog;
 
 public class LinePath implements AbstractPath
 {
@@ -29,6 +30,10 @@ public class LinePath implements AbstractPath
 	
 	public LinePath(){
 		positions=new ArrayList<Vec2>();
+	}
+
+	public PathMeasurer getMeasurer() {
+		return measurer;
 	}
 	
 	public void measure(){
@@ -113,10 +118,12 @@ public class LinePath implements AbstractPath
 	}
 
 	public AbstractPath cutPath(float start,float end){
+		
 		int s=measurer.binarySearch(start)+1;
 		int e=measurer.binarySearch(end);
 		Vec2 startPoint=measurer.atLength(start);
 		Vec2 endPoint=measurer.atLength(end);
+		/*
 		if(Vec2.near(get(s),startPoint,tolerance)){
 			if(Vec2.near(get(e),endPoint,tolerance)){
 				return new SubLinePath(s,e);
@@ -129,7 +136,9 @@ public class LinePath implements AbstractPath
 			}else{
 				return new SubLinePathLR(startPoint,endPoint,s,e);
 			}
-		}
+		}*/
+		
+		return new SubLinePathLR(startPoint,endPoint,s,e);
 	}
 	
 	public class SubLinePath implements  AbstractPath {
@@ -250,8 +259,9 @@ public class LinePath implements AbstractPath
 			this.endPoint=endPoint;
 			this.startPoint=startPoint;
 			this.startIndexM1=startIndex-1;
-			this.endPointIdx=endIndex+1;
+			this.endPointIdx=endIndex-startIndex+2;
 			this.size=endIndex-startIndex+3;
+			MLog.test.vOnce("sub","path-test","e:"+endIndex+" s:"+startIndex+" size: "+size);
 		}
 
 		@Override
@@ -262,6 +272,9 @@ public class LinePath implements AbstractPath
 			}else if(idx==endPointIdx){
 				return endPoint;
 			}else{
+				if(startIndexM1+idx==3){
+					MLog.test.vOnce("sub2","path-test","err called 3 :"+idx+":"+endPointIdx);
+				}
 				return LinePath.this.get(startIndexM1+idx);
 			}
 		}

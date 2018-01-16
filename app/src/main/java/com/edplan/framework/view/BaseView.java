@@ -8,7 +8,7 @@ import android.graphics.Canvas;
 import com.edplan.framework.inputs.Pointer;
 import com.edplan.framework.MContext;
 
-public class BaseWidget implements MDrawable
+public class BaseView implements MDrawable
 {
 	private MViewGroup parent;
 	
@@ -27,7 +27,7 @@ public class BaseWidget implements MDrawable
 	
 	
 	
-	public BaseWidget(MContext _context){
+	public BaseView(MContext _context){
 		basePoint=new Vec2(0,0);
 		setContext(_context);
 	}
@@ -53,7 +53,7 @@ public class BaseWidget implements MDrawable
 		return context;
 	}
 
-	public BaseWidget setParent(MViewGroup parent){
+	public BaseView setParent(MViewGroup parent){
 		this.parent=parent;
 		return this;
 	}
@@ -62,7 +62,7 @@ public class BaseWidget implements MDrawable
 		return parent;
 	}
 
-	public BaseWidget setSizedListener(MOnSizedListener sizedListener){
+	public BaseView setSizedListener(MOnSizedListener sizedListener){
 		this.sizedListener=sizedListener;
 		return this;
 	}
@@ -75,7 +75,7 @@ public class BaseWidget implements MDrawable
 		return false;
 	}
 
-	public BaseWidget setClipTouch(boolean clipTouch)
+	public BaseView setClipTouch(boolean clipTouch)
 	{
 		this.clipTouch = clipTouch;
 		return this;
@@ -86,7 +86,7 @@ public class BaseWidget implements MDrawable
 		return clipTouch;
 	}
 
-	public BaseWidget setClipCanvas(boolean clipCanvas)
+	public BaseView setClipCanvas(boolean clipCanvas)
 	{
 		this.clipCanvas = clipCanvas;
 		return this;
@@ -97,7 +97,7 @@ public class BaseWidget implements MDrawable
 		return clipCanvas;
 	}
 
-	public BaseWidget setVisible(boolean visible)
+	public BaseView setVisible(boolean visible)
 	{
 		this.visible = visible;
 		return this;
@@ -108,7 +108,7 @@ public class BaseWidget implements MDrawable
 		return visible;
 	}
 	
-	public BaseWidget setBasePoint(float x,float y){
+	public BaseView setBasePoint(float x,float y){
 		basePoint.set(x,y);
 		return this;
 	}
@@ -117,27 +117,27 @@ public class BaseWidget implements MDrawable
 		return basePoint;
 	}
 	
-	public BaseWidget setCenter(float x,float y){
+	public BaseView setCenter(float x,float y){
 		setBasePoint(x-getWidth()/2,y-getHeight()/2);
 		return this;
 	}
 	
-	public BaseWidget setCenterX(float x){
+	public BaseView setCenterX(float x){
 		setBasePoint(x-getWidth()/2,basePoint.y);
 		return this;
 	}
 	
-	public BaseWidget setCenterY(float y){
+	public BaseView setCenterY(float y){
 		setBasePoint(basePoint.x,y-getHeight()/2);
 		return this;
 	}
 	
-	public BaseWidget setBottom(float y){
+	public BaseView setBottom(float y){
 		setBasePoint(basePoint.x,y-getHeight());
 		return this;
 	}
 	
-	public BaseWidget setHeight(float height)
+	public BaseView setHeight(float height)
 	{
 		this.height = height;
 		return this;
@@ -148,7 +148,7 @@ public class BaseWidget implements MDrawable
 		return height;
 	}
 
-	public BaseWidget setWidth(float width)
+	public BaseView setWidth(float width)
 	{
 		this.width = width;
 		return this;
@@ -211,14 +211,14 @@ public class BaseWidget implements MDrawable
 	}
 
 	
-	public BaseWidget setAlpha(int a)
+	public BaseView setAlpha(int a)
 	{
 		// TODO: Implement this method
 		return this;
 	}
 
 	
-	public BaseWidget setColorFilter(ColorFilter p1)
+	public BaseView setColorFilter(ColorFilter p1)
 	{
 		// TODO: Implement this method
 		return this;
@@ -232,11 +232,11 @@ public class BaseWidget implements MDrawable
 	}
 	
 	public interface MOnSizedListener{
-		public void onSized(BaseWidget widget,float w,float h);
+		public void onSized(BaseView widget,float w,float h);
 	}
 	
 	public interface MOnClickListener{
-		public void onClick(BaseWidget view);
+		public void onClick(BaseView view);
 	}
 	
 }

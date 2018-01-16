@@ -9,8 +9,9 @@ import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
 import com.edplan.framework.graphics.opengl.objs.TextureVertex3D;
 import com.edplan.framework.math.Vec3;
 import com.edplan.framework.utils.MLog;
+import com.edplan.framework.graphics.opengl.batch.BaseColorBatch;
 
-public class DrawLinePath
+public class DrawLinePath<T extends BaseColorBatch>
 {
 	public static final int MAXRES=24;
 	
@@ -18,7 +19,7 @@ public class DrawLinePath
 	
 	public static final float Z_SIDE=0.0f;
 	
-	private Texture3DBatch batch;
+	private BaseColorBatch<?> batch;
 	
 	private AbstractPath path;
 	
@@ -36,13 +37,14 @@ public class DrawLinePath
 		info=i;
 	}
 
-	public void setBatch(Texture3DBatch batch) {
+	/*
+	public void setBatch(Texture3DBatch<TextureVertex3D> batch) {
 		this.batch=batch;
 	}
 
-	public Texture3DBatch getBatch() {
+	public Texture3DBatch<TextureVertex3D> getBatch() {
 		return batch;
-	}
+	}*/
 	
 	private void addLineCap(Vec2 org,float theta,float thetaDiff){
 		final float step=FMath.Pi/MAXRES;
@@ -183,8 +185,8 @@ public class DrawLinePath
 			 .setColor(info.getMaskColor(startR)));
 	}
 	
-	public void updateBuffers(){
-		batch.clear();
+	public void addToBatch(BaseColorBatch<?> batch){
+		this.batch=batch;
 		if(path.size()<2){
 			if(path.size()==1){
 				addLineCap(path.get(0),FMath.Pi,FMath.Pi);

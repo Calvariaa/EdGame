@@ -43,6 +43,7 @@ public class DrawableStdSlider
 	
 	public LinePath calculatePath(){
 		path.clearPositionData();
+		path.setWidth(baseSize);
 		List<Vec2> subControlPoints=new ArrayList<Vec2>();
 		for(int i=0;i<getControlPoint().size();i++){
 			subControlPoints.add(getControlPoint().get(i));

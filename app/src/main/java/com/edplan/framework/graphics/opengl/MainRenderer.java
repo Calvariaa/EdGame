@@ -1,20 +1,32 @@
 package com.edplan.framework.graphics.opengl;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
 import com.edplan.framework.MContext;
 import com.edplan.framework.graphics.layer.DefBufferedLayer;
+import com.edplan.framework.graphics.line.DrawLinePath;
+import com.edplan.framework.graphics.line.LinePath;
+import com.edplan.framework.graphics.line.PathMeasurer;
+import com.edplan.framework.graphics.opengl.batch.BaseColorBatch;
+import com.edplan.framework.graphics.opengl.drawui.DrawInfo;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
+import com.edplan.framework.math.FMath;
 import com.edplan.framework.math.RectF;
+import com.edplan.framework.math.Vec2;
 import com.edplan.framework.utils.MLog;
+import com.edplan.nso.ParsingBeatmap;
+import com.edplan.nso.ruleset.amodel.parser.HitObjectParser;
+import com.edplan.nso.ruleset.std.objects.drawables.DrawableStdSlider;
+import com.edplan.nso.ruleset.std.parser.StdHitObjectParser;
 import java.io.IOException;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-import android.view.View.OnTouchListener;
-import android.view.MotionEvent;
-import android.view.View;
-import com.edplan.framework.math.Vec2;
-import android.util.Log;
+import com.edplan.nso.ruleset.std.objects.StdSlider;
+import com.edplan.nso.NsoException;
 
 public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 {
@@ -31,6 +43,8 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 	private int pointer;
 	
 	private float scaleRate=1.2f;
+	
+	private DrawableStdSlider sld;
 	
 	public MainRenderer(Context con){
 		context=new MContext(con);
@@ -88,6 +102,15 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 			cardPng=GLTexture.decodeResource(context.getAssetResource().getTextureResource(),
 			"card.jpg");
 			//"default-bg.png");
+			StdHitObjectParser parser=new StdHitObjectParser(new ParsingBeatmap());
+			try {
+				StdSlider sl=(StdSlider) parser.parse("84,364,348429,6,0,B|41:353|5:288|5:288|50:270|50:270|-1:208|5:127|5:127|67:177|67:177|73:62|144:22|144:22|152:125|152:125|242:21|372:32|372:32|282:119|282:119|402:97|500:184|506:238|506:238|459:224|441:230,1,1395.00005321503,6|0,0:3|3:0,0:0:0:0:");
+				//"431,64,72803,2,0,B|409:47|370:43|337:56|317:84|317:84|354:88|376:112,1,191.999994140625,8|8,0:0|0:3,0:0:0:0:");
+				sld=new DrawableStdSlider(sl.getPath());
+			} catch (NsoException e) {
+				e.printStackTrace();
+			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -105,7 +128,7 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 	@Override
 	public void onDrawFrame(GL10 p1) {
 		// TODO: Implement this method
-		a+=0.02;
+		a+=0.005;
 		GLCanvas2D canvas=new GLCanvas2D(rootLayer);
 		canvas.prepare();
 		float c=Math.abs(a%2-1);
@@ -146,7 +169,7 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 		
 		float dh=50;
 		GLPaint paint=new GLPaint();
-		paint.setColorMixRate(0f);
+		paint.setColorMixRate(1f);
 		paint.setFinalAlpha(1f);
 		paint.setMixColor(new Color4(1,1,1,1));
 		paint.setPadding(10);
@@ -155,16 +178,12 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 		paint.setGlowFactor
 		//(0.1f);
 		(0.9f+c*0.3f*0);
-		paint.setGlowColor(Color4.rgba(0,0,0,0.9f));
+		paint.setGlowColor(Color4.rgba(0.3f,0.3f,0.3f,0.9f));
 		
-		canvas.drawRoundedRectTexture(
-			cardPng,
-			new RectF(0,0,80,80),
-			new RectF(point.x-40,point.y-40,80,80),
-			paint);
+		
 			
 		if(lt!=0){
-			canvas.getMaskMatrix().rotate(6,0,0,1);
+			canvas.getMaskMatrix().rotate(0,0,0,1);
 			paint.setColorMixRate(0);
 			paint.setVaryingColor(Color4.White);
 			canvas.drawTexture(
@@ -185,6 +204,137 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 			}
 		}
 		lt=System.currentTimeMillis();
+		
+		
+		
+		final int lcount=300;
+		float xDelta=canvas.getLayer().getWidth()/(float)lcount;
+		
+		float baseH=300;
+		
+		float offset=a*2;
+		
+		float scale=canvas.getLayer().getWidth()/10;
+		
+		float[] lines=new float[lcount*4];
+		
+		float h=canvas.getLayer().getHeight()/2;
+		
+		for(int i=0;i<lcount;i++){
+			lines[4*i]=xDelta*i;
+			lines[4*i+1]=h;
+			lines[4*i+2]=xDelta*i;
+			lines[4*i+3]=h-FMath.sin(lines[4*i]/scale+offset)*baseH;
+		}
+		
+		paint.setFinalAlpha(1f);
+		paint.setStrokeWidth(10);
+		paint.setColorMixRate(1);
+		paint.setMixColor(Color4.White);
+		canvas.drawLines(lines,paint);
+		
+		//c=0.3f;
+		
+		
+		LinePath path=sld.calculatePath();
+		path.setWidth(40);
+		/*
+		path.setWidth(90);
+		path.add(new Vec2(100,100));
+		path.add(new Vec2(200,500));
+		path.add(new Vec2(100,900));
+		path.add(new Vec2(1000,800));*/
+		
+		path.measure();
+		PathMeasurer m=path.getMeasurer();
+		float let=path.getMeasurer().maxLength();
+		MLog.test.vOnce("let","path-test",let+"");
+		
+		
+		DrawLinePath dp=new DrawLinePath(path);
+		dp.setDrawInfo(new DrawInfo(){
+				@Override
+				public Vec2 toLayerPosition(Vec2 v) {
+					// TODO: Implement this method
+					return v;
+				}
+
+				@Override
+				public Color4 getMaskColor(Vec2 position) {
+					// TODO: Implement this method
+					return Color4.rgba(1,0,0,1);
+				}
+			});
+		
+		final BaseColorBatch batch=new BaseColorBatch();
+		dp.addToBatch(batch);
+		
+		DrawLinePath dp2=new DrawLinePath(path.cutPath(2*c*let/3,(1+2*c)*let/3));
+		dp2.setDrawInfo(new DrawInfo(){
+				@Override
+				public Vec2 toLayerPosition(Vec2 v) {
+					// TODO: Implement this method
+					return v;
+				}
+
+				@Override
+				public Color4 getMaskColor(Vec2 position) {
+					// TODO: Implement this method
+					return Color4.rgba(1,1,1,1);
+				}
+			});
+		dp2.addToBatch(batch);
+		
+		
+		
+		LinePath path2=new LinePath();
+		path2.setWidth(15);
+		path2.add(m.atLength(2*let*c/3));
+		path2.add(m.atLength((1+2*c)*let/3));
+		DrawLinePath dp3=new DrawLinePath(path2);
+		dp3.setDrawInfo(new DrawInfo(){
+				@Override
+				public Vec2 toLayerPosition(Vec2 v) {
+					// TODO: Implement this method
+					return v;
+				}
+
+				@Override
+				public Color4 getMaskColor(Vec2 position) {
+					// TODO: Implement this method
+					return Color4.rgba(0.5f,0.5f,0.5f,1);
+				}
+			});
+		
+		dp3.addToBatch(batch);
+		
+		canvas.drawColorBatch(paint,batch);
+		
+		
+		paint.setFinalAlpha(0.5f);
+		canvas.drawRoundedRectTexture(
+			cardPng,
+			new RectF(0,0,80,80),
+			new RectF(point.x-40,point.y-40,80,80),
+			paint);
+		
+		
+		/*canvas.drawLines(new float[]{100,100,500,500,500,500,900,900},paint);
+		
+		MLog.test.runOnce("path-test", new Runnable(){
+				@Override
+				public void run() {
+					// TODO: Implement this method
+					Bitmap bbb=BitmapBatch.drawOnBitmap(batch,1000,1000);
+					try {
+						bbb.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream("/storage/emulated/0/MyDisk/test.png"));
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					}
+				}
+			});*/
+		
+		
 		/*
 		
 		canvas.drawRoundedRectTexture(

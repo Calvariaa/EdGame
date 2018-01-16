@@ -6,7 +6,7 @@ import android.graphics.Paint;
 
 public class BitmapBatch 
 {
-	public static Bitmap drawOnBitmap(Texture3DBatch batch,int w,int h){
+	public static Bitmap drawOnBitmap(BaseColorBatch batch,int w,int h){
 		Bitmap b=Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888);
 		Canvas c=new Canvas(b);
 		c.drawColor(0xffffffff);

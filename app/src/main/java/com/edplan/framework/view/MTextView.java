@@ -6,7 +6,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import com.edplan.framework.MContext;
 
-public class MTextView extends BaseWidget{
+public class MTextView extends BaseView{
 	
 	public float textFieldWidth=100;
 	public StaticLayout textLayout;

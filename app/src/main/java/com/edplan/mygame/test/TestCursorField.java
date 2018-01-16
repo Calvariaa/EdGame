@@ -1,5 +1,5 @@
 package com.edplan.mygame.test;
-import com.edplan.framework.view.BaseWidget;
+import com.edplan.framework.view.BaseView;
 import android.graphics.Canvas;
 import android.graphics.RectF;
 import com.edplan.framework.inputs.Pointer;
@@ -10,7 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.PorterDuff;
 
-public class TestCursorField extends BaseWidget
+public class TestCursorField extends BaseView
 {
 	private RectF touchField;
 	
@@ -91,14 +91,14 @@ public class TestCursorField extends BaseWidget
 	}
 
 	@Override
-	public BaseWidget setBasePoint(float x, float y){
+	public BaseView setBasePoint(float x, float y){
 		// TODO: Implement this method
 		
 		return super.setBasePoint(x, y);
 	}
 
 	@Override
-	public BaseWidget setHeight(float height){
+	public BaseView setHeight(float height){
 		// TODO: Implement this method
 		super.setHeight(height);
 		canvasField.set(canvasField.left,canvasField.top,canvasField.right,canvasField.top+height);
@@ -107,7 +107,7 @@ public class TestCursorField extends BaseWidget
 	}
 
 	@Override
-	public BaseWidget setWidth(float width){
+	public BaseView setWidth(float width){
 		// TODO: Implement this method
 		super.setWidth(width);
 		canvasField.set(canvasField.left,canvasField.top,canvasField.left+width,canvasField.bottom);

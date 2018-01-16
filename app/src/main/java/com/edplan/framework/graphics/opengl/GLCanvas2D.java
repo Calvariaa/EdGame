@@ -21,6 +21,7 @@ import com.edplan.framework.math.Vec3;
 import com.edplan.framework.math.Vec4;
 import com.edplan.framework.utils.AbstractSRable;
 import com.edplan.framework.graphics.opengl.shader.advance.ColorShader;
+import com.edplan.framework.utils.MLog;
 
 public class GLCanvas2D extends AbstractSRable<CanvasData>
 {
@@ -321,12 +322,21 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		tmpColorBatch.add(v);
 	}
 	
-	public void postColorBatch(GLPaint paint){
-		ColorShader shader=getContext().getShaderManager().getColorShader();
+	public void drawColorBatch(GLPaint paint,BaseColorBatch cbatch){
+		ColorShader<BaseColorBatch> shader=getContext().getShaderManager().getColorShader();
+		shader.useThis();
 		shader.loadPaint(paint);
+		MLog.test.vOnce("loadPaint","gl-test","loadPaint");
 		shader.loadMatrix(getFinalMatrix(),getMaskMatrix());
-		shader.loadBatch(tmpColorBatch);
-		GLES20.glDrawArrays(GLES20.GL_TRIANGLES,0,tmpColorBatch.getVertexCount());
+		MLog.test.vOnce("loadMat","gl-test","loadMat");
+		shader.loadBatch(cbatch);
+		MLog.test.vOnce("loadBatch","gl-test","loadBatch");
+		GLES20.glDrawArrays(GLES20.GL_TRIANGLES,0,cbatch.getVertexCount());
+		MLog.test.vOnce("postDraw","gl-test","postDraw");
+	}
+	
+	public void postColorBatch(GLPaint paint){
+		drawColorBatch(paint,tmpColorBatch);
 	}
 	
 	public void drawLines(float[] lines,GLPaint paint){
@@ -343,9 +353,7 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		}
 		postColorBatch(paint);
 	}
-	
-	
-	
+
 	public MContext getContext(){
 		return getLayer().getContext();
 	}

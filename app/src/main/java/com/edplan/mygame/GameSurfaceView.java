@@ -11,7 +11,7 @@ import android.view.SurfaceView;
 import com.edplan.framework.MContext;
 import com.edplan.framework.inputs.Pointer;
 import com.edplan.framework.inputs.TouchEventHelper;
-import com.edplan.framework.view.BaseWidget;
+import com.edplan.framework.view.BaseView;
 import com.edplan.superutils.classes.MLooperThread;
 
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback
@@ -29,7 +29,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 	
 	TouchEventHelper touchHelper;
 	
-	BaseWidget content;
+	BaseView content;
 	
 	private MContext context;
 	
@@ -73,11 +73,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		return surfaceHeight;
 	}
 
-	public void setContent(BaseWidget content){
+	public void setContent(BaseView content){
 		this.content=content;
 	}
 
-	public BaseWidget getContent(){
+	public BaseView getContent(){
 		return content;
 	}
 	

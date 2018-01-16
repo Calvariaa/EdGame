@@ -4,9 +4,9 @@ import com.edplan.superutils.U;
 
 public class StringSpliter
 {
-	public String res;
-	public String[] sp;
-	public int i1;
+	private String res;
+	private String[] sp;
+	private int i1;
 	
 	public StringSpliter(String res,String sps){
 		this.res=res;

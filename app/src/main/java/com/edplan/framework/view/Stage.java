@@ -17,7 +17,7 @@ import com.edplan.framework.MContext;
  */
 
 
-public class Stage extends BaseWidget
+public class Stage extends BaseView
 {
 	Background background;
 	

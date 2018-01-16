@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import com.edplan.framework.math.FMath;
+import com.edplan.framework.utils.MLog;
 
 public class PathMeasurer
 {
@@ -36,10 +37,14 @@ public class PathMeasurer
 		List<Vec2> list=path.getAll();
 		lengthes.add(l);
 		Vec2 pre=list.get(0);
+		Vec2 cur;
 		for(int i=1;i<list.size();i++){
-			l+=Vec2.length(pre,list.get(i));
+			cur=list.get(i);
+			l+=Vec2.length(pre,cur);
 			lengthes.add(l);
+			pre=cur;
 		}
+		MLog.test.vOnce("let-all","path-test",Arrays.toString(lengthes.toArray(new Float[lengthes.size()])));
 	}
 	
 	private void measureEndNormal(){
@@ -65,7 +70,9 @@ public class PathMeasurer
 		}else{
 			int s=binarySearch(l);
 			float ls=lengthes.get(s);
-			return Vec2.onLineLength(path.get(s),path.get(s+1),l-ls);
+			Vec2 v=Vec2.onLineLength(path.get(s),path.get(s+1),l-ls);
+			MLog.test.vOnce("vec","path-test","vec:"+v+" v1:"+path.get(s)+" v2:"+path.get(s+1)+" s:"+s);
+			return v;
 		}
 	}
 	
@@ -84,10 +91,10 @@ public class PathMeasurer
 			return start;
 		}else{
 			int m=(start+end)/2;
-			if(lengthes.get(m)<l){
-				return binarySearch(l,start,m);
-			}else{
+			if(lengthes.get(m)<=l){
 				return binarySearch(l,m,end);
+			}else{
+				return binarySearch(l,start,m);
 			}
 		}
 	}
