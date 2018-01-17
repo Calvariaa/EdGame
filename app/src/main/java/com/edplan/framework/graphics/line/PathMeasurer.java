@@ -14,9 +14,13 @@ public class PathMeasurer
 	
 	private List<Float> lengthes;
 	
-	private Vec2 endNormal;
+	private List<Vec2> directions;
+	
+	private Vec2 endDirection;
 	
 	private Vec2 endPoint;
+	
+	private float endHalf;
 	
 	public PathMeasurer(LinePath path){
 		this.path=path;
@@ -47,13 +51,36 @@ public class PathMeasurer
 		MLog.test.vOnce("let-all","path-test",Arrays.toString(lengthes.toArray(new Float[lengthes.size()])));
 	}
 	
+	private void measureDirections(){
+		directions=new ArrayList<Vec2>(path.size());
+		if(path.size()<2){
+			directions.add(new Vec2(1,0));
+		}else{
+			Vec2 cur;
+			Vec2 pre=path.get(0);
+			int m=path.size()-1;
+			for(int i=0;i<m;i++){
+				cur=path.get(i+1);
+				directions.add(cur.copy().minus(pre).toNormal());
+				pre=cur;
+			}
+			directions.add(directions.get(path.size()-2).copy());
+		}
+	}
+	
 	private void measureEndNormal(){
 		endPoint=path.getLast();
-		endNormal=path.getLast().copy().minus(path.get(path.size()-2)).toNormal();
+		if(path.size()>=2){
+			endDirection=path.getLast().copy().minus(path.get(path.size()-2)).toNormal();
+			endHalf=(lengthes.get(lengthes.size()-1)+lengthes.get(lengthes.size()-2))/2;
+		}else{
+			endDirection=new Vec2(0,0);
+		}
 	}
 	
 	public void measure(){
 		measureLengthes();
+		measureDirections();
 		measureEndNormal();
 	}
 	
@@ -66,7 +93,7 @@ public class PathMeasurer
 	 */
 	public Vec2 atLength(float l){
 		if(l>=maxLength()){
-			return endPoint.copy().add(endNormal.copy().zoom(l-maxLength()));
+			return endPoint.copy().add(endDirection.copy().zoom(l-maxLength()));
 		}else{
 			int s=binarySearch(l);
 			float ls=lengthes.get(s);
@@ -74,6 +101,10 @@ public class PathMeasurer
 			MLog.test.vOnce("vec","path-test","vec:"+v+" v1:"+path.get(s)+" v2:"+path.get(s+1)+" s:"+s);
 			return v;
 		}
+	}
+	
+	public Vec2 getTangentLine(float length){
+		return directions.get(binarySearch(length));
 	}
 	
 	//l>=0

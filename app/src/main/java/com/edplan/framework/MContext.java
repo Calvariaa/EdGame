@@ -7,12 +7,15 @@ import com.edplan.framework.resource.IResource;
 import com.edplan.framework.resource.AssetResource;
 import com.edplan.framework.resource.advance.ApplicationAssetResource;
 import com.edplan.framework.graphics.opengl.ShaderManager;
+import com.edplan.superutils.classes.advance.RunnableHandler;
 
 public class MContext
 {
 	private MLooperThread loopThread;
 	
 	private MLooper looper;
+	
+	private RunnableHandler runnableHandler;
 	
 	private MTimer looperTimer;
 	
@@ -25,6 +28,10 @@ public class MContext
 	public MContext(Context androidContext){
 		this.androidContext=androidContext;
 		//initial();
+	}
+	
+	public RunnableHandler getRunnableHandler() {
+		return runnableHandler;
 	}
 	
 	public void initial(){

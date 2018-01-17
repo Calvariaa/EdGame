@@ -32,4 +32,20 @@ public class FMath
 	public static float sqrt(double v){
 		return (float)Math.sqrt(v);
 	}
+	
+	public static float max(float a,float b){
+		return a>b?a:b;
+	}
+	
+	public static float min(float a,float b){
+		return a>b?b:a;
+	}
+	
+	public static float clamp(float value,float max,float min){
+		return min(max(value,min),max);
+	}
+	
+	public static float linear(float progress,float bottom,float top){
+		return bottom*progress+top*(1-progress);
+	}
 }

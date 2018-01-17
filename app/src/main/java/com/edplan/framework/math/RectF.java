@@ -1,7 +1,8 @@
 package com.edplan.framework.math;
 import com.edplan.framework.interfaces.Copyable;
+import com.edplan.framework.ui.uiobjs.Area2D;
 
-public class RectF implements Copyable
+public class RectF implements Copyable,Area2D
 {
 	private Vec2 basePoint=new Vec2();
 	
@@ -30,6 +31,12 @@ public class RectF implements Copyable
 		width=rect.getWidth();
 		height=rect.getHeight();
 		return this;
+	}
+	
+	public void setLTRB(float l,float t,float r,float b){
+		basePoint.set(l,t);
+		height=b-t;
+		width=r-l;
 	}
 	
 	public Vec2 getBasePoint(){
@@ -117,5 +124,24 @@ public class RectF implements Copyable
 	@Override
 	public RectF copy(){
 		return new RectF(this);
+	}
+	
+	@Override
+	public boolean inArea(Vec2 v) {
+		// TODO: Implement this method
+		Vec2 tmp=v.copy().minus(basePoint);
+		return tmp.x>=0&&tmp.x<=width&&tmp.y>=0&&tmp.y<=height;
+	}
+
+	@Override
+	public void fixRect(float l,float t,float r,float b) {
+		// TODO: Implement this method
+		this.setLTRB(l,t,r,b);
+	}
+
+	@Override
+	public RectF boundRect() {
+		// TODO: Implement this method
+		return this.copy();
 	}
 }

@@ -27,6 +27,10 @@ public class Vec2
 		return this;
 	}
 	
+	public Vec2 set(Vec2 v){
+		return set(v.x,v.y);
+	}
+	
 	public Vec2 add(Vec2 v){
 		return add(v.x,v.y);
 	}

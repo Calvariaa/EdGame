@@ -7,6 +7,7 @@ import android.graphics.ColorFilter;
 import android.graphics.Canvas;
 import com.edplan.framework.inputs.Pointer;
 import com.edplan.framework.MContext;
+import com.edplan.framework.graphics.opengl.GLCanvas2D;
 
 public class BaseView implements MDrawable
 {
@@ -208,6 +209,11 @@ public class BaseView implements MDrawable
 	public void draw(Canvas canvas)
 	{
 		// TODO: Implement this method
+	}
+	
+	
+	public void drawGL(GLCanvas2D canvas){
+		
 	}
 
 	
