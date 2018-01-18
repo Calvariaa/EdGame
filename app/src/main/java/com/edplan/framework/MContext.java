@@ -25,9 +25,19 @@ public class MContext
 	
 	private ApplicationAssetResource assetResource;
 	
+	private int step;
+	
 	public MContext(Context androidContext){
 		this.androidContext=androidContext;
 		//initial();
+	}
+
+	public void setStep(int step) {
+		this.step=step;
+	}
+
+	public int getStep() {
+		return step;
 	}
 	
 	public RunnableHandler getRunnableHandler() {

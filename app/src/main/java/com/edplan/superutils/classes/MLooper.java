@@ -5,6 +5,10 @@ import com.edplan.superutils.interfaces.Loopable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *黑历史，以后别用了
+ *_(:з」∠)_
+ */
 public class MLooper implements AbstractLooper
 {
 	private List<Loopable> loopables;
@@ -75,7 +79,7 @@ public class MLooper implements AbstractLooper
 		isIterating=false;
 		
 		for(Loopable l:removeList){
-			l.onRecycle();
+			l.onRemove();
 			loopables.remove(l);
 		}
 		removeList.clear();

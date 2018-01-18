@@ -3,10 +3,11 @@ import com.edplan.superutils.classes.MLooper;
 import com.edplan.superutils.classes.SafeList;
 import com.edplan.superutils.interfaces.Loopable;
 import java.util.Iterator;
+import com.edplan.superutils.interfaces.AbstractLooper;
 
-public class RunnableHandler implements Loopable,IRunnableHandler
+public class RunnableHandler extends Loopable implements IRunnableHandler
 {
-	private MLooper looper;
+	private AbstractLooper looper;
 	
 	private SafeList<DelayedRunnable> bufferedRunnables;
 	
@@ -35,13 +36,13 @@ public class RunnableHandler implements Loopable,IRunnableHandler
 	}
 	
 	@Override
-	public void setLooper(MLooper lp) {
+	public void setLooper(AbstractLooper lp) {
 		// TODO: Implement this method
 		this.looper=lp;
 	}
 
 	@Override
-	public void onRecycle() {
+	public void onRemove() {
 		// TODO: Implement this method
 		bufferedRunnables.clear();
 		flag=Loopable.Flag.Stop;
