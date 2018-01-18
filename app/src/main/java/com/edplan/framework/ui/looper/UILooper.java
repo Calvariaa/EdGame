@@ -8,8 +8,11 @@ import com.edplan.superutils.interfaces.Loopable;
 public class UILooper extends StepLooper implements IRunnableHandler 
 {
 	
-	
-	//循环开始时最先执行
+	/**
+	 *循环开始时最先执行，处理各种post的预处理
+	 *所有会影响layout的设置应该都在这里进行，
+	 *这个Loopable跑完了之后layout应该被确定了
+	 */
 	private RunnableHandler runnableHandler;
 
 	//处理所有动画
