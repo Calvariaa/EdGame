@@ -43,9 +43,9 @@ public abstract class AbstractSRable<T extends Copyable> implements Recycleable
 	public void restore(){
 		T popData=saves.pop();
 		T pre=currentData;
+		onRestore(popData,pre);
 		currentData=popData;
 		currentDataIndex--;
-		onRestore(popData,pre);
 	}
 	
 	public void restoreToCount(int idx){

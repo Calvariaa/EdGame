@@ -43,6 +43,19 @@ public class LinePath implements AbstractPath
 		measurer=new PathMeasurer(this);
 		measurer.measure();
 	}
+	
+	/**
+	 *
+	 */
+	public void translate(float dx,float dy){
+		for(Vec2 v:positions){
+			v.add(dx,dy);
+		}
+		maxX+=dx;
+		minX+=dx;
+		maxY+=dy;
+		minY+=dy;
+	}
 
 	@Override
 	public int size(){
@@ -123,6 +136,12 @@ public class LinePath implements AbstractPath
 		int e=measurer.binarySearch(end);
 		Vec2 startPoint=measurer.atLength(start);
 		Vec2 endPoint=measurer.atLength(end);
+		
+		/**
+		 *这部分是用来防止当剪切路径刚好在路径点上的情况。。
+		 *不过现在测试感觉没什么用，暂时注释掉
+		 */
+		
 		/*
 		if(Vec2.near(get(s),startPoint,tolerance)){
 			if(Vec2.near(get(e),endPoint,tolerance)){

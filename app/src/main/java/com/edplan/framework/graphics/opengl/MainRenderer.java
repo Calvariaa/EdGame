@@ -27,6 +27,9 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import com.edplan.nso.ruleset.std.objects.StdSlider;
 import com.edplan.nso.NsoException;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
 
 public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 {
@@ -80,6 +83,7 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 	
 	private GLTexture testPng;
 	private GLTexture cardPng;
+	private GLTexture sliderTex;
 	private int initialCount=0;
 	@Override
 	public void onSurfaceCreated(GL10 p1,EGLConfig p2) {
@@ -104,13 +108,28 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 			//"default-bg.png");
 			StdHitObjectParser parser=new StdHitObjectParser(new ParsingBeatmap());
 			try {
-				StdSlider sl=(StdSlider) parser.parse("84,364,348429,6,0,B|41:353|5:288|5:288|50:270|50:270|-1:208|5:127|5:127|67:177|67:177|73:62|144:22|144:22|152:125|152:125|242:21|372:32|372:32|282:119|282:119|402:97|500:184|506:238|506:238|459:224|441:230,1,1395.00005321503,6|0,0:3|3:0,0:0:0:0:");
+				StdSlider sl=(StdSlider) parser.parse("256,273,1724,6,0,B|256:340|256:340|208:340|208:340|208:332|188:320|188:320|205:304|215:280|215:280|240:248|248:212|248:212|252:192|248:156|248:156|236:156|236:156|248:156|248:156|248:116|248:116|244:88|216:72|216:72|236:64|256:60|256:60|260:28|256:25|256:25|252:28|256:60|256:60|276:64|296:72|296:72|268:88|264:116|264:116|264:156|264:156|276:156|276:156|264:156|264:156|260:192|264:212|264:212|272:248|298:280|298:280|312:304|324:320|324:320|312:332|312:340|312:340|256:340|256:340|256:272,1,1049.99996795654,4|0,3:2|0:2,0:2:0:0:");
+				//"84,364,348429,6,0,B|41:353|5:288|5:288|50:270|50:270|-1:208|5:127|5:127|67:177|67:177|73:62|144:22|144:22|152:125|152:125|242:21|372:32|372:32|282:119|282:119|402:97|500:184|506:238|506:238|459:224|441:230,1,1395.00005321503,6|0,0:3|3:0,0:0:0:0:");
 				//"431,64,72803,2,0,B|409:47|370:43|337:56|317:84|317:84|354:88|376:112,1,191.999994140625,8|8,0:0|0:3,0:0:0:0:");
 				sld=new DrawableStdSlider(sl.getPath());
 			} catch (NsoException e) {
 				e.printStackTrace();
 			}
 			
+			Bitmap bmp=Bitmap.createBitmap(500,1,Bitmap.Config.ARGB_8888);
+			for(int x=0;x<bmp.getWidth();x++){
+				float v=x/(float)bmp.getWidth();
+				float theta=(float)Math.acos(v);
+				
+				int gr=(int)(80*(1-v));
+				if(v<0.9f){
+					//int gr=(int)(100*(1-v));
+					bmp.setPixel(x,0,Color.argb(255,gr,gr,gr));
+				}else{
+					bmp.setPixel(x,0,Color4.mix(Color4.gray(1),Color4.argb255(Color.argb(255,gr,gr,gr)),1-FMath.min((v-0.9f)*10*10,1)).toIntBit());
+				}
+			}
+			sliderTex=GLTexture.create(bmp,true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -132,7 +151,7 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 		GLCanvas2D canvas=new GLCanvas2D(rootLayer);
 		canvas.prepare();
 		float c=Math.abs(a%2-1);
-		canvas.drawColor(Color4.Black);
+		canvas.drawColor(Color4.gray(0.2f));
 		//new Color4(c,c,c,1.0f));
 		canvas.clearDepthBuffer();
 		
@@ -237,7 +256,8 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 		
 		
 		LinePath path=sld.calculatePath();
-		path.setWidth(40);
+		float sscale=(1.0f-0.7f*(4-5)/5)/2;
+		path.setWidth(64*sscale);
 		/*
 		path.setWidth(90);
 		path.add(new Vec2(100,100));
@@ -266,7 +286,8 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 				}
 			});
 		
-		final BaseColorBatch batch=new BaseColorBatch();
+		final Texture3DBatch batch=new Texture3DBatch();
+		batch.setColorMixRate(0);
 		dp.addToBatch(batch);
 		
 		DrawLinePath dp2=new DrawLinePath(path.cutPath(2*c*let/3,(1+2*c)*let/3));
@@ -283,7 +304,7 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 					return Color4.rgba(1,1,1,1);
 				}
 			});
-		dp2.addToBatch(batch);
+		//dp2.addToBatch(batch);
 		
 		
 		
@@ -306,10 +327,20 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 				}
 			});
 		
-		dp3.addToBatch(batch);
+		//dp3.addToBatch(batch);
 		
-		canvas.drawColorBatch(paint,batch);
+		//canvas.drawColorBatch(paint,batch);
 		
+		
+		canvas.save();
+		canvas.getMProjMatrix().translate(300,100,0).scale(2,2,1);
+		
+		GLWrapped.depthTest.save();
+		GLWrapped.depthTest.set(true);
+		canvas.drawTexture3DBatch(batch,sliderTex,1,new Color4(1,1,1,1));
+		GLWrapped.depthTest.restore();
+		//canvas.drawtexture3
+		canvas.restore();
 		
 		paint.setFinalAlpha(0.5f);
 		canvas.drawRoundedRectTexture(

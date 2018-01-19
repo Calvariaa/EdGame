@@ -8,10 +8,10 @@ import com.edplan.framework.ui.uiobjs.DrawRequestParam;
 import com.edplan.framework.graphics.layer.BufferedLayer;
 import com.edplan.framework.MContext;
 import com.edplan.superutils.classes.advance.IRunnableHandler;
+import com.edplan.framework.ui.drawable.EdDrawable;
 
 public class EdView implements IRunnableHandler
 {
-	
 	protected static int CUSTOM_INDEX=0;
 	
 	private String name;
@@ -26,9 +26,19 @@ public class EdView implements IRunnableHandler
 	
 	private MContext context;
 	
+	private EdDrawable background;
+	
 	public EdView(MContext context){
 		initialName();
 		this.context=context;
+	}
+
+	public void setBackground(EdDrawable background) {
+		this.background=background;
+	}
+
+	public EdDrawable getBackground() {
+		return background;
 	}
 	
 	@Override
@@ -111,7 +121,12 @@ public class EdView implements IRunnableHandler
 	 *This canvas maybe based on a FBO or parent's canvas.
 	 */
 	public void draw(GLCanvas2D canvas){
-		
+		if(background!=null){
+			int s=canvas.save();
+			canvas.getMaskMatrix().post(background.getTranslationMatrix());
+			background.draw(canvas);
+			canvas.restoreToCount(s);
+		}
 	}
 	
 	
