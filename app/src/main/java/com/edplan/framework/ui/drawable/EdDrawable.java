@@ -18,6 +18,6 @@ public abstract class EdDrawable
 	public Mat4 getTranslationMatrix() {
 		return translationMatrix;
 	}
-	
+
 	public abstract void draw(GLCanvas2D canvas);
 }

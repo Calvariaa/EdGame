@@ -144,4 +144,8 @@ public class RectF implements Copyable,Area2D
 		// TODO: Implement this method
 		return this.copy();
 	}
+	
+	public static RectF ltrb(float l,float t,float r,float b){
+		return (new RectF()).ltrb(l,t,r,b);
+	}
 }

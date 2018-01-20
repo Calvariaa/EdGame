@@ -354,6 +354,14 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		postColorBatch(paint);
 	}
 
+	/**
+	 *通过简便的参数以canvas上某一点为中心绘制一张Texture
+	 */
+	public void drawTextureAnchorCenter(GLTexture texture,Vec2 org,Vec2 w,GLPaint paint){
+		RectF dst=RectF.ltrb(org.x-w.x,org.y-w.y,org.x+w.x,org.y+w.y);
+		drawTexture(texture,new RectF(0,0,1,1),dst,paint);
+	}
+	
 	public MContext getContext(){
 		return getLayer().getContext();
 	}
@@ -371,5 +379,17 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	@Override
 	public void recycle(){
 		tmpBatch.clear();
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		// TODO: Implement this method
+		super.finalize();
+		/*
+		if(isPrepared()){
+			//自动解除canvas，推荐每次prepare和unprepare配套使用
+			unprepare();
+			delete();
+		}*/
 	}
 }

@@ -1,9 +1,8 @@
 package com.edplan.framework.ui.looper;
 
-import com.edplan.superutils.classes.MLooper;
+import com.edplan.framework.ui.animation.AnimationHandler;
 import com.edplan.superutils.classes.advance.IRunnableHandler;
 import com.edplan.superutils.classes.advance.RunnableHandler;
-import com.edplan.superutils.interfaces.Loopable;
 
 public class UILooper extends StepLooper implements IRunnableHandler 
 {
@@ -14,16 +13,23 @@ public class UILooper extends StepLooper implements IRunnableHandler
 	 *这个Loopable跑完了之后layout应该被确定了
 	 */
 	private RunnableHandler runnableHandler;
-
+	
+	/**
+	 *处理其他循环请求
+	 */
+	private BaseLooper othersHandler;
+	
+	
 	//处理所有动画
-	//private AnimationHandler;
+	private AnimationHandler animaHandler;
 
 	//绘制操作
 	//private UIDrawer
 
 	public UILooper(){
 		runnableHandler=new RunnableHandler();
-		//addLoopable(runnableHandler);
+		addLoopable(runnableHandler,UIStep.HANDLE_RUNNABLES);
+		addLoopable(animaHandler,UIStep.HANDLE_ANIMATION);
 	}
 
 	@Override
@@ -36,5 +42,4 @@ public class UILooper extends StepLooper implements IRunnableHandler
 		// TODO: Implement this method
 		runnableHandler.post(r,delayMS);
 	}
-
 }

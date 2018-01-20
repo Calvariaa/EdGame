@@ -1,5 +1,6 @@
 package com.edplan.superutils.classes;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class SafeList<T> extends ArrayList<T>
 {
