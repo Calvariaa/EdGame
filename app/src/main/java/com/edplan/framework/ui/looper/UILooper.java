@@ -28,6 +28,7 @@ public class UILooper extends StepLooper implements IRunnableHandler
 
 	public UILooper(){
 		runnableHandler=new RunnableHandler();
+		animaHandler=new AnimationHandler();
 		addLoopable(runnableHandler,UIStep.HANDLE_RUNNABLES);
 		addLoopable(animaHandler,UIStep.HANDLE_ANIMATION);
 	}

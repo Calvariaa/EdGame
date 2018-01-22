@@ -42,6 +42,29 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		getData().setHeight(layer.getHeight());
 	}
 	
+	public GLCanvas2D translate(float tx,float ty){
+		getData().translate(tx,ty);
+		return this;
+	}
+	
+	public GLCanvas2D scale(float s){
+		getData().scale(s);
+		return this;
+	}
+	
+	public GLCanvas2D clip(Vec2 wh){
+		getData().clip(wh);
+		return this;
+	}
+	
+	public float getWidth(){
+		return getData().getWidth();
+	}
+	
+	public float getHeight(){
+		return getData().getHeight();
+	}
+	
 	public void setMProjMatrix(Mat4 mProjMatrix) {
 		this.getData().setCurrentProjMatrix(mProjMatrix);
 	}
@@ -52,10 +75,6 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	
 	public Mat4 getMaskMatrix(){
 		return getData().getCurrentMaskMatrix();
-	}
-	
-	public void reflectCanvas(RectF area){
-		
 	}
 
 	@Override
@@ -76,6 +95,8 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		d.setTexture3DShader(getDefTexture3DShader());
 		d.setCurrentProjMatrix(createDefProjMatrix());
 		d.setCurrentMaskMatrix(Mat4.createIdentity());
+		d.setHeight(getLayer().getHeight());
+		d.setWidth(getLayer().getWidth());
 		return d;
 	}
 

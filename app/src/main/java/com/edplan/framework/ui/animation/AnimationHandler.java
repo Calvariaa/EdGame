@@ -40,6 +40,8 @@ public class AnimationHandler extends Loopable
 						iter.remove();
 					}
 					break;
+				default:
+					MLog.test.vOnce("switch-err","???","什么鬼啊");
 			}
 		}
 	}

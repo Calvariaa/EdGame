@@ -55,6 +55,7 @@ public class StepLooper extends BaseLooper<StepedLoopable>
 			return loopable.getFlag();
 		}
 
+		
 		@Override
 		public void setFlag(Loopable.Flag flag) {
 			// TODO: Implement this method

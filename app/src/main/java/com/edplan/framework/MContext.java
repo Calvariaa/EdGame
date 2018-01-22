@@ -8,6 +8,9 @@ import com.edplan.framework.resource.AssetResource;
 import com.edplan.framework.resource.advance.ApplicationAssetResource;
 import com.edplan.framework.graphics.opengl.ShaderManager;
 import com.edplan.superutils.classes.advance.RunnableHandler;
+import com.edplan.framework.ui.EdView;
+import com.edplan.framework.ui.looper.UILooper;
+import com.edplan.superutils.classes.advance.IRunnableHandler;
 
 public class MContext
 {
@@ -27,9 +30,41 @@ public class MContext
 	
 	private int step;
 	
+	private EdView content;
+	
+	private UILooper uiLooper;
+	
 	public MContext(Context androidContext){
 		this.androidContext=androidContext;
 		//initial();
+	}
+
+	public void setUiLooper(UILooper uiLooper) {
+		this.uiLooper=uiLooper;
+	}
+
+	public UILooper getUiLooper() {
+		return uiLooper;
+	}
+	
+	public int currentUIStep(){
+		return getUiLooper().getStep();
+	}
+	
+	public void runOnUIThread(Runnable r){
+		getUiLooper().post(r);
+	}
+	
+	public void runOnUIThread(Runnable r,int delayMs){
+		getUiLooper().post(r,delayMs);
+	}
+
+	public void setContent(EdView content) {
+		this.content=content;
+	}
+
+	public EdView getContent() {
+		return content;
 	}
 
 	public void setStep(int step) {
@@ -40,8 +75,8 @@ public class MContext
 		return step;
 	}
 	
-	public RunnableHandler getRunnableHandler() {
-		return runnableHandler;
+	public IRunnableHandler getRunnableHandler() {
+		return uiLooper;
 	}
 	
 	public void initial(){

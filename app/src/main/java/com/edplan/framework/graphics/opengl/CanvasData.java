@@ -4,6 +4,7 @@ import com.edplan.framework.graphics.opengl.shader.advance.Texture3DShader;
 import com.edplan.framework.interfaces.Copyable;
 import com.edplan.framework.interfaces.Recycleable;
 import com.edplan.framework.math.Mat4;
+import com.edplan.framework.math.Vec2;
 
 public class CanvasData implements Recycleable,Copyable {
 
@@ -15,6 +16,8 @@ public class CanvasData implements Recycleable,Copyable {
 
 	private Mat4 currentProjMatrix;
 
+	private float pixelDensity;
+	
 	private Texture3DShader texture3DShader;
 
 	public CanvasData(CanvasData c){
@@ -23,11 +26,20 @@ public class CanvasData implements Recycleable,Copyable {
 		this.currentProjMatrix=c.currentProjMatrix.copy();
 		this.width=c.width;
 		this.height=c.height;
+		this.pixelDensity=c.pixelDensity;
 	}
 
 	public CanvasData(){
 		currentProjMatrix=new Mat4();
 		currentMaskMatrix=new Mat4();
+	}
+
+	public void setPixelDensity(float pixelDensity) {
+		this.pixelDensity=pixelDensity;
+	}
+
+	public float getPixelDensity() {
+		return pixelDensity;
 	}
 
 	public void setWidth(float width) {
@@ -68,6 +80,23 @@ public class CanvasData implements Recycleable,Copyable {
 
 	public Mat4 getCurrentMaskMatrix() {
 		return currentMaskMatrix;
+	}
+	
+	public CanvasData translate(float tx,float ty){
+		getCurrentMaskMatrix().translate(tx,ty,0);
+		return this;
+	}
+	
+	public CanvasData scale(float s){
+		getCurrentMaskMatrix().scale(s,s,1);
+		this.pixelDensity*=s;
+		return this;
+	}
+	
+	public CanvasData clip(Vec2 wh){
+		setWidth(wh.x);
+		setHeight(wh.y);
+		return this;
 	}
 
 	@Override
