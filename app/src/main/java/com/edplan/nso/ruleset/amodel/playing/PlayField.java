@@ -1,6 +1,7 @@
 package com.edplan.nso.ruleset.amodel.playing;
 import com.edplan.framework.ui.drawable.EdDrawable;
 import com.edplan.framework.graphics.opengl.GLCanvas2D;
+import com.edplan.framework.MContext;
 
 /**
  *主要的游戏绘制，不包括各种ui，只绘制HitObject以及附加物件
@@ -23,6 +24,10 @@ public abstract class PlayField<T extends PlayingBeatmap> extends EdDrawable
 		CANVAS_SIZE_Y=BASE_Y-2*PADDING_Y;
 	}
 
+	public PlayField(MContext c){
+		super(c);
+	}
+	
 	public abstract void applyBeatmap(T beatmap);
 	
 	/**

@@ -30,6 +30,7 @@ import com.edplan.nso.NsoException;
 import com.edplan.superutils.interfaces.StringMakeable;
 import com.edplan.nso.OsuFilePart;
 import com.edplan.superutils.U;
+import com.edplan.nso.OsuBeatmap;
 
 public class StdBeatmapParser implements StringMakeable
 {
@@ -239,6 +240,13 @@ public class StdBeatmapParser implements StringMakeable
 	private void nextLine() throws IOException{
 		reader.readLine();
 		parsingBeatmap.nextLine();
+	}
+	
+	
+	
+	public OsuBeatmap makeupBeatmap(){
+		//switch(
+		return null;
 	}
 
 	@Override

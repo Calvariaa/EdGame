@@ -10,6 +10,7 @@ import com.edplan.nso.filepart.PartMetadata;
 import com.edplan.nso.filepart.PartTimingPoints;
 import com.edplan.nso.beatmap.StdBeatmapBindingData;
 import com.edplan.nso.ruleset.std.objects.StdHitObjects;
+import com.edplan.nso.ruleset.std.objects.StdHitObject;
 
 public class StdBeatmap extends OsuBeatmap
 {
@@ -23,7 +24,7 @@ public class StdBeatmap extends OsuBeatmap
 	private PartEvents event;
 	private PartTimingPoints timingPoints;
 	private PartColours colours;
-	private StdHitObjects hitObjects;
+	private StdHitObjects<StdHitObject> hitObjects;
 
 	public StdBeatmap(){
 		
@@ -39,7 +40,7 @@ public class StdBeatmap extends OsuBeatmap
 		setColours(bd.getColours());
 	}
 
-	public void setHitObjects(StdHitObjects hitObjects){
+	public void setHitObjects(StdHitObjects<StdHitObject> hitObjects){
 		this.hitObjects=hitObjects;
 	}
 

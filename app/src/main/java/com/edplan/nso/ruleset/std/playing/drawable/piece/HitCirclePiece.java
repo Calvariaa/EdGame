@@ -6,6 +6,7 @@ import com.edplan.framework.ui.drawable.interfaces.IFadeable;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.graphics.opengl.GLPaint;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
+import com.edplan.framework.MContext;
 
 public class HitCirclePiece extends EdDrawable implements IScaleable2D,IFadeable
 {
@@ -18,6 +19,10 @@ public class HitCirclePiece extends EdDrawable implements IScaleable2D,IFadeable
 	private GLPaint paint=new GLPaint();
 	
 	private GLTexture texture;
+	
+	public HitCirclePiece(MContext c){
+		super(c);
+	}
 
 	public void setOrigin(Vec2 origin) {
 		this.origin.set(origin);

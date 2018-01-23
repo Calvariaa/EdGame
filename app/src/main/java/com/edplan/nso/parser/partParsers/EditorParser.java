@@ -4,7 +4,7 @@ import com.edplan.nso.filepart.PartEditor;
 import com.edplan.nso.beatmapComponent.Bookmarks;
 import com.edplan.nso.OsuFilePart;
 
-public class EditorParser implements PartParser
+public class EditorParser implements PartParser<PartEditor>
 {
 	private PartEditor part;
 	
@@ -13,17 +13,9 @@ public class EditorParser implements PartParser
 	}
 
 	@Override
-	public OsuFilePart getPart(){
+	public PartEditor getPart(){
 		// TODO: Implement this method
 		return part;
-	}
-
-	
-	
-
-	@Override
-	public void applyDefault(){
-		// TODO: Implement this method
 	}
 
 	@Override

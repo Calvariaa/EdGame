@@ -111,6 +111,7 @@ public class MainGamePage extends MStaticViewGroup
 			paint.setAntiAlias(true);
 			paint.setStyle(Paint.Style.STROKE);
 			int cx=0;
+			/*
 			if(false)
 			for(HitObject o:((PartHitObjects)(p.getHitObjectsParser().getPart())).getHitObjectList()){
 				if(o instanceof StdSlider){
@@ -167,7 +168,7 @@ public class MainGamePage extends MStaticViewGroup
 					pbp.compress(Bitmap.CompressFormat.PNG,100,new FileOutputStream(npng));
 					
 				}
-			}
+			}*/
 			clock.end();
 			cf.addText("------");
 			cf.addText("Total time : "+clock.getTime());

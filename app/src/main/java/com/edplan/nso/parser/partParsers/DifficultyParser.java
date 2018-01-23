@@ -4,7 +4,7 @@ import com.edplan.nso.filepart.PartDifficulty;
 import com.edplan.superutils.U;
 import com.edplan.nso.OsuFilePart;
 
-public class DifficultyParser implements PartParser
+public class DifficultyParser implements PartParser<PartDifficulty>
 {
 	private PartDifficulty part;
 	
@@ -13,14 +13,9 @@ public class DifficultyParser implements PartParser
 	}
 
 	@Override
-	public OsuFilePart getPart(){
+	public PartDifficulty getPart(){
 		// TODO: Implement this method
 		return part;
-	}
-
-	@Override
-	public void applyDefault(){
-		// TODO: Implement this method
 	}
 
 	@Override

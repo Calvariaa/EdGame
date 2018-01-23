@@ -98,4 +98,5 @@ public class GLPaint
 
 	public float getFinalAlpha() {
 		return finalAlpha;
-	}}
+	}
+}

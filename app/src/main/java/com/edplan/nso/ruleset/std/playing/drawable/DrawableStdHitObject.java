@@ -8,6 +8,7 @@ import com.edplan.nso.ruleset.std.objects.StdHitObject;
 import com.edplan.nso.ruleset.std.StdBeatmap;
 import com.edplan.nso.difficulty.DifficultyUtil;
 import com.edplan.nso.ruleset.amodel.playing.PlayingBeatmap;
+import com.edplan.framework.MContext;
 
 public class DrawableStdHitObject extends DrawableHitObject
 {
@@ -26,8 +27,11 @@ public class DrawableStdHitObject extends DrawableHitObject
 	private float alpha=1;
 	
 	private PreciseTimeline timeLine;
+	
+	private boolean finished=false;
 
-	public DrawableStdHitObject(StdHitObject obj){
+	public DrawableStdHitObject(MContext c,StdHitObject obj){
+		super(c);
 		hitObject=obj;
 		setOrigin(new Vec2(obj.getStartX(),obj.getStartY()));
 	}
@@ -56,6 +60,17 @@ public class DrawableStdHitObject extends DrawableHitObject
 		timePreempt=DifficultyUtil.stdHitObjectTimePreempt(beatmap.getDifficulty().getApproachRate());
 		timeFadein=DifficultyUtil.stdHitObjectTimeFadein(beatmap.getDifficulty().getApproachRate());
 		showTime=hitObject.getStartTime()-timePreempt;
+	}
+	
+	/**
+	 *通知PlayField回收这个HitObject
+	 */
+	public void finish(){
+		finished=true;
+	}
+	
+	public void onFinish(){
+		
 	}
 	
 	@Override
@@ -96,5 +111,10 @@ public class DrawableStdHitObject extends DrawableHitObject
 		// TODO: Implement this method
 		return timeLine;
 	}
-
+	
+	@Override
+	public boolean isFinished() {
+		// TODO: Implement this method
+		return finished;
+	}
 }

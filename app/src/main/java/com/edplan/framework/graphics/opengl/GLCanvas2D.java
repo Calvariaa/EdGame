@@ -47,14 +47,18 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		return this;
 	}
 	
-	public GLCanvas2D scale(float s){
-		getData().scale(s);
+	public GLCanvas2D scaleContent(float s){
+		getData().scaleContent(s);
 		return this;
 	}
 	
 	public GLCanvas2D clip(Vec2 wh){
 		getData().clip(wh);
 		return this;
+	}
+	
+	public float getPixelDensity(){
+		return getData().getPixelDensity();
 	}
 	
 	public float getWidth(){
@@ -393,7 +397,7 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	
 	public Mat4 createDefProjMatrix(){
 		Mat4 projMatrix=new Mat4();
-		projMatrix.setOrtho(0,layer.getWidth(),layer.getHeight(),0,-100,100);
+		projMatrix.setOrtho(0,layer.getWidth(),0,layer.getHeight(),-100,100);
 		return projMatrix;
 	}
 	

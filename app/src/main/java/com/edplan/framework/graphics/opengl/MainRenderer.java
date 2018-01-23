@@ -99,7 +99,7 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 			GLWrapped.initial();
 			//GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 			GLWrapped.depthTest.set(false);
-			GLWrapped.enableBlend();
+			GLWrapped.blend.set(true);
 			uiLooper=new UILooper();
 			context.setUiLooper(uiLooper);
 			tmer.initial();
@@ -169,7 +169,7 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 		a+=0.005;
 		GLCanvas2D canvas=new GLCanvas2D(rootLayer);
 		canvas.prepare();
-		
+		canvas.getMProjMatrix().setOrtho(0,canvas.getWidth(),canvas.getHeight(),0,-100,100);
 		if(debugUi){
 			if(context.getContent()!=null)context.getContent().draw(canvas);
 			canvas.unprepare();
@@ -289,9 +289,9 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 		//转换到osu field
 		
 		canvas.save();
-		float osuScale=canvas.getHeight()/PlayField.BASE_Y;
-		canvas.translate(canvas.getWidth()/2-PlayField.BASE_X/2*osuScale,0);
-		canvas.scale(osuScale);
+		float osuScale=PlayField.BASE_Y/canvas.getHeight();
+		canvas.translate(canvas.getWidth()/2-PlayField.BASE_X/2/osuScale,0);
+		canvas.scaleContent(osuScale);
 		canvas.translate(PlayField.PADDING_X,PlayField.PADDING_Y);
 		canvas.clip(new Vec2(PlayField.CANVAS_SIZE_X,PlayField.CANVAS_SIZE_Y));
 		

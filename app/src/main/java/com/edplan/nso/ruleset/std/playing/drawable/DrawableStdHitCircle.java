@@ -6,14 +6,21 @@ import com.edplan.nso.ruleset.std.playing.drawable.piece.HitCirclePiece;
 import com.edplan.nso.ruleset.amodel.playing.PlayingBeatmap;
 import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.math.Vec2;
+import com.edplan.framework.MContext;
+import com.edplan.nso.ruleset.std.objects.StdHitObject;
 
 public class DrawableStdHitCircle extends DrawableStdHitObject
 {
 	private HitCirclePiece circlePiece;
 	
-	public DrawableStdHitCircle(StdHitCircle obj,StdBeatmap beatmap){
-		super(obj);
-		circlePiece=new HitCirclePiece();
+	public DrawableStdHitCircle(MContext c,StdHitCircle obj){
+		super(c,obj);
+		circlePiece=new HitCirclePiece(c);
+	}
+	
+	public DrawableStdHitCircle(MContext c,StdHitObject obj){
+		super(c,obj);
+		circlePiece=new HitCirclePiece(c);
 	}
 
 	@Override

@@ -106,7 +106,7 @@ public class DepthBufferObject
 	}
 
 	private static void bind(int id){
-		GLES20.glBindRenderbuffer(GLES20.GL_FRAMEBUFFER,id);
+		GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER,id);
 	}
 	
 	private static class SystemDepthBuffer extends DepthBufferObject {

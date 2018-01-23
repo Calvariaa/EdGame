@@ -58,7 +58,7 @@ public class BufferedLayer
 	}
 	
 	public boolean isBind(){
-		return getFrameBuffer().isBind();
+		return (getFrameBuffer()!=null)?getFrameBuffer().isBind():false;
 	}
 
 	public void setWidth(int width) {
@@ -97,13 +97,14 @@ public class BufferedLayer
 	public void bind(){
 		checkChange();
 		getFrameBuffer().bind();
-		GLWrapped.setViewport(0,0,getWidth(),getHeight());
 	}
 	
 	public void unbind(){
 		getFrameBuffer().unBind();
 	}
 	
-	//When rendering, the viewport should be sat by parent layer allready.
+	public void recycle(){
+		getFrameBuffer().deleteWithAttachment();
+	}
 }
 

@@ -7,12 +7,13 @@ import com.edplan.nso.ruleset.std.objects.StdHitObjects;
 public class ManiaHitObjects extends StdHitObjects
 {
 	@Override
-	public void addHitObject(HitObject t){
+	public void addHitObject(HitObject r){
 		// TODO: Implement this method
-		if(t instanceof StdHitObject){
-			switch(((StdHitObject)t).getResType()){
+		if(r instanceof StdHitObject){
+			StdHitObject t=(StdHitObject)r;
+			switch(t.getResType()){
 				case Circle:
-					super.addHitObject(ManiaNote.toManiaNote((StdHitObject)t));
+					super.addHitObject(ManiaNote.toManiaNote(t));
 					return;
 				case ManiaHolder:
 					super.addHitObject(t);

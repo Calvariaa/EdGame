@@ -1,14 +1,13 @@
 package com.edplan.framework.test;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.util.Log;
+import android.opengl.GLES20;
 import com.edplan.framework.MContext;
-import com.edplan.framework.graphics.layer.DefBufferedLayer;
+import com.edplan.framework.graphics.layer.BufferedLayer;
 import com.edplan.framework.graphics.line.DrawLinePath;
 import com.edplan.framework.graphics.line.LinePath;
 import com.edplan.framework.graphics.line.PathMeasurer;
 import com.edplan.framework.graphics.opengl.GLCanvas2D;
-import com.edplan.framework.graphics.opengl.GLLooper;
 import com.edplan.framework.graphics.opengl.GLPaint;
 import com.edplan.framework.graphics.opengl.GLWrapped;
 import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
@@ -19,7 +18,6 @@ import com.edplan.framework.math.FMath;
 import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.ui.EdView;
-import com.edplan.framework.ui.looper.UILooper;
 import com.edplan.framework.utils.MLog;
 import com.edplan.nso.NsoException;
 import com.edplan.nso.ParsingBeatmap;
@@ -27,9 +25,10 @@ import com.edplan.nso.ruleset.amodel.playing.PlayField;
 import com.edplan.nso.ruleset.std.objects.StdSlider;
 import com.edplan.nso.ruleset.std.objects.drawables.DrawableStdSlider;
 import com.edplan.nso.ruleset.std.parser.StdHitObjectParser;
-import com.edplan.superutils.MTimer;
 import java.io.IOException;
-import android.widget.Toast;
+import com.edplan.framework.ui.animation.AbstractAnimation;
+import com.edplan.framework.ui.animation.AnimState;
+import com.edplan.framework.ui.animation.LoopType;
 
 public class TestView extends EdView
 {
@@ -40,6 +39,10 @@ public class TestView extends EdView
 	private int pointer;
 
 	private DrawableStdSlider sld;
+	
+	private float postAlpha=1;
+	
+	private float postProgress=0;
 	
 	//private DrawableStdSlider sld2;
 	
@@ -76,19 +79,40 @@ public class TestView extends EdView
 			} catch (NsoException e) {
 				e.printStackTrace();
 			}
+			
+			playAnim();
+			
+			float aa_portion = 0.02f;
+            float border_portion = 0.128f;
+            float gradient_portion = 1 - border_portion;
 
+            float opacity_at_centre = 0.3f;
+            float opacity_at_edge = 0.8f;
+			
 			Bitmap bmp=Bitmap.createBitmap(500,1,Bitmap.Config.ARGB_8888);
 			for(int x=0;x<bmp.getWidth();x++){
-				float v=x/(float)bmp.getWidth();
-				float theta=(float)Math.acos(v);
+				//float v=x/(float)bmp.getWidth();
+				//float theta=(float)Math.acos(v);
 
+				float v=1-x/(float)(bmp.getWidth()-1);
+				
+				if(v<=border_portion){
+					bmp.setPixel(x,0,Color.argb((int)(Math.min(v/aa_portion,1)*255),255,255,255));
+				}else{
+					v-=border_portion;
+					bmp.setPixel(x,0,Color.argb(
+						(int)((opacity_at_edge-(opacity_at_edge-opacity_at_centre)*v/gradient_portion)*255),
+						255,255,255));
+				}
+				
+				/*
 				int gr=(int)(80*(1-v));
 				if(v<0.9f){
 					//int gr=(int)(100*(1-v));
 					bmp.setPixel(x,0,Color.argb(255,gr,gr,gr));
 				}else{
 					bmp.setPixel(x,0,Color4.mix(Color4.gray(1),Color4.argb255(Color.argb(255,gr,gr,gr)),1-FMath.min((v-0.9f)*10*10,1)).toIntBit());
-				}
+				}*/
 			}
 			sliderTex=GLTexture.create(bmp,true);
 			
@@ -99,6 +123,12 @@ public class TestView extends EdView
 		}
 	}
 
+	
+	public void playAnim(){
+		postAlpha=0;
+		postProgress=0;
+		getContext().getUiLooper().getAnimaHandler().addAnimation(new SliderAnim());
+	}
 	
 	boolean ifend=false;
 	@Override
@@ -123,6 +153,7 @@ public class TestView extends EdView
 									//"84,364,348429,6,0,B|41:353|5:288|5:288|50:270|50:270|-1:208|5:127|5:127|67:177|67:177|73:62|144:22|144:22|152:125|152:125|242:21|372:32|372:32|282:119|282:119|402:97|500:184|506:238|506:238|459:224|441:230,1,1395.00005321503,6|0,0:3|3:0,0:0:0:0:");
 									//"431,64,72803,2,0,B|409:47|370:43|337:56|317:84|317:84|354:88|376:112,1,191.999994140625,8|8,0:0|0:3,0:0:0:0:");
 									sld=new DrawableStdSlider(sl.getPath());
+									playAnim();
 								} catch (NsoException e) {
 									e.printStackTrace();
 								}
@@ -142,7 +173,7 @@ public class TestView extends EdView
 											} catch (NsoException e) {
 												e.printStackTrace();
 											}
-
+											playAnim();
 										}
 									},5000);
 							}
@@ -156,9 +187,8 @@ public class TestView extends EdView
 		canvas.drawColor(Color4.gray(0.2f));
 		//new Color4(c,c,c,1.0f));
 		canvas.clearDepthBuffer();
-
-		//canvas.getMProjMatrix().post(Mat4.createIdentity().setOrtho(0,2,2,2,-100,100));
-
+		
+		
 		canvas.save();
 		canvas.getMaskMatrix().translate(500+testPng.getWidth()/2,500+testPng.getHeight()/2,0).rotate(c*90,0,0,1);
 		//.post((new Mat4()).translate(10,10,0));
@@ -174,6 +204,12 @@ public class TestView extends EdView
 			1f);
 
 		canvas.restore();
+		
+		
+
+		//canvas.getMProjMatrix().post(Mat4.createIdentity().setOrtho(0,2,2,2,-100,100));
+
+		
 		/*
 		 canvas.drawTexture(
 		 testPng,
@@ -251,18 +287,14 @@ public class TestView extends EdView
 		paint.setMixColor(Color4.White);
 		canvas.drawLines(lines,paint);
 
+		
 		//c=0.3f;
 
 
 		//转换到osu field
 
 		canvas.save();
-		float osuScale=canvas.getHeight()/PlayField.BASE_Y;
-		canvas.translate(canvas.getWidth()/2-PlayField.BASE_X/2*osuScale,0);
-		canvas.scale(osuScale);
-		canvas.translate(PlayField.PADDING_X,PlayField.PADDING_Y);
-		canvas.clip(new Vec2(PlayField.CANVAS_SIZE_X,PlayField.CANVAS_SIZE_Y));
-
+		
 		LinePath path=sld.calculatePath();
 		float cs=4;
 		float sscale=(1.0f-0.7f*(cs-5)/5)/2;
@@ -280,7 +312,7 @@ public class TestView extends EdView
 		MLog.test.vOnce("let","path-test",let+"");
 
 
-		DrawLinePath dp=new DrawLinePath(path);
+		DrawLinePath dp=new DrawLinePath(path.cutPath(0,m.maxLength()*postProgress));
 		dp.setDrawInfo(new DrawInfo(){
 				@Override
 				public Vec2 toLayerPosition(Vec2 v) {
@@ -343,14 +375,44 @@ public class TestView extends EdView
 
 		//canvas.save();
 		//canvas.getMProjMatrix().translate(300,100,0).scale(2,2,1);
-		paint.setMixColor(Color4.rgb(1,0.5f,0.5f));
+		BufferedLayer newLayer=new BufferedLayer(getContext(),canvas.getLayer().getWidth(),canvas.getLayer().getHeight(),true);
+		GLCanvas2D newCanvas=new GLCanvas2D(newLayer);
+		newCanvas.prepare();
+		
+		newCanvas.drawColor(Color4.Alpha);
+		newCanvas.clearDepthBuffer();
+		
+		float osuScale=PlayField.BASE_Y/canvas.getHeight();
+		newCanvas.translate(newCanvas.getWidth()/2-PlayField.BASE_X/2/osuScale,0);
+		newCanvas.scaleContent(osuScale);
+		newCanvas.translate(PlayField.PADDING_X,PlayField.PADDING_Y);
+		newCanvas.clip(new Vec2(PlayField.CANVAS_SIZE_X,PlayField.CANVAS_SIZE_Y));
+		
+		
+		//paint.setMixColor(Color4.rgb(1,0.5f,0.5f));
 		GLWrapped.depthTest.save();
+		GLWrapped.depthTest.set(false);
 		GLWrapped.depthTest.set(true);
-		canvas.drawTexture3DBatch(batch,sliderTex,1,new Color4(1,0.8f,0.8f,1));
+		GLWrapped.blend.save();
+		GLWrapped.blend.set(false);
+		//GLES20.glDisable(GLES20.GL_BLEND);
+		newCanvas.drawTexture3DBatch(batch,sliderTex,1,new Color4(1,0.8f,0.8f,1));
+		newCanvas.drawLines(new float[]{0,0,newCanvas.getWidth(),newCanvas.getHeight()},new GLPaint());
+		GLWrapped.blend.restore();
 		GLWrapped.depthTest.restore();
 		//canvas.drawtexture3
 		//canvas.restore();
+		newCanvas.unprepare();
 
+		paint.setColorMixRate(0);
+		
+		GLPaint newPaint=new GLPaint();
+		newPaint.setFinalAlpha(postAlpha);
+		GLTexture texture=newLayer.getTexture();
+		canvas.drawTexture(texture,new RectF(0,0,texture.getWidth(),texture.getHeight()),new RectF(0,0,canvas.getWidth(),canvas.getHeight()),newPaint);
+		
+		newLayer.recycle();
+		
 		canvas.restore();
 
 		paint.setFinalAlpha(0.5f);
@@ -359,6 +421,96 @@ public class TestView extends EdView
 			new RectF(0,0,80,80),
 			new RectF(point.x-40,point.y-40,80,80),
 			paint);
+		canvas.save();
+		canvas.getMaskMatrix().translate(500+testPng.getWidth()/2,500+testPng.getHeight()/2,0).rotate(c*90,0,0,1);
+		//.post((new Mat4()).translate(10,10,0));
+
+		canvas.drawTexture(
+			testPng,
+			new RectF(0,0,testPng.getWidth(),testPng.getHeight()),
+			new RectF(-testPng.getWidth()/2,-testPng.getHeight()/2,testPng.getWidth(),testPng.getHeight()),
+			new Color4(1,1,1,1),
+			new Color4(1,1,1,1),
+			0f,
+			1,
+			1f);
+
+		canvas.restore();
+		
+		/*
+		GLPaint fp=new GLPaint();
+		fp.setMixColor(Color4.gray(1));
+		fp.setStrokeWidth(50);
+		canvas.drawLines(new float[]{0,0,500,500},fp);*/
+		
+		
+		GLPaint fp=new GLPaint();
+		fp.setColorMixRate(1);
+		fp.setMixColor(Color4.gray(1));
+		fp.setStrokeWidth(50);
+		canvas.drawLines(new float[]{0,0,500,500},fp);
+		
 		
 	}
+	
+	
+	public class SliderAnim extends AbstractAnimation {
+
+		int progressTime=0;
+		
+		@Override
+		public int getDuration() {
+			// TODO: Implement this method
+			return 1000;
+		}
+
+		@Override
+		public LoopType getLoopType() {
+			// TODO: Implement this method
+			return LoopType.None;
+		}
+
+		@Override
+		public AnimState getState() {
+			// TODO: Implement this method
+			return AnimState.Running;
+		}
+
+		@Override
+		public void setProgressTime(int p) {
+			// TODO: Implement this method
+			progressTime=p;
+			float pr=p/(float)getDuration();
+			postAlpha=Math.min(1,pr*1.4f);
+			postProgress=pr;
+		}
+
+		@Override
+		public int getProgressTime() {
+			// TODO: Implement this method
+			return progressTime;
+		}
+
+		@Override
+		public void onStart() {
+			// TODO: Implement this method
+		}
+
+		@Override
+		public void onProgress(int p,int loopCount) {
+			// TODO: Implement this method
+		}
+
+		@Override
+		public void onFinish() {
+			// TODO: Implement this method
+		}
+
+		@Override
+		public void onEnd() {
+			// TODO: Implement this method
+		}
+	}
+	
+	
 }

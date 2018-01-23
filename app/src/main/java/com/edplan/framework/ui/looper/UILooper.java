@@ -33,6 +33,10 @@ public class UILooper extends StepLooper implements IRunnableHandler
 		addLoopable(animaHandler,UIStep.HANDLE_ANIMATION);
 	}
 
+	public AnimationHandler getAnimaHandler() {
+		return animaHandler;
+	}
+
 	@Override
 	public void post(Runnable r){
 		runnableHandler.post(r);

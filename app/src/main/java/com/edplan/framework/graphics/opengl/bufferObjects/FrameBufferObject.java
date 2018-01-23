@@ -1,6 +1,7 @@
 package com.edplan.framework.graphics.opengl.bufferObjects;
 import android.opengl.GLES20;
 import com.edplan.framework.graphics.opengl.GLException;
+import com.edplan.framework.graphics.opengl.GLWrapped;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 
 public class FrameBufferObject
@@ -98,9 +99,12 @@ public class FrameBufferObject
 			throw new GLException("A FrameBufferObject can't attach two DepthBuffer");
 		}else{
 			setDepthAttachment(dbo);
-			GLES20.glBindRenderbuffer(
+			GLES20.glFramebufferRenderbuffer(
+				GLES20.GL_FRAMEBUFFER,
+				GLES20.GL_DEPTH_ATTACHMENT,
 				GLES20.GL_RENDERBUFFER,
-				depthAttachment.getBufferId());
+				dbo.getBufferId()
+			);
 		}
 	}
 	
@@ -123,10 +127,10 @@ public class FrameBufferObject
 		fbo.setWidth(width);
 		fbo.setHeight(height);
 		fbo.bind();
-			fbo.linkColorAttachment(GLTexture.createGPUTexture(width,height));
 			if(useDepth){
 				fbo.linkDepthBuffer(DepthBufferObject.create(width,height));
 			}
+			fbo.linkColorAttachment(GLTexture.createGPUTexture(width,height));
 		fbo.unBind();
 		return fbo;
 	}
@@ -168,9 +172,11 @@ public class FrameBufferObject
 				setBind(true);
 				previousFBO=currentFBO();
 				setCurrentFBO(this);
-				if(hasDepthAttachment()){
+				if(hasDepthAttachment()&&!getDepthAttachment().isBind()){
 					getDepthAttachment().bind();
 				}
+				//默认bind后自动将viewport设置为当前的
+				GLWrapped.setViewport(0,0,getWidth(),getHeight());
 			}
 		}
 	}
@@ -181,7 +187,7 @@ public class FrameBufferObject
 			checkCurrent();
 			setCurrentFBO(previousFBO);
 			previousFBO=null;
-			if(hasDepthAttachment()){
+			if(hasDepthAttachment()&&getDepthAttachment().isBind()){
 				getDepthAttachment().unBind();
 			}
 		}else{

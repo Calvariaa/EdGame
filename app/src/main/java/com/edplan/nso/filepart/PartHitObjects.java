@@ -12,6 +12,7 @@ import android.util.Log;
 import com.edplan.superutils.U;
 import com.edplan.nso.ruleset.mania.objects.ManiaHitObjects;
 import java.util.List;
+import com.edplan.nso.ruleset.std.objects.StdHitObject;
 
 public class PartHitObjects implements OsuFilePart
 {
@@ -25,7 +26,7 @@ public class PartHitObjects implements OsuFilePart
 		this.mode=mode;
 		switch(mode){
 			case ModeManager.MODE_STD:
-				hitObjects=new StdHitObjects();
+				hitObjects=new StdHitObjects<StdHitObject>();
 				break;
 			case ModeManager.MODE_MANIA:
 				hitObjects=new ManiaHitObjects();
@@ -39,8 +40,8 @@ public class PartHitObjects implements OsuFilePart
 		hitObjects.addHitObject(obj);
 	}
 	
-	public List<HitObject> getHitObjectList(){
-		return hitObjects.getHitObjectList();
+	public HitObjects getHitObjects(){
+		return hitObjects;
 	}
 	
 	

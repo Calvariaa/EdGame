@@ -44,6 +44,7 @@ public class AnimationHandler extends Loopable
 					MLog.test.vOnce("switch-err","???","什么鬼啊");
 			}
 		}
+		animations.endIterate();
 	}
 	
 	/**

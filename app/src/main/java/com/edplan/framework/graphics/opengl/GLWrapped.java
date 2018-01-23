@@ -26,20 +26,36 @@ public class GLWrapped
 		},
 		false).initial();
 		
+	public static final
+	BooleanSetting blend=new BooleanSetting(new Setter<Boolean>(){
+			@Override
+			public void set(Boolean t) {
+				// TODO: Implement this method
+				if(t){
+					GLES20.glEnable(GLES20.GL_BLEND);
+					GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA,GLES20.GL_ONE_MINUS_SRC_ALPHA);
+				}else{
+					GLES20.glDisable(GLES20.GL_BLEND);
+				}
+			}
+		},
+		false).initial();
+		
 	public static void initial(){
 		//depthTest=false;
 		//GLES20.glDisable(GLES20.GL_DEPTH_TEST);
 		GLTexture.initial();
 	}
 	
-	public static void enableBlend(){
-		GLES20.glEnable(GLES20.GL_BLEND);
-		GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA,GLES20.GL_ONE_MINUS_SRC_ALPHA);
-		//GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA,GLES20.GL_DST_ALPHA);
-	}
-	
+	private static int px1,px2,py1,py2;
 	public static void setViewport(int x1,int y1,int x2,int y2){
-		GLES20.glViewport(x1,y1,x2,y2);
+		if(!(px1==x1&&px2==x2&&py1==y1&&py2==y2)){
+			GLES20.glViewport(x1,y1,x2,y2);
+			px1=x1;
+			px2=x2;
+			py1=y1;
+			py2=y2;
+		}
 	}
 	
 	public static void setClearColor(float r,float g,float b,float a){

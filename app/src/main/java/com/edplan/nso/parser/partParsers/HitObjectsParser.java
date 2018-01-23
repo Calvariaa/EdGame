@@ -6,7 +6,7 @@ import com.edplan.nso.NsoException;
 import com.edplan.nso.filepart.PartHitObjects;
 import com.edplan.nso.ruleset.ModeManager;
 
-public class HitObjectsParser implements PartParser
+public class HitObjectsParser implements PartParser<PartHitObjects>
 {
 	private ParsingBeatmap parsingBeatmap;
 	private PartHitObjects part;
@@ -30,7 +30,7 @@ public class HitObjectsParser implements PartParser
 	}
 
 	@Override
-	public OsuFilePart getPart(){
+	public PartHitObjects getPart(){
 		// TODO: Implement this method
 		return part;
 	}
@@ -40,11 +40,6 @@ public class HitObjectsParser implements PartParser
 		// TODO: Implement this method
 		part.addHitObject(parser.parse(l));
 		return true;
-	}
-
-	@Override
-	public void applyDefault(){
-		// TODO: Implement this method
 	}
 
 	

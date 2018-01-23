@@ -15,7 +15,7 @@ public class LinePath implements AbstractPath
 	
 	private PathMeasurer measurer;
 	
-	private float tolerance=0.1f;
+	//private float tolerance=0.1f;
 	
 	public LinePath(List<Vec2> ps,float width){
 		positions=ps;

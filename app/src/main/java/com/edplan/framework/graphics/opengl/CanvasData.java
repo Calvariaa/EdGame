@@ -38,6 +38,9 @@ public class CanvasData implements Recycleable,Copyable {
 		this.pixelDensity=pixelDensity;
 	}
 
+	/**
+	 *定义了canvas上每单位有多少像素
+	 */
 	public float getPixelDensity() {
 		return pixelDensity;
 	}
@@ -87,8 +90,13 @@ public class CanvasData implements Recycleable,Copyable {
 		return this;
 	}
 	
-	public CanvasData scale(float s){
-		getCurrentMaskMatrix().scale(s,s,1);
+	/**
+	 *对轴进行缩放，而不是对物件缩放，所以处理Matrix时用倒数
+	 */
+	public CanvasData scaleContent(float s){
+		if(s==0)throw new IllegalArgumentException("you can't scale content using a scale rate ==0");
+		float rs=1/s;
+		getCurrentMaskMatrix().scale(rs,rs,1);
 		this.pixelDensity*=s;
 		return this;
 	}
