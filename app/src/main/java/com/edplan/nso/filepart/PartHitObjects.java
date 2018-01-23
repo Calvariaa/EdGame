@@ -44,6 +44,13 @@ public class PartHitObjects implements OsuFilePart
 		return hitObjects;
 	}
 	
+	public <T extends HitObjects> T getHitObjects(Class<T> klass){
+		return (T)getHitObjects();
+	}
+	
+	public StdHitObjects<StdHitObject> getStdHitObjects(){
+		return (StdHitObjects<StdHitObject>)getHitObjects();
+	}
 	
 	@Override
 	public String getTag(){

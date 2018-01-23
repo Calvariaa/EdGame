@@ -28,8 +28,8 @@ public class DifficultyUtil
 	/**
 	 *看名说话系列
 	 */
-	public static float stdHitObjectTimePreempt(float ar){
-		return
+	public static int stdHitObjectTimePreempt(float ar){
+		return (int)
 			difficultyRange(
 				ar,
 				STD_TIME_PREEMPT_MAX,
@@ -41,8 +41,8 @@ public class DifficultyUtil
 	/**
 	 *看名说话系列
 	 */
-	public static float stdHitObjectTimeFadein(float ar){
-		return
+	public static int stdHitObjectTimeFadein(float ar){
+		return (int)
 			difficultyRange(
 				ar,
 				STD_TIME_PREEMPT_MAX,

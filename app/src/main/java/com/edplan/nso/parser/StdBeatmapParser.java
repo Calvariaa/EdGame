@@ -31,6 +31,10 @@ import com.edplan.superutils.interfaces.StringMakeable;
 import com.edplan.nso.OsuFilePart;
 import com.edplan.superutils.U;
 import com.edplan.nso.OsuBeatmap;
+import com.edplan.nso.ruleset.ModeManager;
+import com.edplan.nso.ruleset.std.StdBeatmap;
+import com.edplan.nso.ruleset.std.objects.StdHitObjects;
+import com.edplan.nso.ruleset.std.objects.StdHitObject;
 
 public class StdBeatmapParser implements StringMakeable
 {
@@ -245,8 +249,26 @@ public class StdBeatmapParser implements StringMakeable
 	
 	
 	public OsuBeatmap makeupBeatmap(){
-		//switch(
-		return null;
+		switch(generalParser.getPart().getMode()){
+			case ModeManager.MODE_STD:
+				StdBeatmap stdbeatmap=new StdBeatmap();
+				stdbeatmap.setVersion(getFormat());
+				stdbeatmap.setGeneral(generalParser.getPart());
+				stdbeatmap.setMetadata(metadataParser.getPart());
+				stdbeatmap.setEditor(editorParser.getPart());
+				stdbeatmap.setDifficulty(difficultyParser.getPart());
+				stdbeatmap.setEvent(eventsParser.getPart());
+				stdbeatmap.setTimingPoints(timingPointsParser.getPart());
+				stdbeatmap.setColours(coloursParser.getPart());
+				stdbeatmap.setHitObjects(hitObjectsParser.getPart().getStdHitObjects());
+				return stdbeatmap;
+			default:return null;
+		}
+	}
+	
+	
+	public <T extends OsuBeatmap> T makeupBeatmap(Class<T> klass){
+		return (T)makeupBeatmap();
 	}
 
 	@Override

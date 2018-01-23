@@ -3,11 +3,17 @@ import com.edplan.nso.ruleset.amodel.playing.Judgment;
 
 public class StdJudgment extends Judgment
 {
-	public Level type;
+	private Level level;
 	
-	
+	public Level getLevel(){
+		return level;
+	}
 	
 	public enum Level{
-		None,Miss,S100,S300
+		None(""),Miss("x"),S50("50"),S100("100"),S300("300");
+		private final String text;
+		public Level(String text){
+			this.text=text;
+		}
 	}
 }

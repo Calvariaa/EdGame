@@ -57,8 +57,11 @@ public class AnimationHandler extends Loopable
 				p=anim.getProgressTime()+postTime;
 				if(p<anim.getDuration()){
 					anim.setProgressTime(p);
+					anim.onProgress(p);
 				}else{
-					anim.setProgressTime(anim.getDuration());
+					p=anim.getDuration();
+					anim.setProgressTime(p);
+					anim.onProgress(p);
 					return true;
 				}
 				break;
@@ -66,9 +69,12 @@ public class AnimationHandler extends Loopable
 				p=anim.getProgressTime()+postTime;
 				if(p<anim.getDuration()){
 					anim.setProgressTime(p);
+					anim.onProgress(p);
 				}else{
-					anim.setProgressTime(p%anim.getDuration());
+					p%=anim.getDuration();
+					anim.setProgressTime(p);
 					anim.addLoopCount();
+					anim.onProgress(p);
 				}
 				break;
 			case LoopAndReverse:
@@ -77,17 +83,22 @@ public class AnimationHandler extends Loopable
 					p=anim.getProgressTime()+postTime;
 					if(p<anim.getDuration()){
 						anim.setProgressTime(p);
+						anim.onProgress(p);
 					}else{
-						anim.setProgressTime(anim.getDuration()-p%anim.getDuration());
+						p=anim.getDuration()-p%anim.getDuration();
+						anim.setProgressTime(p);
 						anim.addLoopCount();
+						anim.onProgress(p);
 					}
 				}else{
 					p=anim.getProgressTime()-postTime;
 					if(p>0){
 						anim.setProgressTime(p);
 					}else{
-						anim.setProgressTime(-p);
+						p=-p;
+						anim.setProgressTime(p);
 						anim.addLoopCount();
+						anim.onProgress(p);
 					}
 				}
 				break;

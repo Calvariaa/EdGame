@@ -8,6 +8,9 @@ import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.MContext;
 import com.edplan.nso.ruleset.std.objects.StdHitObject;
+import com.edplan.nso.ruleset.amodel.playing.Judgment;
+import com.edplan.nso.ruleset.std.playing.judgment.StdJudgment;
+import com.edplan.framework.ui.animation.precise.BasePreciseAnimation;
 
 public class DrawableStdHitCircle extends DrawableStdHitObject
 {
@@ -15,20 +18,23 @@ public class DrawableStdHitCircle extends DrawableStdHitObject
 	
 	public DrawableStdHitCircle(MContext c,StdHitCircle obj){
 		super(c,obj);
-		circlePiece=new HitCirclePiece(c);
 	}
 	
+	/**
+	 *测试用的构造方法，之后大概率被弃用
+	 */
 	public DrawableStdHitCircle(MContext c,StdHitObject obj){
 		super(c,obj);
-		circlePiece=new HitCirclePiece(c);
 	}
 
 	@Override
 	public void applyDefault(PlayingBeatmap beatmap) {
 		// TODO: Implement this method
 		super.applyDefault(beatmap);
+		circlePiece=new HitCirclePiece(getContext(),beatmap.getTimeLine());
 		circlePiece.setOrigin(getOrigin());
 		circlePiece.setBaseSize(getBaseSize());
+		circlePiece.setTexture(beatmap.getSkin().getHitcircleTexture());
 	}
 
 	@Override
@@ -57,6 +63,54 @@ public class DrawableStdHitCircle extends DrawableStdHitObject
 		// TODO: Implement this method
 		super.setOrigin(origin);
 	}
+
+	@Override
+	public void onShow() {
+		// TODO: Implement this method
+		super.onShow();
+		(new FadeInAnimation()).post(getTimeLine());
+	}
 	
+	@Override
+	public void onJudgment(Judgment judgment) {
+		// TODO: Implement this method
+		super.onJudgment(judgment);
+		StdJudgment judg=(StdJudgment)judgment;
+		switch(judg.getLevel()){
+			case S50:
+			case S100:
+			case S300:
+				
+				break;
+			case Miss:
+				
+				break;
+			case None:
+				break;
+			default:break;
+		}
+	}
+
+	public class FadeInAnimation extends BasePreciseAnimation{
+		
+		public FadeInAnimation(){
+			setDuration(getTimeFadein());
+			setStartTime(getShowTime());
+		}
+
+		@Override
+		public void onProgress(int p) {
+			// TODO: Implement this method
+			super.onProgress(p);
+			float fp=p/(float)getDuration();
+			circlePiece.setAlpha(fp);
+		}
+	}
 	
+	public class FadeOutAnimation extends BasePreciseAnimation{
+		public FadeOutAnimation(int startTime){
+			setStartTime(startTime);
+			//setDuration(gett
+		}
+	}
 }

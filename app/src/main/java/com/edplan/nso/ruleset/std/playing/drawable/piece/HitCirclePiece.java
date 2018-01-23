@@ -7,6 +7,7 @@ import com.edplan.framework.math.Vec2;
 import com.edplan.framework.graphics.opengl.GLPaint;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.MContext;
+import com.edplan.framework.timing.PreciseTimeline;
 
 public class HitCirclePiece extends EdDrawable implements IScaleable2D,IFadeable
 {
@@ -20,8 +21,15 @@ public class HitCirclePiece extends EdDrawable implements IScaleable2D,IFadeable
 	
 	private GLTexture texture;
 	
-	public HitCirclePiece(MContext c){
+	private PreciseTimeline timeline;
+	
+	public HitCirclePiece(MContext c,PreciseTimeline timeline){
 		super(c);
+		this.timeline=timeline;
+	}
+
+	public void setTexture(GLTexture texture){
+		this.texture=texture;
 	}
 
 	public void setOrigin(Vec2 origin) {

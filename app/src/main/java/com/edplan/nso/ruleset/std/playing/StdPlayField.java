@@ -5,10 +5,13 @@ import com.edplan.framework.timing.PreciseTimeline;
 import com.edplan.nso.ruleset.amodel.playing.PlayField;
 import com.edplan.nso.ruleset.amodel.playing.PlayingBeatmap;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdHitObject;
-import java.util.List;
 import com.edplan.nso.ruleset.std.playing.drawable.interfaces.IHasApproachCircle;
 import java.util.Iterator;
-import com.edplan.nso.ruleset.std.StdBeatmap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import com.edplan.nso.ruleset.std.objects.StdHitObject;
 
 public class StdPlayField extends PlayField
 {
@@ -34,7 +37,23 @@ public class StdPlayField extends PlayField
 		// TODO: Implement this method
 		if(res instanceof StdPlayingBeatmap){
 			StdPlayingBeatmap beatmap=(StdPlayingBeatmap)res;
-			
+			int objCount=beatmap.getHitObjects().size();
+			drawableHitObjects=new ArrayList<DrawableStdHitObject>(objCount);
+			DrawableStdHitObject dobj;
+			for(StdHitObject obj:beatmap.getHitObjects()){
+				dobj=beatmap.createDrawableHitObject(obj);
+				dobj.applyDefault(beatmap);
+				drawableHitObjects.add(dobj);
+			}
+			Collections.sort(drawableHitObjects, new Comparator<DrawableStdHitObject>(){
+					@Override
+					public int compare(DrawableStdHitObject p1,DrawableStdHitObject p2) {
+						// TODO: Implement this method
+						return (int)Math.signum(p2.getShowTime()-p1.getShowTime());
+					}
+				});
+			hitObjectsInField=new ArrayList<DrawableStdHitObject>();
+			savedIndex=0;
 		}else{
 			throw new IllegalArgumentException("you can only apply a StdPlayingBeatmap to StdPlayField");
 		}
@@ -54,8 +73,8 @@ public class StdPlayField extends PlayField
 	
 	protected void pullNewAdded(int curTime){
 		DrawableStdHitObject obj;
-		for(int i=savedIndex;i<drawableHitObjects.size();i++){
-			obj=drawableHitObjects.get(i);
+		for(;savedIndex<drawableHitObjects.size();savedIndex++){
+			obj=drawableHitObjects.get(savedIndex);
 			if(obj.getShowTime()<=curTime){
 				showHitObject(obj);
 			}else{

@@ -44,7 +44,7 @@ public class StdBeatmap extends OsuBeatmap
 		this.hitObjects=hitObjects;
 	}
 
-	public StdHitObjects getHitObjects(){
+	public StdHitObjects<StdHitObject> getHitObjects(){
 		return hitObjects;
 	}
 	

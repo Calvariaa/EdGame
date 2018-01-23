@@ -18,11 +18,11 @@ public class DrawableStdHitObject extends DrawableHitObject
 	
 	private StdHitObject hitObject;
 	
-	private float showTime;
+	private int showTime;
 	
-	private float timePreempt;
+	private int timePreempt;
 	
-	private float timeFadein;
+	private int timeFadein;
 	
 	private float alpha=1;
 	
@@ -34,6 +34,22 @@ public class DrawableStdHitObject extends DrawableHitObject
 		super(c);
 		hitObject=obj;
 		setOrigin(new Vec2(obj.getStartX(),obj.getStartY()));
+	}
+
+	public void setTimePreempt(int timePreempt) {
+		this.timePreempt=timePreempt;
+	}
+
+	public int getTimePreempt() {
+		return timePreempt;
+	}
+
+	public void setTimeFadein(int timeFadein) {
+		this.timeFadein=timeFadein;
+	}
+
+	public int getTimeFadein() {
+		return timeFadein;
 	}
 
 	public void setBaseSize(float baseSize) {
@@ -91,7 +107,7 @@ public class DrawableStdHitObject extends DrawableHitObject
 	}
 
 	@Override
-	public float getShowTime() {
+	public int getShowTime() {
 		// TODO: Implement this method
 		return showTime;
 	}

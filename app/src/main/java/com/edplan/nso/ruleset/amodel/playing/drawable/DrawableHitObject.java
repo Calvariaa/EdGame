@@ -14,7 +14,7 @@ public abstract class DrawableHitObject extends EdDrawable implements IFadeable
 	/**
 	 *这个物件出现的时间，此处的时间为getTimeLine()中的时间
 	 */
-	public abstract float getShowTime();
+	public abstract int getShowTime();
 	
 	public abstract void onShow();
 	

@@ -25,6 +25,10 @@ public class PreciseTimeline extends Loopable
 	
 	private SafeList<AbstractPreciseAnimation> animations;
 
+	public void addAnimation(AbstractPreciseAnimation a){
+		animations.add(a);
+	}
+	
 	@Override
 	public void onLoop(int deltaTime) {
 		// TODO: Implement this method
@@ -96,8 +100,11 @@ public class PreciseTimeline extends Loopable
 		p=frameTime()-anim.getStartTimeAtTimeline();
 		if(p<anim.getDuration()){
 			anim.setProgressTime(p);
+			anim.onProgress(p);
 		}else{
-			anim.setProgressTime(anim.getDuration());
+			p=anim.getDuration();
+			anim.setProgressTime(p);
+			anim.onProgress(p);
 			return true;
 		}
 		return false;

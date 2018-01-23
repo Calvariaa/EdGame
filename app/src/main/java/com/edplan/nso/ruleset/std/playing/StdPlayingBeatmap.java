@@ -7,6 +7,7 @@ import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdHitObject;
 import com.edplan.nso.ruleset.std.objects.StdHitObject;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdHitCircle;
 import java.util.List;
+import com.edplan.nso.resource.OsuSkin;
 
 public class StdPlayingBeatmap extends PlayingBeatmap
 {
@@ -14,7 +15,8 @@ public class StdPlayingBeatmap extends PlayingBeatmap
 	
 	private MContext context;
 	
-	public StdPlayingBeatmap(MContext context,StdBeatmap beatmap){
+	public StdPlayingBeatmap(MContext context,StdBeatmap beatmap,OsuSkin skin){
+		super(skin);
 		this.context=context;
 		this.beatmap=beatmap;
 	}
@@ -28,8 +30,7 @@ public class StdPlayingBeatmap extends PlayingBeatmap
 	}
 	
 	public List<StdHitObject> getHitObjects(){
-		return null;
-		//getBeatmap().getHitObjects();
+		return getBeatmap().getHitObjects().getHitObjectList();
 	}
 	
 	public DrawableStdHitObject createDrawableHitObject(StdHitObject obj){

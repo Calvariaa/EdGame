@@ -14,7 +14,7 @@ public interface AnimationCallback
 	 *@param p: 当前动画的进度
 	 *@param loopCount: 初始值为0，每次进入新循环会+1
 	 */
-	public void onProgress(int p,int loopCount);
+	public void onProgress(int p);
 
 	/**
 	 *动画完成时被调用（可能动画被取消，这时不一定会有这个方法的回调，

@@ -29,9 +29,12 @@ import java.io.IOException;
 import com.edplan.framework.ui.animation.AbstractAnimation;
 import com.edplan.framework.ui.animation.AnimState;
 import com.edplan.framework.ui.animation.LoopType;
+import com.edplan.nso.resource.OsuSkin;
 
 public class TestView extends EdView
 {
+	private OsuSkin skin;
+	
 	private Vec2 point=new Vec2();
 
 	private Vec2 pre=new Vec2();
@@ -58,7 +61,16 @@ public class TestView extends EdView
 	public TestView(MContext context){
 		super(context);
 		try {
-			testPng=
+			skin=new OsuSkin();
+			skin.load(
+				getContext()
+				 .getAssetResource()
+				  .subResource("osu")
+				   .subResource("skins")
+				    .subResource("default"));
+			
+			
+			testPng=//skin.getHitcircleTexture();
 				GLTexture.decodeStream(
 				context
 				.getAssetResource()
@@ -497,7 +509,7 @@ public class TestView extends EdView
 		}
 
 		@Override
-		public void onProgress(int p,int loopCount) {
+		public void onProgress(int p) {
 			// TODO: Implement this method
 		}
 
