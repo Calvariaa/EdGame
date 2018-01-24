@@ -34,6 +34,7 @@ import com.edplan.nso.ruleset.std.playing.StdPlayingBeatmap;
 import com.edplan.framework.timing.PreciseTimeline;
 import com.edplan.nso.ruleset.std.playing.StdPlayField;
 import com.edplan.nso.parser.StdBeatmapParser;
+import android.util.Log;
 
 public class TestView extends EdView
 {
@@ -80,12 +81,14 @@ public class TestView extends EdView
 			StdBeatmapParser bparser=new StdBeatmapParser(
 												getContext()
 												 .getAssetResource()
-												  .openInput("osu\test\beatmap\test.osu"),
+				.openInput("osu/test/beatmap/Suzuki Konomi - Cyber Thunder Cider (Nattu) [Niat's Cider].osu"),
 												"test case beatmap: " 
 												 );
 			try
 			{
+				Log.v("parse-osu","start parse");
 				bparser.parse();
+				Log.v("parse-osu","end parse");
 				beatmap=bparser.makeupBeatmap(StdBeatmap.class);
 				timeline=new PreciseTimeline();
 			}
