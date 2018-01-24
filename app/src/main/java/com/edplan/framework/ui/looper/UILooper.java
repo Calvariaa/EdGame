@@ -3,6 +3,7 @@ package com.edplan.framework.ui.looper;
 import com.edplan.framework.ui.animation.AnimationHandler;
 import com.edplan.superutils.classes.advance.IRunnableHandler;
 import com.edplan.superutils.classes.advance.RunnableHandler;
+import com.edplan.superutils.interfaces.Loopable;
 
 public class UILooper extends StepLooper implements IRunnableHandler 
 {
@@ -17,7 +18,7 @@ public class UILooper extends StepLooper implements IRunnableHandler
 	/**
 	 *处理其他循环请求
 	 */
-	private BaseLooper othersHandler;
+	private LooperLoopable<Loopable> otherLoopableHandler;
 	
 	
 	//处理所有动画
@@ -30,7 +31,12 @@ public class UILooper extends StepLooper implements IRunnableHandler
 		runnableHandler=new RunnableHandler();
 		animaHandler=new AnimationHandler();
 		addLoopable(runnableHandler,UIStep.HANDLE_RUNNABLES);
+		addLoopable(otherLoopableHandler,UIStep.HANDLE_OTHER_LOOPABLE);
 		addLoopable(animaHandler,UIStep.HANDLE_ANIMATION);
+	}
+	
+	public void addLoopableBeforeDraw(Loopable l){
+		otherLoopableHandler.addLoopable(l);
 	}
 
 	public AnimationHandler getAnimaHandler() {

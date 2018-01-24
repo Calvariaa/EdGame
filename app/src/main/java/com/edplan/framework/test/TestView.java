@@ -1,7 +1,6 @@
 package com.edplan.framework.test;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.opengl.GLES20;
 import com.edplan.framework.MContext;
 import com.edplan.framework.graphics.layer.BufferedLayer;
 import com.edplan.framework.graphics.line.DrawLinePath;
@@ -18,29 +17,38 @@ import com.edplan.framework.math.FMath;
 import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.ui.EdView;
+import com.edplan.framework.ui.animation.AbstractAnimation;
+import com.edplan.framework.ui.animation.AnimState;
+import com.edplan.framework.ui.animation.LoopType;
 import com.edplan.framework.utils.MLog;
 import com.edplan.nso.NsoException;
 import com.edplan.nso.ParsingBeatmap;
+import com.edplan.nso.resource.OsuSkin;
 import com.edplan.nso.ruleset.amodel.playing.PlayField;
+import com.edplan.nso.ruleset.std.StdBeatmap;
 import com.edplan.nso.ruleset.std.objects.StdSlider;
 import com.edplan.nso.ruleset.std.objects.drawables.DrawableStdSlider;
 import com.edplan.nso.ruleset.std.parser.StdHitObjectParser;
 import java.io.IOException;
-import com.edplan.framework.ui.animation.AbstractAnimation;
-import com.edplan.framework.ui.animation.AnimState;
-import com.edplan.framework.ui.animation.LoopType;
-import com.edplan.nso.resource.OsuSkin;
+import com.edplan.nso.ruleset.std.playing.StdPlayingBeatmap;
+import com.edplan.framework.timing.PreciseTimeline;
+import com.edplan.nso.ruleset.std.playing.StdPlayField;
+import com.edplan.nso.parser.StdBeatmapParser;
 
 public class TestView extends EdView
 {
+	private StdPlayField playField;
+	
+	private StdBeatmap beatmap;
+
+	private StdPlayingBeatmap playingBeatmap;
+
+	private PreciseTimeline timeline;
+	
 	private OsuSkin skin;
 	
 	private Vec2 point=new Vec2();
-
-	private Vec2 pre=new Vec2();
-
-	private int pointer;
-
+	
 	private DrawableStdSlider sld;
 	
 	private float postAlpha=1;
@@ -69,6 +77,28 @@ public class TestView extends EdView
 				   .subResource("skins")
 				    .subResource("default"));
 			
+			StdBeatmapParser bparser=new StdBeatmapParser(
+												getContext()
+												 .getAssetResource()
+												  .openInput("osu\test\beatmap\test.osu"),
+												"test case beatmap: " 
+												 );
+			try
+			{
+				bparser.parse();
+				beatmap=bparser.makeupBeatmap(StdBeatmap.class);
+				timeline=new PreciseTimeline();
+			}
+			catch (NsoException e)
+			{
+				e.printStackTrace();
+				throw new RuntimeException("err",e);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+
 			
 			testPng=//skin.getHitcircleTexture();
 				GLTexture.decodeStream(

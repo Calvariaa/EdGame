@@ -1,8 +1,11 @@
 package com.edplan.nso.parser;
 import android.util.Log;
-import com.edplan.nso.beatmap.StdBeatmapBindingData;
 import com.edplan.nso.NsoBeatmapParsingException;
+import com.edplan.nso.NsoException;
+import com.edplan.nso.OsuBeatmap;
+import com.edplan.nso.OsuFilePart;
 import com.edplan.nso.ParsingBeatmap;
+import com.edplan.nso.beatmap.StdBeatmapBindingData;
 import com.edplan.nso.filepart.PartColours;
 import com.edplan.nso.filepart.PartDifficulty;
 import com.edplan.nso.filepart.PartEditor;
@@ -20,21 +23,17 @@ import com.edplan.nso.parser.partParsers.HitObjectsParser;
 import com.edplan.nso.parser.partParsers.MetadataParser;
 import com.edplan.nso.parser.partParsers.PartParser;
 import com.edplan.nso.parser.partParsers.TimingPointsParser;
+import com.edplan.nso.ruleset.ModeManager;
+import com.edplan.nso.ruleset.std.StdBeatmap;
 import com.edplan.superutils.AdvancedBufferedReader;
+import com.edplan.superutils.U;
+import com.edplan.superutils.interfaces.StringMakeable;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
-import java.io.File;
-import java.io.FileNotFoundException;
-import com.edplan.nso.NsoException;
-import com.edplan.superutils.interfaces.StringMakeable;
-import com.edplan.nso.OsuFilePart;
-import com.edplan.superutils.U;
-import com.edplan.nso.OsuBeatmap;
-import com.edplan.nso.ruleset.ModeManager;
-import com.edplan.nso.ruleset.std.StdBeatmap;
-import com.edplan.nso.ruleset.std.objects.StdHitObjects;
-import com.edplan.nso.ruleset.std.objects.StdHitObject;
+import java.io.InputStream;
 
 public class StdBeatmapParser implements StringMakeable
 {
@@ -69,6 +68,12 @@ public class StdBeatmapParser implements StringMakeable
 	private Map<String,PartParser> parsers;
 	
 	private PartParser nowParser=null;
+	
+	public StdBeatmapParser(InputStream in,String resInfo){
+		AdvancedBufferedReader r=new AdvancedBufferedReader(in);
+		ParsingBeatmap b=new ParsingBeatmap();
+		b.setResInfo(resInfo!=null?resInfo:"unknow");
+	}
 	
 	public StdBeatmapParser(File file) throws FileNotFoundException{
 		AdvancedBufferedReader br=new AdvancedBufferedReader(file);

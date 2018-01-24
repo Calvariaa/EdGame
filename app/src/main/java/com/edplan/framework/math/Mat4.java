@@ -140,7 +140,6 @@ public class Mat4 implements Recycleable
 	}
 	
 	public Mat4 post(Mat4 mat){
-		//Matrix.multiplyMM(data,0,mat.data,0,data,0);
 		Mat4 c=copy();
 		muitpMat(data,mat.data,c.data);
 		return this;
@@ -154,7 +153,6 @@ public class Mat4 implements Recycleable
 		Mat4 m=createIdentity();
 		Matrix.rotateM(m.data,0,a,x,y,z);
 		return m;
-		//return createIdentity().rotate(angel,dx,dy,dz);
 	}
 	
 	public static Mat4 translation(float tx,float ty,float tz){
@@ -187,11 +185,6 @@ public class Mat4 implements Recycleable
 	}
 	
 	private static void muitpMat(float[] out,float[] m1,float[] m2){
-		/*for(int x=0;x<4;x++){
-			for(int y=0;y<4;y++){
-				out[x+y*4]=get(m1,0,y)*get(m2,x,0)+get(m1,1,y)*get(m2,x,1)+get(m1,2,y)*get(m2,x,2)+get(m1,3,y)*get(m2,x,3);
-			}
-		}*/
 		Matrix.multiplyMM(out,0,m1,0,m2,0);
 	}
 	
