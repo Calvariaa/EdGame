@@ -73,6 +73,8 @@ public class StdBeatmapParser implements StringMakeable
 		AdvancedBufferedReader r=new AdvancedBufferedReader(in);
 		ParsingBeatmap b=new ParsingBeatmap();
 		b.setResInfo(resInfo!=null?resInfo:"unknow");
+		setParseable(true);
+		initial(r,b);
 	}
 	
 	public StdBeatmapParser(File file) throws FileNotFoundException{
