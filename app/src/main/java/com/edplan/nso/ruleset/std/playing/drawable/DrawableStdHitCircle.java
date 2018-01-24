@@ -91,6 +91,29 @@ public class DrawableStdHitCircle extends DrawableStdHitObject
 		}
 	}
 
+	public class TestOutAnimation extends BasePreciseAnimation{
+		public TestOutAnimation(int startTime){
+			setStartTime(startTime);
+			setDuration(1000);
+		}
+
+		@Override
+		public void onProgress(int p) {
+			// TODO: Implement this method
+			super.onProgress(p);
+			float fp=p/(float)getDuration();
+			fp=Math.min(1,2*(1-fp));
+			circlePiece.setAlpha(fp);
+		}
+
+		@Override
+		public void onEnd() {
+			// TODO: Implement this method
+			super.onEnd();
+			finish();
+		}
+	}
+	
 	public class FadeInAnimation extends BasePreciseAnimation{
 		
 		public FadeInAnimation(){
@@ -104,6 +127,13 @@ public class DrawableStdHitCircle extends DrawableStdHitObject
 			super.onProgress(p);
 			float fp=p/(float)getDuration();
 			circlePiece.setAlpha(fp);
+		}
+
+		@Override
+		public void onEnd() {
+			// TODO: Implement this method
+			super.onEnd();
+			(new TestOutAnimation(getTimeLine().frameTime())).post(getTimeLine());
 		}
 	}
 	

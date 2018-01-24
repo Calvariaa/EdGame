@@ -148,6 +148,36 @@ public class TestView extends EdView
 		// TODO: Implement this method
 		super.draw(canvas);
 		
+		a+=0.005;
+		float c=Math.abs(a%2-1);
+		
+		canvas.save();
+		GLWrapped.blend.save();
+		GLWrapped.blend.set(false);
+		canvas.getMaskMatrix()
+			 .translate(100,100,0)
+			 .rotate(45*c,1,0,0)
+			 ;
+			 //.post((new Mat4()).translate(10,10,0));
+		MLog.test.vOnce("remix-debug","remix-debug","MakMat:"+canvas.getMaskMatrix());
+		MLog.test.vOnce("remix-debug2","remix-debug","PrjMat:"+canvas.getData().getCurrentProjMatrix());
+		MLog.test.vOnce("remix-debug3","remix-debug","FinMat:"+canvas.getFinalMatrix());
+		canvas.drawColor(Color4.gray(0.5f));
+		canvas.drawTexture(
+			testPng,
+			new RectF(0,0,testPng.getWidth(),testPng.getHeight()),
+			new RectF(-testPng.getWidth()/2,-testPng.getHeight()/2,testPng.getWidth(),testPng.getHeight()),
+			new Color4(1,1,1,1),
+			new Color4(1,1,1,1),
+			0f,
+			1,
+			1f);
+		GLWrapped.blend.restore();
+		canvas.restore();
+
+		
+		
+		
 		MLog.test.runOnce("test-post", new Runnable(){
 				@Override
 				public void run() {
@@ -194,8 +224,7 @@ public class TestView extends EdView
 		});
 		
 		
-		a+=0.005;
-		float c=Math.abs(a%2-1);
+		
 		canvas.drawColor(Color4.gray(0.2f));
 		//new Color4(c,c,c,1.0f));
 		canvas.clearDepthBuffer();
@@ -437,6 +466,7 @@ public class TestView extends EdView
 		canvas.getMaskMatrix().translate(500+testPng.getWidth()/2,500+testPng.getHeight()/2,0).rotate(c*90,0,0,1);
 		//.post((new Mat4()).translate(10,10,0));
 
+		//canvas.drawColor(Color4.gray(0.5f));
 		canvas.drawTexture(
 			testPng,
 			new RectF(0,0,testPng.getWidth(),testPng.getHeight()),

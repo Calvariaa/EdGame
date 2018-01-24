@@ -1,6 +1,7 @@
 package com.edplan.framework.math;
 import android.opengl.Matrix;
 import com.edplan.framework.interfaces.Recycleable;
+import java.util.Arrays;
 
 public class Mat4 implements Recycleable
 {
@@ -133,12 +134,15 @@ public class Mat4 implements Recycleable
     }
 	
 	public Mat4 pre(Mat4 mat){
-		Matrix.multiplyMM(data,0,data,0,mat.data,0);
+		Mat4 c=copy();
+		muitpMat(data,c.data,mat.data);
 		return this;
 	}
 	
 	public Mat4 post(Mat4 mat){
-		Matrix.multiplyMM(data,0,mat.data,0,data,0);
+		//Matrix.multiplyMM(data,0,mat.data,0,data,0);
+		Mat4 c=copy();
+		muitpMat(data,mat.data,c.data);
 		return this;
 	}
 	
@@ -146,8 +150,11 @@ public class Mat4 implements Recycleable
 		return new Mat4(this.data);
 	}
 	
-	public static Mat4 rotation(float angel,float dx,float dy,float dz){
-		return createIdentity().rotate(angel,dx,dy,dz);
+	public static Mat4 rotation(float a,float x,float y,float z){
+		Mat4 m=createIdentity();
+		Matrix.rotateM(m.data,0,a,x,y,z);
+		return m;
+		//return createIdentity().rotate(angel,dx,dy,dz);
 	}
 	
 	public static Mat4 translation(float tx,float ty,float tz){
@@ -163,4 +170,38 @@ public class Mat4 implements Recycleable
 		// TODO: Implement this method
 		this.data=null;
 	}
+
+	@Override
+	public String toString()
+	{
+		// TODO: Implement this method
+		StringBuilder sb=new StringBuilder();
+		for(int y=0;y<4;y++){
+			for(int x=0;x<4;x++){
+				sb.append(get(data,x,y)).append(",");
+			}
+			sb.append("\n");
+		}
+		
+		return "{Mat4}:\n"+sb.toString();
+	}
+	
+	private static void muitpMat(float[] out,float[] m1,float[] m2){
+		/*for(int x=0;x<4;x++){
+			for(int y=0;y<4;y++){
+				out[x+y*4]=get(m1,0,y)*get(m2,x,0)+get(m1,1,y)*get(m2,x,1)+get(m1,2,y)*get(m2,x,2)+get(m1,3,y)*get(m2,x,3);
+			}
+		}*/
+		Matrix.multiplyMM(out,0,m1,0,m2,0);
+	}
+	
+	private static float get(float[] a,int x,int y){
+		return a[x+y*4];
+	}
 }
+		
+
+
+
+	
+

@@ -154,6 +154,7 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 	public void onSurfaceChanged(GL10 p1,int width,int heigth) {
 		// TODO: Implement this method
 		rootLayer=new DefBufferedLayer(context,width,heigth);
+		Log.v("ini-log","ini-scr: "+width+":"+heigth);
 	}
 
 	float a=0;
@@ -170,16 +171,15 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 		GLCanvas2D canvas=new GLCanvas2D(rootLayer);
 		canvas.prepare();
 		canvas.getMProjMatrix().setOrtho(0,canvas.getWidth(),canvas.getHeight(),0,-100,100);
+//		1080*16/9,1080,0,-100,100);
 		if(debugUi){
-			if(context.getContent()!=null)context.getContent().draw(canvas);
+			if(context.getContent()!=null){
+				canvas.drawColor(Color4.gray(0.3f));
+				context.getContent().draw(canvas);
+			}
 			canvas.unprepare();
 			return;
 		}
-		
-		
-		
-		
-		
 		
 		float c=Math.abs(a%2-1);
 		canvas.drawColor(Color4.gray(0.2f));

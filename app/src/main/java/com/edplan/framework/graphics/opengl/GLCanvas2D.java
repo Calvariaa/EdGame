@@ -152,7 +152,8 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	}
 	
 	public Mat4 getFinalMatrix(){
-		return getMProjMatrix().copy().pre(getMaskMatrix());
+		return getMaskMatrix().copy().post(getMProjMatrix());
+		//getMProjMatrix().copy().pre(getMaskMatrix());
 	}
 	
 	public void drawColor(Color4 color){
