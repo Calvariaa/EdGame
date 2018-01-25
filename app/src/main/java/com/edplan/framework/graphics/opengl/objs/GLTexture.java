@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.IntBuffer;
 
-public class GLTexture
+public class GLTexture extends AbstractTexture
 {
 	public static BitmapFactory.Options DEF_CREATE_OPTIONS;
 
@@ -64,10 +64,18 @@ public class GLTexture
 		
 	}
 
+	@Override
+	public GLTexture getTexture() {
+		// TODO: Implement this method
+		return this;
+	}
+
+	@Override
 	public int getWidth() {
 		return width;
 	}
 	
+	@Override
 	public int getHeight() {
 		return height;
 	}
@@ -88,6 +96,7 @@ public class GLTexture
 		return glHeight;
 	}
 
+	@Override
 	public int getTextureId() {
 		return textureId;
 	}
@@ -101,6 +110,7 @@ public class GLTexture
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,textureId);
 	}
 
+	@Override
 	public Vec2 toTexturePosition(float x,float y){
 		return new Vec2(glWidth*x/width,glHeight*y/height);
 	}

@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.io.IOException;
 import android.util.Log;
 import java.util.HashMap;
+import com.edplan.framework.ui.drawable.TextureDrawable;
 
 public class OsuSkin
 {
@@ -15,6 +16,13 @@ public class OsuSkin
 	@AResType(ResType.TEXTURE)
 	@AResPath("hitcircle.png")
 	public TextureInfo hitcircle;
+	
+	@AResType(ResType.TEXTURE)
+	@AResPath("hitcircleoverlay.png")
+	public TextureInfo hitcircleOverlay;
+	
+	
+	//public TextureDrawable hitcircleDrawable;
 	
 	public OsuSkin(){
 		initial();
@@ -49,11 +57,6 @@ public class OsuSkin
 			e.printStackTrace();
 			throw new OsuResException("reflect err illagr: "+e.getMessage(),e);
 		}
-	}
-	
-
-	public GLTexture getHitcircleTexture() {
-		return hitcircle.getRes();
 	}
 	
 	public void load(IResource res){

@@ -9,12 +9,8 @@ import java.nio.ByteBuffer;
 import java.io.BufferedInputStream;
 import java.nio.ByteOrder;
 
-
-
 public abstract class IResource
 {
-	
-	public abstract InputStream openInput(String path) throws IOException;
 	
 	public BufferedReader openBufferedReader(String path) throws IOException{
 		return new BufferedReader(new InputStreamReader(openInput(path)));
@@ -56,4 +52,8 @@ public abstract class IResource
 	}
 	
 	public abstract String[] list(String dir) throws IOException;
+	
+	public abstract boolean contain(String file);
+	
+	public abstract InputStream openInput(String path) throws IOException;
 }

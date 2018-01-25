@@ -125,7 +125,7 @@ public class TestView extends EdView
 			}
 
 			
-			testPng=skin.getHitcircleTexture();
+			testPng=skin.hitcircle.getRes();
 			/*
 				GLTexture.decodeStream(
 				context

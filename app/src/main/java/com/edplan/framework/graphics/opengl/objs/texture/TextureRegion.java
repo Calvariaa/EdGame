@@ -2,8 +2,9 @@ package com.edplan.framework.graphics.opengl.objs.texture;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.Vec2;
+import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 
-public class TextureRegion
+public class TextureRegion extends AbstractTexture
 {
 	private GLTexture texture;
 	
@@ -22,27 +23,29 @@ public class TextureRegion
 		return area;
 	}
 	
+	@Override
 	public Vec2 toTexturePosition(float x,float y) {
 		return texture.toTexturePosition(area.getX1()+x,area.getY1()+y);
 	}
 	
+	@Override
 	public GLTexture getTexture(){
 		return texture;
 	}
 	
+	@Override
 	public int getTextureId(){
 		return getTexture().getTextureId();
 	}
 	
-	public float getWidth(){
-		return area.getWidth();
+	@Override
+	public int getWidth(){
+		return (int)area.getWidth();
 	}
 	
-	public float getHeight(){
-		return area.getHeight();
+	@Override
+	public int getHeight(){
+		return (int)area.getHeight();
 	}
-	
-	
-	
 	
 }

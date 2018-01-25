@@ -8,6 +8,7 @@ import com.edplan.framework.graphics.opengl.GLPaint;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.MContext;
 import com.edplan.framework.timing.PreciseTimeline;
+import com.edplan.nso.resource.OsuSkin;
 
 public class HitCirclePiece extends EdDrawable implements IScaleable2D,IFadeable
 {
@@ -19,7 +20,9 @@ public class HitCirclePiece extends EdDrawable implements IScaleable2D,IFadeable
 	
 	private GLPaint paint=new GLPaint();
 	
-	private GLTexture texture;
+	private GLTexture hitcircle;
+	
+	private GLTexture hitcircleOverlay;
 	
 	private PreciseTimeline timeline;
 	
@@ -27,9 +30,10 @@ public class HitCirclePiece extends EdDrawable implements IScaleable2D,IFadeable
 		super(c);
 		this.timeline=timeline;
 	}
-
-	public void setTexture(GLTexture texture){
-		this.texture=texture;
+	
+	public void setSkin(OsuSkin skin){
+		hitcircle=skin.hitcircle.getRes();
+		hitcircleOverlay=skin.hitcircleOverlay.getRes();
 	}
 
 	public void setOrigin(Vec2 origin) {
@@ -76,6 +80,7 @@ public class HitCirclePiece extends EdDrawable implements IScaleable2D,IFadeable
 	public void draw(GLCanvas2D canvas) {
 		// TODO: Implement this method
 		//将note绘制上去
-		canvas.drawTextureAnchorCenter(texture,getOrigin(),(new Vec2(getBaseSize(),getBaseSize())).multiple(scale),paint);
+		canvas.drawTextureAnchorCenter(hitcircle,getOrigin(),(new Vec2(getBaseSize(),getBaseSize())).multiple(scale),paint);
+		canvas.drawTextureAnchorCenter(hitcircleOverlay,getOrigin(),(new Vec2(getBaseSize(),getBaseSize())).multiple(scale),paint);
 	}
 }

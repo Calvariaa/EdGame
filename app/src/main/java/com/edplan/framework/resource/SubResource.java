@@ -29,17 +29,27 @@ public class SubResource extends IResource
 	public String getRPath() {
 		return rPath;
 	}
+	
+	public String toRealPath(String path){
+		return getRPath()+"/"+path;
+	}
 
 	@Override
 	public InputStream openInput(String path) throws IOException {
 		// TODO: Implement this method
-		return rootRes.openInput(getRPath()+"/"+path);
+		return rootRes.openInput(toRealPath(path));
 	}
 
 	@Override
 	public String[] list(String dir) throws IOException
 	{
 		// TODO: Implement this method
-		return rootRes.list(getRPath()+"/"+dir);
+		return rootRes.list(toRealPath(dir));
+	}
+
+	@Override
+	public boolean contain(String file) {
+		// TODO: Implement this method
+		return rootRes.contain(toRealPath(file));
 	}
 }

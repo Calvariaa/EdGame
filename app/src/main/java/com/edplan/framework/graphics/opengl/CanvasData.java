@@ -16,6 +16,8 @@ public class CanvasData implements Recycleable,Copyable {
 
 	private Mat4 currentProjMatrix;
 
+	private Mat4 finalMatrix;
+
 	private float pixelDensity;
 	
 	private Texture3DShader texture3DShader;
@@ -24,6 +26,7 @@ public class CanvasData implements Recycleable,Copyable {
 		this.currentMaskMatrix=c.getCurrentMaskMatrix().copy();
 		this.texture3DShader=c.texture3DShader;
 		this.currentProjMatrix=c.currentProjMatrix.copy();
+		this.finalMatrix=(c.finalMatrix!=null)?c.finalMatrix.copy():null;
 		this.width=c.width;
 		this.height=c.height;
 		this.pixelDensity=c.pixelDensity;
@@ -81,6 +84,9 @@ public class CanvasData implements Recycleable,Copyable {
 		this.currentMaskMatrix.set(matrix);
 	}
 
+	/**
+	 *每次直接操作之后要freshMatrix，否则效果不会显示
+	 */
 	public Mat4 getCurrentMaskMatrix() {
 		return currentMaskMatrix;
 	}
@@ -97,8 +103,17 @@ public class CanvasData implements Recycleable,Copyable {
 		if(s==0)throw new IllegalArgumentException("you can't scale content using a scale rate ==0");
 		float rs=1/s;
 		getCurrentMaskMatrix().scale(rs,rs,1);
+		freshMatrix();
 		this.pixelDensity*=s;
 		return this;
+	}
+	
+	public void freshMatrix(){
+		finalMatrix=null;
+	}
+	
+	public Mat4 getFinalMatrix(){
+		return (finalMatrix==null)?(finalMatrix=currentMaskMatrix.copy().post(currentProjMatrix)):finalMatrix;
 	}
 	
 	public CanvasData clip(Vec2 wh){

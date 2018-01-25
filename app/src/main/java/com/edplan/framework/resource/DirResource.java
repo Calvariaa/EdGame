@@ -35,7 +35,14 @@ public class DirResource extends IResource
 		if(rdir==null||rdir.length()==0){
 			return dir.list();
 		}else{
-			return (new File(dir,rdir)).list();
+			File f=new File(dir,rdir);
+			return f.exists()?f.list():new String[0];
 		}
+	}
+
+	@Override
+	public boolean contain(String file) {
+		// TODO: Implement this method
+		return (new File(dir,file)).exists();
 	}
 }

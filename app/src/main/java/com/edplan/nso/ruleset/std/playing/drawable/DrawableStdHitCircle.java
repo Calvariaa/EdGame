@@ -35,7 +35,7 @@ public class DrawableStdHitCircle extends DrawableStdHitObject
 		circlePiece=new HitCirclePiece(getContext(),beatmap.getTimeLine());
 		circlePiece.setOrigin(getOrigin());
 		circlePiece.setBaseSize(getBaseSize());
-		circlePiece.setTexture(beatmap.getSkin().getHitcircleTexture());
+		circlePiece.setSkin(beatmap.getSkin());
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class DrawableStdHitCircle extends DrawableStdHitObject
 			float fp=Math.max(0,p/(float)getDuration());
 			fp=1-fp;
 			circlePiece.setAlpha(FMath.sin(fp*FMath.PiHalf));
-			float s=1.6f-0.6f*(1-FMath.cos(fp*FMath.PiHalf));
+			float s=1.6f-0.6f*fp;
 			circlePiece.setScale(s,s);
 		}
 
