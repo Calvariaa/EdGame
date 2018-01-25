@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import java.io.IOException;
 import android.content.res.AssetManager;
+import android.util.Log;
+import java.util.Arrays;
 
 public class AssetResource extends IResource
 {
@@ -21,5 +23,12 @@ public class AssetResource extends IResource
 	public InputStream openInput(String path) throws IOException {
 		// TODO: Implement this method
 		return res.open(path);
+	}
+
+	@Override
+	public String[] list(String dir) throws IOException
+	{
+		// TODO: Implement this method
+		return res.list(dir);
 	}
 }

@@ -54,4 +54,6 @@ public abstract class IResource
 		in.close();
 		return buffer;
 	}
+	
+	public abstract String[] list(String dir) throws IOException;
 }

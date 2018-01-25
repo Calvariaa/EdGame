@@ -35,4 +35,11 @@ public class SubResource extends IResource
 		// TODO: Implement this method
 		return rootRes.openInput(getRPath()+"/"+path);
 	}
+
+	@Override
+	public String[] list(String dir) throws IOException
+	{
+		// TODO: Implement this method
+		return rootRes.list(getRPath()+"/"+dir);
+	}
 }

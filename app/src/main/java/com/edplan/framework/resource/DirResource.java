@@ -28,4 +28,14 @@ public class DirResource extends IResource
 		return new DirResource(new File(dir,path));
 	}
 
+	@Override
+	public String[] list(String rdir) throws IOException
+	{
+		// TODO: Implement this method
+		if(rdir==null||rdir.length()==0){
+			return dir.list();
+		}else{
+			return (new File(dir,rdir)).list();
+		}
+	}
 }
