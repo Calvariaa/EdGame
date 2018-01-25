@@ -97,7 +97,7 @@ public class DrawableStdHitCircle extends DrawableStdHitObject
 		
 		public TestOutAnimation(int startTime){
 			setStartTime(startTime);
-			setDuration(600);
+			setDuration(300);
 			//(int)(m*(DrawableStdHitCircle.this.getHitObject().getStartTime()-getStartTimeAtTimeline())));
 		}
 
@@ -106,8 +106,8 @@ public class DrawableStdHitCircle extends DrawableStdHitObject
 		public void onProgress(int p) {
 			// TODO: Implement this method
 			super.onProgress(p);
-			float fp=p/(float)getDuration();
-			fp=Math.min(1,m*(1-fp));
+			float fp=Math.max(0,p/(float)getDuration());
+			fp=1-fp;
 			circlePiece.setAlpha(FMath.sin(fp*FMath.PiHalf));
 			float s=1.6f-0.6f*(1-FMath.cos(fp*FMath.PiHalf));
 			circlePiece.setScale(s,s);
@@ -154,8 +154,8 @@ public class DrawableStdHitCircle extends DrawableStdHitObject
 		public void onEnd() {
 			// TODO: Implement this method
 			super.onEnd();
-			Log.v("test_anim","end:"+getStartTimeAtTimeline());
-			(new TestOutAnimation(getTimeLine().frameTime())).post(getTimeLine());
+			//Log.v("test_anim","end:"+getStartTimeAtTimeline());
+			(new TestOutAnimation(getHitObject().getStartTime())).post(getTimeLine());
 		}
 	}
 	

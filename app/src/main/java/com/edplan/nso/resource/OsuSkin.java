@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class OsuSkin
 {
-	private HashMap<String,TextureInfo> textureDictionary=new HashMap<String,TextureInfo>();
+	private HashMap<String,ResourceInfo> resourceDictionary=new HashMap<String,ResourceInfo>();
 	
 	@AResType(ResType.TEXTURE)
 	@AResPath("hitcircle.png")
@@ -31,14 +31,15 @@ public class OsuSkin
 					Log.v("load","parse annotation. "+f);
 					AResType type=(AResType)f.getAnnotation(AResType.class);
 					AResPath path=(AResPath)f.getAnnotation(AResPath.class);
+					f.setAccessible(true);
 					switch(type.value()){
 						case TEXTURE:
-							f.setAccessible(true);
 							f.set(this,new TextureInfo(path.value()));
 							Log.v("load","create info {"+path+"}. "+f);
 							break;
 						default:break;
 					}
+					resourceDictionary.put(f.getName(),(ResourceInfo)f.get(this));
 				}
 			}
 		}catch (IllegalAccessException e) {

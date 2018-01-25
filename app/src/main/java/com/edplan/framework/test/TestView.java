@@ -36,6 +36,8 @@ import com.edplan.nso.ruleset.std.playing.StdPlayField;
 import com.edplan.nso.parser.StdBeatmapParser;
 import android.util.Log;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdHitCircle;
+import com.edplan.framework.audio.bass.BassChannel;
+import com.edplan.framework.timing.AudioTimeline;
 
 public class TestView extends EdView
 {
@@ -46,6 +48,8 @@ public class TestView extends EdView
 	private StdPlayingBeatmap playingBeatmap;
 
 	private PreciseTimeline timeline;
+	
+	private BassChannel audio;
 	
 	private OsuSkin skin;
 	
@@ -88,18 +92,22 @@ public class TestView extends EdView
 												   //"t+pazolite with siromaru - Chambarising (Bloodmoon) [Stream Practice (160)].osu"
 												   //"Suzuki Konomi - Cyber Thunder Cider (Nattu) [Niat's Cider].osu"
 												   //"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
-			"Yueporu feat. Hatsune Miku - Kurikaeshi Hitotsubu (Zweib) [Hitotsubu].osu"
+					"UNDEAD CORPORATION - The Empress (Plutia) [STARBOW BREAK!].osu"
+												   //"Yueporu feat. Hatsune Miku - Kurikaeshi Hitotsubu (Zweib) [Hitotsubu].osu"
 												   ),
 												"test case beatmap: " 
 												 );
+												 
+			audio=BassChannel.createStreamFromAsset(getContext(),"osu/test/test.m");
 			try
 			{
 				Log.v("parse-osu","start parse");
 				bparser.parse();
 				Log.v("parse-osu","end parse");
 				beatmap=bparser.makeupBeatmap(StdBeatmap.class);
-				timeline=new PreciseTimeline();
-				getContext().getUiLooper().addLoopableBeforeDraw(timeline);
+				timeline=new AudioTimeline(audio);
+				//new PreciseTimeline();
+				
 				playingBeatmap=new StdPlayingBeatmap(getContext(),beatmap,timeline,skin);
 				Log.v("osu","objs: "+playingBeatmap.getHitObjects().size()+" first: "+playingBeatmap.getHitObjects().get(0).getStartTime());
 				playField=new StdPlayField(getContext(),timeline);
@@ -224,7 +232,22 @@ public class TestView extends EdView
 		canvas.restore();
 		*/
 		
-		
+		MLog.test.runOnce("test-play", new Runnable(){
+				@Override
+				public void run()
+				{
+					// TODO: Implement this method
+					post(new Runnable(){
+							@Override
+							public void run()
+							{
+								// TODO: Implement this method
+								getContext().getUiLooper().addLoopableBeforeDraw(timeline);
+								audio.play();
+							}
+					},5000);
+				}
+			});
 		
 		if(false)MLog.test.runOnce("test-post", new Runnable(){
 				@Override

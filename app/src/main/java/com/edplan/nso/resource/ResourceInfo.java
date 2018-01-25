@@ -2,7 +2,7 @@ package com.edplan.nso.resource;
 
 public class ResourceInfo<T>
 {
-	private static Integer hashIndex;
+	private static int hashIndex;
 	
 	private final int hash;
 	
@@ -11,10 +11,7 @@ public class ResourceInfo<T>
 	
 	public ResourceInfo(String path){
 		this.path=path;
-		synchronized(hashIndex){
-			this.hash=hashIndex;
-			hashIndex=hashIndex+1;
-		}
+		hash=hashIndex++;
 	}
 
 	public void setPath(String path) {
@@ -31,5 +28,23 @@ public class ResourceInfo<T>
 
 	public T getRes() {
 		return res;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		// TODO: Implement this method
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		// TODO: Implement this method
+		if(obj!=null&&obj instanceof ResourceInfo){
+			return ((ResourceInfo)obj).hash==hash;
+		}else{
+			return false;
+		}
 	}
 }

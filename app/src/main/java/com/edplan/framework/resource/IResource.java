@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import android.graphics.BitmapFactory;
+import java.nio.ByteBuffer;
+import java.io.BufferedInputStream;
+import java.nio.ByteOrder;
 
 
 
@@ -37,5 +40,18 @@ public abstract class IResource
 		}
 		r.close();
 		return sb.toString();
+	}
+	
+	public ByteBuffer loadBuffer(String path) throws IOException{
+		InputStream in=openInput(path);
+		ByteBuffer buffer=ByteBuffer.allocateDirect(in.available());
+		buffer.order(ByteOrder.nativeOrder());
+		byte[] bu=new byte[1024*16];
+		int l;
+		while((l=in.read(bu))!=-1){
+			buffer.put(bu,0,l);
+		}
+		in.close();
+		return buffer;
 	}
 }

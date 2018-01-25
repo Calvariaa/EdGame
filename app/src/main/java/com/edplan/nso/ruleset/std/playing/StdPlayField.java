@@ -102,7 +102,9 @@ public class StdPlayField extends PlayField
 	}
 	
 	protected void drawContentLayer(GLCanvas2D canvas){
-		for(DrawableStdHitObject obj:hitObjectsInField){
+		DrawableStdHitObject obj;
+		for(int i=hitObjectsInField.size()-1;i>=0;i--){
+			obj=hitObjectsInField.get(i);
 			obj.draw(canvas);
 		}
 	}

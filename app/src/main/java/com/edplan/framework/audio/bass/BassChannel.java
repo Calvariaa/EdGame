@@ -2,6 +2,7 @@ package com.edplan.framework.audio.bass;
 import android.util.Log;
 import com.un4seen.bass.BASS;
 import java.nio.ByteBuffer;
+import com.edplan.framework.MContext;
 
 public class BassChannel
 {
@@ -27,6 +28,14 @@ public class BassChannel
 
 	public boolean play(){
 		return play(false);
+	}
+	
+	public int currentPlayTimeMS(){
+		return (int)(currentPlayTimeS()*1000);
+	}
+	
+	public double currentPlayTimeS(){
+		return BASS.BASS_ChannelBytes2Seconds(chaId,BASS.BASS_ChannelGetPosition(chaId,BASS.BASS_POS_BYTE));
 	}
 
 	
@@ -55,16 +64,21 @@ public class BassChannel
 		return BASS.BASS_StreamFree(getChannelId());
 	}
 	
-	//public static BassChannel createSampleFromFile(String f){
-	//	return new BassChannel(BASS.BASS_SampleLoad(f,0,0
-	//}
-	
 	public static BassChannel createStreamFromFile(String file,int offset,int length,int flags){
 		return new BassChannel(BASS.BASS_StreamCreateFile(file,offset,length,flags),Type.Stream); 
 	}
 	
 	public static BassChannel createStreamFromFile(String file){
 		return createStreamFromFile(file,0,0,0);
+	}
+	
+	public static BassChannel createStreamFromAsset(MContext context,String path){
+		BASS.Asset asset=new BASS.Asset(context.getNativeContext().getAssets(),path);
+		return new BassChannel(BASS.BASS_StreamCreateFile(asset,0,0,0),Type.Stream);
+	}
+	
+	public static BassChannel createStreamFromBuffer(ByteBuffer buffer){
+		return new BassChannel(BASS.BASS_StreamCreateFile(buffer,0,0,0),Type.Stream);
 	}
 	
 	private BassChannel(int chaId,Type type){
