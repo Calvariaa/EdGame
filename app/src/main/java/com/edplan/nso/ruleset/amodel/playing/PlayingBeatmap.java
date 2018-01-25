@@ -9,8 +9,9 @@ public abstract class PlayingBeatmap
 
 	private OsuSkin skin;
 	
-	public PlayingBeatmap(OsuSkin skin){
+	public PlayingBeatmap(OsuSkin skin,PreciseTimeline timeline){
 		this.skin=skin;
+		this.timeLine=timeline;
 	}
 
 	public void setSkin(OsuSkin skin) {

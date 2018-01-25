@@ -58,6 +58,8 @@ public class GLTexture
 
 	private int textureId;
 	
+	private boolean recycled=false;
+	
 	public GLTexture(){
 		
 	}
@@ -105,6 +107,7 @@ public class GLTexture
 	
 	public void delete(){
 		GLES20.glDeleteTextures(1,new int[]{textureId},0);
+		recycled=true;
 	}
 	
 	public Bitmap toBitmap(){
@@ -121,7 +124,7 @@ public class GLTexture
 	@Override
 	protected void finalize() throws Throwable {
 		// TODO: Implement this method
-		delete();
+		if(!recycled)delete();
 		super.finalize();
 	}
 	

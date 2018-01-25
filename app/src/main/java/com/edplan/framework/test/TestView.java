@@ -35,6 +35,7 @@ import com.edplan.framework.timing.PreciseTimeline;
 import com.edplan.nso.ruleset.std.playing.StdPlayField;
 import com.edplan.nso.parser.StdBeatmapParser;
 import android.util.Log;
+import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdHitCircle;
 
 public class TestView extends EdView
 {
@@ -54,7 +55,7 @@ public class TestView extends EdView
 	
 	private float postAlpha=1;
 	
-	private float postProgress=0;
+	private float postProgress=1;
 	
 	//private DrawableStdSlider sld2;
 	
@@ -63,6 +64,8 @@ public class TestView extends EdView
 	private GLTexture testPng;
 	private GLTexture cardPng;
 	private GLTexture sliderTex;
+	
+	private DrawableStdHitCircle firstObj;
 	
 	float a=0;
 	long lt=0;
@@ -81,7 +84,12 @@ public class TestView extends EdView
 			StdBeatmapParser bparser=new StdBeatmapParser(
 												getContext()
 												 .getAssetResource()
-				.openInput("osu/test/beatmap/Suzuki Konomi - Cyber Thunder Cider (Nattu) [Niat's Cider].osu"),
+												  .subResource("osu/test/beatmap").openInput(
+												   //"t+pazolite with siromaru - Chambarising (Bloodmoon) [Stream Practice (160)].osu"
+												   //"Suzuki Konomi - Cyber Thunder Cider (Nattu) [Niat's Cider].osu"
+												   //"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
+			"Yueporu feat. Hatsune Miku - Kurikaeshi Hitotsubu (Zweib) [Hitotsubu].osu"
+												   ),
 												"test case beatmap: " 
 												 );
 			try
@@ -91,6 +99,12 @@ public class TestView extends EdView
 				Log.v("parse-osu","end parse");
 				beatmap=bparser.makeupBeatmap(StdBeatmap.class);
 				timeline=new PreciseTimeline();
+				getContext().getUiLooper().addLoopableBeforeDraw(timeline);
+				playingBeatmap=new StdPlayingBeatmap(getContext(),beatmap,timeline,skin);
+				Log.v("osu","objs: "+playingBeatmap.getHitObjects().size()+" first: "+playingBeatmap.getHitObjects().get(0).getStartTime());
+				playField=new StdPlayField(getContext(),timeline);
+				playField.applyBeatmap(playingBeatmap);
+				firstObj=(DrawableStdHitCircle)playField.getDrawableHitObjects().get(0);
 			}
 			catch (NsoException e)
 			{
@@ -103,13 +117,14 @@ public class TestView extends EdView
 			}
 
 			
-			testPng=//skin.getHitcircleTexture();
+			testPng=skin.getHitcircleTexture();
+			/*
 				GLTexture.decodeStream(
 				context
 				.getAssetResource()
 				.getTextureResource()
 				.openInput
-				("ic_launcher.png"));
+				("ic_launcher.png"));*/
 			cardPng=GLTexture.decodeResource(context.getAssetResource().getTextureResource(),
 											 "card.jpg");
 			//"default-bg.png");
@@ -183,7 +198,7 @@ public class TestView extends EdView
 		
 		a+=0.005;
 		float c=Math.abs(a%2-1);
-		
+		/*
 		canvas.save();
 		GLWrapped.blend.save();
 		GLWrapped.blend.set(false);
@@ -207,11 +222,11 @@ public class TestView extends EdView
 			1f);
 		GLWrapped.blend.restore();
 		canvas.restore();
-
+		*/
 		
 		
 		
-		MLog.test.runOnce("test-post", new Runnable(){
+		if(false)MLog.test.runOnce("test-post", new Runnable(){
 				@Override
 				public void run() {
 					// TODO: Implement this method
@@ -258,11 +273,11 @@ public class TestView extends EdView
 		
 		
 		
-		canvas.drawColor(Color4.gray(0.2f));
+		canvas.drawColor(Color4.gray(0.1f));
 		//new Color4(c,c,c,1.0f));
 		canvas.clearDepthBuffer();
 		
-		
+		/*
 		canvas.save();
 		canvas.getMaskMatrix().translate(500+testPng.getWidth()/2,500+testPng.getHeight()/2,0).rotate(c*90,0,0,1);
 		//.post((new Mat4()).translate(10,10,0));
@@ -277,7 +292,7 @@ public class TestView extends EdView
 			1,
 			1f);
 
-		canvas.restore();
+		canvas.restore();*/
 		
 		
 
@@ -309,6 +324,7 @@ public class TestView extends EdView
 		paint.setGlowColor(Color4.rgba(0.3f,0.3f,0.3f,0.9f));
 
 
+		/*
 
 		if(lt!=0){
 			canvas.getMaskMatrix().rotate(0,0,0,1);
@@ -330,11 +346,12 @@ public class TestView extends EdView
 			if(GLTexture.White.getTextureId()==testPng.getTextureId()){
 				MLog.test.vOnce("gl bind bug","gl_test","err id=id "+testPng.getTextureId());
 			}
-		}
+		}*/
 		lt=System.currentTimeMillis();
 
 
 
+		/*
 		final int lcount=300;
 		float xDelta=canvas.getLayer().getWidth()/(float)lcount;
 
@@ -360,6 +377,7 @@ public class TestView extends EdView
 		paint.setColorMixRate(1);
 		paint.setMixColor(Color4.White);
 		canvas.drawLines(lines,paint);
+		*/
 
 		
 		//c=0.3f;
@@ -368,6 +386,7 @@ public class TestView extends EdView
 		//转换到osu field
 
 		canvas.save();
+		
 		
 		LinePath path=sld.calculatePath();
 		float cs=4;
@@ -470,10 +489,34 @@ public class TestView extends EdView
 		GLWrapped.blend.save();
 		GLWrapped.blend.set(false);
 		//GLES20.glDisable(GLES20.GL_BLEND);
-		newCanvas.drawTexture3DBatch(batch,sliderTex,1,new Color4(1,0.8f,0.8f,1));
-		newCanvas.drawLines(new float[]{0,0,newCanvas.getWidth(),newCanvas.getHeight()},new GLPaint());
+		
+		//newCanvas.drawTexture3DBatch(batch,sliderTex,1,new Color4(1,0.8f,0.8f,1));
+		//newCanvas.drawLines(new float[]{0,0,newCanvas.getWidth(),newCanvas.getHeight()},new GLPaint());
 		GLWrapped.blend.restore();
 		GLWrapped.depthTest.restore();
+		GLPaint tp=new GLPaint();
+		tp.setVaryingColor(Color4.rgb(1,1,1));
+		tp.setColorMixRate(1);
+		tp.setStrokeWidth(5);
+		tp.setFinalAlpha(1);
+		//newCanvas.drawLines(new float[]{0,0,PlayField.CANVAS_SIZE_X,PlayField.CANVAS_SIZE_Y},tp);
+		
+		playField.draw(newCanvas);
+		//firstObj.draw(newCanvas);
+		
+		Vec2 org=new Vec2(256,273);
+		//newCanvas.drawTextureAnchorCenter(skin.getHitcircleTexture(),new Vec2(256,273),new Vec2(64,64),tp);
+		//newCanvas.drawTexture(skin.getHitcircleTexture(),new RectF(0,0,testPng.getWidth(),testPng.getHeight()),new RectF(256-64,273-64,256+64,273+64),tp);
+		/*newCanvas.drawTexture(
+			testPng,
+			new RectF(0,0,testPng.getWidth(),testPng.getHeight()),
+			new RectF(-testPng.getWidth()/2+org.x,-testPng.getHeight()/2+org.y,testPng.getWidth(),testPng.getHeight()),
+			new Color4(1,1,1,1),
+			new Color4(1,1,1,1),
+			0f,
+			1,
+			1f);*/
+		
 		//canvas.drawtexture3
 		//canvas.restore();
 		newCanvas.unprepare();
@@ -500,6 +543,7 @@ public class TestView extends EdView
 		//.post((new Mat4()).translate(10,10,0));
 
 		//canvas.drawColor(Color4.gray(0.5f));
+		/*
 		canvas.drawTexture(
 			testPng,
 			new RectF(0,0,testPng.getWidth(),testPng.getHeight()),
@@ -508,7 +552,7 @@ public class TestView extends EdView
 			new Color4(1,1,1,1),
 			0f,
 			1,
-			1f);
+			1f);*/
 
 		canvas.restore();
 		
@@ -518,12 +562,12 @@ public class TestView extends EdView
 		fp.setStrokeWidth(50);
 		canvas.drawLines(new float[]{0,0,500,500},fp);*/
 		
-		
+		/*
 		GLPaint fp=new GLPaint();
 		fp.setColorMixRate(1);
 		fp.setMixColor(Color4.gray(1));
 		fp.setStrokeWidth(50);
-		canvas.drawLines(new float[]{0,0,500,500},fp);
+		canvas.drawLines(new float[]{0,0,500,500},fp);*/
 		
 		
 	}

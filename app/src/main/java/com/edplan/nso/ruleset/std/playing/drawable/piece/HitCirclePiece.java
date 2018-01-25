@@ -76,6 +76,6 @@ public class HitCirclePiece extends EdDrawable implements IScaleable2D,IFadeable
 	public void draw(GLCanvas2D canvas) {
 		// TODO: Implement this method
 		//将note绘制上去
-		canvas.drawTextureAnchorCenter(texture,getOrigin(),new Vec2(getBaseSize(),getBaseSize()),paint);
+		canvas.drawTextureAnchorCenter(texture,getOrigin(),(new Vec2(getBaseSize(),getBaseSize())).multiple(scale),paint);
 	}
 }

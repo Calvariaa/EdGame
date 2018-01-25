@@ -385,7 +385,7 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	 */
 	public void drawTextureAnchorCenter(GLTexture texture,Vec2 org,Vec2 w,GLPaint paint){
 		RectF dst=RectF.ltrb(org.x-w.x,org.y-w.y,org.x+w.x,org.y+w.y);
-		drawTexture(texture,new RectF(0,0,1,1),dst,paint);
+		drawTexture(texture,new RectF(0,0,texture.getWidth(),texture.getHeight()),dst,paint);
 	}
 	
 	public MContext getContext(){

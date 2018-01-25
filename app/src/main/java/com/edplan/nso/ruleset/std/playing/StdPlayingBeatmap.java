@@ -8,6 +8,7 @@ import com.edplan.nso.ruleset.std.objects.StdHitObject;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdHitCircle;
 import java.util.List;
 import com.edplan.nso.resource.OsuSkin;
+import com.edplan.framework.timing.PreciseTimeline;
 
 public class StdPlayingBeatmap extends PlayingBeatmap
 {
@@ -15,8 +16,8 @@ public class StdPlayingBeatmap extends PlayingBeatmap
 	
 	private MContext context;
 	
-	public StdPlayingBeatmap(MContext context,StdBeatmap beatmap,OsuSkin skin){
-		super(skin);
+	public StdPlayingBeatmap(MContext context,StdBeatmap beatmap,PreciseTimeline timeline,OsuSkin skin){
+		super(skin,timeline);
 		this.context=context;
 		this.beatmap=beatmap;
 	}

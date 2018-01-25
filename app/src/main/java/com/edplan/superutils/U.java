@@ -42,7 +42,7 @@ public class U
 	}
 	
 	public static int toInt(String s){
-		if(s.length()==0)return 0;
+		if(s==null||s.length()==0)return 0;
 		return Integer.parseInt(s);
 	}
 	

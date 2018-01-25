@@ -64,6 +64,12 @@ public class Vec2
 		return this;
 	}
 	
+	public Vec2 multiple(Vec2 v){
+		x*=v.x;
+		y*=v.y;
+		return this;
+	}
+	
 	public Vec2 divide(float d){
 		return divide(d,d);
 	}

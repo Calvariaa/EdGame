@@ -33,10 +33,11 @@ public class RectF implements Copyable,Area2D
 		return this;
 	}
 	
-	public void setLTRB(float l,float t,float r,float b){
+	public RectF setLTRB(float l,float t,float r,float b){
 		basePoint.set(l,t);
 		height=b-t;
 		width=r-l;
+		return this;
 	}
 	
 	public Vec2 getBasePoint(){
@@ -146,6 +147,6 @@ public class RectF implements Copyable,Area2D
 	}
 	
 	public static RectF ltrb(float l,float t,float r,float b){
-		return (new RectF()).ltrb(l,t,r,b);
+		return (new RectF()).setLTRB(l,t,r,b);
 	}
 }

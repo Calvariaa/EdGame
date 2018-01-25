@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import com.edplan.nso.ruleset.std.objects.StdHitObject;
+import android.util.Log;
 
 public class StdPlayField extends PlayField
 {
@@ -32,6 +33,10 @@ public class StdPlayField extends PlayField
 		this.timeline=timeline;
 	}
 
+	public List<DrawableStdHitObject> getDrawableHitObjects() {
+		return drawableHitObjects;
+	}
+
 	@Override
 	public void applyBeatmap(PlayingBeatmap res) {
 		// TODO: Implement this method
@@ -49,9 +54,10 @@ public class StdPlayField extends PlayField
 					@Override
 					public int compare(DrawableStdHitObject p1,DrawableStdHitObject p2) {
 						// TODO: Implement this method
-						return (int)Math.signum(p2.getShowTime()-p1.getShowTime());
+						return (int)Math.signum(p1.getShowTime()-p2.getShowTime());
 					}
 				});
+			Log.v("first-obj",""+drawableHitObjects.get(0).getShowTime()+" pos:"+drawableHitObjects.get(0).getOrigin());
 			hitObjectsInField=new ArrayList<DrawableStdHitObject>();
 			savedIndex=0;
 		}else{
@@ -116,7 +122,7 @@ public class StdPlayField extends PlayField
 		//添加新的物件
 		pullNewAdded(curTime);
 		deleteFinished();
-		drawConnectionLayer(canvas);
+		drawContentLayer(canvas);
 		drawConnectionLayer(canvas);
 		drawApproachCircleLayer(canvas);
 	}

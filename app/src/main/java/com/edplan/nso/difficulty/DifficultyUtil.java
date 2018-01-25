@@ -50,4 +50,8 @@ public class DifficultyUtil
 				STD_TIME_FADEIN_MIN
 			);
 	}
+	
+	public static float stdCircleSizeScale(float cs){
+		return (1.0f-0.7f*(cs-5)/5)/2;
+	}
 }

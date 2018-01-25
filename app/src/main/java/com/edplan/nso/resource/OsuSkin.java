@@ -6,9 +6,12 @@ import com.edplan.nso.resource.annotation.AResPath;
 import java.lang.reflect.Field;
 import java.io.IOException;
 import android.util.Log;
+import java.util.HashMap;
 
 public class OsuSkin
 {
+	private HashMap<String,TextureInfo> textureDictionary=new HashMap<String,TextureInfo>();
+	
 	@AResType(ResType.TEXTURE)
 	@AResPath("hitcircle.png")
 	public TextureInfo hitcircle;

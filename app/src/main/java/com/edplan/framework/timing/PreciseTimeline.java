@@ -23,7 +23,7 @@ public class PreciseTimeline extends Loopable
 	
 	private boolean askRestart=false;
 	
-	private SafeList<AbstractPreciseAnimation> animations;
+	private SafeList<AbstractPreciseAnimation> animations=new SafeList<AbstractPreciseAnimation>();
 
 	public void addAnimation(AbstractPreciseAnimation a){
 		animations.add(a);
@@ -90,6 +90,7 @@ public class PreciseTimeline extends Loopable
 					MLog.test.vOnce("switch-err","???","什么鬼啊");
 			}
 		}
+		animations.endIterate();
 	}
 	
 	/**

@@ -36,6 +36,10 @@ public class DrawableStdHitObject extends DrawableHitObject
 		setOrigin(new Vec2(obj.getStartX(),obj.getStartY()));
 	}
 
+	public StdHitObject getHitObject() {
+		return hitObject;
+	}
+
 	public void setTimePreempt(int timePreempt) {
 		this.timePreempt=timePreempt;
 	}
@@ -75,6 +79,7 @@ public class DrawableStdHitObject extends DrawableHitObject
 		timeLine=beatmap.getTimeLine();
 		timePreempt=DifficultyUtil.stdHitObjectTimePreempt(beatmap.getDifficulty().getApproachRate());
 		timeFadein=DifficultyUtil.stdHitObjectTimeFadein(beatmap.getDifficulty().getApproachRate());
+		baseSize*=DifficultyUtil.stdCircleSizeScale(beatmap.getDifficulty().getCircleSize());
 		showTime=hitObject.getStartTime()-timePreempt;
 	}
 	

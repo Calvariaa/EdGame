@@ -1,16 +1,17 @@
 package com.edplan.nso.ruleset.std.playing.drawable;
-import com.edplan.nso.ruleset.std.objects.StdHitCircle;
-import com.edplan.nso.ruleset.std.StdBeatmap;
-import com.edplan.framework.ui.drawable.interfaces.IScaleable2D;
-import com.edplan.nso.ruleset.std.playing.drawable.piece.HitCirclePiece;
-import com.edplan.nso.ruleset.amodel.playing.PlayingBeatmap;
+import android.util.Log;
+import com.edplan.framework.MContext;
 import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.math.Vec2;
-import com.edplan.framework.MContext;
-import com.edplan.nso.ruleset.std.objects.StdHitObject;
-import com.edplan.nso.ruleset.amodel.playing.Judgment;
-import com.edplan.nso.ruleset.std.playing.judgment.StdJudgment;
 import com.edplan.framework.ui.animation.precise.BasePreciseAnimation;
+import com.edplan.nso.ruleset.amodel.playing.Judgment;
+import com.edplan.nso.ruleset.amodel.playing.PlayingBeatmap;
+import com.edplan.nso.ruleset.std.objects.StdHitCircle;
+import com.edplan.nso.ruleset.std.objects.StdHitObject;
+import com.edplan.nso.ruleset.std.playing.drawable.piece.HitCirclePiece;
+import com.edplan.nso.ruleset.std.playing.judgment.StdJudgment;
+import com.edplan.framework.timing.PreciseTimeline;
+import com.edplan.framework.math.FMath;
 
 public class DrawableStdHitCircle extends DrawableStdHitObject
 {
@@ -92,18 +93,24 @@ public class DrawableStdHitCircle extends DrawableStdHitObject
 	}
 
 	public class TestOutAnimation extends BasePreciseAnimation{
+		static final float m=5;
+		
 		public TestOutAnimation(int startTime){
 			setStartTime(startTime);
-			setDuration(1000);
+			setDuration(600);
+			//(int)(m*(DrawableStdHitCircle.this.getHitObject().getStartTime()-getStartTimeAtTimeline())));
 		}
 
+		
 		@Override
 		public void onProgress(int p) {
 			// TODO: Implement this method
 			super.onProgress(p);
 			float fp=p/(float)getDuration();
-			fp=Math.min(1,2*(1-fp));
-			circlePiece.setAlpha(fp);
+			fp=Math.min(1,m*(1-fp));
+			circlePiece.setAlpha(FMath.sin(fp*FMath.PiHalf));
+			float s=1.6f-0.6f*(1-FMath.cos(fp*FMath.PiHalf));
+			circlePiece.setScale(s,s);
 		}
 
 		@Override
@@ -122,17 +129,32 @@ public class DrawableStdHitCircle extends DrawableStdHitObject
 		}
 
 		@Override
+		public void post(PreciseTimeline timeline) {
+			// TODO: Implement this method
+			super.post(timeline);
+			setProgressTime(0);
+		}
+		
+		@Override
+		public void setProgressTime(int p) {
+			// TODO: Implement this method
+			super.setProgressTime(p);
+			float fp=p/(float)getDuration();
+			circlePiece.setAlpha(fp);
+			//Log.v("anim-pro","prog:"+fp);
+		}
+
+		@Override
 		public void onProgress(int p) {
 			// TODO: Implement this method
 			super.onProgress(p);
-			float fp=p/(float)getDuration();
-			circlePiece.setAlpha(fp);
 		}
 
 		@Override
 		public void onEnd() {
 			// TODO: Implement this method
 			super.onEnd();
+			Log.v("test_anim","end:"+getStartTimeAtTimeline());
 			(new TestOutAnimation(getTimeLine().frameTime())).post(getTimeLine());
 		}
 	}
