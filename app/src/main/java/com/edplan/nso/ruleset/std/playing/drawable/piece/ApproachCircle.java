@@ -45,7 +45,7 @@ public class ApproachCircle extends BasePieces
 			// TODO: Implement this method
 			super.setProgressTime(p);
 			float fp=p/(float)getDuration();
-			float s=4.5f*(1-fp)+1.0f*fp;
+			float s=2.5f*(1-fp)+1.0f*fp;
 			approachCircle.setScale(s,s);
 		}
 

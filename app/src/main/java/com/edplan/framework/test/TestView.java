@@ -109,8 +109,8 @@ public class TestView extends EdView
 				bparser.parse();
 				Log.v("parse-osu","end parse");
 				beatmap=bparser.makeupBeatmap(StdBeatmap.class);
-				timeline=new AudioTimeline(audio);
-				//new PreciseTimeline();
+				timeline=//new AudioTimeline(audio);
+				new PreciseTimeline();
 				
 				playingBeatmap=new StdPlayingBeatmap(getContext(),beatmap,timeline,skin);
 				Log.v("osu","objs: "+playingBeatmap.getHitObjects().size()+" first: "+playingBeatmap.getHitObjects().get(0).getStartTime());
