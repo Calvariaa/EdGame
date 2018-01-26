@@ -92,16 +92,16 @@ public class TestView extends EdView
 												   //"t+pazolite with siromaru - Chambarising (Bloodmoon) [Stream Practice (160)].osu"
 												   //"Suzuki Konomi - Cyber Thunder Cider (Nattu) [Niat's Cider].osu"
 												   //"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
-												   //"UNDEAD CORPORATION - The Empress (Plutia) [STARBOW BREAK!].osu"
-												   "Mai Zang - Si Ye Cao De Huang Xiang (Axarious) [Despair].osu"
+												   "UNDEAD CORPORATION - The Empress (Plutia) [STARBOW BREAK!].osu"
+												   //"Mai Zang - Si Ye Cao De Huang Xiang (Axarious) [Despair].osu"
 												   //"Yueporu feat. Hatsune Miku - Kurikaeshi Hitotsubu (Zweib) [Hitotsubu].osu"
 												   ),
 												"test case beatmap: " 
 												 );
 												 
 			audio=BassChannel.createStreamFromAsset(getContext(),"osu/test/beatmap/"+
-			//"test.mp3"
-			"cloverfantasy.mp3"
+			"test.mp3"
+			//"cloverfantasy.mp3"
 			);
 			try
 			{
