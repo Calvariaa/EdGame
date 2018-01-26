@@ -109,6 +109,12 @@ public class Color4
 	public int toIntBit(){
 		return Color.argb(getA255(),getR255(),getG255(),getB255());
 	}
+
+	@Override
+	public String toString() {
+		// TODO: Implement this method
+		return "(r,g,b,a)=("+r+","+g+","+b+","+a+")";
+	}
 	
 	public static Color4 max(Color4 c1,Color4 c2){
 		return new Color4(Math.max(c1.r,c2.r),Math.max(c1.g,c2.g),Math.max(c1.b,c2.b),Math.max(c1.a,c2.a));

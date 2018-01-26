@@ -93,7 +93,7 @@ public class GLPaint
 	}
 
 	public void setMixColor(Color4 mixColor) {
-		this.mixColor=mixColor;
+		this.mixColor.set(mixColor);
 	}
 
 	public Color4 getMixColor() {
@@ -101,7 +101,7 @@ public class GLPaint
 	}
 
 	public void setVaryingColor(Color4 varyingColor) {
-		this.varyingColor=varyingColor;
+		this.varyingColor.set(varyingColor);
 	}
 
 	public Color4 getVaryingColor() {

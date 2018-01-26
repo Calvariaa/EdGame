@@ -1,14 +1,14 @@
 package com.edplan.nso.ruleset.std.playing.drawable;
-import com.edplan.nso.ruleset.amodel.playing.drawable.DrawableHitObject;
-import com.edplan.nso.ruleset.amodel.playing.Judgment;
-import com.edplan.framework.timing.PreciseTimeline;
-import com.edplan.framework.graphics.opengl.GLCanvas2D;
-import com.edplan.framework.math.Vec2;
-import com.edplan.nso.ruleset.std.objects.StdHitObject;
-import com.edplan.nso.ruleset.std.StdBeatmap;
-import com.edplan.nso.difficulty.DifficultyUtil;
-import com.edplan.nso.ruleset.amodel.playing.PlayingBeatmap;
 import com.edplan.framework.MContext;
+import com.edplan.framework.graphics.opengl.GLCanvas2D;
+import com.edplan.framework.graphics.opengl.objs.Color4;
+import com.edplan.framework.math.Vec2;
+import com.edplan.framework.timing.PreciseTimeline;
+import com.edplan.nso.difficulty.DifficultyUtil;
+import com.edplan.nso.ruleset.amodel.playing.Judgment;
+import com.edplan.nso.ruleset.amodel.playing.PlayingBeatmap;
+import com.edplan.nso.ruleset.amodel.playing.drawable.DrawableHitObject;
+import com.edplan.nso.ruleset.std.objects.StdHitObject;
 
 public class DrawableStdHitObject extends DrawableHitObject
 {
@@ -29,11 +29,21 @@ public class DrawableStdHitObject extends DrawableHitObject
 	private PreciseTimeline timeLine;
 	
 	private boolean finished=false;
+	
+	private Color4 accentColor=new Color4(1,1,1,1);
 
 	public DrawableStdHitObject(MContext c,StdHitObject obj){
 		super(c);
 		hitObject=obj;
 		setOrigin(new Vec2(obj.getStartX(),obj.getStartY()));
+	}
+
+	public void setAccentColor(Color4 accentColor) {
+		this.accentColor.set(accentColor);
+	}
+
+	public Color4 getAccentColor() {
+		return accentColor;
 	}
 
 	public StdHitObject getHitObject() {
@@ -77,8 +87,8 @@ public class DrawableStdHitObject extends DrawableHitObject
 	 */
 	public void applyDefault(PlayingBeatmap beatmap){
 		timeLine=beatmap.getTimeLine();
-		timePreempt=DifficultyUtil.stdHitObjectTimePreempt(beatmap.getDifficulty().getApproachRate())/2;
-		timeFadein=DifficultyUtil.stdHitObjectTimeFadein(beatmap.getDifficulty().getApproachRate())/2;
+		timePreempt=(int)(DifficultyUtil.stdHitObjectTimePreempt(beatmap.getDifficulty().getApproachRate())*0.4);
+		timeFadein=(int)(DifficultyUtil.stdHitObjectTimeFadein(beatmap.getDifficulty().getApproachRate())*0.4);
 		baseSize*=DifficultyUtil.stdCircleSizeScale(beatmap.getDifficulty().getCircleSize());
 		showTime=hitObject.getStartTime()-timePreempt;
 	}

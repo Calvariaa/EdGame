@@ -288,7 +288,7 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		tmpBatch.clear();
 		tmpBatch.setColorMixRate(colorMixRate);
 		tmpBatch.add(makeupVertex(texture,resV,dstV,varyColor));
-		drawTexture3DBatch(tmpRectBatch,texture,finalAlpha,mixColor);
+		drawTexture3DBatch(tmpBatch,texture,finalAlpha,mixColor);
 	}
 	
 	public void drawTexture(AbstractTexture texture,RectF res,RectF dst,GLPaint paint){
@@ -301,11 +301,11 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	
 	public void drawTexture(AbstractTexture texture,RectF dst,Color4 mixColor,Color4 color,float colorMixRate,float z,float alpha){
 		checkCanDraw();
-		tmpRectBatch.clear();
-		tmpRectBatch.setColorMixRate(colorMixRate);
+		tmpBatch.clear();
+		tmpBatch.setColorMixRate(colorMixRate);
 		RectVertex[] v=createRectVertexs(texture,new RectF(0,0,texture.getWidth(),texture.getHeight()),dst,color,z);
-		tmpRectBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
-		drawTexture3DBatch(tmpRectBatch,texture,alpha,mixColor);
+		tmpBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
+		drawTexture3DBatch(tmpBatch,texture,alpha,mixColor);
 	}
 	
 	public void drawRectTexture(AbstractTexture texture,RectF res,RectF dst,GLPaint paint){

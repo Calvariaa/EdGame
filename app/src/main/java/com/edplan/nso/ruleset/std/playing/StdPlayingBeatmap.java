@@ -35,7 +35,14 @@ public class StdPlayingBeatmap extends PlayingBeatmap
 	}
 	
 	public DrawableStdHitObject createDrawableHitObject(StdHitObject obj){
-		return new DrawableStdHitCircle(getContext(),obj);
+		DrawableStdHitObject dobj=new DrawableStdHitCircle(getContext(),obj);
+		if(obj.isNewCombo()){
+			getSkin().comboColorGenerater.skipColors(obj.getComboColorsSkip());
+			dobj.setAccentColor(getSkin().comboColorGenerater.nextColor());
+		}else{
+			dobj.setAccentColor(getSkin().comboColorGenerater.currentColor());
+		}
+		return dobj;
 	}
 
 	@Override

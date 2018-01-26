@@ -32,9 +32,10 @@ public class AssetResource extends IResource
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		/*
 		for(Map.Entry<String,AssetResInfo> e:resMap.entrySet()){
 			Log.v("res-list",e.getValue().path+(e.getValue().isFile?"":"/"));
-		}
+		}*/
 		
 	}
 	

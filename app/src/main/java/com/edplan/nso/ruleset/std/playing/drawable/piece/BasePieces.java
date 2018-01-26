@@ -92,6 +92,6 @@ public abstract class BasePieces extends EdDrawable implements IScaleable2D,IFad
 		if(tmpPaint==null)tmpPaint=new GLPaint();
 		tmpPaint.set(paint);
 		tmpPaint.setMixColor(tmpPaint.getMixColor().copyNew().multiple(getAccentColor()));
-		c.drawTextureAnchorCenter(t,getOrigin(),(new Vec2(getBaseSize(),getBaseSize())).multiple(getScale()),paint);
+		c.drawTextureAnchorCenter(t,getOrigin(),(new Vec2(getBaseSize(),getBaseSize())).multiple(getScale()),tmpPaint);
 	}
 }

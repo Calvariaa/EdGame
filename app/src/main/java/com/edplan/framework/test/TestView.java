@@ -499,7 +499,7 @@ public class TestView extends EdView
 		GLCanvas2D newCanvas=new GLCanvas2D(newLayer);
 		newCanvas.prepare();
 		
-		newCanvas.drawColor(Color4.Alpha);
+		newCanvas.drawColor(Color4.gray(0));
 		newCanvas.clearDepthBuffer();
 		
 		float osuScale=PlayField.BASE_Y/canvas.getHeight();
@@ -552,9 +552,10 @@ public class TestView extends EdView
 		
 		GLPaint newPaint=new GLPaint();
 		newPaint.setFinalAlpha(postAlpha);
+		//newPaint.setMixColor(new Color4(1,0.5f,0.5f,1));
 		GLTexture texture=newLayer.getTexture();
-		canvas.drawTexture(texture,new RectF(0,0,texture.getWidth(),texture.getHeight()),new RectF(0,0,canvas.getWidth(),canvas.getHeight()),newPaint);
-		
+		//canvas.drawTexture(texture,new RectF(0,0,texture.getWidth(),texture.getHeight()),new RectF(0,0,canvas.getWidth(),canvas.getHeight()),newPaint);
+		canvas.drawTextureAnchorCenter(texture,new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),newPaint);
 		newLayer.recycle();
 		
 		canvas.restore();

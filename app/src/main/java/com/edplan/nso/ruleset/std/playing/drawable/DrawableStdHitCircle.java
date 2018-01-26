@@ -14,14 +14,13 @@ import com.edplan.nso.ruleset.std.playing.drawable.piece.ApproachCircle;
 import com.edplan.nso.ruleset.std.playing.drawable.piece.BasePieces;
 import com.edplan.nso.ruleset.std.playing.drawable.piece.HitCirclePiece;
 import com.edplan.nso.ruleset.std.playing.judgment.StdJudgment;
+import com.edplan.framework.utils.MLog;
 
 public class DrawableStdHitCircle extends DrawableStdHitObject implements IHasApproachCircle
 {
 	private HitCirclePiece circlePiece;
 	
 	private ApproachCircle approachCircle;
-	
-	private Color4 accentColor=new Color4(1,1,1,1);
 	
 	public DrawableStdHitCircle(MContext c,StdHitCircle obj){
 		super(c,obj);
@@ -51,6 +50,8 @@ public class DrawableStdHitCircle extends DrawableStdHitObject implements IHasAp
 	}
 	
 	private void applyPiece(BasePieces p,PlayingBeatmap beatmap){
+		p.setAccentColor(getAccentColor());
+		MLog.test.vOnce("color-test","color-test",getAccentColor().toString());
 		p.setOrigin(getOrigin());
 		p.setBaseSize(getBaseSize());
 		p.setSkin(beatmap.getSkin());
@@ -61,14 +62,6 @@ public class DrawableStdHitCircle extends DrawableStdHitObject implements IHasAp
 		// TODO: Implement this method
 		super.draw(canvas);
 		circlePiece.draw(canvas);
-	}
-	
-	public void setAccentColor(Color4 accentColor) {
-		this.accentColor=accentColor;
-	}
-
-	public Color4 getAccentColor() {
-		return accentColor;
 	}
 
 	@Override
@@ -166,7 +159,7 @@ public class DrawableStdHitCircle extends DrawableStdHitObject implements IHasAp
 			// TODO: Implement this method
 			super.setProgressTime(p);
 			float fp=p/(float)getDuration();
-			setAlpha(fp);
+			setAlpha(FMath.sin(fp*FMath.PiHalf));
 			//Log.v("anim-pro","prog:"+fp);
 		}
 
