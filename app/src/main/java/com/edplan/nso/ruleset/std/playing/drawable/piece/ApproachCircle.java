@@ -6,6 +6,7 @@ import com.edplan.framework.timing.PreciseTimeline;
 import com.edplan.framework.ui.animation.precise.BasePreciseAnimation;
 import com.edplan.nso.resource.OsuSkin;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdHitObject;
+import com.edplan.framework.graphics.opengl.objs.Color4;
 
 public class ApproachCircle extends BasePieces
 {
@@ -25,7 +26,7 @@ public class ApproachCircle extends BasePieces
 	@Override
 	public void draw(GLCanvas2D canvas) {
 		// TODO: Implement this method
-		simpleDraw(approachCircle,canvas);
+		simpleDrawWithAccentColor(approachCircle,canvas);
 	}
 	
 	public static class PreemptAnimation extends BasePreciseAnimation{

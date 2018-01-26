@@ -2,6 +2,7 @@ package com.edplan.nso.ruleset.std.playing.drawable.piece;
 import com.edplan.framework.MContext;
 import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.graphics.opengl.GLPaint;
+import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.timing.PreciseTimeline;
@@ -19,12 +20,24 @@ public abstract class BasePieces extends EdDrawable implements IScaleable2D,IFad
 	private Vec2 scale=new Vec2(1, 1);
 
 	protected GLPaint paint=new GLPaint();
+	
+	protected GLPaint tmpPaint;
 
 	private PreciseTimeline timeline;
+	
+	private Color4 accentColor=new Color4(1,1,1,1);
 
 	public BasePieces(MContext c,PreciseTimeline timeline){
 		super(c);
 		this.timeline=timeline;
+	}
+
+	public void setAccentColor(Color4 accentColor) {
+		this.accentColor.set(accentColor);
+	}
+
+	public Color4 getAccentColor() {
+		return accentColor;
 	}
 	
 	public void setSkin(OsuSkin skin){
@@ -72,6 +85,13 @@ public abstract class BasePieces extends EdDrawable implements IScaleable2D,IFad
 	}
 	
 	protected void simpleDraw(GLTexture t,GLCanvas2D c){
+		c.drawTextureAnchorCenter(t,getOrigin(),(new Vec2(getBaseSize(),getBaseSize())).multiple(getScale()),paint);
+	}
+	
+	protected void simpleDrawWithAccentColor(GLTexture t,GLCanvas2D c){
+		if(tmpPaint==null)tmpPaint=new GLPaint();
+		tmpPaint.set(paint);
+		tmpPaint.setMixColor(tmpPaint.getMixColor().copyNew().multiple(getAccentColor()));
 		c.drawTextureAnchorCenter(t,getOrigin(),(new Vec2(getBaseSize(),getBaseSize())).multiple(getScale()),paint);
 	}
 }

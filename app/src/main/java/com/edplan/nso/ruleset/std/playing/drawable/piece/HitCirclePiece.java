@@ -9,6 +9,7 @@ import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.MContext;
 import com.edplan.framework.timing.PreciseTimeline;
 import com.edplan.nso.resource.OsuSkin;
+import com.edplan.framework.graphics.opengl.objs.Color4;
 
 public class HitCirclePiece extends BasePieces implements IScaleable2D,IFadeable
 {
@@ -31,7 +32,7 @@ public class HitCirclePiece extends BasePieces implements IScaleable2D,IFadeable
 	public void draw(GLCanvas2D canvas) {
 		// TODO: Implement this method
 		//将note绘制上去
-		simpleDraw(hitcircle,canvas);
+		simpleDrawWithAccentColor(hitcircle,canvas);
 		simpleDraw(hitcircleOverlay,canvas);
 	}
 }

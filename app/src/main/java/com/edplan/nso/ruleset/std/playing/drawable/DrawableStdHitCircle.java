@@ -1,26 +1,27 @@
 package com.edplan.nso.ruleset.std.playing.drawable;
-import android.util.Log;
 import com.edplan.framework.MContext;
 import com.edplan.framework.graphics.opengl.GLCanvas2D;
+import com.edplan.framework.graphics.opengl.objs.Color4;
+import com.edplan.framework.math.FMath;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.ui.animation.precise.BasePreciseAnimation;
 import com.edplan.nso.ruleset.amodel.playing.Judgment;
 import com.edplan.nso.ruleset.amodel.playing.PlayingBeatmap;
 import com.edplan.nso.ruleset.std.objects.StdHitCircle;
 import com.edplan.nso.ruleset.std.objects.StdHitObject;
-import com.edplan.nso.ruleset.std.playing.drawable.piece.HitCirclePiece;
-import com.edplan.nso.ruleset.std.playing.judgment.StdJudgment;
-import com.edplan.framework.timing.PreciseTimeline;
-import com.edplan.framework.math.FMath;
 import com.edplan.nso.ruleset.std.playing.drawable.interfaces.IHasApproachCircle;
 import com.edplan.nso.ruleset.std.playing.drawable.piece.ApproachCircle;
 import com.edplan.nso.ruleset.std.playing.drawable.piece.BasePieces;
+import com.edplan.nso.ruleset.std.playing.drawable.piece.HitCirclePiece;
+import com.edplan.nso.ruleset.std.playing.judgment.StdJudgment;
 
 public class DrawableStdHitCircle extends DrawableStdHitObject implements IHasApproachCircle
 {
 	private HitCirclePiece circlePiece;
 	
 	private ApproachCircle approachCircle;
+	
+	private Color4 accentColor=new Color4(1,1,1,1);
 	
 	public DrawableStdHitCircle(MContext c,StdHitCircle obj){
 		super(c,obj);
@@ -60,6 +61,14 @@ public class DrawableStdHitCircle extends DrawableStdHitObject implements IHasAp
 		// TODO: Implement this method
 		super.draw(canvas);
 		circlePiece.draw(canvas);
+	}
+	
+	public void setAccentColor(Color4 accentColor) {
+		this.accentColor=accentColor;
+	}
+
+	public Color4 getAccentColor() {
+		return accentColor;
 	}
 
 	@Override

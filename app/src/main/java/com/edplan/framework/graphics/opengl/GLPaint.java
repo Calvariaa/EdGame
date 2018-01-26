@@ -27,6 +27,26 @@ public class GLPaint
 	//#Line Data，绘制线时的各种参数
 	public float strokeWidth=1f;
 	//#end Line Data
+	
+	public GLPaint(){
+		
+	}
+	
+	public GLPaint(GLPaint res){
+		set(res);
+	}
+	
+	public void set(GLPaint p){
+		setMixColor(p.getMixColor());
+		setVaryingColor(p.getVaryingColor());
+		setColorMixRate(p.getColorMixRate());
+		setFinalAlpha(p.getFinalAlpha());
+		setPadding(p.getPadding());
+		setRoundedRadius(p.getRoundedRadius());
+		setGlowFactor(p.getGlowFactor());
+		setGlowColor(p.getGlowColor());
+		setStrokeWidth(p.getStrokeWidth());
+	}
 
 	public void setStrokeWidth(float strokeWidth) {
 		this.strokeWidth=strokeWidth;
@@ -53,7 +73,7 @@ public class GLPaint
 	}
 
 	public void setGlowColor(Color4 glowColor) {
-		this.glowColor=glowColor;
+		this.glowColor.set(glowColor);
 	}
 
 	public Color4 getGlowColor() {
@@ -62,6 +82,10 @@ public class GLPaint
 
 	public void setPadding(float padding) {
 		this.padding.set(padding,padding,padding,padding);
+	}
+	
+	public void setPadding(Vec4 padding){
+		this.padding.set(padding);
 	}
 
 	public Vec4 getPadding() {

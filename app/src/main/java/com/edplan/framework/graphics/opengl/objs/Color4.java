@@ -38,6 +38,10 @@ public class Color4
 		return this;
 	}
 	
+	public Color4 multiple(Color4 c){
+		return multiple(c.r,c.g,c.b,c.a);
+	}
+	
 	public Color4 multiple(float fr,float fg,float fb,float fa){
 		this.r*=fr;
 		this.g*=fg;
