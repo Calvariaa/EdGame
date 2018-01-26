@@ -21,6 +21,10 @@ public class OsuSkin
 	@AResPath("hitcircleoverlay.png")
 	public TextureInfo hitcircleOverlay;
 	
+	@AResType(ResType.TEXTURE)
+	@AResPath("approachcircle.png")
+	public TextureInfo approachCircle;
+	
 	
 	//public TextureDrawable hitcircleDrawable;
 	
@@ -71,7 +75,7 @@ public class OsuSkin
 							f.setAccessible(true);
 							TextureInfo info=(TextureInfo)f.get(this);
 							try {
-								loadRes(info, res);
+								loadTextureRes(info, res);
 							} catch (IOException e) {
 								e.printStackTrace();
 								throw new OsuResException("res io err : "+e.getMessage(),e);
@@ -90,7 +94,7 @@ public class OsuSkin
 		}
 	}
 	
-	public void loadRes(TextureInfo info,IResource res) throws IOException{
+	public void loadTextureRes(TextureInfo info,IResource res) throws IOException{
 		info.setTexture(GLTexture.decodeResource(res,info.getPath()));
 	}
 }

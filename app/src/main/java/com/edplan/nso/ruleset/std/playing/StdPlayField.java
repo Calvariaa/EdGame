@@ -40,7 +40,9 @@ public class StdPlayField extends PlayField
 	@Override
 	public void applyBeatmap(PlayingBeatmap res) {
 		// TODO: Implement this method
+		Log.v("beatmap-data",res.getDifficulty().makeString());
 		if(res instanceof StdPlayingBeatmap){
+			//这部分代码应该移到StdPlayingBeatmap里
 			StdPlayingBeatmap beatmap=(StdPlayingBeatmap)res;
 			int objCount=beatmap.getHitObjects().size();
 			drawableHitObjects=new ArrayList<DrawableStdHitObject>(objCount);
@@ -68,9 +70,6 @@ public class StdPlayField extends PlayField
 	private void showHitObject(DrawableStdHitObject obj){
 		hitObjectsInField.add(obj);
 		obj.onShow();
-		if(obj instanceof IHasApproachCircle){
-			//添加一个ApproachCircle
-		}
 	}
 	
 	private void removeHitObject(DrawableStdHitObject obj){
@@ -114,7 +113,13 @@ public class StdPlayField extends PlayField
 	}
 	
 	private void drawApproachCircleLayer(GLCanvas2D canvas){
-		
+		DrawableStdHitObject obj;
+		for(int i=hitObjectsInField.size()-1;i>=0;i--){
+			obj=hitObjectsInField.get(i);
+			if(obj instanceof IHasApproachCircle){
+				((IHasApproachCircle)obj).getApproachCircle().draw(canvas);
+			}
+		}
 	}
 	
 	@Override
@@ -124,8 +129,8 @@ public class StdPlayField extends PlayField
 		//添加新的物件
 		pullNewAdded(curTime);
 		deleteFinished();
-		drawContentLayer(canvas);
 		drawConnectionLayer(canvas);
+		drawContentLayer(canvas);
 		drawApproachCircleLayer(canvas);
 	}
 }

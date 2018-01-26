@@ -12,10 +12,15 @@ import com.edplan.nso.ruleset.std.playing.drawable.piece.HitCirclePiece;
 import com.edplan.nso.ruleset.std.playing.judgment.StdJudgment;
 import com.edplan.framework.timing.PreciseTimeline;
 import com.edplan.framework.math.FMath;
+import com.edplan.nso.ruleset.std.playing.drawable.interfaces.IHasApproachCircle;
+import com.edplan.nso.ruleset.std.playing.drawable.piece.ApproachCircle;
+import com.edplan.nso.ruleset.std.playing.drawable.piece.BasePieces;
 
-public class DrawableStdHitCircle extends DrawableStdHitObject
+public class DrawableStdHitCircle extends DrawableStdHitObject implements IHasApproachCircle
 {
 	private HitCirclePiece circlePiece;
+	
+	private ApproachCircle approachCircle;
 	
 	public DrawableStdHitCircle(MContext c,StdHitCircle obj){
 		super(c,obj);
@@ -29,13 +34,25 @@ public class DrawableStdHitCircle extends DrawableStdHitObject
 	}
 
 	@Override
+	public ApproachCircle getApproachCircle() {
+		// TODO: Implement this method
+		return approachCircle;
+	}
+
+	@Override
 	public void applyDefault(PlayingBeatmap beatmap) {
 		// TODO: Implement this method
 		super.applyDefault(beatmap);
 		circlePiece=new HitCirclePiece(getContext(),beatmap.getTimeLine());
-		circlePiece.setOrigin(getOrigin());
-		circlePiece.setBaseSize(getBaseSize());
-		circlePiece.setSkin(beatmap.getSkin());
+		applyPiece(circlePiece,beatmap);
+		approachCircle=new ApproachCircle(getContext(),beatmap.getTimeLine());
+		applyPiece(approachCircle,beatmap);
+	}
+	
+	private void applyPiece(BasePieces p,PlayingBeatmap beatmap){
+		p.setOrigin(getOrigin());
+		p.setBaseSize(getBaseSize());
+		p.setSkin(beatmap.getSkin());
 	}
 
 	@Override
@@ -49,7 +66,8 @@ public class DrawableStdHitCircle extends DrawableStdHitObject
 	public void setAlpha(float a) {
 		// TODO: Implement this method
 		super.setAlpha(a);
-		circlePiece.setAlpha(a);
+		if(circlePiece!=null)circlePiece.setAlpha(a);
+		if(approachCircle!=null)approachCircle.setAlpha(a);
 	}
 
 	@Override
@@ -70,6 +88,7 @@ public class DrawableStdHitCircle extends DrawableStdHitObject
 		// TODO: Implement this method
 		super.onShow();
 		(new FadeInAnimation()).post(getTimeLine());
+		(new ApproachCircle.PreemptAnimation(this,approachCircle)).post(getTimeLine());
 	}
 	
 	@Override
@@ -108,7 +127,9 @@ public class DrawableStdHitCircle extends DrawableStdHitObject
 			super.onProgress(p);
 			float fp=Math.max(0,p/(float)getDuration());
 			fp=1-fp;
-			circlePiece.setAlpha(FMath.sin(fp*FMath.PiHalf));
+			float a=FMath.sin(fp*FMath.PiHalf);
+			circlePiece.setAlpha(a);
+			if(p>0)approachCircle.setAlpha(0);
 			float s=1.6f-0.6f*fp;
 			circlePiece.setScale(s,s);
 		}
@@ -121,33 +142,23 @@ public class DrawableStdHitCircle extends DrawableStdHitObject
 		}
 	}
 	
+	
+	
 	public class FadeInAnimation extends BasePreciseAnimation{
 		
 		public FadeInAnimation(){
 			setDuration(getTimeFadein());
 			setStartTime(getShowTime());
-		}
-
-		@Override
-		public void post(PreciseTimeline timeline) {
-			// TODO: Implement this method
-			super.post(timeline);
 			setProgressTime(0);
 		}
-		
+
 		@Override
 		public void setProgressTime(int p) {
 			// TODO: Implement this method
 			super.setProgressTime(p);
 			float fp=p/(float)getDuration();
-			circlePiece.setAlpha(fp);
+			setAlpha(fp);
 			//Log.v("anim-pro","prog:"+fp);
-		}
-
-		@Override
-		public void onProgress(int p) {
-			// TODO: Implement this method
-			super.onProgress(p);
 		}
 
 		@Override

@@ -15,6 +15,7 @@ public class BasePreciseAnimation extends AbstractPreciseAnimation
 	public void post(PreciseTimeline timeline){
 		state=AnimState.Running;
 		timeline.addAnimation(this);
+		setProgressTime(0);
 	}
 	
 	public void setStartTime(int startTime){

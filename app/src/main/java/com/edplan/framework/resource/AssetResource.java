@@ -28,7 +28,7 @@ public class AssetResource extends IResource
 	private void initial(){
 		try {
 			addSubRes("");
-			Log.v("res-list",Arrays.toString(list("osu")));
+			//Log.v("res-list",Arrays.toString(list("osu")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
