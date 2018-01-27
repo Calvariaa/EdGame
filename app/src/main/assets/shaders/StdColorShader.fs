@@ -10,6 +10,6 @@ uniform vec4 u_MixColor;
 
 void main(){
 	vec4 c=u_MixColor*(f_VaryingColor*u_ColorMixRate);
-	c.a*=u_FinalAlpha;
+	c*=u_FinalAlpha;
 	gl_FragColor=c;
 }

@@ -244,7 +244,7 @@ public class GLTexture extends AbstractTexture
 	
 	public static void initial(){
 		DEF_CREATE_OPTIONS=new BitmapFactory.Options();
-		DEF_CREATE_OPTIONS.inPremultiplied=false;
+		DEF_CREATE_OPTIONS.inPremultiplied=true;
 		White=create1pxTexture(Color4.White);
 		Alpha=create1pxTexture(Color4.Alpha);
 		Black=create1pxTexture(Color4.Black);

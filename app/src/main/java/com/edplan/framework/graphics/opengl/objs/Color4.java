@@ -13,6 +13,8 @@ public class Color4
 	public static final Color4 Blue=Color4.rgb(0,0,1);
 	
 	public float r,g,b,a;
+	
+	public boolean premultiple=false;
 
 	public Color4(){
 
@@ -23,11 +25,23 @@ public class Color4
 	}
 
 	public Color4(Color4 c){
-		set(c.r,c.g,c.b,c.a);
+		set(c);
 	}
 	
 	public Color4 set(Color4 c){
-		return set(c.r,c.g,c.b,c.a);
+		set(c.r,c.g,c.b,c.a);
+		premultiple=c.premultiple;
+		return this;
+	}
+
+	public Color4 toPremultipled(){
+		if(premultiple){
+			return this.copyNew();
+		}else{
+			Color4 c=new Color4(r*a,g*a,b*a,a);
+			c.premultiple=true;
+			return c;
+		}
 	}
 
 	public Color4 set(float r,float g,float b,float a){

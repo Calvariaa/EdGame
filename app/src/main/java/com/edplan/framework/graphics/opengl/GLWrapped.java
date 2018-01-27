@@ -33,7 +33,9 @@ public class GLWrapped
 				// TODO: Implement this method
 				if(t){
 					GLES20.glEnable(GLES20.GL_BLEND);
-					GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA,GLES20.GL_ONE_MINUS_SRC_ALPHA);
+					//GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA,GLES20.GL_ONE_MINUS_SRC_ALPHA);
+					GLES20.glBlendFunc(GLES20.GL_ONE,GLES20.GL_ONE_MINUS_SRC_ALPHA);
+					//GLES20.glBlendFunc(GLES20.GL_ONE,GLES20.GL_ONE);
 				}else{
 					GLES20.glDisable(GLES20.GL_BLEND);
 				}

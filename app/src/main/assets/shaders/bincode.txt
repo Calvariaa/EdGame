@@ -1,0 +1,2 @@
+	//*vec4(mix(t.rgb,f_VaryingColor.rgb,u_ColorMixRate*f_VaryingColor.a),t.a)
+	//vec4(mix(t.rgb,f_VaryingColor.rgb,u_ColorMixRate*f_VaryingColor.a),t.a)

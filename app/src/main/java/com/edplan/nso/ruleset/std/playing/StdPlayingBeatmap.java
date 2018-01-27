@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdFollowpoint;
+import android.util.Log;
 
 public class StdPlayingBeatmap extends PlayingBeatmap
 {
@@ -34,12 +35,13 @@ public class StdPlayingBeatmap extends PlayingBeatmap
 	public void calDrawables(){
 		int objCount=getHitObjects().size();
 		drawableHitObjects=new ArrayList<DrawableStdHitObject>(objCount);
-		DrawableStdHitObject dobj;
+		DrawableStdHitObject dobj=null;
 		for(StdHitObject obj:getHitObjects()){
 			dobj=createDrawableHitObject(obj);
 			dobj.applyDefault(this);
 			drawableHitObjects.add(dobj);
 		}
+		Log.v("times",dobj.getTimeFadein()+"|"+dobj.getTimePreempt());
 		//此时依然保持原顺序，计算followpoints
 		connectionObjs=new ArrayList<DrawableStdHitObject>(objCount);
 		DrawableStdHitObject pre=(objCount!=0)?drawableHitObjects.get(0):null;

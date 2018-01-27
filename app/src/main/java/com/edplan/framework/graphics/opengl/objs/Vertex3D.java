@@ -26,7 +26,7 @@ public class Vertex3D
 	}
 
 	public Vertex3D setColor(Color4 color) {
-		this.color.set(color);
+		this.color.set(color.toPremultipled());
 		return this;
 	}
 

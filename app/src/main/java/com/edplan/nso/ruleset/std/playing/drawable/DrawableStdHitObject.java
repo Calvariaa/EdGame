@@ -108,8 +108,8 @@ public class DrawableStdHitObject extends DrawableHitObject
 	 */
 	public void applyDefault(PlayingBeatmap beatmap){
 		timeLine=beatmap.getTimeLine();
-		timePreempt=(int)(DifficultyUtil.stdHitObjectTimePreempt(beatmap.getDifficulty().getApproachRate())*0.25);
-		timeFadein=(int)(DifficultyUtil.stdHitObjectTimeFadein(beatmap.getDifficulty().getApproachRate())*0.25);
+		timePreempt=DifficultyUtil.stdHitObjectTimePreempt(beatmap.getDifficulty().getApproachRate());
+		timeFadein=DifficultyUtil.stdHitObjectTimeFadein(beatmap.getDifficulty().getApproachRate());
 		baseSize*=DifficultyUtil.stdCircleSizeScale(beatmap.getDifficulty().getCircleSize());
 		showTime=hitObject.getStartTime()-timePreempt;
 		/*if(!getHitObject().isNewCombo()){

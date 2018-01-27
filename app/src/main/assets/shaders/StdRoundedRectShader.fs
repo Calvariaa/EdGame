@@ -44,7 +44,7 @@ void main(){
 	vec4 t=texture2D(u_Texture,f_TexturePosition);
 	float edgeFactor=1.0-pow(0.2,dis);
 	
-	vec4 c=u_MixColor*vec4(mix(t.rgb,f_VaryingColor.rgb,u_ColorMixRate*f_VaryingColor.a),t.a);
+	vec4 c=u_MixColor*t;
 	
 	if(dis>0.0){
 		c=mix(c,u_GlowColor,u_GlowColor.a*edgeFactor);
@@ -56,6 +56,6 @@ void main(){
 		c.a=mix(c.a,1.0,((w-dis)/w/2.0));
 	}
 	
-	c.a*=r_alpha*u_FinalAlpha;
+	c*=r_alpha*u_FinalAlpha;
 	gl_FragColor=c;
 }

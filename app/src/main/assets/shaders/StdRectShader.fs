@@ -24,7 +24,10 @@ void main(){
 		return;
 	}
 	vec4 t=texture2D(u_Texture,f_TexturePosition);
-	vec4 c=u_MixColor*vec4(mix(t.rgb,f_VaryingColor.rgb,u_ColorMixRate*f_VaryingColor.a),t.a);
-	c.a*=u_FinalAlpha;
+	vec4 c=u_MixColor*t;
+	
+
+	
+	c*=u_FinalAlpha;
 	gl_FragColor=c;
 }

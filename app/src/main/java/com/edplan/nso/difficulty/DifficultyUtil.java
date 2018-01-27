@@ -15,7 +15,7 @@ public class DifficultyUtil
 	 *线性插值计算difficulty对应的数值
 	 *@param difficulty:默认范围为0～10，实际可能会有大于10的情况（比如dt ar10）
 	 */
-	public static float difficultyRange(float difficulty,float max,float mid,float min){
+	public static float difficultyRange(float difficulty,float min,float mid,float max){
 		if(difficulty>5){
 			return mid+(max-mid)*(difficulty-5)/5;
 		}else if(difficulty<5){
@@ -45,7 +45,7 @@ public class DifficultyUtil
 		return (int)
 			difficultyRange(
 				ar,
-				STD_TIME_PREEMPT_MAX,
+				STD_TIME_FADEIN_MAX,
 				STD_TIME_FADEIN_MID,
 				STD_TIME_FADEIN_MIN
 			);
