@@ -354,18 +354,31 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		Vec2 dirt=end.copy().minus(start);
 		dirt.toOrthogonalDirectionNormal().zoom(w);
 		Vertex3D v1=Vertex3D
-			 .atPosition(new Vec3(start.copy().add(dirt),defZ))
-			 .setColor(color);
+			.atPosition(new Vec3(start.copy().add(dirt),defZ))
+			.setColor(color);
 		Vertex3D v2=Vertex3D
-			 .atPosition(new Vec3(start.copy().minus(dirt),defZ))
-			 .setColor(color);
+			.atPosition(new Vec3(start.copy().minus(dirt),defZ))
+			.setColor(color);
 		Vertex3D v3=Vertex3D
-			 .atPosition(new Vec3(end.copy().add(dirt),defZ))
-			 .setColor(color);
+			.atPosition(new Vec3(end.copy().add(dirt),defZ))
+			.setColor(color);
 		Vertex3D v4=Vertex3D
-			 .atPosition(new Vec3(end.copy().minus(dirt),defZ))
-			 .setColor(color);
-		return new Vertex3D[]{v1,v2,v4,v1,v4,v3};
+			.atPosition(new Vec3(end.copy().minus(dirt),defZ))
+			.setColor(color);
+		return new Vertex3D[]{v1,v2,v3,v4};
+	}
+	
+	public Vertex3D[] rectToTriangles(Vertex3D[] v){
+		return new Vertex3D[]{v[0],v[1],v[3],v[0],v[3],v[2]};
+	}
+	
+	public Vertex3D[] createLineRectVertexTriangles(Vec2 start,Vec2 end,float w,Color4 color){
+		Vertex3D[] v=createLineRectVertex(start,end,w,color);
+		return rectToTriangles(v);
+	}
+	
+	public void clearTmpColorBatch(){
+		tmpColorBatch.clear();
 	}
 	
 	public void addToColorBatch(Vertex3D[] v){
@@ -393,7 +406,7 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		tmpColorBatch.clear();
 		for(int i=0;i<lines.length;i+=4){
 			addToColorBatch(
-				createLineRectVertex(
+				createLineRectVertexTriangles(
 					new Vec2(lines[i],lines[i+1]),
 					new Vec2(lines[i+2],lines[i+3]),
 					paint.getStrokeWidth(),

@@ -26,6 +26,9 @@ public class OsuSkin
 	@AResPath("approachcircle.png")
 	public TextureInfo approachCircle;
 	
+	@AResType(ResType.TEXTURE)
+	@AResPath("followpoint.png")
+	public TextureInfo followpoint;
 	
 	public IComboColorGenerater comboColorGenerater;
 	

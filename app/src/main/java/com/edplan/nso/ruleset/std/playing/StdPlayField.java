@@ -1,24 +1,26 @@
 package com.edplan.nso.ruleset.std.playing;
+import android.util.Log;
 import com.edplan.framework.MContext;
 import com.edplan.framework.graphics.opengl.GLCanvas2D;
+import com.edplan.framework.graphics.opengl.GLPaint;
+import com.edplan.framework.graphics.opengl.objs.Color4;
+import com.edplan.framework.math.Vec2;
 import com.edplan.framework.timing.PreciseTimeline;
 import com.edplan.nso.ruleset.amodel.playing.PlayField;
 import com.edplan.nso.ruleset.amodel.playing.PlayingBeatmap;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdHitObject;
 import com.edplan.nso.ruleset.std.playing.drawable.interfaces.IHasApproachCircle;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import com.edplan.nso.ruleset.std.objects.StdHitObject;
-import android.util.Log;
+import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdFollowpoint;
 
 public class StdPlayField extends PlayField
 {
-	private List<DrawableStdHitObject> drawableHitObjects;
+	private FieldDrawables drawableHitObjects=new FieldDrawables();
 	
-	private int savedIndex=0;
+	private FieldDrawables connectionDrawables=new FieldDrawables();
 	
 	private PreciseTimeline timeline;
 	
@@ -26,7 +28,7 @@ public class StdPlayField extends PlayField
 	
 	//private connectionLayer;
 	
-	private List<DrawableStdHitObject> hitObjectsInField;
+	
 	
 	public StdPlayField(MContext context,PreciseTimeline timeline){
 		super(context);
@@ -34,7 +36,7 @@ public class StdPlayField extends PlayField
 	}
 
 	public List<DrawableStdHitObject> getDrawableHitObjects() {
-		return drawableHitObjects;
+		return drawableHitObjects.getObjects();
 	}
 
 	@Override
@@ -42,83 +44,68 @@ public class StdPlayField extends PlayField
 		// TODO: Implement this method
 		Log.v("beatmap-data",res.getDifficulty().makeString());
 		if(res instanceof StdPlayingBeatmap){
-			//这部分代码应该移到StdPlayingBeatmap里
 			StdPlayingBeatmap beatmap=(StdPlayingBeatmap)res;
-			int objCount=beatmap.getHitObjects().size();
-			drawableHitObjects=new ArrayList<DrawableStdHitObject>(objCount);
-			DrawableStdHitObject dobj;
-			for(StdHitObject obj:beatmap.getHitObjects()){
-				dobj=beatmap.createDrawableHitObject(obj);
-				dobj.applyDefault(beatmap);
-				drawableHitObjects.add(dobj);
-			}
-			Collections.sort(drawableHitObjects, new Comparator<DrawableStdHitObject>(){
-					@Override
-					public int compare(DrawableStdHitObject p1,DrawableStdHitObject p2) {
-						// TODO: Implement this method
-						return (int)Math.signum(p1.getShowTime()-p2.getShowTime());
-					}
-				});
-			Log.v("first-obj",""+drawableHitObjects.get(0).getShowTime()+" pos:"+drawableHitObjects.get(0).getOrigin());
-			hitObjectsInField=new ArrayList<DrawableStdHitObject>();
-			savedIndex=0;
+			drawableHitObjects.setObjects(beatmap.getDrawableHitObjects());
+			connectionDrawables.setObjects(beatmap.getDrawableConnections());
+			Log.v("test-datas","Connections: "+connectionDrawables.getObjects().size());
 		}else{
 			throw new IllegalArgumentException("you can only apply a StdPlayingBeatmap to StdPlayField");
 		}
 	}
 	
-	private void showHitObject(DrawableStdHitObject obj){
-		hitObjectsInField.add(obj);
-		obj.onShow();
-	}
 	
-	private void removeHitObject(DrawableStdHitObject obj){
-		obj.onFinish();
-	}
-	
-	protected void pullNewAdded(int curTime){
-		DrawableStdHitObject obj;
-		for(;savedIndex<drawableHitObjects.size();savedIndex++){
-			obj=drawableHitObjects.get(savedIndex);
-			if(obj.getShowTime()<=curTime){
-				showHitObject(obj);
-			}else{
-				break;
-			}
-		}
-	}
-	
-	protected void deleteFinished(){
-		Iterator<DrawableStdHitObject> iter=hitObjectsInField.iterator();
-		DrawableStdHitObject obj;
-		while(iter.hasNext()){
-			obj=iter.next();
-			if(obj.isFinished()){
-				removeHitObject(obj);
-				iter.remove();
-			}
-		}
-	}
 	
 	protected void drawContentLayer(GLCanvas2D canvas){
 		DrawableStdHitObject obj;
-		for(int i=hitObjectsInField.size()-1;i>=0;i--){
-			obj=hitObjectsInField.get(i);
+		for(int i=drawableHitObjects.getObjectsInField().size()-1;i>=0;i--){
+			obj=drawableHitObjects.getObjectsInField().get(i);
 			obj.draw(canvas);
+			if(obj instanceof IHasApproachCircle){
+				((IHasApproachCircle)obj).getApproachCircle().draw(canvas);
+			}
 		}
 	}
 	
 	private void drawConnectionLayer(GLCanvas2D canvas){
-		
+		DrawableStdHitObject obj;
+		for(int i=connectionDrawables.getObjectsInField().size()-1;i>=0;i--){
+			obj=connectionDrawables.getObjectsInField().get(i);
+			obj.draw(canvas);
+		}
 	}
 	
 	private void drawApproachCircleLayer(GLCanvas2D canvas){
 		DrawableStdHitObject obj;
-		for(int i=hitObjectsInField.size()-1;i>=0;i--){
-			obj=hitObjectsInField.get(i);
+		for(int i=drawableHitObjects.getObjectsInField().size()-1;i>=0;i--){
+			obj=drawableHitObjects.getObjectsInField().get(i);
 			if(obj instanceof IHasApproachCircle){
 				((IHasApproachCircle)obj).getApproachCircle().draw(canvas);
 			}
+		}
+	}
+	
+	private void drawTestLayer(GLCanvas2D canvas){
+		List<DrawableStdHitObject> l=drawableHitObjects.getObjectsInField();
+		GLPaint paint=new GLPaint();
+		paint.setColorMixRate(1);
+		paint.setStrokeWidth(2f);
+		paint.setMixColor(Color4.rgba(1,0,0,1));
+		StdHitObject v1,v2;
+		for(int i=1;i<l.size();i++){
+			v1=l.get(i-1).getHitObject();
+			v2=l.get(i).getHitObject();
+			if(!v2.isNewCombo())canvas.drawLines(new float[]{v1.getStartX(),v1.getStartY(),v2.getStartX(),v2.getStartY()},paint);
+		}
+		
+		l=connectionDrawables.getObjectsInField();
+		
+		//StdHitObject v1,v2;
+		paint.setStrokeWidth(1f);
+		paint.setMixColor(Color4.rgba(0,1,0,1));
+		for(int i=0;i<l.size();i++){
+			v1=((DrawableStdFollowpoint)l.get(i)).getObj1().getHitObject();
+			v2=((DrawableStdFollowpoint)l.get(i)).getObj2().getHitObject();
+			if(!v2.isNewCombo())canvas.drawLines(new float[]{v1.getStartX(),v1.getStartY(),v2.getStartX(),v2.getStartY()},paint);
 		}
 	}
 	
@@ -127,10 +114,79 @@ public class StdPlayField extends PlayField
 		// TODO: Implement this method
 		int curTime=timeline.frameTime();
 		//添加新的物件
-		pullNewAdded(curTime);
-		deleteFinished();
+		drawableHitObjects.prepareToDraw(curTime);
+		connectionDrawables.prepareToDraw(curTime);
+		
 		drawConnectionLayer(canvas);
+		//drawTestLayer(canvas);
 		drawContentLayer(canvas);
-		drawApproachCircleLayer(canvas);
+		//drawApproachCircleLayer(canvas);
+	}
+	
+	public class FieldDrawables{
+		private List<DrawableStdHitObject> drawableHitObjects;
+
+		private List<DrawableStdHitObject> hitObjectsInField=new ArrayList<DrawableStdHitObject>();
+
+		private int savedIndex=0;
+		
+		public FieldDrawables(){
+			
+		}
+
+		public void setObjectsInField(List<DrawableStdHitObject> hitObjectsInField) {
+			this.hitObjectsInField=hitObjectsInField;
+		}
+
+		public List<DrawableStdHitObject> getObjectsInField() {
+			return hitObjectsInField;
+		}
+
+		public void setObjects(List<DrawableStdHitObject> drawableHitObjects) {
+			this.drawableHitObjects=drawableHitObjects;
+		}
+
+		public List<DrawableStdHitObject> getObjects() {
+			return drawableHitObjects;
+		}
+		
+		public void prepareToDraw(int curTime){
+			pullNewAdded(curTime);
+			deleteFinished();
+		}
+		
+		private void showHitObject(DrawableStdHitObject obj){
+			hitObjectsInField.add(obj);
+			obj.onShow();
+		}
+
+		private void removeHitObject(DrawableStdHitObject obj){
+			obj.onFinish();
+		}
+
+		private void pullNewAdded(int curTime){
+			DrawableStdHitObject obj;
+			for(;savedIndex<drawableHitObjects.size();savedIndex++){
+				obj=drawableHitObjects.get(savedIndex);
+				if(obj.getShowTime()<=curTime){
+					showHitObject(obj);
+				}else{
+					break;
+				}
+			}
+		}
+
+		protected void deleteFinished(){
+			Iterator<DrawableStdHitObject> iter=hitObjectsInField.iterator();
+			DrawableStdHitObject obj;
+			while(iter.hasNext()){
+				obj=iter.next();
+				if(obj.isFinished()){
+					removeHitObject(obj);
+					iter.remove();
+				}
+			}
+		}
+		
 	}
 }

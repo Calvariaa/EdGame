@@ -38,6 +38,7 @@ import android.util.Log;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdHitCircle;
 import com.edplan.framework.audio.bass.BassChannel;
 import com.edplan.framework.timing.AudioTimeline;
+import com.edplan.framework.timing.AdjustableTimeline;
 
 public class TestView extends EdView
 {
@@ -109,9 +110,9 @@ public class TestView extends EdView
 				bparser.parse();
 				Log.v("parse-osu","end parse");
 				beatmap=bparser.makeupBeatmap(StdBeatmap.class);
-				timeline=//new AudioTimeline(audio);
-				new PreciseTimeline();
-				
+				timeline=new AudioTimeline(audio);
+				//new PreciseTimeline();
+				//new AdjustableTimeline(1f);
 				playingBeatmap=new StdPlayingBeatmap(getContext(),beatmap,timeline,skin);
 				Log.v("osu","objs: "+playingBeatmap.getHitObjects().size()+" first: "+playingBeatmap.getHitObjects().get(0).getStartTime());
 				playField=new StdPlayField(getContext(),timeline);
@@ -249,7 +250,7 @@ public class TestView extends EdView
 								getContext().getUiLooper().addLoopableBeforeDraw(timeline);
 								audio.play();
 							}
-					},5000);
+					},2000);
 				}
 			});
 		

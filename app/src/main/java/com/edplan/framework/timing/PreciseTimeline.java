@@ -99,7 +99,7 @@ public class PreciseTimeline extends Loopable
 	private boolean postProgress(AbstractPreciseAnimation anim,int postTime){
 		int p;
 		p=frameTime()-anim.getStartTimeAtTimeline();
-		if(p<anim.getDuration()){
+		if(p>=0)if(p<anim.getDuration()){
 			anim.setProgressTime(p);
 			anim.onProgress(p);
 		}else{

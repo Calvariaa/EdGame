@@ -11,7 +11,7 @@ import com.edplan.nso.ruleset.std.objects.StdHitCircle;
 import com.edplan.nso.ruleset.std.objects.StdHitObject;
 import com.edplan.nso.ruleset.std.playing.drawable.interfaces.IHasApproachCircle;
 import com.edplan.nso.ruleset.std.playing.drawable.piece.ApproachCircle;
-import com.edplan.nso.ruleset.std.playing.drawable.piece.BasePieces;
+import com.edplan.nso.ruleset.std.playing.drawable.piece.BasePiece;
 import com.edplan.nso.ruleset.std.playing.drawable.piece.HitCirclePiece;
 import com.edplan.nso.ruleset.std.playing.judgment.StdJudgment;
 import com.edplan.framework.utils.MLog;
@@ -47,14 +47,6 @@ public class DrawableStdHitCircle extends DrawableStdHitObject implements IHasAp
 		applyPiece(circlePiece,beatmap);
 		approachCircle=new ApproachCircle(getContext(),beatmap.getTimeLine());
 		applyPiece(approachCircle,beatmap);
-	}
-	
-	private void applyPiece(BasePieces p,PlayingBeatmap beatmap){
-		p.setAccentColor(getAccentColor());
-		MLog.test.vOnce("color-test","color-test",getAccentColor().toString());
-		p.setOrigin(getOrigin());
-		p.setBaseSize(getBaseSize());
-		p.setSkin(beatmap.getSkin());
 	}
 
 	@Override
@@ -129,7 +121,8 @@ public class DrawableStdHitCircle extends DrawableStdHitObject implements IHasAp
 			super.onProgress(p);
 			float fp=Math.max(0,p/(float)getDuration());
 			fp=1-fp;
-			float a=FMath.sin(fp*FMath.PiHalf);
+			float a=fp;
+			//FMath.sin(fp*FMath.PiHalf);
 			circlePiece.setAlpha(a);
 			if(p>0)approachCircle.setAlpha(0);
 			float s=1.6f-0.6f*fp;

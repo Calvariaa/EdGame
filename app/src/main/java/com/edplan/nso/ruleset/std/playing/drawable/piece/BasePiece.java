@@ -10,10 +10,13 @@ import com.edplan.framework.ui.drawable.EdDrawable;
 import com.edplan.framework.ui.drawable.interfaces.IFadeable;
 import com.edplan.framework.ui.drawable.interfaces.IScaleable2D;
 import com.edplan.nso.resource.OsuSkin;
+import com.edplan.framework.utils.MLog;
 
-public abstract class BasePieces extends EdDrawable implements IScaleable2D,IFadeable
+public abstract class BasePiece extends EdDrawable implements IScaleable2D,IFadeable
 {
-	private float baseSize;
+	public static float DEF_SIZE=64;
+	
+	private float baseSize=DEF_SIZE;
 
 	private Vec2 origin=new Vec2();
 
@@ -27,7 +30,7 @@ public abstract class BasePieces extends EdDrawable implements IScaleable2D,IFad
 	
 	private Color4 accentColor=new Color4(1,1,1,1);
 
-	public BasePieces(MContext c,PreciseTimeline timeline){
+	public BasePiece(MContext c,PreciseTimeline timeline){
 		super(c);
 		this.timeline=timeline;
 	}

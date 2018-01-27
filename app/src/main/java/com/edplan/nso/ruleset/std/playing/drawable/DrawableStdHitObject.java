@@ -9,6 +9,7 @@ import com.edplan.nso.ruleset.amodel.playing.Judgment;
 import com.edplan.nso.ruleset.amodel.playing.PlayingBeatmap;
 import com.edplan.nso.ruleset.amodel.playing.drawable.DrawableHitObject;
 import com.edplan.nso.ruleset.std.objects.StdHitObject;
+import com.edplan.nso.ruleset.std.playing.drawable.piece.BasePiece;
 
 public class DrawableStdHitObject extends DrawableHitObject
 {
@@ -36,6 +37,26 @@ public class DrawableStdHitObject extends DrawableHitObject
 		super(c);
 		hitObject=obj;
 		setOrigin(new Vec2(obj.getStartX(),obj.getStartY()));
+	}
+
+	public void setShowTime(int showTime) {
+		this.showTime=showTime;
+	}
+	
+	public int getObjStartTime(){
+		return getHitObject().getStartTime();
+	}
+	
+	public int getObjPredictedEndTime(){
+		return getObjStartTime();
+	}
+	
+	public Vec2 getStartPoint(){
+		return new Vec2(getHitObject().getStartX(),getHitObject().getStartY());
+	}
+	
+	public Vec2 getEndPoint(){
+		return new Vec2(getHitObject().getStartX(),getHitObject().getStartY());
 	}
 
 	public void setAccentColor(Color4 accentColor) {
@@ -87,10 +108,20 @@ public class DrawableStdHitObject extends DrawableHitObject
 	 */
 	public void applyDefault(PlayingBeatmap beatmap){
 		timeLine=beatmap.getTimeLine();
-		timePreempt=(int)(DifficultyUtil.stdHitObjectTimePreempt(beatmap.getDifficulty().getApproachRate())*0.4);
-		timeFadein=(int)(DifficultyUtil.stdHitObjectTimeFadein(beatmap.getDifficulty().getApproachRate())*0.4);
+		timePreempt=(int)(DifficultyUtil.stdHitObjectTimePreempt(beatmap.getDifficulty().getApproachRate())*0.25);
+		timeFadein=(int)(DifficultyUtil.stdHitObjectTimeFadein(beatmap.getDifficulty().getApproachRate())*0.25);
 		baseSize*=DifficultyUtil.stdCircleSizeScale(beatmap.getDifficulty().getCircleSize());
 		showTime=hitObject.getStartTime()-timePreempt;
+		/*if(!getHitObject().isNewCombo()){
+			baseSize*=0.1f;
+		}*/
+	}
+	
+	protected void applyPiece(BasePiece p,PlayingBeatmap beatmap){
+		p.setAccentColor(getAccentColor());
+		p.setOrigin(getOrigin());
+		p.setBaseSize(getBaseSize());
+		p.setSkin(beatmap.getSkin());
 	}
 	
 	/**

@@ -11,7 +11,7 @@ import com.edplan.framework.timing.PreciseTimeline;
 import com.edplan.nso.resource.OsuSkin;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 
-public class HitCirclePiece extends BasePieces implements IScaleable2D,IFadeable
+public class HitCirclePiece extends BasePiece implements IScaleable2D,IFadeable
 {
 	private GLTexture hitcircle;
 	
