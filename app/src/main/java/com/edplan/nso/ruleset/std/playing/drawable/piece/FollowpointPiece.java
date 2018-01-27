@@ -18,6 +18,12 @@ public class FollowpointPiece extends BasePiece
 	
 	private Vec2 p2=new Vec2();
 	
+	private Vec2 offCircleP1;
+	
+	private Vec2 offCircleP2;
+	
+	private boolean needDraw=true;
+	
 	private float progress=0;
 	
 	private Color4 color1=Color4.rgba(1,1,1,1);
@@ -34,8 +40,19 @@ public class FollowpointPiece extends BasePiece
 		paint.setColorMixRate(1);
 	}
 
+	public void calOffCirclePoints(){
+		float dis=Vec2.length(p1,p2);
+		if(dis<=getBaseSize()*2){
+			needDraw=false;
+		}else{
+			offCircleP1=Vec2.onLineLength(p1,p2,getBaseSize());
+			offCircleP2=Vec2.onLineLength(p2,p1,getBaseSize());
+		}
+	}
+
 	public void setProgress(float progress) {
 		this.progress=progress;
+		calOffCirclePoints();
 	}
 
 	public float getProgress() {
@@ -63,6 +80,7 @@ public class FollowpointPiece extends BasePiece
 		// TODO: Implement this method
 		super.setBaseSize(baseSize);
 		paint.setStrokeWidth(baseWidth*getBaseSize()/BasePiece.DEF_SIZE);
+		calOffCirclePoints();
 	}
 
 	@Override
@@ -96,13 +114,14 @@ public class FollowpointPiece extends BasePiece
 		setColor1(Color4.White);
 		setColor2(Color4.White);
 		progress=1;*/
-		Vertex3D[] v=canvas.createLineRectVertex(p1,Vec2.onLine(p1,p2,progress),paint.getStrokeWidth(),color1);
-		v[2].setColor(color2);
-		v[3].setColor(color2);
-		
-		canvas.clearTmpColorBatch();
-		canvas.addToColorBatch(canvas.rectToTriangles(v));
-		canvas.postColorBatch(paint);
-		
+		if(needDraw){
+			Vertex3D[] v=canvas.createLineRectVertex(offCircleP1,Vec2.onLine(offCircleP1,offCircleP2,progress),paint.getStrokeWidth(),color1);
+			v[2].setColor(color2);
+			v[3].setColor(color2);
+
+			canvas.clearTmpColorBatch();
+			canvas.addToColorBatch(canvas.rectToTriangles(v));
+			canvas.postColorBatch(paint);
+		}
 	}
 }

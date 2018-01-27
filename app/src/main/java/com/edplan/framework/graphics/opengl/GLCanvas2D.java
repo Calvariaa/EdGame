@@ -152,8 +152,6 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	
 	public Mat4 getFinalMatrix(){
 		return getData().getFinalMatrix();
-		//getMaskMatrix().copy().post(getMProjMatrix());
-		//getMProjMatrix().copy().pre(getMaskMatrix());
 	}
 	
 	public void drawColor(Color4 color){
@@ -194,43 +192,11 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		shader.loadRectPositions(batch.makeRectPositionBuffer());
 	}
 	
-	/*
-	public void drawTexture3DBatch(Texture3DBatch batch,AbstractTexture texture,float alpha,Color4 mixColor){
-		checkCanDraw();
-		injectData(batch,texture,alpha,mixColor,getData().getTexture3DShader());
-		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, batch.getVertexCount());
-	}*/
-	
 	public void drawTexture3DBatch(Texture3DBatch batch,AbstractTexture texture,float alpha,Color4 mixColor){
 		checkCanDraw();
 		injectData(batch,texture.getTexture(),alpha,mixColor,getData().getTexture3DShader());
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, batch.getVertexCount());
 	}
-	
-	/*
-	private RectVertex[] createRectVertexs(AbstractTexture texture,RectF res,RectF dst,Color4 color,float z){
-		//  3          2
-		//   ┌────┐
-		//   └────┘
-		//  0          1
-		RectVertex v0=RectVertex.atRect(dst,0,1);
-		v0.setPosition(new Vec3(dst.getPoint(0,1),z));
-		v0.setColor(color);
-		v0.setTexturePoint(texture.toTexturePosition(res.getX1(),res.getY2()));
-		RectVertex v1=RectVertex.atRect(dst,1,1);
-		v1.setPosition(new Vec3(dst.getPoint(1,1),z));
-		v1.setColor(color);
-		v1.setTexturePoint(texture.toTexturePosition(res.getX2(),res.getY2()));
-		RectVertex v2=RectVertex.atRect(dst,1,0);
-		v2.setPosition(new Vec3(dst.getPoint(1,0),z));
-		v2.setColor(color);
-		v2.setTexturePoint(texture.toTexturePosition(res.getX2(),res.getY1()));
-		RectVertex v3=RectVertex.atRect(dst,0,0);
-		v3.setPosition(new Vec3(dst.getPoint(0,0),z));
-		v3.setColor(color);
-		v3.setTexturePoint(texture.toTexturePosition(res.getX1(),res.getY1()));
-		return new RectVertex[]{v0,v1,v2,v3};
-	}*/
 	
 	private RectVertex[] createRectVertexs(AbstractTexture texture,RectF res,RectF dst,Color4 color,float z){
 		//  3          2
@@ -425,6 +391,11 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		drawTexture(texture,new RectF(0,0,texture.getWidth(),texture.getHeight()),dst,paint);
 	}
 	
+	public void drawTextureAnchorCenter(AbstractTexture texture,Vec2 org,Vec4 w,GLPaint paint){
+		RectF dst=RectF.ltrb(org.x-w.r,org.y-w.g,org.x+w.b,org.y+w.a);
+		drawTexture(texture,new RectF(0,0,texture.getWidth(),texture.getHeight()),dst,paint);
+	}
+	
 	public MContext getContext(){
 		return getLayer().getContext();
 	}
@@ -448,11 +419,5 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	protected void finalize() throws Throwable {
 		// TODO: Implement this method
 		super.finalize();
-		/*
-		if(isPrepared()){
-			//自动解除canvas，推荐每次prepare和unprepare配套使用
-			unprepare();
-			delete();
-		}*/
 	}
 }

@@ -13,10 +13,17 @@ public class GLProgram implements Recycleable
 	
 	private int id;
 	
+	private int noPreMultipleId;
+	
 	protected GLProgram(GLShader vs,GLShader fs,int id){
 		this.vertexShader=vs;
 		this.fragmentShader=fs;
 		this.id=id;
+	}
+	
+	public void linkNoPreMultipleShader(GLShader nmpfs){
+		GLProgram p=linkShader(vertexShader,nmpfs);
+		this.noPreMultipleId=p.getProgramId();
 	}
 
 	public GLShader getVertexShader() {

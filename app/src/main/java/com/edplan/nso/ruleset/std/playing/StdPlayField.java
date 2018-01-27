@@ -60,9 +60,9 @@ public class StdPlayField extends PlayField
 		for(int i=drawableHitObjects.getObjectsInField().size()-1;i>=0;i--){
 			obj=drawableHitObjects.getObjectsInField().get(i);
 			obj.draw(canvas);
-			if(obj instanceof IHasApproachCircle){
-				((IHasApproachCircle)obj).getApproachCircle().draw(canvas);
-			}
+			//if(obj instanceof IHasApproachCircle){
+			//	((IHasApproachCircle)obj).getApproachCircle().draw(canvas);
+			//}
 		}
 	}
 	
@@ -120,7 +120,7 @@ public class StdPlayField extends PlayField
 		drawConnectionLayer(canvas);
 		//drawTestLayer(canvas);
 		drawContentLayer(canvas);
-		//drawApproachCircleLayer(canvas);
+		drawApproachCircleLayer(canvas);
 	}
 	
 	public class FieldDrawables{
