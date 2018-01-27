@@ -227,7 +227,7 @@ public class GLTexture extends AbstractTexture
 		return tex;
 	}
 
-	private static int createTexture(){
+	private static synchronized int createTexture(){
 		int[] t=new int[1];
 		GLES20.glGenTextures(1,t,0);
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,t[0]);

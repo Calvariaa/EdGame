@@ -42,10 +42,13 @@ public class OsuSkin
 		comboColorGenerater=
 			BaseComboColorGenerater
 				 .createBy(
-				  Color4.rgb(1,0.8f,0.8f),
-				  Color4.rgb(0.8f,1,0.8f),
-				  Color4.rgb(0.8f,0.8f,1),
-				  Color4.rgb(1,1,1));
+				  Color4.rgb(1,0.2f,0.2f),
+				  Color4.rgb(0.2f,1,0.2f),
+				  Color4.rgb(0.2f,0.2f,1),
+				  Color4.rgb(1,1,1),
+				  Color4.rgb(1,1,0.2f),
+				  Color4.rgb(1,0.2f,1),
+				  Color4.rgb(0.2f,1,1));
 		try{
 			Class klass=OsuSkin.class;
 			Field[] fields=klass.getFields();

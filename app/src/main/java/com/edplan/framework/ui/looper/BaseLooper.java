@@ -18,6 +18,10 @@ public class BaseLooper<T extends Loopable> implements AbstractLooper<T>
 		loopables=new SafeList<T>();
 		timer=new MTimer();
 	}
+	
+	public int getDeltaTime(){
+		return timer.getDeltaTime();
+	}
 
 	public void setTimer(MTimer timer){
 		this.timer=timer;

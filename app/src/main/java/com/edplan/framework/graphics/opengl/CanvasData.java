@@ -66,6 +66,7 @@ public class CanvasData implements Recycleable,Copyable {
 
 	public void setCurrentProjMatrix(Mat4 projMatrix) {
 		this.currentProjMatrix.set(projMatrix);
+		freshMatrix();
 	}
 
 	public Mat4 getCurrentProjMatrix() {
@@ -93,6 +94,7 @@ public class CanvasData implements Recycleable,Copyable {
 	
 	public CanvasData translate(float tx,float ty){
 		getCurrentMaskMatrix().translate(tx,ty,0);
+		freshMatrix();
 		return this;
 	}
 	

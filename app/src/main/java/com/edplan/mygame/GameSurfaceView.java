@@ -99,13 +99,15 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		mDrawThread.setFlag(flag);
 	}
 	
-	Paint tp=new Paint();
-	Paint fp=new Paint();
+	
+	
 	int[] timelist=new int[20];
 	public void mDraw(Canvas c){
 		c.drawColor(getClearColor());
 		content.draw(c);
 		if(drawDetails){
+			Paint tp=new Paint();
+			Paint fp=new Paint();
 			tp.setARGB(255,255,255,255);
 			tp.setTextSize(30);
 			tp.setStrokeWidth(7);

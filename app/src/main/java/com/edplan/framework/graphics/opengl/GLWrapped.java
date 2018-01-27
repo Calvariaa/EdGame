@@ -9,6 +9,7 @@ import com.edplan.framework.utils.advance.BooleanCopyable;
 import com.edplan.framework.utils.advance.BooleanSetting;
 import com.edplan.framework.interfaces.Setter;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
+import com.edplan.framework.interfaces.Copyable;
 
 public class GLWrapped
 {
@@ -25,7 +26,7 @@ public class GLWrapped
 			}
 		},
 		false).initial();
-		
+
 	public static final
 	BooleanSetting blend=new BooleanSetting(new Setter<Boolean>(){
 			@Override
@@ -42,7 +43,7 @@ public class GLWrapped
 			}
 		},
 		false).initial();
-		
+	
 	public static void initial(){
 		//depthTest=false;
 		//GLES20.glDisable(GLES20.GL_DEPTH_TEST);
@@ -98,5 +99,56 @@ public class GLWrapped
             Log.e("ES20_ERROR", op + ": glError " + error);
             throw new GLException(op + ": glError " + error);
         }
+	}
+	
+	public static class BlendPropert implements Copyable {
+		
+		public boolean enable=true;
+		
+		public int srcType=GLES20.GL_ONE;
+		
+		public int dstType=GLES20.GL_ONE_MINUS_SRC_ALPHA;
+		
+		public BlendPropert(){
+			
+		}
+		
+		public BlendPropert(BlendPropert b){
+			set(b);
+		}
+		
+		public void set(BlendPropert b){
+			this.enable=b.enable;
+			this.srcType=b.srcType;
+			this.dstType=b.dstType;
+		}
+		
+		public void applyToGL(){
+			if(enable){
+				GLES20.glEnable(GLES20.GL_BLEND);
+				GLES20.glBlendFunc(srcType,dstType);
+			}else{
+				GLES20.glDisable(GLES20.GL_BLEND);
+			}
+		}
+		
+		public void setAddictiveMode(){
+			
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			// TODO: Implement this method
+			if(obj instanceof BlendPropert){
+				BlendPropert b=(GLWrapped.BlendPropert) obj;
+				return (enable==b.enable)&&(srcType==b.srcType)&&(dstType==b.srcType);
+			}else return false;
+		}
+		
+		@Override
+		public Copyable copy() {
+			// TODO: Implement this method
+			return new BlendPropert(this);
+		}
 	}
 }

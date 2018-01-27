@@ -383,6 +383,10 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		postColorBatch(paint);
 	}
 
+	public void drawLine(float x1,float y1,float x2,float y2,GLPaint paint){
+		drawLines(new float[]{x1,y1,x2,y2},paint);
+	}
+
 	/**
 	 *通过简便的参数以canvas上某一点为中心绘制一张Texture
 	 */

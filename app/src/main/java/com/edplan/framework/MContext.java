@@ -97,7 +97,7 @@ public class MContext
 	}
 	
 	public int getFrameDeltaTime(){
-		return getLooper().getTimer().getDeltaTime();
+		return uiLooper.getTimer().getDeltaTime();
 	}
 	
 	public MLooper getLooper(){
