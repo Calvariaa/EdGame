@@ -9,6 +9,8 @@ public class BaseComboColorGenerater implements IComboColorGenerater
 	
 	private int index=0;
 	
+	private Color4 currentColor;
+	
 	public BaseComboColorGenerater(){
 		
 	}
@@ -32,13 +34,14 @@ public class BaseComboColorGenerater implements IComboColorGenerater
 	@Override
 	public Color4 currentColor() {
 		// TODO: Implement this method
-		return colorList.get(index);
+		return currentColor;
 	}
 	
 	@Override
 	public Color4 nextColor() {
 		// TODO: Implement this method
 		Color4 c=colorList.get(index);
+		currentColor=c;
 		moveStep(1);
 		return c;
 	}

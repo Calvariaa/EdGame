@@ -20,7 +20,7 @@ import com.edplan.framework.math.Vec2;
 import com.edplan.framework.utils.MLog;
 import com.edplan.nso.ParsingBeatmap;
 import com.edplan.nso.ruleset.amodel.parser.HitObjectParser;
-import com.edplan.nso.ruleset.std.objects.drawables.DrawableStdSlider;
+import com.edplan.nso.ruleset.std.objects.drawables.StdSliderPathMaker;
 import com.edplan.nso.ruleset.std.parser.StdHitObjectParser;
 import java.io.IOException;
 import javax.microedition.khronos.egl.EGLConfig;

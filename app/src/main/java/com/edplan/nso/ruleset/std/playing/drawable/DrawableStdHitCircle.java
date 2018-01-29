@@ -81,8 +81,14 @@ public class DrawableStdHitCircle extends DrawableStdHitObject implements IHasAp
 	public void onShow() {
 		// TODO: Implement this method
 		super.onShow();
-		(new FadeInAnimation()).post(getTimeLine());
-		(new ApproachCircle.PreemptAnimation(this,approachCircle)).post(getTimeLine());
+		circlePiece.fadeIn(this);
+		approachCircle.fadeAndScaleIn(this);
+	}
+
+	@Override
+	public boolean isFinished() {
+		// TODO: Implement this method
+		return circlePiece.isFinished();
 	}
 	
 	@Override
@@ -102,73 +108,6 @@ public class DrawableStdHitCircle extends DrawableStdHitObject implements IHasAp
 			case None:
 				break;
 			default:break;
-		}
-	}
-
-	public class TestOutAnimation extends BasePreciseAnimation{
-		static final float m=5;
-		
-		public TestOutAnimation(int startTime){
-			setStartTime(startTime);
-			setDuration(300);
-			//(int)(m*(DrawableStdHitCircle.this.getHitObject().getStartTime()-getStartTimeAtTimeline())));
-		}
-
-		
-		@Override
-		public void onProgress(int p) {
-			// TODO: Implement this method
-			super.onProgress(p);
-			float fp=Math.max(0,p/(float)getDuration());
-			fp=1-fp;
-			float a=fp;
-			//FMath.sin(fp*FMath.PiHalf);
-			circlePiece.setAlpha(a);
-			if(p>0)approachCircle.setAlpha(0);
-			float s=1.6f-0.6f*fp;
-			circlePiece.setScale(s,s);
-		}
-
-		@Override
-		public void onEnd() {
-			// TODO: Implement this method
-			super.onEnd();
-			finish();
-		}
-	}
-	
-	
-	
-	public class FadeInAnimation extends BasePreciseAnimation{
-		
-		public FadeInAnimation(){
-			setDuration(getTimeFadein());
-			setStartTime(getShowTime());
-			setProgressTime(0);
-		}
-
-		@Override
-		public void setProgressTime(int p) {
-			// TODO: Implement this method
-			super.setProgressTime(p);
-			float fp=p/(float)getDuration();
-			setAlpha(FMath.sin(fp*FMath.PiHalf));
-			//Log.v("anim-pro","prog:"+fp);
-		}
-
-		@Override
-		public void onEnd() {
-			// TODO: Implement this method
-			super.onEnd();
-			//Log.v("test_anim","end:"+getStartTimeAtTimeline());
-			(new TestOutAnimation(getHitObject().getStartTime())).post(getTimeLine());
-		}
-	}
-	
-	public class FadeOutAnimation extends BasePreciseAnimation{
-		public FadeOutAnimation(int startTime){
-			setStartTime(startTime);
-			//setDuration(gett
 		}
 	}
 }

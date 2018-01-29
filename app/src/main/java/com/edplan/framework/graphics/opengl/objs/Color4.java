@@ -159,6 +159,10 @@ public class Color4
 		return new Color4(r/255f,g/255f,b/255f,a/255f);
 	}
 	
+	public static Color4 argb255(int a,int r,int g,int b){
+		return new Color4(r/255f,g/255f,b/255f,a/255f);
+	}
+	
 	public static Color4 argb255(int v){
 		return rgba255(Color.red(v),Color.green(v),Color.blue(v),Color.alpha(v));
 	}

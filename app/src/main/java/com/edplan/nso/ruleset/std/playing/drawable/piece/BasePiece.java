@@ -29,10 +29,28 @@ public abstract class BasePiece extends EdDrawable implements IScaleable2D,IFade
 	private PreciseTimeline timeline;
 	
 	private Color4 accentColor=new Color4(1,1,1,1);
+	
+	private boolean finished=false;
 
 	public BasePiece(MContext c,PreciseTimeline timeline){
 		super(c);
 		this.timeline=timeline;
+	}
+
+	public void setTimeline(PreciseTimeline timeline) {
+		this.timeline=timeline;
+	}
+
+	public PreciseTimeline getTimeline() {
+		return timeline;
+	}
+
+	public void finish() {
+		this.finished=true;
+	}
+
+	public boolean isFinished() {
+		return finished;
 	}
 
 	public void setAccentColor(Color4 accentColor) {

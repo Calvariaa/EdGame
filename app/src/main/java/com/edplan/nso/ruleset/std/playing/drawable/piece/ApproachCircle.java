@@ -26,15 +26,18 @@ public class ApproachCircle extends BasePiece
 	@Override
 	public void draw(GLCanvas2D canvas) {
 		// TODO: Implement this method
+		if(isFinished())return;
 		simpleDrawWithAccentColor(approachCircle,canvas);
 	}
 	
-	public static class PreemptAnimation extends BasePreciseAnimation{
-
-		private ApproachCircle approachCircle;
+	public void fadeAndScaleIn(DrawableStdHitObject obj){
+		(new PreemptAnimation(obj)).post(getTimeline());
+		(new FadeInAnimation(obj)).post(getTimeline());
+	}
+	
+	public class PreemptAnimation extends BasePreciseAnimation{
 		
-		public PreemptAnimation(DrawableStdHitObject obj,ApproachCircle c){
-			approachCircle=c;
+		public PreemptAnimation(DrawableStdHitObject obj){
 			setDuration(obj.getTimePreempt());
 			setStartTime(obj.getShowTime());
 			setProgressTime(0);
@@ -45,9 +48,32 @@ public class ApproachCircle extends BasePiece
 			// TODO: Implement this method
 			super.setProgressTime(p);
 			float fp=p/(float)getDuration();
-			float s=3f*(1-fp)+1.1f*fp;
-			approachCircle.setScale(s,s);
+			float s=3f*(1-fp)+1.0f*fp;
+			setScale(s,s);
 		}
 
+		@Override
+		public void onEnd() {
+			// TODO: Implement this method
+			super.onEnd();
+			finish();
+		}
+	}
+	
+	public class FadeInAnimation extends BasePreciseAnimation{
+
+		public FadeInAnimation(DrawableStdHitObject obj){
+			setDuration(obj.getTimeFadein());
+			setStartTime(obj.getShowTime());
+			setProgressTime(0);
+		}
+
+		@Override
+		public void setProgressTime(int p) {
+			// TODO: Implement this method
+			super.setProgressTime(p);
+			float fp=p/(float)getDuration();
+			setAlpha(fp);
+		}
 	}
 }

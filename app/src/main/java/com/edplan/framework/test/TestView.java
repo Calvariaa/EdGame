@@ -27,7 +27,7 @@ import com.edplan.nso.resource.OsuSkin;
 import com.edplan.nso.ruleset.amodel.playing.PlayField;
 import com.edplan.nso.ruleset.std.StdBeatmap;
 import com.edplan.nso.ruleset.std.objects.StdSlider;
-import com.edplan.nso.ruleset.std.objects.drawables.DrawableStdSlider;
+import com.edplan.nso.ruleset.std.objects.drawables.StdSliderPathMaker;
 import com.edplan.nso.ruleset.std.parser.StdHitObjectParser;
 import java.io.IOException;
 import com.edplan.nso.ruleset.std.playing.StdPlayingBeatmap;
@@ -40,6 +40,7 @@ import com.edplan.framework.audio.bass.BassChannel;
 import com.edplan.framework.timing.AudioTimeline;
 import com.edplan.framework.timing.AdjustableTimeline;
 import com.edplan.framework.ui.drawable.BitmapDrawable;
+import java.io.FileOutputStream;
 
 public class TestView extends EdView
 {
@@ -59,7 +60,7 @@ public class TestView extends EdView
 	
 	private Vec2 point=new Vec2();
 	
-	private DrawableStdSlider sld;
+	private StdSliderPathMaker sld;
 	
 	private float postAlpha=1;
 	
@@ -102,16 +103,22 @@ public class TestView extends EdView
 												   //"t+pazolite with siromaru - Chambarising (Bloodmoon) [Stream Practice (160)].osu"
 												   //"Suzuki Konomi - Cyber Thunder Cider (Nattu) [Niat's Cider].osu"
 												   //"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
-												   "UNDEAD CORPORATION - The Empress (Plutia) [STARBOW BREAK!].osu"
+												   //"UNDEAD CORPORATION - The Empress (Plutia) [STARBOW BREAK!].osu"
 												   //"Mai Zang - Si Ye Cao De Huang Xiang (Axarious) [Despair].osu"
+												   //"Osu!Droid Tieba Challenge - Evolution Pack (Believer_zzr) [Future Cider].osu"
+												   //"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
 												   //"Yueporu feat. Hatsune Miku - Kurikaeshi Hitotsubu (Zweib) [Hitotsubu].osu"
+												   "1/Chino (CV.Minase Inori) - Okashina yume o Ohitotsu douzo (- Skanbis -) [Asuka_-'s insane].osu"
 												   ),
 												"test case beatmap: " 
 												 );
 												 
 			audio=BassChannel.createStreamFromAsset(getContext(),"osu/test/beatmap/"+
-			"test.mp3"
+			//"test.mp3"
 			//"cloverfantasy.mp3"
+			//"audio.mp3"
+			//"No Poi!.mp3"
+			"1/audio.mp3"
 			);
 			try
 			{
@@ -121,12 +128,11 @@ public class TestView extends EdView
 				beatmap=bparser.makeupBeatmap(StdBeatmap.class);
 				timeline=new AudioTimeline(audio);
 				//new PreciseTimeline();
-				//new AdjustableTimeline(1f);
+				//new AdjustableTimeline(0.5f);
 				playingBeatmap=new StdPlayingBeatmap(getContext(),beatmap,timeline,skin);
 				Log.v("osu","objs: "+playingBeatmap.getHitObjects().size()+" first: "+playingBeatmap.getHitObjects().get(0).getStartTime());
 				playField=new StdPlayField(getContext(),timeline);
 				playField.applyBeatmap(playingBeatmap);
-				firstObj=(DrawableStdHitCircle)playField.getDrawableHitObjects().get(0);
 			}
 			catch (NsoException e)
 			{
@@ -157,7 +163,7 @@ public class TestView extends EdView
 					"256,273,1724,6,0,B|256:340|256:340|208:340|208:340|208:332|188:320|188:320|205:304|215:280|215:280|240:248|248:212|248:212|252:192|248:156|248:156|236:156|236:156|248:156|248:156|248:116|248:116|244:88|216:72|216:72|236:64|256:60|256:60|260:28|256:25|256:25|252:28|256:60|256:60|276:64|296:72|296:72|268:88|264:116|264:116|264:156|264:156|276:156|276:156|264:156|264:156|260:192|264:212|264:212|272:248|298:280|298:280|312:304|324:320|324:320|312:332|312:340|312:340|256:340|256:340|256:272,1,1049.99996795654,4|0,3:2|0:2,0:2:0:0:");
 				//"84,364,348429,6,0,B|41:353|5:288|5:288|50:270|50:270|-1:208|5:127|5:127|67:177|67:177|73:62|144:22|144:22|152:125|152:125|242:21|372:32|372:32|282:119|282:119|402:97|500:184|506:238|506:238|459:224|441:230,1,1395.00005321503,6|0,0:3|3:0,0:0:0:0:");
 				//"431,64,72803,2,0,B|409:47|370:43|337:56|317:84|317:84|354:88|376:112,1,191.999994140625,8|8,0:0|0:3,0:0:0:0:");
-				sld=new DrawableStdSlider(sl.getPath());
+				sld=new StdSliderPathMaker(sl.getPath());
 			} catch (NsoException e) {
 				e.printStackTrace();
 			}
@@ -171,7 +177,7 @@ public class TestView extends EdView
             float opacity_at_centre = 0.3f;
             float opacity_at_edge = 0.8f;
 			
-			Bitmap bmp=Bitmap.createBitmap(500,1,Bitmap.Config.ARGB_8888);
+			Bitmap bmp=Bitmap.createBitmap(700,1,Bitmap.Config.ARGB_8888);
 			for(int x=0;x<bmp.getWidth();x++){
 				//float v=x/(float)bmp.getWidth();
 				//float theta=(float)Math.acos(v);
@@ -196,6 +202,7 @@ public class TestView extends EdView
 					bmp.setPixel(x,0,Color4.mix(Color4.gray(1),Color4.argb255(Color.argb(255,gr,gr,gr)),1-FMath.min((v-0.9f)*10*10,1)).toIntBit());
 				}*/
 			}
+			//bmp.compress(Bitmap.CompressFormat.PNG,100,new FileOutputStream("/storage/emulated/0/MyDisk/WorkBench/data/out/slider-texture.png"));
 			sliderTex=GLTexture.create(bmp,true);
 			
 			
@@ -279,7 +286,7 @@ public class TestView extends EdView
 										//"256,273,1724,6,0,B|256:340|256:340|208:340|208:340|208:332|188:320|188:320|205:304|215:280|215:280|240:248|248:212|248:212|252:192|248:156|248:156|236:156|236:156|248:156|248:156|248:116|248:116|244:88|216:72|216:72|236:64|256:60|256:60|260:28|256:25|256:25|252:28|256:60|256:60|276:64|296:72|296:72|268:88|264:116|264:116|264:156|264:156|276:156|276:156|264:156|264:156|260:192|264:212|264:212|272:248|298:280|298:280|312:304|324:320|324:320|312:332|312:340|312:340|256:340|256:340|256:272,1,1049.99996795654,4|0,3:2|0:2,0:2:0:0:");
 									//"84,364,348429,6,0,B|41:353|5:288|5:288|50:270|50:270|-1:208|5:127|5:127|67:177|67:177|73:62|144:22|144:22|152:125|152:125|242:21|372:32|372:32|282:119|282:119|402:97|500:184|506:238|506:238|459:224|441:230,1,1395.00005321503,6|0,0:3|3:0,0:0:0:0:");
 									//"431,64,72803,2,0,B|409:47|370:43|337:56|317:84|317:84|354:88|376:112,1,191.999994140625,8|8,0:0|0:3,0:0:0:0:");
-									sld=new DrawableStdSlider(sl.getPath());
+									sld=new StdSliderPathMaker(sl.getPath());
 									playAnim();
 								} catch (NsoException e) {
 									e.printStackTrace();
@@ -296,7 +303,7 @@ public class TestView extends EdView
 												//"256,273,1724,6,0,B|256:340|256:340|208:340|208:340|208:332|188:320|188:320|205:304|215:280|215:280|240:248|248:212|248:212|252:192|248:156|248:156|236:156|236:156|248:156|248:156|248:116|248:116|244:88|216:72|216:72|236:64|256:60|256:60|260:28|256:25|256:25|252:28|256:60|256:60|276:64|296:72|296:72|268:88|264:116|264:116|264:156|264:156|276:156|276:156|264:156|264:156|260:192|264:212|264:212|272:248|298:280|298:280|312:304|324:320|324:320|312:332|312:340|312:340|256:340|256:340|256:272,1,1049.99996795654,4|0,3:2|0:2,0:2:0:0:");
 												"84,364,348429,6,0,B|41:353|5:288|5:288|50:270|50:270|-1:208|5:127|5:127|67:177|67:177|73:62|144:22|144:22|152:125|152:125|242:21|372:32|372:32|282:119|282:119|402:97|500:184|506:238|506:238|459:224|441:230,1,1395.00005321503,6|0,0:3|3:0,0:0:0:0:");
 												//"431,64,72803,2,0,B|409:47|370:43|337:56|317:84|317:84|354:88|376:112,1,191.999994140625,8|8,0:0|0:3,0:0:0:0:");
-												sld=new DrawableStdSlider(sl.getPath());
+												sld=new StdSliderPathMaker(sl.getPath());
 											} catch (NsoException e) {
 												e.printStackTrace();
 											}
@@ -310,9 +317,11 @@ public class TestView extends EdView
 		
 		
 		
-		canvas.drawColor(Color4.gray(0.1f));
+		canvas.drawColor(Color4.gray(0.0f));
 		//new Color4(c,c,c,1.0f));
 		canvas.clearDepthBuffer();
+		
+		
 		
 		/*
 		canvas.save();
@@ -451,7 +460,7 @@ public class TestView extends EdView
 				}
 
 				@Override
-				public Color4 getMaskColor(Vec2 position) {
+				public Color4 getVaryingColor(Vec2 position) {
 					// TODO: Implement this method
 					return Color4.rgba(1,0,0,1);
 				}
@@ -470,7 +479,7 @@ public class TestView extends EdView
 				}
 
 				@Override
-				public Color4 getMaskColor(Vec2 position) {
+				public Color4 getVaryingColor(Vec2 position) {
 					// TODO: Implement this method
 					return Color4.rgba(1,1,1,1);
 				}
@@ -492,7 +501,7 @@ public class TestView extends EdView
 				}
 
 				@Override
-				public Color4 getMaskColor(Vec2 position) {
+				public Color4 getVaryingColor(Vec2 position) {
 					// TODO: Implement this method
 					return Color4.rgba(0.5f,0.5f,0.5f,1);
 				}
@@ -577,7 +586,7 @@ public class TestView extends EdView
 			new RectF(point.x-40,point.y-40,80,80),
 			paint);
 		canvas.save();
-		canvas.getMaskMatrix().translate(500+testPng.getWidth()/2,500+testPng.getHeight()/2,0).rotate(c*90,0,0,1);
+		canvas.translate(500+testPng.getWidth()/2,500+testPng.getHeight()/2);
 		//.post((new Mat4()).translate(10,10,0));
 
 		//canvas.drawColor(Color4.gray(0.5f));

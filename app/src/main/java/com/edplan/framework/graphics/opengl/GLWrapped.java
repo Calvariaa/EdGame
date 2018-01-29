@@ -52,13 +52,13 @@ public class GLWrapped
 	
 	private static int px1,px2,py1,py2;
 	public static void setViewport(int x1,int y1,int x2,int y2){
-		if(!(px1==x1&&px2==x2&&py1==y1&&py2==y2)){
-			GLES20.glViewport(x1,y1,x2,y2);
+		//if(!(px1==x1&&px2==x2&&py1==y1&&py2==y2)){
+			GLES20.glViewport(x1,y1,x2-x1,y2-y1);
 			px1=x1;
 			px2=x2;
 			py1=y1;
 			py2=y2;
-		}
+		//}
 	}
 	
 	public static void setClearColor(float r,float g,float b,float a){

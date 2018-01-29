@@ -24,7 +24,7 @@ import com.edplan.nso.ruleset.amodel.object.HitObject;
 import com.edplan.nso.ruleset.std.objects.StdHitObject;
 import com.edplan.nso.ruleset.std.objects.StdPath;
 import com.edplan.nso.ruleset.std.objects.StdSlider;
-import com.edplan.nso.ruleset.std.objects.drawables.DrawableStdSlider;
+import com.edplan.nso.ruleset.std.objects.drawables.StdSliderPathMaker;
 import com.edplan.nso.ruleset.std.parser.StdHitObjectParser;
 import com.edplan.nso.filepart.PartGeneral;
 import com.edplan.nso.filepart.PartHitObjects;

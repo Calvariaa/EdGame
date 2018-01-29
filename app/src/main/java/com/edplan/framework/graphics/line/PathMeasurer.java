@@ -26,6 +26,12 @@ public class PathMeasurer
 		this.path=path;
 	}
 	
+	public void onAddPoint(Vec2 v,Vec2 pre){
+		lengthes.add(lengthes.get(lengthes.size()-1)+Vec2.length(v,pre));
+		endDirection.add(v.copy().minus(pre).toNormal());
+		measureEndNormal();
+	}
+	
 	public void clear(){
 		lengthes.clear();
 		path=null;

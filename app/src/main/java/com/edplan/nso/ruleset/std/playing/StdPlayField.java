@@ -15,6 +15,8 @@ import java.util.Iterator;
 import java.util.List;
 import com.edplan.nso.ruleset.std.objects.StdHitObject;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdFollowpoint;
+import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdSlider;
+import com.edplan.framework.graphics.line.LinePath;
 
 public class StdPlayField extends PlayField
 {
@@ -27,8 +29,6 @@ public class StdPlayField extends PlayField
 	//private approachCircleLayer;
 	
 	//private connectionLayer;
-	
-	
 	
 	public StdPlayField(MContext context,PreciseTimeline timeline){
 		super(context);
@@ -85,28 +85,33 @@ public class StdPlayField extends PlayField
 	}
 	
 	private void drawTestLayer(GLCanvas2D canvas){
+		
 		List<DrawableStdHitObject> l=drawableHitObjects.getObjectsInField();
 		GLPaint paint=new GLPaint();
 		paint.setColorMixRate(1);
 		paint.setStrokeWidth(2f);
 		paint.setMixColor(Color4.rgba(1,0,0,1));
-		StdHitObject v1,v2;
-		for(int i=1;i<l.size();i++){
-			v1=l.get(i-1).getHitObject();
-			v2=l.get(i).getHitObject();
-			if(!v2.isNewCombo())canvas.drawLines(new float[]{v1.getStartX(),v1.getStartY(),v2.getStartX(),v2.getStartY()},paint);
+		for(DrawableStdHitObject obj:l){
+			if(obj instanceof DrawableStdSlider){
+				DrawableStdSlider sld=(DrawableStdSlider) obj;
+				LinePath path=sld.getPath();
+				float[] list=new float[(path.size()/2)*4];
+				for(int i=0;i<(path.size()/2)*2;i++){
+					list[i*2]=path.get(i).x;
+					list[i*2+1]=path.get(i).y;
+				}
+				canvas.drawLines(list,paint);
+			}
 		}
-		
-		l=connectionDrawables.getObjectsInField();
-		
-		//StdHitObject v1,v2;
+		/*
+		StdHitObject v1,v2;
 		paint.setStrokeWidth(1f);
 		paint.setMixColor(Color4.rgba(0,1,0,1));
 		for(int i=0;i<l.size();i++){
 			v1=((DrawableStdFollowpoint)l.get(i)).getObj1().getHitObject();
 			v2=((DrawableStdFollowpoint)l.get(i)).getObj2().getHitObject();
 			if(!v2.isNewCombo())canvas.drawLines(new float[]{v1.getStartX(),v1.getStartY(),v2.getStartX(),v2.getStartY()},paint);
-		}
+		}*/
 	}
 	
 	@Override
@@ -118,9 +123,9 @@ public class StdPlayField extends PlayField
 		connectionDrawables.prepareToDraw(curTime);
 		
 		drawConnectionLayer(canvas);
-		//drawTestLayer(canvas);
 		drawContentLayer(canvas);
 		drawApproachCircleLayer(canvas);
+		//drawTestLayer(canvas);
 	}
 	
 	public class FieldDrawables{

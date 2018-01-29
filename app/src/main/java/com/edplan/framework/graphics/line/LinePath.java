@@ -32,6 +32,22 @@ public class LinePath implements AbstractPath
 		positions=new ArrayList<Vec2>();
 	}
 
+	public float getMaxX() {
+		return maxX;
+	}
+
+	public float getMinX() {
+		return minX;
+	}
+
+	public float getMaxY() {
+		return maxY;
+	}
+
+	public float getMinY() {
+		return minY;
+	}
+
 	public PathMeasurer getMeasurer() {
 		return measurer;
 	}
@@ -42,6 +58,15 @@ public class LinePath implements AbstractPath
 		}
 		measurer=new PathMeasurer(this);
 		measurer.measure();
+	}
+	
+	/**
+	 *扩展到指定长度
+	 */
+	public void bufferLength(float length){
+		Vec2 added=measurer.atLength(length);
+		add(added);
+		measurer.onAddPoint(added,positions.get(positions.size()-2));
 	}
 	
 	/**
@@ -76,20 +101,20 @@ public class LinePath implements AbstractPath
 	}
 	
 	public RectF getDrawArea(){
-		return new RectF(minX,minY,getAreaWidth(),getAreaHeight());
+		return RectF.ltrb(minX-width,minY-width,maxX+width,maxY+width);
 	}
 	
 	public float getAreaWidth(){
-		return maxX-minX;
+		return maxX-minX+2*width;
 	}
 	
 	public float getAreaHeight(){
-		return maxY-minY;
+		return maxY-minY+2*width;
 	}
 
 	public void setWidth(float width) {
 		this.width=width;
-		recomputeBounds();
+		//recomputeBounds();
 	}
 
 	@Override
@@ -113,14 +138,23 @@ public class LinePath implements AbstractPath
 	}
 	
 	private void resetBounds(){
-		minX=minY=maxX=maxY=0;
+		minX=minY=9999999;
+		maxX=maxY=-9999999;
 	}
 	
 	private void expandBounds(Vec2 v){
-		if(v.x-width<minX)minX=v.x-width;
-		if(v.x+width>maxX)maxX=v.x+width;
-		if(v.y-width<minY)minY=v.y-width;
-		if(v.y+width>maxY)minX=v.y+width;
+		if(v.x<minX){
+			minX=v.x;
+		}
+		if(v.x>maxX){
+			maxX=v.x;
+		}
+		if(v.y<minY){
+			minY=v.y;
+		}
+		if(v.y>maxY){
+			maxY=v.y;
+		}
 	}
 	
 	private void recomputeBounds(){

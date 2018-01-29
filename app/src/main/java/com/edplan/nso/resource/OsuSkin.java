@@ -30,6 +30,8 @@ public class OsuSkin
 	@AResPath("followpoint.png")
 	public TextureInfo followpoint;
 	
+	
+	
 	public IComboColorGenerater comboColorGenerater;
 	
 	//public TextureDrawable hitcircleDrawable;

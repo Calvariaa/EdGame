@@ -31,6 +31,19 @@ public class DrawLinePath<T extends BaseColorBatch>
 	
 	public DrawLinePath(AbstractPath p){
 		path=p;
+		info=new DrawInfo(){
+			@Override
+			public Vec2 toLayerPosition(Vec2 v) {
+				// TODO: Implement this method
+				return v;
+			}
+
+			@Override
+			public Color4 getVaryingColor(Vec2 position) {
+				// TODO: Implement this method
+				return Color4.White;
+			}
+		};
 	}
 
 	public void setDrawInfo(DrawInfo i){
@@ -60,10 +73,10 @@ public class DrawLinePath<T extends BaseColorBatch>
 		/* current = org + atCircle(...)*width */
 		Vec2 current=Vec2.atCircle(theta).zoom(path.getWidth()).add(org);
 		current=info.toLayerPosition(current);
-		Color4 currentColor=info.getMaskColor(current);
+		Color4 currentColor=info.getVaryingColor(current);
 		
 		Vec2 orgAtLayer=info.toLayerPosition(org);
-		Color4 orgColor=info.getMaskColor(orgAtLayer);
+		Color4 orgColor=info.getVaryingColor(orgAtLayer);
 		
 		Vec3 orgAtLayer3D=new Vec3(orgAtLayer,Z_MIDDLE);
 		for(int i=1;i<=amountPoints;i++){
@@ -83,7 +96,7 @@ public class DrawLinePath<T extends BaseColorBatch>
 			current=
 			info.toLayerPosition(
 				Vec2.atCircle(theta+dir*angularOffset).zoom(path.getWidth()).add(org));
-			currentColor=info.getMaskColor(current);
+			currentColor=info.getVaryingColor(current);
 			
 			batch.add(
 				TextureVertex3D
@@ -105,8 +118,8 @@ public class DrawLinePath<T extends BaseColorBatch>
 		
 		Vec3 start3D=new Vec3(start,Z_MIDDLE);
 		Vec3 end3D=new Vec3(end,Z_MIDDLE);
-		Color4 startColor=info.getMaskColor(start);
-		Color4 endColor=info.getMaskColor(end);
+		Color4 startColor=info.getVaryingColor(start);
+		Color4 endColor=info.getVaryingColor(end);
 		
 		//tr 1
 		batch.add(
@@ -125,7 +138,7 @@ public class DrawLinePath<T extends BaseColorBatch>
 			TextureVertex3D
 			 .atPosition(new Vec3(endL,Z_SIDE))
 			 .setTexturePoint(textureEnd)
-			 .setColor(info.getMaskColor(endL)));
+			 .setColor(info.getVaryingColor(endL)));
 
 		//tr 2
 		batch.add(
@@ -138,13 +151,13 @@ public class DrawLinePath<T extends BaseColorBatch>
 			TextureVertex3D
 			 .atPosition(new Vec3(endL,Z_SIDE))
 			 .setTexturePoint(textureEnd)
-			 .setColor(info.getMaskColor(endL)));
+			 .setColor(info.getVaryingColor(endL)));
 
 		batch.add(
 			TextureVertex3D
 			 .atPosition(new Vec3(startL,Z_SIDE))
 			 .setTexturePoint(textureEnd)
-			 .setColor(info.getMaskColor(startL)));
+			 .setColor(info.getVaryingColor(startL)));
 
 		//tr 3
 		batch.add(
@@ -163,7 +176,7 @@ public class DrawLinePath<T extends BaseColorBatch>
 			TextureVertex3D
 			 .atPosition(new Vec3(endR,Z_SIDE))
 			 .setTexturePoint(textureEnd)
-			 .setColor(info.getMaskColor(endR)));
+			 .setColor(info.getVaryingColor(endR)));
 
 		//tr 4
 		batch.add(
@@ -176,13 +189,13 @@ public class DrawLinePath<T extends BaseColorBatch>
 			TextureVertex3D
 			 .atPosition(new Vec3(endR,Z_SIDE))
 			 .setTexturePoint(textureEnd)
-			 .setColor(info.getMaskColor(endR)));
+			 .setColor(info.getVaryingColor(endR)));
 
 		batch.add(
 			TextureVertex3D
 			 .atPosition(new Vec3(startR,Z_SIDE))
 			 .setTexturePoint(textureEnd)
-			 .setColor(info.getMaskColor(startR)));
+			 .setColor(info.getVaryingColor(startR)));
 	}
 	
 	public void addToBatch(BaseColorBatch<?> batch){

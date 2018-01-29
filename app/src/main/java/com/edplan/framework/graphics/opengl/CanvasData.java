@@ -18,7 +18,7 @@ public class CanvasData implements Recycleable,Copyable {
 
 	private Mat4 finalMatrix;
 
-	private float pixelDensity;
+	private float pixelDensity=1;
 	
 	private Texture3DShader texture3DShader;
 

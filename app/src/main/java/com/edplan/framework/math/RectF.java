@@ -27,7 +27,7 @@ public class RectF implements Copyable,Area2D
 	}
 	
 	public RectF set(RectF rect){
-		setBasePoint(rect.getLeft(),rect.getTop());
+		setBasePoint(rect.getX1(),rect.getY1());
 		width=rect.getWidth();
 		height=rect.getHeight();
 		return this;
@@ -144,6 +144,12 @@ public class RectF implements Copyable,Area2D
 	public RectF boundRect() {
 		// TODO: Implement this method
 		return this.copy();
+	}
+
+	@Override
+	public String toString() {
+		// TODO: Implement this method
+		return "(("+getX1()+","+getY1()+"),("+getX2()+","+getY2()+"))";
 	}
 	
 	public static RectF ltrb(float l,float t,float r,float b){

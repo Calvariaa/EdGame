@@ -6,7 +6,6 @@ import com.edplan.framework.graphics.opengl.objs.GLTexture;
 
 public class FrameBufferObject
 {
-	
 	private DepthBufferObject depthAttachment;
 	
 	private GLTexture colorAttachment;
@@ -172,11 +171,10 @@ public class FrameBufferObject
 				setBind(true);
 				previousFBO=currentFBO();
 				setCurrentFBO(this);
-				if(hasDepthAttachment()&&!getDepthAttachment().isBind()){
-					getDepthAttachment().bind();
-				}
+				//if(hasDepthAttachment()&&!getDepthAttachment().isBind()){
+				//	getDepthAttachment().bind();
+				//}
 				//默认bind后自动将viewport设置为当前的
-				GLWrapped.setViewport(0,0,getWidth(),getHeight());
 			}
 		}
 	}
@@ -205,6 +203,7 @@ public class FrameBufferObject
 	
 	public static void bindInitial(SystemFrameBuffer sysFrameBuffer){
 		CURRENT_FRAMEBUFFER=sysFrameBuffer;
+		GLWrapped.setViewport(0,0,sysFrameBuffer.getWidth(),sysFrameBuffer.getHeight());
 	}
 	
 	public static FrameBufferObject CURRENT_FRAMEBUFFER;
@@ -215,6 +214,7 @@ public class FrameBufferObject
 	
 	private static void setCurrentFBO(FrameBufferObject fbo){
 		CURRENT_FRAMEBUFFER=fbo;
+		GLWrapped.setViewport(0,0,fbo.getWidth(),fbo.getHeight());
 		bind(fbo.getFBOId());
 	}
 	

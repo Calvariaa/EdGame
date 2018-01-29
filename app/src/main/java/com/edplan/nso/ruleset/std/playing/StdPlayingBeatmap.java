@@ -14,6 +14,8 @@ import java.util.Comparator;
 import java.util.List;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdFollowpoint;
 import android.util.Log;
+import com.edplan.nso.ruleset.std.objects.StdSlider;
+import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdSlider;
 
 public class StdPlayingBeatmap extends PlayingBeatmap
 {
@@ -94,7 +96,13 @@ public class StdPlayingBeatmap extends PlayingBeatmap
 	}
 	
 	public DrawableStdHitObject createDrawableHitObject(StdHitObject obj){
-		DrawableStdHitObject dobj=new DrawableStdHitCircle(getContext(),obj);
+		DrawableStdHitObject dobj=null;
+		if(obj instanceof StdSlider){
+			dobj=new DrawableStdSlider(getContext(),(StdSlider)obj);
+			//Log.v("sld","create sld");
+		}else{
+			dobj=new DrawableStdHitCircle(getContext(),obj);
+		}
 		if(obj.isNewCombo()){
 			getSkin().comboColorGenerater.skipColors(obj.getComboColorsSkip());
 			dobj.setAccentColor(getSkin().comboColorGenerater.nextColor());
