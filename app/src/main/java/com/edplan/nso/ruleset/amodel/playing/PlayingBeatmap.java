@@ -2,6 +2,7 @@ package com.edplan.nso.ruleset.amodel.playing;
 import com.edplan.framework.timing.PreciseTimeline;
 import com.edplan.nso.filepart.PartDifficulty;
 import com.edplan.nso.resource.OsuSkin;
+import com.edplan.nso.ruleset.std.playing.controlpoint.ControlPoints;
 
 public abstract class PlayingBeatmap
 {
@@ -27,4 +28,6 @@ public abstract class PlayingBeatmap
 	}
 	
 	public abstract PartDifficulty getDifficulty();
+	
+	public abstract ControlPoints getControlPoints();
 }

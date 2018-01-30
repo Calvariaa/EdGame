@@ -100,15 +100,16 @@ public class TestView extends EdView
 												getContext()
 												 .getAssetResource()
 												  .subResource("osu/test/beatmap").openInput(
-												   //"t+pazolite with siromaru - Chambarising (Bloodmoon) [Stream Practice (160)].osu"
-												   //"Suzuki Konomi - Cyber Thunder Cider (Nattu) [Niat's Cider].osu"
-												   //"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
-												   //"UNDEAD CORPORATION - The Empress (Plutia) [STARBOW BREAK!].osu"
-												   //"Mai Zang - Si Ye Cao De Huang Xiang (Axarious) [Despair].osu"
-												   //"Osu!Droid Tieba Challenge - Evolution Pack (Believer_zzr) [Future Cider].osu"
-												   //"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
-												   //"Yueporu feat. Hatsune Miku - Kurikaeshi Hitotsubu (Zweib) [Hitotsubu].osu"
-												   "1/Chino (CV.Minase Inori) - Okashina yume o Ohitotsu douzo (- Skanbis -) [Asuka_-'s insane].osu"
+			//"t+pazolite with siromaru - Chambarising (Bloodmoon) [Stream Practice (160)].osu"
+			//"Suzuki Konomi - Cyber Thunder Cider (Nattu) [Niat's Cider].osu"
+			//"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
+			//"UNDEAD CORPORATION - The Empress (Plutia) [STARBOW BREAK!].osu"
+			//"Mai Zang - Si Ye Cao De Huang Xiang (Axarious) [Despair].osu"
+			//"Osu!Droid Tieba Challenge - Evolution Pack (Believer_zzr) [Future Cider].osu"
+			//"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
+			//"Yueporu feat. Hatsune Miku - Kurikaeshi Hitotsubu (Zweib) [Hitotsubu].osu"
+			//"1/Chino (CV.Minase Inori) - Okashina yume o Ohitotsu douzo (- Skanbis -) [Asuka_-'s insane].osu"
+			"2/Halozy - Kikoku Doukoku Jigokuraku (Hollow Wings) [Notch Hell].osu"
 												   ),
 												"test case beatmap: " 
 												 );
@@ -118,7 +119,8 @@ public class TestView extends EdView
 			//"cloverfantasy.mp3"
 			//"audio.mp3"
 			//"No Poi!.mp3"
-			"1/audio.mp3"
+			//"1/audio.mp3"
+			"2/Kikoku Doukoku Jigokuraku.mp3"
 			);
 			try
 			{
@@ -126,9 +128,9 @@ public class TestView extends EdView
 				bparser.parse();
 				Log.v("parse-osu","end parse");
 				beatmap=bparser.makeupBeatmap(StdBeatmap.class);
-				timeline=new AudioTimeline(audio);
+				timeline=//new AudioTimeline(audio);
 				//new PreciseTimeline();
-				//new AdjustableTimeline(0.5f);
+				new AdjustableTimeline(1f);
 				playingBeatmap=new StdPlayingBeatmap(getContext(),beatmap,timeline,skin);
 				Log.v("osu","objs: "+playingBeatmap.getHitObjects().size()+" first: "+playingBeatmap.getHitObjects().get(0).getStartTime());
 				playField=new StdPlayField(getContext(),timeline);

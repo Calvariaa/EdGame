@@ -17,8 +17,8 @@ public class TimingPointsParser implements PartParser<PartTimingPoints>
 	public TimingPoint parseTimingPoint(String l){
 		TimingPoint t=new TimingPoint();
 		StringSpliter sp=new StringSpliter(l,",");
-		t.setOffset(U.toInt(sp.next()));
-		t.setMillionsecondsPerBeat(U.toDouble(sp.next()));
+		t.setTime(U.toInt(sp.next()));
+		t.setBeatLength(U.toDouble(sp.next()));
 		t.setMeter(U.toInt(sp.next()));
 		t.setSampleType(U.toInt(sp.next()));
 		t.setSampleSet(SampleSet.parse(sp.next()));

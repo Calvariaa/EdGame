@@ -10,8 +10,8 @@ import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.graphics.opengl.objs.TextureVertex3D;
+import com.edplan.framework.math.Vec2;
 import com.edplan.framework.timing.PreciseTimeline;
-import com.edplan.framework.ui.animation.precise.BasePreciseAnimation;
 import com.edplan.framework.ui.drawable.BufferedDrawable;
 import com.edplan.nso.resource.OsuSkin;
 import com.edplan.nso.ruleset.std.objects.StdSlider;
@@ -29,14 +29,22 @@ public class SliderBody extends BasePiece
 	
 	private LinePath sliderPath;
 	
-	private Texture3DBatch<TextureVertex3D> batch=new Texture3DBatch<TextureVertex3D>();
-
-	private GLTexture sliderPathTexture;
-	
 	public SliderBody(MContext c,PreciseTimeline t,DrawableStdSlider sld){
 		super(c,t);
 		this.slider=(StdSlider)sld.getHitObject();
 		sliderPath=sld.getPath();
+	}
+	
+	public Vec2 getCurrentHeadPoint(){
+		return sliderPath.getMeasurer().atLength((float)(slider.getPixelLength()*getProgress1()));
+	}
+
+	public Vec2 getCurrentEndPoint(){
+		return sliderPath.getMeasurer().atLength((float)(slider.getPixelLength()*getProgress2()));
+	}
+	
+	public Vec2 getPointAt(float length){
+		return sliderPath.getMeasurer().atLength(length);
 	}
 
 	@Override

@@ -206,7 +206,8 @@ public class DrawLinePath<T extends BaseColorBatch>
 				addLineCap(path.get(0),0,FMath.Pi);
 				return;
 			}else{
-				throw new RuntimeException("Path must has at least 1 point");
+				return;
+				//throw new RuntimeException("Path must has at least 1 point");
 			}
 		}
 		

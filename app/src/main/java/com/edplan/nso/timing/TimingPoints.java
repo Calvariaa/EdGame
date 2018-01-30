@@ -15,6 +15,10 @@ public class TimingPoints implements StringMakeable
 		timings.add(t);
 	}
 	
+	public ArrayList<TimingPoint> getTimingPointList(){
+		return timings;
+	}
+	
 	@Override
 	public String makeString(){
 		// TODO: Implement this method

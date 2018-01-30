@@ -191,7 +191,7 @@ public class StdBeatmapParser implements StringMakeable
 		parsers.put(PartEditor.TAG       ,editorParser       );
 		parsers.put(PartMetadata.TAG     ,metadataParser     );
 		parsers.put(PartDifficulty.TAG   ,difficultyParser   );
-		parsers.put(PartEvents.TAG        ,eventsParser       );
+		parsers.put(PartEvents.TAG       ,eventsParser       );
 		parsers.put(PartTimingPoints.TAG ,timingPointsParser );
 		parsers.put(PartColours.TAG      ,coloursParser      );
 		parsers.put(PartHitObjects.TAG   ,hitObjectsParser   );

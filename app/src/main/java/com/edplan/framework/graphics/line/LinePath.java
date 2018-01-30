@@ -64,6 +64,7 @@ public class LinePath implements AbstractPath
 	 *扩展到指定长度
 	 */
 	public void bufferLength(float length){
+		if(measurer.maxLength()>=length)return;
 		Vec2 added=measurer.atLength(length);
 		add(added);
 		measurer.onAddPoint(added,positions.get(positions.size()-2));

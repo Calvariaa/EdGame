@@ -12,9 +12,13 @@ import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.ui.animation.AnimationHelper;
 import com.edplan.nso.ruleset.std.playing.drawable.interfaces.IHasApproachCircle;
 import com.edplan.nso.ruleset.std.playing.drawable.piece.ApproachCircle;
+import com.edplan.nso.timing.TimingPoint;
+import com.edplan.nso.ruleset.std.playing.controlpoint.TimingControlPoint;
 
 public class DrawableStdSlider extends DrawableStdHitObject implements IHasApproachCircle
 {
+	private final float BASE_SCORING_DISTANCE=100;
+	
 	private ApproachCircle approachCircle;
 	
 	private StdSlider slider;
@@ -25,11 +29,27 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 	
 	private SliderBody body;
 	
+	private double velocity;
+	
 	private HitCirclePiece startPiece;
 	
 	public DrawableStdSlider(MContext c,StdSlider slider){
 		super(c,slider);
 		this.slider=slider;
+	}
+	
+	public void setVelocity(double velocity) {
+		this.velocity=velocity;
+	}
+
+	public double getVelocity() {
+		return velocity;
+	}
+
+	@Override
+	public int getObjPredictedEndTime() {
+		// TODO: Implement this method
+		return (int)(slider.getStartTime()+slider.getRepeat()*slider.getPixelLength()/getVelocity());
 	}
 
 	@Override
@@ -52,16 +72,27 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 	public void applyDefault(PlayingBeatmap beatmap) {
 		// TODO: Implement this method
 		super.applyDefault(beatmap);
+		
+		TimingControlPoint timingPoint=beatmap.getControlPoints().getTimingPointAt(slider.getStartTime());
+		double speedMultiplier=beatmap.getControlPoints().getDifficultyPointAt(slider.getStartTime()).getSpeedMultiplier();
+		
+		double scoringDistance=BASE_SCORING_DISTANCE*beatmap.getDifficulty().getSliderMultiplier()*speedMultiplier;
+		velocity=scoringDistance/timingPoint.getBeatLength();
+		
 		StdSliderPathMaker maker=new StdSliderPathMaker(slider.getPath());
 		maker.setBaseSize(getBaseSize());
 		path=maker.calculatePath();
 		path.measure();
 		path.bufferLength((float)slider.getPixelLength());
-		endPoint=path.getMeasurer().atLength((float)slider.getPixelLength());
+		endPoint=(slider.getRepeat()%2==1)?path.getMeasurer().atLength((float)slider.getPixelLength()):new Vec2(slider.getStartX(),slider.getStartY());
+		
 		body=new SliderBody(getContext(),beatmap.getTimeLine(),this);
 		applyPiece(body,beatmap);
+		
 		startPiece=new HitCirclePiece(getContext(),beatmap.getTimeLine());
+		startPiece.setAlpha(0);
 		applyPiece(startPiece,beatmap);
+		
 		approachCircle=new ApproachCircle(getContext(),getTimeLine());
 		applyPiece(approachCircle,beatmap);
 	}
@@ -78,9 +109,14 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 	public void onShow() {
 		// TODO: Implement this method
 		super.onShow();
-		startPiece.fadeIn(this);
 		(new ShowSliderAnimation()).post(getTimeLine());
 		approachCircle.fadeAndScaleIn(this);
+	}
+
+	@Override
+	public boolean isFinished() {
+		// TODO: Implement this method
+		return super.isFinished()&&startPiece.isFinished();
 	}
 	
 	public class ShowSliderAnimation extends BasePreciseAnimation{
@@ -94,6 +130,7 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 			// TODO: Implement this method
 			super.onProgress(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
+			startPiece.setAlpha(fp);
 			body.setAlpha(fp);
 			body.setProgress2(fp);
 		}
@@ -102,14 +139,14 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 		public void onFinish() {
 			// TODO: Implement this method
 			super.onFinish();
-			(new FadeOutAnimation()).post(getTimeLine());
+			(new SlideOutAnimation()).post(getTimeLine());
 		}
 	}
 	
-	public class FadeOutAnimation extends BasePreciseAnimation{
-		public FadeOutAnimation(){
+	public class SlideOutAnimation extends BasePreciseAnimation{
+		public SlideOutAnimation(){
 			setStartTime(getObjStartTime());
-			setDuration(400);
+			setDuration(getObjPredictedEndTime()-getObjStartTime());
 		}
 
 		@Override
@@ -117,6 +154,46 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 			// TODO: Implement this method
 			super.onProgress(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
+			//body.setProgress1(fp);
+			//startPiece.setOrigin(body.getCurrentHeadPoint());
+			//body.setAlpha(fp);
+			float repeatProgress=(fp*slider.getRepeat())%1;
+			int repeatCount=(int)(fp*slider.getRepeat());
+			float positionProgress=((repeatCount%2==0)?repeatProgress:(1-repeatProgress));
+			startPiece.setOrigin(body.getPointAt((float)(slider.getPixelLength()*positionProgress)));
+			if(repeatCount==slider.getRepeat()-1){
+				if(repeatCount%2==0){
+					body.setProgress1(positionProgress);
+				}else{
+					body.setProgress2(positionProgress);
+				}
+			}
+			//body.setProgress1(positionProgress);
+		}
+
+		@Override
+		public void onFinish() {
+			// TODO: Implement this method
+			super.onFinish();
+			body.setAlpha(0);
+			startPiece.explode(getObjPredictedEndTime());
+			finish();
+			//(new FadeOutAnimation()).post(getTimeLine());
+		}
+	}
+	
+	public class FadeOutAnimation extends BasePreciseAnimation{
+		public FadeOutAnimation(){
+			setStartTime(getObjPredictedEndTime());
+			setDuration(getTimeFadein()/2);
+		}
+
+		@Override
+		public void onProgress(int p) {
+			// TODO: Implement this method
+			super.onProgress(p);
+			float fp=AnimationHelper.getFloatProgress(p,getDuration());
+			startPiece.setAlpha(1-fp);
 			body.setAlpha(1-fp);
 		}
 
@@ -127,5 +204,4 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 			finish();
 		}
 	}
-	
 }

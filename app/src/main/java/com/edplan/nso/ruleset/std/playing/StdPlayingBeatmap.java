@@ -16,6 +16,7 @@ import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdFollowpoint;
 import android.util.Log;
 import com.edplan.nso.ruleset.std.objects.StdSlider;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdSlider;
+import com.edplan.nso.ruleset.std.playing.controlpoint.ControlPoints;
 
 public class StdPlayingBeatmap extends PlayingBeatmap
 {
@@ -27,11 +28,19 @@ public class StdPlayingBeatmap extends PlayingBeatmap
 	
 	private List<DrawableStdHitObject> connectionObjs;
 	
+	private ControlPoints controlPoints;
+	
 	public StdPlayingBeatmap(MContext context,StdBeatmap beatmap,PreciseTimeline timeline,OsuSkin skin){
 		super(skin,timeline);
 		this.context=context;
 		this.beatmap=beatmap;
+		loadControlPoints();
 		calDrawables();
+	}
+	
+	public void loadControlPoints(){
+		controlPoints=new ControlPoints();
+		controlPoints.load(getBeatmap().getTimingPoints().getTimingPoints());
 	}
 
 	public void calDrawables(){
@@ -58,7 +67,6 @@ public class StdPlayingBeatmap extends PlayingBeatmap
 			}
 			pre=now;
 		}
-		/*
 		Collections.sort(connectionObjs, new Comparator<DrawableStdHitObject>(){
 				@Override
 				public int compare(DrawableStdHitObject p1,DrawableStdHitObject p2) {
@@ -72,7 +80,7 @@ public class StdPlayingBeatmap extends PlayingBeatmap
 					// TODO: Implement this method
 					return (int)Math.signum(p1.getShowTime()-p2.getShowTime());
 				}
-			});*/
+			});
 	}
 	
 	public StdBeatmap getBeatmap() {
@@ -116,5 +124,11 @@ public class StdPlayingBeatmap extends PlayingBeatmap
 	public PartDifficulty getDifficulty() {
 		// TODO: Implement this method
 		return getBeatmap().getDifficulty();
+	}
+
+	@Override
+	public ControlPoints getControlPoints() {
+		// TODO: Implement this method
+		return controlPoints;
 	}
 }
