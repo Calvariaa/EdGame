@@ -151,6 +151,14 @@ public class Vec2
 		return new Vec3(this,z);
 	}
 	
+	public static float sizeOfTriangle(Vec2 v1,Vec2 v2,Vec2 v3){
+		return (v1.x*v2.y+v2.x*v3.y+v3.x*v1.y-v1.x*v3.y-v2.x*v1.y-v3.x*v2.y)/2;
+	}
+	
+	public static boolean shareLine(Vec2 v1,Vec2 v2,Vec2 v3,float toleration){
+		return Math.abs(sizeOfTriangle(v1,v2,v3))<toleration;
+	}
+	
 	public static boolean near(Vec2 v1,Vec2 v2,float t){
 		return lengthSquared(v1,v2)<t;
 	}

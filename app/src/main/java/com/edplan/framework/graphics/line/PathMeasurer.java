@@ -54,7 +54,7 @@ public class PathMeasurer
 			lengthes.add(l);
 			pre=cur;
 		}
-		MLog.test.vOnce("let-all","path-test",Arrays.toString(lengthes.toArray(new Float[lengthes.size()])));
+		//MLog.test.vOnce("let-all","path-test",Arrays.toString(lengthes.toArray(new Float[lengthes.size()])));
 	}
 	
 	private void measureDirections(){

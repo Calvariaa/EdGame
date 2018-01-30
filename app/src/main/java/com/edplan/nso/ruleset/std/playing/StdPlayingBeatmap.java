@@ -47,8 +47,11 @@ public class StdPlayingBeatmap extends PlayingBeatmap
 		int objCount=getHitObjects().size();
 		drawableHitObjects=new ArrayList<DrawableStdHitObject>(objCount);
 		DrawableStdHitObject dobj=null;
+		int count=0;
 		for(StdHitObject obj:getHitObjects()){
+			count++;
 			dobj=createDrawableHitObject(obj);
+			Log.v("load-bmp",count+"/"+getHitObjects().size());
 			dobj.applyDefault(this);
 			drawableHitObjects.add(dobj);
 		}

@@ -109,7 +109,8 @@ public class TestView extends EdView
 			//"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
 			//"Yueporu feat. Hatsune Miku - Kurikaeshi Hitotsubu (Zweib) [Hitotsubu].osu"
 			//"1/Chino (CV.Minase Inori) - Okashina yume o Ohitotsu douzo (- Skanbis -) [Asuka_-'s insane].osu"
-			"2/Halozy - Kikoku Doukoku Jigokuraku (Hollow Wings) [Notch Hell].osu"
+			//"2/Halozy - Kikoku Doukoku Jigokuraku (Hollow Wings) [Notch Hell].osu"
+			"3/IAHN - Transform (Original Mix) (Monstrata) [Aspire].osu"
 												   ),
 												"test case beatmap: " 
 												 );
@@ -120,7 +121,8 @@ public class TestView extends EdView
 			//"audio.mp3"
 			//"No Poi!.mp3"
 			//"1/audio.mp3"
-			"2/Kikoku Doukoku Jigokuraku.mp3"
+			//"2/Kikoku Doukoku Jigokuraku.mp3"
+			"3/audio.mp3"
 			);
 			try
 			{
