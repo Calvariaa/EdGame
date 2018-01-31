@@ -103,15 +103,6 @@ public class StdPlayField extends PlayField
 				canvas.drawLines(list,paint);
 			}
 		}
-		/*
-		StdHitObject v1,v2;
-		paint.setStrokeWidth(1f);
-		paint.setMixColor(Color4.rgba(0,1,0,1));
-		for(int i=0;i<l.size();i++){
-			v1=((DrawableStdFollowpoint)l.get(i)).getObj1().getHitObject();
-			v2=((DrawableStdFollowpoint)l.get(i)).getObj2().getHitObject();
-			if(!v2.isNewCombo())canvas.drawLines(new float[]{v1.getStartX(),v1.getStartY(),v2.getStartX(),v2.getStartY()},paint);
-		}*/
 	}
 	
 	@Override
@@ -125,7 +116,6 @@ public class StdPlayField extends PlayField
 		drawConnectionLayer(canvas);
 		drawContentLayer(canvas);
 		drawApproachCircleLayer(canvas);
-		//drawTestLayer(canvas);
 	}
 	
 	public class FieldDrawables{

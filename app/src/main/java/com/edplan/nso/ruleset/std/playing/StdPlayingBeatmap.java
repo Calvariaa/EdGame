@@ -48,14 +48,20 @@ public class StdPlayingBeatmap extends PlayingBeatmap
 		drawableHitObjects=new ArrayList<DrawableStdHitObject>(objCount);
 		DrawableStdHitObject dobj=null;
 		int count=0;
+		
+		if(!getHitObjects().get(0).isNewCombo()){
+			Log.w("err-beatmap","Beatmap's first HitObject must be a new combo");
+			getHitObjects().get(0).setIsNewCombo(true);
+		}
+		
 		for(StdHitObject obj:getHitObjects()){
 			count++;
 			dobj=createDrawableHitObject(obj);
-			Log.v("load-bmp",count+"/"+getHitObjects().size());
-			dobj.applyDefault(this);
+			//Log.v("load-bmp",count+"/"+getHitObjects().size());
 			drawableHitObjects.add(dobj);
 		}
-		Log.v("times",dobj.getTimeFadein()+"|"+dobj.getTimePreempt());
+		//Log.v("Slider-size",maxSliderArray+"");
+		
 		//此时依然保持原顺序，计算followpoints
 		connectionObjs=new ArrayList<DrawableStdHitObject>(objCount);
 		DrawableStdHitObject pre=(objCount!=0)?drawableHitObjects.get(0):null;
@@ -65,7 +71,6 @@ public class StdPlayingBeatmap extends PlayingBeatmap
 			now=drawableHitObjects.get(i);
 			if(!now.getHitObject().isNewCombo()){
 				followpoint=new DrawableStdFollowpoint(getContext(),pre,now);
-				followpoint.applyDefault(this);
 				connectionObjs.add(followpoint);
 			}
 			pre=now;
@@ -84,6 +89,19 @@ public class StdPlayingBeatmap extends PlayingBeatmap
 					return (int)Math.signum(p1.getShowTime()-p2.getShowTime());
 				}
 			});
+		int comboIndex=1;
+		for(DrawableStdHitObject obj:drawableHitObjects){
+			if(obj.getHitObject().isNewCombo()){
+				comboIndex=1;
+			}else{
+				comboIndex++;
+			}
+			obj.setComboIndex(comboIndex);
+			obj.applyDefault(this);
+		}
+		for(DrawableStdHitObject obj:connectionObjs){
+			obj.applyDefault(this);
+		}
 	}
 	
 	public StdBeatmap getBeatmap() {

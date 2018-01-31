@@ -32,11 +32,21 @@ public class DrawableStdHitObject extends DrawableHitObject
 	private boolean finished=false;
 	
 	private Color4 accentColor=new Color4(1,1,1,1);
+	
+	private int comboIndex=1;
 
 	public DrawableStdHitObject(MContext c,StdHitObject obj){
 		super(c);
 		hitObject=obj;
 		setOrigin(new Vec2(obj.getStartX(),obj.getStartY()));
+	}
+
+	public void setComboIndex(int comboIndex) {
+		this.comboIndex=comboIndex;
+	}
+
+	public int getComboIndex() {
+		return comboIndex;
 	}
 
 	public void setShowTime(int showTime) {

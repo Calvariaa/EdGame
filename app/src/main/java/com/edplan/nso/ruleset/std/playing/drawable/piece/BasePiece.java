@@ -36,6 +36,10 @@ public abstract class BasePiece extends EdDrawable implements IScaleable2D,IFade
 		super(c);
 		this.timeline=timeline;
 	}
+	
+	public void onFinish(){
+		
+	}
 
 	public void setTimeline(PreciseTimeline timeline) {
 		this.timeline=timeline;

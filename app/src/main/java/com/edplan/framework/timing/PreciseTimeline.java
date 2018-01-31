@@ -100,10 +100,12 @@ public class PreciseTimeline extends Loopable
 		int p;
 		p=frameTime()-anim.getStartTimeAtTimeline();
 		if(p>=0)if(p<anim.getDuration()){
+			if(!anim.hasStart())anim.onStart();
 			anim.setProgressTime(p);
 			anim.onProgress(p);
 		}else{
 			p=anim.getDuration();
+			if(!anim.hasStart())anim.onStart();
 			anim.setProgressTime(p);
 			anim.onProgress(p);
 			return true;

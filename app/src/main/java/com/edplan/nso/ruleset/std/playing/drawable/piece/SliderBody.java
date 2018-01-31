@@ -89,6 +89,13 @@ public class SliderBody extends BasePiece
 	}
 
 	@Override
+	public void onFinish() {
+		// TODO: Implement this method
+		super.onFinish();
+		sliderBuffered.recycle();
+	}
+	
+	@Override
 	public void draw(GLCanvas2D canvas) {
 		// TODO: Implement this method
 		sliderBuffered.draw(canvas);

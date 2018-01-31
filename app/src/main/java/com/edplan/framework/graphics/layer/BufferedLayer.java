@@ -7,12 +7,19 @@ import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.MContext;
 import com.edplan.framework.graphics.opengl.GLException;
 import com.edplan.framework.graphics.opengl.GLWrapped;
+import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
+import com.edplan.framework.graphics.opengl.bufferObjects.FBOPool;
+import android.util.Log;
 
 /**
  *通过FBO，完全分离的绘制，最后的结果是一个Texture
  */
 public class BufferedLayer
 {
+	public static FBOPool DEF_FBOPOOL=new FBOPool();
+	
+	private FBOPool bufferedPool;
+	
 	private MContext context;
 	
 	private FrameBufferObject frameBuffer;
@@ -28,6 +35,7 @@ public class BufferedLayer
 		this.width=width;
 		this.height=height;
 		this.hasDepthBuffer=hasDepthBuffer;
+		bufferedPool=DEF_FBOPOOL;
 	}
 	
 	public BufferedLayer(MContext context,FrameBufferObject fbo){
@@ -36,6 +44,7 @@ public class BufferedLayer
 		this.width=fbo.getWidth();
 		this.height=fbo.getHeight();
 		this.hasDepthBuffer=fbo.hasDepthAttachment();
+		bufferedPool=DEF_FBOPOOL;
 	}
 	
 	public MContext getContext(){
@@ -80,18 +89,49 @@ public class BufferedLayer
 	}
 	
 	private void reCreateBuffer(){
-		if(frameBuffer!=null)frameBuffer.deleteWithAttachment();
-		frameBuffer=FrameBufferObject.create(width,height,hasDepthBuffer);
+		if(false){
+			frameBuffer=FrameBufferObject.create(width,height,hasDepthBuffer);
+		}
+		//Log.v("fbo-test","start reCreateBuffer");
+		if(frameBuffer!=null){
+			if(frameBuffer.getCreatedHeight()>=height&&frameBuffer.getCreatedWidth()>=width){
+				frameBuffer.setWidth(width);
+				frameBuffer.setHeight(height);
+				//Log.v("fbo-test","1 resize fbo "+frameBuffer.getFBOId());
+			}else{
+				if(!bufferedPool.saveFBO(frameBuffer)){
+					frameBuffer.deleteWithAttachment();
+				}//else Log.v("fbo-test","save fbo to pool "+frameBuffer.getFBOId());
+				frameBuffer=bufferedPool.requireFBO(width,height);
+				if(frameBuffer==null){
+					frameBuffer=FrameBufferObject.create(width,height,hasDepthBuffer);
+					frameBuffer.setWidth(width);
+					frameBuffer.setHeight(height);
+					//Log.v("fbo-test","1 create fbo "+frameBuffer.getFBOId());
+				}//else Log.v("fbo-test","1 load fbo from pool "+frameBuffer.getFBOId());
+			}
+		}else{
+			frameBuffer=bufferedPool.requireFBO(width,height);
+			if(frameBuffer==null){
+				frameBuffer=FrameBufferObject.create(width,height,hasDepthBuffer);
+				//Log.v("fbo-test","2 create fbo "+frameBuffer.getFBOId());
+			}else{
+				//Log.v("fbo-test","2 load fbo from pool "+frameBuffer.getFBOId());
+			}
+		}
 	}
 	
 	private void checkChange(){
+		if(frameBuffer!=null&&frameBuffer.isBind()){
+			throw new RuntimeException("you can only check BufferedLayer when it is unbind");
+		}
 		if(frameBuffer==null||frameBuffer.getWidth()!=width||frameBuffer.getHeight()!=height||(hasDepthBuffer!=frameBuffer.hasDepthAttachment())){
 			reCreateBuffer();
 		}
 	}
 	
-	public GLTexture getTexture(){
-		return frameBuffer.getColorAttachment();
+	public AbstractTexture getTexture(){
+		return frameBuffer.getTexture();
 	}
 	
 	public void bind(){
@@ -102,9 +142,22 @@ public class BufferedLayer
 	public void unbind(){
 		getFrameBuffer().unBind();
 	}
-	
+
+	boolean recycled=false;
 	public void recycle(){
-		getFrameBuffer().deleteWithAttachment();
+		if(recycled){
+			return;
+		}else{
+			if(!bufferedPool.saveFBO(frameBuffer))frameBuffer.deleteWithAttachment();
+			recycled=true;
+		}
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		// TODO: Implement this method
+		super.finalize();
+		recycle();
 	}
 }
 

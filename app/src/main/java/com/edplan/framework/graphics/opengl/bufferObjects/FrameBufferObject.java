@@ -3,6 +3,10 @@ import android.opengl.GLES20;
 import com.edplan.framework.graphics.opengl.GLException;
 import com.edplan.framework.graphics.opengl.GLWrapped;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
+import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
+import com.edplan.framework.graphics.opengl.objs.texture.TextureRegion;
+import com.edplan.framework.math.RectF;
+import com.edplan.framework.math.RectI;
 
 public class FrameBufferObject
 {
@@ -10,11 +14,19 @@ public class FrameBufferObject
 	
 	private GLTexture colorAttachment;
 	
+	private TextureRegion region;
+	
 	private int frameBufferId;
+	
+	private int createdWidth;
+	
+	private int createdHeight;
 	
 	private int width;
 	
 	private int height;
+	
+	private boolean deleted=false;
 	
 	FrameBufferObject(){
 		
@@ -23,6 +35,24 @@ public class FrameBufferObject
 	FrameBufferObject(int width,int height){
 		this.width=width;
 		this.height=height;
+		this.createdHeight=height;
+		this.createdWidth=width;
+	}
+
+	protected void setCreatedWidth(int createdWidth) {
+		this.createdWidth=createdWidth;
+	}
+
+	public int getCreatedWidth() {
+		return createdWidth;
+	}
+
+	protected void setCreatedHeight(int createdHeight) {
+		this.createdHeight=createdHeight;
+	}
+
+	public int getCreatedHeight() {
+		return createdHeight;
 	}
 
 	public int getWidth(){
@@ -33,12 +63,14 @@ public class FrameBufferObject
 		return height;
 	}
 	
-	private void setWidth(int w){
+	public void setWidth(int w){
 		width=w;
+		region.getArea().setWidth(w);
 	}
 	
-	private void setHeight(int h){
+	public void setHeight(int h){
 		height=h;
+		region.getArea().setHeight(h);
 	}
 	
 	public void clearDepthBuffer(){
@@ -63,8 +95,12 @@ public class FrameBufferObject
 	private void setColorAttachment(GLTexture colorAttachment) {
 		this.colorAttachment=colorAttachment;
 	}
+	
+	public AbstractTexture getTexture(){
+		return region;
+	}
 
-	public GLTexture getColorAttachment() {
+	private GLTexture getColorAttachment() {
 		return colorAttachment;
 	}
 	
@@ -82,6 +118,7 @@ public class FrameBufferObject
 			throw new GLException("A FrameBufferObject can't attach two Texture...Maybe support future:(");
 		}else{
 			setColorAttachment(texture);
+			region=new TextureRegion(texture,new RectI(0,0,texture.getWidth(),texture.getHeight()));
 			GLES20.glFramebufferTexture2D(
 				GLES20.GL_FRAMEBUFFER,
 				GLES20.GL_COLOR_ATTACHMENT0,
@@ -108,7 +145,10 @@ public class FrameBufferObject
 	}
 	
 	public void delete(){
-		GLES20.glDeleteFramebuffers(1,new int[]{getFBOId()},0);
+		if(!deleted){
+			deleted=true;
+			GLES20.glDeleteFramebuffers(1,new int[]{getFBOId()},0);
+		}
 	}
 	
 	public void deleteWithAttachment(){
@@ -120,11 +160,20 @@ public class FrameBufferObject
 		}
 		this.delete();
 	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		// TODO: Implement this method
+		super.finalize();
+		delete();
+	}
 	
 	public static FrameBufferObject create(int width,int height,boolean useDepth){
 		FrameBufferObject fbo=createFBO();
-		fbo.setWidth(width);
-		fbo.setHeight(height);
+		fbo.width=width;
+		fbo.height=height;
+		fbo.setCreatedHeight(height);
+		fbo.setCreatedWidth(width);
 		fbo.bind();
 			if(useDepth){
 				fbo.linkDepthBuffer(DepthBufferObject.create(width,height));

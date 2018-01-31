@@ -71,8 +71,6 @@ public class HitCirclePiece extends BasePiece implements IScaleable2D,IFadeable
 		}
 	}
 
-
-
 	public class FadeInAnimation extends BasePreciseAnimation{
 		DrawableStdHitObject obj;
 		public FadeInAnimation(DrawableStdHitObject obj){

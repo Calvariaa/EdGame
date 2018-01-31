@@ -68,6 +68,12 @@ public class BezierApproximator
 		
 		if(count==0)return out;
 		
+		if(count==2){
+			out.add(controlPoints.get(0));
+			out.add(controlPoints.get(1));
+			return out;
+		}
+		
 		Stack<Vec2[]> toFlatten=new Stack<Vec2[]>();
 		Stack<Vec2[]> freeBuffers=new Stack<Vec2[]>();
 		

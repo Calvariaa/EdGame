@@ -7,6 +7,7 @@ import com.edplan.framework.ui.animation.precise.BasePreciseAnimation;
 import com.edplan.nso.resource.OsuSkin;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdHitObject;
 import com.edplan.framework.graphics.opengl.objs.Color4;
+import com.edplan.framework.math.FMath;
 
 public class ApproachCircle extends BasePiece
 {
@@ -48,7 +49,7 @@ public class ApproachCircle extends BasePiece
 			// TODO: Implement this method
 			super.setProgressTime(p);
 			float fp=p/(float)getDuration();
-			float s=3f*(1-fp)+1.0f*fp;
+			float s=4f*(1-fp)+1.0f*fp;
 			setScale(s,s);
 		}
 
@@ -73,7 +74,7 @@ public class ApproachCircle extends BasePiece
 			// TODO: Implement this method
 			super.setProgressTime(p);
 			float fp=p/(float)getDuration();
-			setAlpha(fp);
+			setAlpha(1-FMath.cos(fp));
 		}
 	}
 }

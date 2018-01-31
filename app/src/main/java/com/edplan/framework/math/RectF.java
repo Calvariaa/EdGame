@@ -84,16 +84,18 @@ public class RectF implements Copyable,Area2D
 		return getLeft()+getWidth();
 	}
 	
-	public void setWidth(float width) {
+	public RectF setWidth(float width) {
 		this.width=width;
+		return this;
 	}
 
 	public float getWidth() {
 		return width;
 	}
 
-	public void setHeight(float height) {
+	public RectF setHeight(float height) {
 		this.height=height;
+		return this;
 	}
 
 	public float getHeight() {

@@ -14,6 +14,7 @@ import com.edplan.nso.ruleset.std.playing.drawable.interfaces.IHasApproachCircle
 import com.edplan.nso.ruleset.std.playing.drawable.piece.ApproachCircle;
 import com.edplan.nso.timing.TimingPoint;
 import com.edplan.nso.ruleset.std.playing.controlpoint.TimingControlPoint;
+import com.edplan.nso.ruleset.std.playing.drawable.piece.ComboIndexPiece;
 
 public class DrawableStdSlider extends DrawableStdHitObject implements IHasApproachCircle
 {
@@ -32,6 +33,10 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 	private double velocity;
 	
 	private HitCirclePiece startPiece;
+	
+	private ComboIndexPiece comboPiece;
+	
+	private boolean snakeOut=false;
 	
 	public DrawableStdSlider(MContext c,StdSlider slider){
 		super(c,slider);
@@ -95,6 +100,9 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 		
 		approachCircle=new ApproachCircle(getContext(),getTimeLine());
 		applyPiece(approachCircle,beatmap);
+		
+		comboPiece=new ComboIndexPiece(getContext(),beatmap.getTimeLine(),getComboIndex());
+		applyPiece(comboPiece,beatmap);
 	}
 
 	@Override
@@ -103,6 +111,7 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 		super.draw(canvas);
 		body.draw(canvas);
 		startPiece.draw(canvas);
+		comboPiece.draw(canvas);
 	}
 
 	@Override
@@ -118,6 +127,15 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 		// TODO: Implement this method
 		return super.isFinished()&&startPiece.isFinished();
 	}
+
+	@Override
+	public void onFinish() {
+		// TODO: Implement this method
+		super.onFinish();
+		startPiece.onFinish();
+		body.onFinish();
+		approachCircle.onFinish();
+	}
 	
 	public class ShowSliderAnimation extends BasePreciseAnimation{
 		public ShowSliderAnimation(){
@@ -131,6 +149,7 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 			super.onProgress(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
 			startPiece.setAlpha(fp);
+			comboPiece.setAlpha(fp);
 			body.setAlpha(fp);
 			body.setProgress2(fp);
 		}
@@ -150,25 +169,29 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 		}
 
 		@Override
+		public void onStart() {
+			// TODO: Implement this method
+			super.onStart();
+			comboPiece.finish();
+			//comboPiece.fadeOut(DrawableStdSlider.this,getObjStartTime());
+		}
+	
+		@Override
 		public void onProgress(int p) {
 			// TODO: Implement this method
 			super.onProgress(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
-			//body.setProgress1(fp);
-			//startPiece.setOrigin(body.getCurrentHeadPoint());
-			//body.setAlpha(fp);
 			float repeatProgress=(fp*slider.getRepeat())%1;
 			int repeatCount=(int)(fp*slider.getRepeat());
 			float positionProgress=((repeatCount%2==0)?repeatProgress:(1-repeatProgress));
 			startPiece.setOrigin(body.getPointAt((float)(slider.getPixelLength()*positionProgress)));
-			if(repeatCount==slider.getRepeat()-1){
+			if(snakeOut)if(repeatCount==slider.getRepeat()-1){
 				if(repeatCount%2==0){
 					body.setProgress1(positionProgress);
 				}else{
 					body.setProgress2(positionProgress);
 				}
 			}
-			//body.setProgress1(positionProgress);
 		}
 
 		@Override

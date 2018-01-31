@@ -9,6 +9,12 @@ import com.edplan.framework.ui.animation.LoopType;
  */
 public abstract class AbstractPreciseAnimation extends AbstractAnimation
 {
+	private boolean hasStart=false;
+	
+	public boolean hasStart(){
+		return hasStart;
+	}
+	
 	/**
 	 *在Timeline上的开始时间，
 	 *在动画实际开始的时候（对应的帧时间）会通过这个参数进行ms级别的调整
@@ -33,5 +39,11 @@ public abstract class AbstractPreciseAnimation extends AbstractAnimation
 	@Override
 	public void addLoopCount() {
 		// TODO: Implement this method
+	}
+
+	@Override
+	public void onStart() {
+		// TODO: Implement this method
+		hasStart=true;
 	}
 }

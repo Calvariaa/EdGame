@@ -41,6 +41,7 @@ import com.edplan.framework.timing.AudioTimeline;
 import com.edplan.framework.timing.AdjustableTimeline;
 import com.edplan.framework.ui.drawable.BitmapDrawable;
 import java.io.FileOutputStream;
+import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 
 public class TestView extends EdView
 {
@@ -68,6 +69,7 @@ public class TestView extends EdView
 	
 	//private DrawableStdSlider sld2;
 	
+	private BufferedLayer newLayer;
 	
 	
 	private GLTexture testPng;
@@ -110,7 +112,10 @@ public class TestView extends EdView
 			//"Yueporu feat. Hatsune Miku - Kurikaeshi Hitotsubu (Zweib) [Hitotsubu].osu"
 			//"1/Chino (CV.Minase Inori) - Okashina yume o Ohitotsu douzo (- Skanbis -) [Asuka_-'s insane].osu"
 			//"2/Halozy - Kikoku Doukoku Jigokuraku (Hollow Wings) [Notch Hell].osu"
-			"3/IAHN - Transform (Original Mix) (Monstrata) [Aspire].osu"
+			//"3/IAHN - Transform (Original Mix) (Monstrata) [Aspire].osu"
+			//"4/IOSYS - Marisa wa Taihen na Mono wo Nusunde Ikimashita (DJPop) [TAG4].osu"
+			//"5/Luo Tianyi - Xiao Ji Bibi ~ Remix ~ (MoleAkarin) [Bi~bi~].osu"
+			"6/xi - FREEDOM DiVE (Nakagawa-Kanon) [FOUR DIMENSIONS].osu"
 												   ),
 												"test case beatmap: " 
 												 );
@@ -119,10 +124,14 @@ public class TestView extends EdView
 			//"test.mp3"
 			//"cloverfantasy.mp3"
 			//"audio.mp3"
+			//"hust.mp3"
 			//"No Poi!.mp3"
 			//"1/audio.mp3"
 			//"2/Kikoku Doukoku Jigokuraku.mp3"
-			"3/audio.mp3"
+			//"3/audio.mp3"
+			//"4/Marisa wa Taihen na Mono wo Nusunde Ikimashita.mp3"
+			//"5/bibibi.mp3"
+			"6/Freedom Dive.mp3"
 			);
 			try
 			{
@@ -518,7 +527,7 @@ public class TestView extends EdView
 
 		//canvas.save();
 		//canvas.getMProjMatrix().translate(300,100,0).scale(2,2,1);
-		BufferedLayer newLayer=new BufferedLayer(getContext(),canvas.getLayer().getWidth(),canvas.getLayer().getHeight(),true);
+		if(newLayer==null)newLayer=new BufferedLayer(getContext(),canvas.getLayer().getWidth(),canvas.getLayer().getHeight(),true);
 		GLCanvas2D newCanvas=new GLCanvas2D(newLayer);
 		newCanvas.prepare();
 		
@@ -576,10 +585,10 @@ public class TestView extends EdView
 		GLPaint newPaint=new GLPaint();
 		newPaint.setFinalAlpha(postAlpha);
 		//newPaint.setMixColor(new Color4(1,0.5f,0.5f,1));
-		GLTexture texture=newLayer.getTexture();
+		AbstractTexture texture=newLayer.getTexture();
 		//canvas.drawTexture(texture,new RectF(0,0,texture.getWidth(),texture.getHeight()),new RectF(0,0,canvas.getWidth(),canvas.getHeight()),newPaint);
 		canvas.drawTextureAnchorCenter(texture,new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),newPaint);
-		newLayer.recycle();
+		//newLayer.recycle();
 		
 		canvas.restore();
 

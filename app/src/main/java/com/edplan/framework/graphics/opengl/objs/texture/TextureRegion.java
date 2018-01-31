@@ -3,23 +3,24 @@ import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
+import com.edplan.framework.math.RectI;
 
 public class TextureRegion extends AbstractTexture
 {
 	private GLTexture texture;
 	
-	private RectF area;
+	private RectI area=new RectI();
 	
-	public TextureRegion(GLTexture t,RectF area){
+	public TextureRegion(GLTexture t,RectI area){
 		this.texture=t;
-		this.area=area;
+		this.area.set(area);
 	}
 
-	public void setArea(RectF _area) {
+	public void setArea(RectI _area) {
 		this.area.set(_area);
 	}
 
-	public RectF getArea() {
+	public RectI getArea() {
 		return area;
 	}
 	
@@ -40,12 +41,12 @@ public class TextureRegion extends AbstractTexture
 	
 	@Override
 	public int getWidth(){
-		return (int)area.getWidth();
+		return area.getWidth();
 	}
 	
 	@Override
 	public int getHeight(){
-		return (int)area.getHeight();
+		return area.getHeight();
 	}
 	
 }

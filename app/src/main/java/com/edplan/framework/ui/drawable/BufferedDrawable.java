@@ -9,6 +9,8 @@ import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.ui.drawable.interfaces.IFadeable;
 import com.edplan.framework.utils.MLog;
+import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
+import com.edplan.framework.graphics.opengl.bufferObjects.FBOPool;
 
 /**
  *将Canvas上的一块用BufferedLayer包装，再绘制到canvas上去
@@ -25,6 +27,13 @@ public abstract class BufferedDrawable extends EdDrawable implements IFadeable
 	
 	public BufferedDrawable(MContext c){
 		super(c);
+	}
+	
+	/**
+	 *必须在不再绘制这个view后调用，主动回收内存
+	 */
+	public void recycle(){
+		bufferedLayer.recycle();
 	}
 
 	public void setArea(RectF area) {
@@ -70,7 +79,7 @@ public abstract class BufferedDrawable extends EdDrawable implements IFadeable
 	/**
 	 *如何将内容绘制到父Canvas上去
 	 */
-	protected void postToParent(GLTexture texture,GLCanvas2D canvas){
+	protected void postToParent(AbstractTexture texture,GLCanvas2D canvas){
 		//canvas.drawTexture(GLTexture.White,new RectF(0,0,texture.getWidth(),texture.getHeight()),
 		//				   RectF.ltrb(area.getX1(),area.getY1(),area.getX2(),area.getY2()),paint);
 		canvas.drawTexture(texture,new RectF(0,0,texture.getWidth(),texture.getHeight()),

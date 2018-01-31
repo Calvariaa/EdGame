@@ -15,10 +15,13 @@ import com.edplan.nso.ruleset.std.playing.drawable.piece.BasePiece;
 import com.edplan.nso.ruleset.std.playing.drawable.piece.HitCirclePiece;
 import com.edplan.nso.ruleset.std.playing.judgment.StdJudgment;
 import com.edplan.framework.utils.MLog;
+import com.edplan.nso.ruleset.std.playing.drawable.piece.ComboIndexPiece;
 
 public class DrawableStdHitCircle extends DrawableStdHitObject implements IHasApproachCircle
 {
 	private HitCirclePiece circlePiece;
+	
+	private ComboIndexPiece comboPiece;
 	
 	private ApproachCircle approachCircle;
 	
@@ -47,6 +50,8 @@ public class DrawableStdHitCircle extends DrawableStdHitObject implements IHasAp
 		applyPiece(circlePiece,beatmap);
 		approachCircle=new ApproachCircle(getContext(),beatmap.getTimeLine());
 		applyPiece(approachCircle,beatmap);
+		comboPiece=new ComboIndexPiece(getContext(),beatmap.getTimeLine(),getComboIndex());
+		applyPiece(comboPiece,beatmap);
 	}
 
 	@Override
@@ -54,6 +59,7 @@ public class DrawableStdHitCircle extends DrawableStdHitObject implements IHasAp
 		// TODO: Implement this method
 		super.draw(canvas);
 		circlePiece.draw(canvas);
+		comboPiece.draw(canvas);
 	}
 
 	@Override
@@ -62,6 +68,7 @@ public class DrawableStdHitCircle extends DrawableStdHitObject implements IHasAp
 		super.setAlpha(a);
 		if(circlePiece!=null)circlePiece.setAlpha(a);
 		if(approachCircle!=null)approachCircle.setAlpha(a);
+		if(comboPiece!=null)comboPiece.setAlpha(a);
 	}
 
 	@Override
@@ -82,6 +89,7 @@ public class DrawableStdHitCircle extends DrawableStdHitObject implements IHasAp
 		// TODO: Implement this method
 		super.onShow();
 		circlePiece.fadeIn(this);
+		comboPiece.fadeIn(this);
 		approachCircle.fadeAndScaleIn(this);
 	}
 
@@ -89,6 +97,13 @@ public class DrawableStdHitCircle extends DrawableStdHitObject implements IHasAp
 	public boolean isFinished() {
 		// TODO: Implement this method
 		return circlePiece.isFinished();
+	}
+
+	@Override
+	public void onFinish() {
+		// TODO: Implement this method
+		super.onFinish();
+		circlePiece.onFinish();
 	}
 	
 	@Override

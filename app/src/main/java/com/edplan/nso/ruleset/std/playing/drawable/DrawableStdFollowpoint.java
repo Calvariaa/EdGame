@@ -92,6 +92,13 @@ public class DrawableStdFollowpoint extends DrawableStdHitObject
 			finish();
 		}
 	}
+
+	@Override
+	public void onFinish() {
+		// TODO: Implement this method
+		super.onFinish();
+		followpointPiece.onFinish();
+	}
 	
 	boolean a1e=false;
 	public class FollowpointMoveAnimation extends BasePreciseAnimation{
