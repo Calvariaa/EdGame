@@ -5,17 +5,22 @@ import java.util.Collections;
 import java.util.Arrays;
 import java.util.HashMap;
 import com.edplan.framework.MContext;
+import java.util.ArrayList;
 
 public class EdAbstractViewGroup extends EdView
 {
-	protected List<EdView> children;
+	protected List<EdView> children=new ArrayList<EdView>();
 
-	protected List<EdLayoutParam> layoutParams;
+	protected List<EdLayoutParam> layoutParams=new ArrayList<EdLayoutParam>();
 	
 	protected HashMap<String,EdView> viewMap;
 
 	public EdAbstractViewGroup(MContext context){
 		super(context);
+	}
+	
+	public EdLayoutParam getDefaultLayoutParam(){
+		return null;
 	}
 	
 	public void add(final EdView view){

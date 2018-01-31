@@ -44,13 +44,13 @@ public class EdView implements IRunnableHandler
 	@Override
 	public void post(Runnable r) {
 		// TODO: Implement this method
-		getContext().getRunnableHandler().post(r);
+		getContext().runOnUIThread(r);
 	}
 
 	@Override
 	public void post(Runnable r,int delayMS) {
 		// TODO: Implement this method
-		getContext().getRunnableHandler().post(r,delayMS);
+		getContext().runOnUIThread(r,delayMS);
 	}
 	
 	public void setContext(MContext context) {

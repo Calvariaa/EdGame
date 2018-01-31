@@ -11,6 +11,7 @@ import com.edplan.superutils.classes.advance.RunnableHandler;
 import com.edplan.framework.ui.EdView;
 import com.edplan.framework.ui.looper.UILooper;
 import com.edplan.superutils.classes.advance.IRunnableHandler;
+import com.edplan.framework.ui.looper.UIStep;
 
 public class MContext
 {
@@ -51,8 +52,15 @@ public class MContext
 		return getUiLooper().getStep();
 	}
 	
+	/**
+	 *在主线程上运行，当当前就是在HANDLE_RUNNABLES时立马执行
+	 */
 	public void runOnUIThread(Runnable r){
-		getUiLooper().post(r);
+		if(currentUIStep()==UIStep.HANDLE_RUNNABLES){
+			r.run();
+		}else{
+			getUiLooper().post(r);
+		}
 	}
 	
 	public void runOnUIThread(Runnable r,int delayMs){
@@ -67,15 +75,16 @@ public class MContext
 		return content;
 	}
 
+	/*
 	public void setStep(int step) {
 		this.step=step;
 	}
 
 	public int getStep() {
 		return step;
-	}
+	}*/
 	
-	public IRunnableHandler getRunnableHandler() {
+	private IRunnableHandler getRunnableHandler() {
 		return uiLooper;
 	}
 	

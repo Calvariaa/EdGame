@@ -114,8 +114,8 @@ public class TestView extends EdView
 			//"2/Halozy - Kikoku Doukoku Jigokuraku (Hollow Wings) [Notch Hell].osu"
 			//"3/IAHN - Transform (Original Mix) (Monstrata) [Aspire].osu"
 			//"4/IOSYS - Marisa wa Taihen na Mono wo Nusunde Ikimashita (DJPop) [TAG4].osu"
-			//"5/Luo Tianyi - Xiao Ji Bibi ~ Remix ~ (MoleAkarin) [Bi~bi~].osu"
-			"6/xi - FREEDOM DiVE (Nakagawa-Kanon) [FOUR DIMENSIONS].osu"
+			"5/Luo Tianyi - Xiao Ji Bibi ~ Remix ~ (MoleAkarin) [Bi~bi~].osu"
+			//"6/xi - FREEDOM DiVE (Nakagawa-Kanon) [FOUR DIMENSIONS].osu"
 												   ),
 												"test case beatmap: " 
 												 );
@@ -130,8 +130,8 @@ public class TestView extends EdView
 			//"2/Kikoku Doukoku Jigokuraku.mp3"
 			//"3/audio.mp3"
 			//"4/Marisa wa Taihen na Mono wo Nusunde Ikimashita.mp3"
-			//"5/bibibi.mp3"
-			"6/Freedom Dive.mp3"
+			"5/bibibi.mp3"
+			//"6/Freedom Dive.mp3"
 			);
 			try
 			{
