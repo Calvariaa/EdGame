@@ -144,7 +144,7 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 		}
 
 		@Override
-		public void onProgress(int p) {
+		public void setProgressTime(int p) {
 			// TODO: Implement this method
 			super.onProgress(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
@@ -177,7 +177,7 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 		}
 	
 		@Override
-		public void onProgress(int p) {
+		public void setProgressTime(int p) {
 			// TODO: Implement this method
 			super.onProgress(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
@@ -201,22 +201,22 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 			body.setAlpha(0);
 			startPiece.explode(getObjPredictedEndTime());
 			finish();
-			//(new FadeOutAnimation()).post(getTimeLine());
+			(new FadeOutAnimation()).post(getTimeLine());
 		}
 	}
 	
 	public class FadeOutAnimation extends BasePreciseAnimation{
 		public FadeOutAnimation(){
 			setStartTime(getObjPredictedEndTime());
-			setDuration(getTimeFadein()/2);
+			setDuration(getTimeFadein());
 		}
 
 		@Override
-		public void onProgress(int p) {
+		public void setProgressTime(int p) {
 			// TODO: Implement this method
 			super.onProgress(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
-			startPiece.setAlpha(1-fp);
+			//startPiece.setAlpha(1-fp);
 			body.setAlpha(1-fp);
 		}
 
@@ -224,7 +224,7 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 		public void onFinish() {
 			// TODO: Implement this method
 			super.onFinish();
-			finish();
+			body.finish();
 		}
 	}
 }

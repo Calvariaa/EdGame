@@ -52,9 +52,7 @@ public class StdPlayField extends PlayField
 			throw new IllegalArgumentException("you can only apply a StdPlayingBeatmap to StdPlayField");
 		}
 	}
-	
-	
-	
+
 	protected void drawContentLayer(GLCanvas2D canvas){
 		DrawableStdHitObject obj;
 		for(int i=drawableHitObjects.getObjectsInField().size()-1;i>=0;i--){
@@ -117,7 +115,7 @@ public class StdPlayField extends PlayField
 		drawContentLayer(canvas);
 		drawApproachCircleLayer(canvas);
 	}
-	
+
 	public class FieldDrawables{
 		private List<DrawableStdHitObject> drawableHitObjects;
 

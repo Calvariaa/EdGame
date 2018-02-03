@@ -188,7 +188,9 @@ public class GLTexture extends AbstractTexture
 	}
 	
 	public static GLTexture decodeResource(IResource res,String name) throws IOException{
-		return decodeStream(res.openInput(name),true);
+		InputStream in=res.openInput(name);
+		if(in==null)return null;
+		return decodeStream(in,true);
 	}
 	
 	public static GLTexture create1pxTexture(Color4 color){

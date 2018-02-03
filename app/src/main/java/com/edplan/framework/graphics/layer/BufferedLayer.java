@@ -88,7 +88,7 @@ public class BufferedLayer
 		return height;
 	}
 	
-	private void reCreateBuffer(){
+	public void reCreateBuffer(){
 		if(false){
 			frameBuffer=FrameBufferObject.create(width,height,hasDepthBuffer);
 		}
@@ -105,8 +105,8 @@ public class BufferedLayer
 				frameBuffer=bufferedPool.requireFBO(width,height);
 				if(frameBuffer==null){
 					frameBuffer=FrameBufferObject.create(width,height,hasDepthBuffer);
-					frameBuffer.setWidth(width);
-					frameBuffer.setHeight(height);
+					//frameBuffer.setWidth(width);
+					//frameBuffer.setHeight(height);
 					//Log.v("fbo-test","1 create fbo "+frameBuffer.getFBOId());
 				}//else Log.v("fbo-test","1 load fbo from pool "+frameBuffer.getFBOId());
 			}
@@ -131,6 +131,7 @@ public class BufferedLayer
 	}
 	
 	public AbstractTexture getTexture(){
+		checkChange();
 		return frameBuffer.getTexture();
 	}
 	

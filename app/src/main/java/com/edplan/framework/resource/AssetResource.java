@@ -32,11 +32,6 @@ public class AssetResource extends IResource
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		/*
-		for(Map.Entry<String,AssetResInfo> e:resMap.entrySet()){
-			Log.v("res-list",e.getValue().path+(e.getValue().isFile?"":"/"));
-		}*/
-		
 	}
 	
 	/**
@@ -55,6 +50,7 @@ public class AssetResource extends IResource
 	@Override
 	public InputStream openInput(String path) throws IOException {
 		// TODO: Implement this method
+		if(!contain(path))return null;
 		return res.open(path);
 	}
 

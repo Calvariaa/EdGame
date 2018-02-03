@@ -98,7 +98,7 @@ public class SliderBody extends BasePiece
 	@Override
 	public void draw(GLCanvas2D canvas) {
 		// TODO: Implement this method
-		sliderBuffered.draw(canvas);
+		if(!isFinished())sliderBuffered.draw(canvas);
 	}
 	
 	public class BufferedSliderDrawable extends BufferedDrawable{

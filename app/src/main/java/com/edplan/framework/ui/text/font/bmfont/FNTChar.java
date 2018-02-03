@@ -80,4 +80,20 @@ public class FNTChar
 			id,x,y,width,height,xoffset,yoffset,xadvance,page,chnl
 		);
 	}
+
+	@Override
+	public int hashCode() {
+		// TODO: Implement this method
+		return (int)id;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		// TODO: Implement this method
+		if(obj instanceof FNTChar){
+			return id==((FNTChar)obj).id;
+		}else{
+			return false;
+		}
+	}
 }

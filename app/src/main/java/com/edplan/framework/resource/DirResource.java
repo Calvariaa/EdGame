@@ -19,7 +19,9 @@ public class DirResource extends IResource
 	@Override
 	public InputStream openInput(String path) throws IOException {
 		// TODO: Implement this method
-		return new FileInputStream(new File(dir,path));
+		File f=new File(dir,path);
+		if((!f.exists())||f.isDirectory())return null;
+		return new FileInputStream(f);
 	}
 
 	@Override

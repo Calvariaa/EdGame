@@ -1,7 +1,9 @@
 package com.edplan.framework.test;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.Log;
 import com.edplan.framework.MContext;
+import com.edplan.framework.audio.bass.BassChannel;
 import com.edplan.framework.graphics.layer.BufferedLayer;
 import com.edplan.framework.graphics.line.DrawLinePath;
 import com.edplan.framework.graphics.line.LinePath;
@@ -11,37 +13,32 @@ import com.edplan.framework.graphics.opengl.GLPaint;
 import com.edplan.framework.graphics.opengl.GLWrapped;
 import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
 import com.edplan.framework.graphics.opengl.drawui.DrawInfo;
+import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
-import com.edplan.framework.math.FMath;
 import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.Vec2;
+import com.edplan.framework.timing.AdjustableTimeline;
+import com.edplan.framework.timing.PreciseTimeline;
 import com.edplan.framework.ui.EdView;
 import com.edplan.framework.ui.animation.AbstractAnimation;
 import com.edplan.framework.ui.animation.AnimState;
 import com.edplan.framework.ui.animation.LoopType;
+import com.edplan.framework.ui.drawable.BitmapDrawable;
 import com.edplan.framework.utils.MLog;
 import com.edplan.nso.NsoException;
 import com.edplan.nso.ParsingBeatmap;
+import com.edplan.nso.parser.StdBeatmapParser;
 import com.edplan.nso.resource.OsuSkin;
 import com.edplan.nso.ruleset.amodel.playing.PlayField;
 import com.edplan.nso.ruleset.std.StdBeatmap;
 import com.edplan.nso.ruleset.std.objects.StdSlider;
 import com.edplan.nso.ruleset.std.objects.drawables.StdSliderPathMaker;
 import com.edplan.nso.ruleset.std.parser.StdHitObjectParser;
-import java.io.IOException;
-import com.edplan.nso.ruleset.std.playing.StdPlayingBeatmap;
-import com.edplan.framework.timing.PreciseTimeline;
 import com.edplan.nso.ruleset.std.playing.StdPlayField;
-import com.edplan.nso.parser.StdBeatmapParser;
-import android.util.Log;
+import com.edplan.nso.ruleset.std.playing.StdPlayingBeatmap;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdHitCircle;
-import com.edplan.framework.audio.bass.BassChannel;
-import com.edplan.framework.timing.AudioTimeline;
-import com.edplan.framework.timing.AdjustableTimeline;
-import com.edplan.framework.ui.drawable.BitmapDrawable;
-import java.io.FileOutputStream;
-import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
+import java.io.IOException;
 
 public class TestView extends EdView
 {
@@ -110,11 +107,11 @@ public class TestView extends EdView
 			//"Osu!Droid Tieba Challenge - Evolution Pack (Believer_zzr) [Future Cider].osu"
 			//"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
 			//"Yueporu feat. Hatsune Miku - Kurikaeshi Hitotsubu (Zweib) [Hitotsubu].osu"
-			//"1/Chino (CV.Minase Inori) - Okashina yume o Ohitotsu douzo (- Skanbis -) [Asuka_-'s insane].osu"
+			"1/Chino (CV.Minase Inori) - Okashina yume o Ohitotsu douzo (- Skanbis -) [Asuka_-'s insane].osu"
 			//"2/Halozy - Kikoku Doukoku Jigokuraku (Hollow Wings) [Notch Hell].osu"
 			//"3/IAHN - Transform (Original Mix) (Monstrata) [Aspire].osu"
 			//"4/IOSYS - Marisa wa Taihen na Mono wo Nusunde Ikimashita (DJPop) [TAG4].osu"
-			"5/Luo Tianyi - Xiao Ji Bibi ~ Remix ~ (MoleAkarin) [Bi~bi~].osu"
+			//"5/Luo Tianyi - Xiao Ji Bibi ~ Remix ~ (MoleAkarin) [Bi~bi~].osu"
 			//"6/xi - FREEDOM DiVE (Nakagawa-Kanon) [FOUR DIMENSIONS].osu"
 												   ),
 												"test case beatmap: " 
@@ -126,11 +123,11 @@ public class TestView extends EdView
 			//"audio.mp3"
 			//"hust.mp3"
 			//"No Poi!.mp3"
-			//"1/audio.mp3"
+			"1/audio.mp3"
 			//"2/Kikoku Doukoku Jigokuraku.mp3"
 			//"3/audio.mp3"
 			//"4/Marisa wa Taihen na Mono wo Nusunde Ikimashita.mp3"
-			"5/bibibi.mp3"
+			//"5/bibibi.mp3"
 			//"6/Freedom Dive.mp3"
 			);
 			try

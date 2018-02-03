@@ -13,7 +13,9 @@ public abstract class IResource
 {
 	
 	public BufferedReader openBufferedReader(String path) throws IOException{
-		return new BufferedReader(new InputStreamReader(openInput(path)));
+		InputStream in=openInput(path);
+		if(in==null)return null;
+		return new BufferedReader(new InputStreamReader(in));
 	}
 	
 	public IResource subResource(String path){
@@ -22,6 +24,7 @@ public abstract class IResource
 	
 	public Bitmap loadBitmap(String path) throws IOException{
 		InputStream in=openInput(path);
+		if(in==null)return null;
 		Bitmap bmp=BitmapFactory.decodeStream(in);
 		in.close();
 		return bmp;
@@ -29,6 +32,7 @@ public abstract class IResource
 	
 	public String loadText(String path) throws IOException{
 		BufferedReader r=openBufferedReader(path);
+		if(r==null)return null;
 		StringBuilder sb=new StringBuilder();
 		String s;
 		while((s=r.readLine())!=null){
@@ -40,6 +44,7 @@ public abstract class IResource
 	
 	public ByteBuffer loadBuffer(String path) throws IOException{
 		InputStream in=openInput(path);
+		if(in==null)return null;
 		ByteBuffer buffer=ByteBuffer.allocateDirect(in.available());
 		buffer.order(ByteOrder.nativeOrder());
 		byte[] bu=new byte[1024*16];
@@ -55,5 +60,6 @@ public abstract class IResource
 	
 	public abstract boolean contain(String file);
 	
+	//当path的res不存在的时候应该返回null
 	public abstract InputStream openInput(String path) throws IOException;
 }

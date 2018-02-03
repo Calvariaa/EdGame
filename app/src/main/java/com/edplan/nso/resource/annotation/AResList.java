@@ -6,7 +6,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface AFontList
+public @interface AResList
 {
 	public String[] value() default {};
 }

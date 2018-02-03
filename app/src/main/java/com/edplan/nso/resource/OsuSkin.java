@@ -9,8 +9,10 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import com.edplan.nso.ruleset.std.playing.BaseComboColorGenerater;
 import com.edplan.framework.graphics.opengl.objs.Color4;
-import com.edplan.nso.resource.annotation.AFontList;
+import com.edplan.nso.resource.annotation.AResList;
 import com.edplan.nso.resource.annotation.AFontCharList;
+import com.edplan.framework.resource.ResException;
+import android.util.Log;
 
 public class OsuSkin
 {
@@ -35,9 +37,13 @@ public class OsuSkin
 	
 	@AResType(ResType.TEXTUREFONT)
 	@AResPath("default")
-	@AFontList({"0","1","2","3","4","5","6","7","8","9","x","dot","comma","percent"})
+	@AResList({"0","1","2","3","4","5","6","7","8","9","x","dot","comma","percent"})
 	@AFontCharList({'0','1','2','3','4','5','6','7','8','9','x','.',',','%'})
 	public TextureFontInfo defaultTextureFont;
+	
+	@AResType(ResType.FRAMETEXTURE)
+	@AResPath("sliderb")
+	public FrameTextureInfo sliderb;
 	
 	public IComboColorGenerater comboColorGenerater;
 	
@@ -77,6 +83,9 @@ public class OsuSkin
 						case TEXTUREFONT:
 							f.set(this,new TextureFontInfo(path.value()));
 							break;
+						case FRAMETEXTURE:
+							f.set(this,new FrameTextureInfo(path.value()));
+							break;
 						default:break;
 					}
 					resourceDictionary.put(f.getName(),(ResourceInfo)f.get(this));
@@ -98,9 +107,9 @@ public class OsuSkin
 			for(Field f:fields){
 				if(f.isAnnotationPresent(AResType.class)){
 					AResType type=f.getAnnotation(AResType.class);
+					f.setAccessible(true);
 					switch(type.value()){
 						case TEXTURE:
-							f.setAccessible(true);
 							TextureInfo info=(TextureInfo)f.get(this);
 							try {
 								loadTextureRes(info, res);
@@ -110,10 +119,18 @@ public class OsuSkin
 							}
 							break;
 						case TEXTUREFONT:
-							f.setAccessible(true);
 							TextureFontInfo fontinfo=(TextureFontInfo)f.get(this);
 							try {
-								loadTextureFontRes(fontinfo,res,f.getAnnotation(AFontList.class).value(),f.getAnnotation(AFontCharList.class).value());
+								loadTextureFontRes(fontinfo,res,f.getAnnotation(AResList.class).value(),f.getAnnotation(AFontCharList.class).value());
+							} catch (IOException e) {
+								e.printStackTrace();
+								throw new OsuResException("res io err : "+e.getMessage(),e);
+							}
+							break;
+						case FRAMETEXTURE:
+							FrameTextureInfo frameinfo=(FrameTextureInfo)f.get(this);
+							try {
+								loadFrameTextureRes(frameinfo,res);
 							} catch (IOException e) {
 								e.printStackTrace();
 								throw new OsuResException("res io err : "+e.getMessage(),e);
@@ -140,5 +157,19 @@ public class OsuSkin
 		for(int i=0;i<tag.length;i++){
 			info.addToPool(chars[i],GLTexture.decodeResource(res,info.getPath()+'-'+tag[i]+".png"));
 		}
+	}
+	
+	public void loadFrameTextureRes(FrameTextureInfo info,IResource res)throws IOException{
+		int index=0;
+		String path=info.getPath()+index+".png";
+		GLTexture curTexture=GLTexture.decodeResource(res,path);
+		if(curTexture==null)throw new ResException("no texture found");
+		do{
+			info.addFrame(curTexture);
+			index++;
+			path=info.getPath()+index+".png";
+			curTexture=GLTexture.decodeResource(res,path);
+		}while(curTexture!=null);
+		Log.v("frame-test",info.getRes().frameCount()+"");
 	}
 }

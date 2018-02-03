@@ -7,6 +7,7 @@ import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 import com.edplan.framework.graphics.opengl.objs.texture.TextureRegion;
 import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.RectI;
+import android.util.Log;
 
 public class FrameBufferObject
 {
@@ -65,12 +66,12 @@ public class FrameBufferObject
 	
 	public void setWidth(int w){
 		width=w;
-		region.getArea().setWidth(w);
+		if(region!=null)region.getArea().setWidth(w);
 	}
 	
 	public void setHeight(int h){
 		height=h;
-		region.getArea().setHeight(h);
+		if(region!=null)region.getArea().setHeight(h);
 	}
 	
 	public void clearDepthBuffer(){
@@ -97,6 +98,7 @@ public class FrameBufferObject
 	}
 	
 	public AbstractTexture getTexture(){
+		if(region==null)Log.w("err-gl","region is null : "+hasLinkRegion);
 		return region;
 	}
 
@@ -112,6 +114,7 @@ public class FrameBufferObject
 		return frameBufferId;
 	}
 	
+	boolean hasLinkRegion=false;
 	private void linkColorAttachment(GLTexture texture){
 		checkCurrent();
 		if(colorAttachment!=null){
@@ -119,6 +122,7 @@ public class FrameBufferObject
 		}else{
 			setColorAttachment(texture);
 			region=new TextureRegion(texture,new RectI(0,0,texture.getWidth(),texture.getHeight()));
+			hasLinkRegion=true;
 			GLES20.glFramebufferTexture2D(
 				GLES20.GL_FRAMEBUFFER,
 				GLES20.GL_COLOR_ATTACHMENT0,
@@ -277,6 +281,14 @@ public class FrameBufferObject
 		
 		public SystemFrameBuffer(int width,int height){
 			super(width,height);
+		}
+
+		@Override
+		public AbstractTexture getTexture() {
+			// TODO: Implement this method
+			Log.w("err-gl","you called getTexture on SystemBuffer");
+			throw new RuntimeException("you called getTexture on SystemBuffer");
+			//return super.getTexture();
 		}
 		
 		@Override

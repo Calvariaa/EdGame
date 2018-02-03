@@ -5,7 +5,7 @@ import android.util.Log;
 
 public class FBOPool
 {
-	private int maxMemory=1080*1920*20*0;
+	private int maxMemory=1080*1920*10;
 	
 	private int currentMemory=0;
 	
@@ -25,11 +25,11 @@ public class FBOPool
 		while(iter.hasNext()){
 			e=iter.next();
 			if(e.width>=width&&e.height>=height){
+				iter.remove();
 				FrameBufferObject fbo=e.fbo;
 				fbo.setWidth(width);
 				fbo.setHeight(height);
 				//if(fbo.isBind())fbo.unBind();
-				iter.remove();
 				currentMemory-=e.width*e.height;
 				//Log.v("fbo-pool","pop a "+e.width+"x"+e.height+" fbo. Current memory:"+currentMemory+" cur size: "+list.size());
 				return fbo;
@@ -44,6 +44,11 @@ public class FBOPool
 	 */
 	public boolean saveFBO(FrameBufferObject fbo){
 		//Log.v("fbo-pool","onSaveFbo "+fbo.getFBOId());
+		if(fbo instanceof FrameBufferObject.SystemFrameBuffer){
+			throw new RuntimeException("you can't save SystemBuffer to pool");
+		}
+		
+		
 		if(fbo.isBind())throw new RuntimeException("you can't save a binded fbo into pool");
 		if(fbo.getCreatedHeight()<minHeight||fbo.getCreatedWidth()<minWidth){
 			//不保存过小的fbo

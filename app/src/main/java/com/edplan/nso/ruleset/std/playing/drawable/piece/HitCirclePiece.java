@@ -52,7 +52,7 @@ public class HitCirclePiece extends BasePiece implements IScaleable2D,IFadeable
 		}
 
 		@Override
-		public void onProgress(int p) {
+		public void setProgressTime(int p) {
 			// TODO: Implement this method
 			super.onProgress(p);
 			float fp=Math.max(0,p/(float)getDuration());
