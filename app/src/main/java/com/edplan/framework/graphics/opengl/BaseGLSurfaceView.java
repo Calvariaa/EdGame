@@ -57,7 +57,8 @@ public class BaseGLSurfaceView extends GLSurfaceView
 
 			if (configCounts[0] == 0) {
 				// Failed! Error handling.
-				return null;
+				throw new RuntimeException("err choose comfig");
+				//return null;
 			} else {
 				return configs[0];
 			}

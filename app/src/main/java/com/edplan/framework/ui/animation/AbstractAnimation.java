@@ -8,17 +8,17 @@ public abstract class AbstractAnimation implements AnimationCallback
 	 *动画的持续时间，对于循环的动画而言这里的时间为一个循环的时间。
 	 *单位ms
 	 */
-	public abstract int getDuration() default 0;
+	public abstract int getDuration();
 	
 	/**
 	 *动画的循环方式
 	 */
-	public abstract LoopType getLoopType() default LoopType.None;
+	public abstract LoopType getLoopType();
 
 	/**
 	 *动画的状态，默认为等待，需要后续操作让动画实际进行
 	 */
-	public abstract AnimState getState() default AnimState.Waiting;
+	public abstract AnimState getState();
 
 	/**
 	 *设置当前进度

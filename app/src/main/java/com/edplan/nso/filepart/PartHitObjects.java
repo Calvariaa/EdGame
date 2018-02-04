@@ -20,7 +20,7 @@ public class PartHitObjects implements OsuFilePart
 	
 	public int mode;
 	
-	public HitObjects hitObjects;
+	public HitObjects<?> hitObjects;
 	
 	public void initial(int mode) throws NsoException{
 		this.mode=mode;
