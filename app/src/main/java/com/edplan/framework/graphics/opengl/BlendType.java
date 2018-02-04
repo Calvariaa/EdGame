@@ -15,7 +15,7 @@ public enum BlendType
 	public final int srcType;
 	public final int dstType;
 	public final boolean needPreMultiple;
-	public BlendType(int src,int dst,boolean prm){
+	BlendType(int src,int dst,boolean prm){
 		srcType=src;
 		dstType=dst;
 		needPreMultiple=prm;

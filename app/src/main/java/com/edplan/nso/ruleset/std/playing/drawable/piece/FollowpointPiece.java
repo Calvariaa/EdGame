@@ -99,21 +99,6 @@ public class FollowpointPiece extends BasePiece
 	@Override
 	public void draw(GLCanvas2D canvas) {
 		// TODO: Implement this method
-		/*
-		if(tmpPaint==null)tmpPaint=new GLPaint();
-		tmpPaint.set(paint);
-		tmpPaint.setMixColor(Color4.White);
-		//getAccentColor());
-		tmpPaint.setStrokeWidth(tmpPaint.getStrokeWidth()*getScale().x);
-		MLog.test.vOnce("tmpPaint-width","tmpPaint-width",tmpPaint.getStrokeWidth()+"|"+getScale()+"|"+paint.getStrokeWidth());
-		MLog.test.vOnce("tmpPaint-line","tmpPaint-line","p1:"+p1+" p2:"+p2+"\n"+tmpPaint.getMixColor());
-		canvas.drawLines(new float[]{p1.x,p1.y,p2.x,p2.y},tmpPaint);
-		*/
-		/*
-		paint.setFinalAlpha(1);
-		setColor1(Color4.White);
-		setColor2(Color4.White);
-		progress=1;*/
 		if(needDraw){
 			Vertex3D[] v=canvas.createLineRectVertex(offCircleP1,Vec2.onLine(offCircleP1,offCircleP2,progress),paint.getStrokeWidth(),color1);
 			v[2].setColor(color2);

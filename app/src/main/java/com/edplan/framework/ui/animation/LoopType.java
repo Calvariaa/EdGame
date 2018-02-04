@@ -38,7 +38,7 @@ public enum LoopType
 	
 	private final Reflection<Integer,Boolean> reverseRef;
 	
-	public LoopType(Reflection<Integer,Boolean> reverseRef){
+	LoopType(Reflection<Integer,Boolean> reverseRef){
 		this.reverseRef=reverseRef;
 	}
 	

@@ -196,11 +196,13 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		}
 	}
 	
+	
+	public enum Flag{
+		Drawing,Waiting,Stopped
+	}
+	
 	public class DrawThread_old extends Thread
 	{
-		public enum Flag{
-			Drawing,Waiting,Stopped
-		}
 		
 		public Flag flag;
 		

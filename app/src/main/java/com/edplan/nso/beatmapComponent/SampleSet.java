@@ -7,7 +7,7 @@ public enum SampleSet implements StringMakeable
 	;
 	private final String value;
 
-	public SampleSet(String v){
+	SampleSet(String v){
 		value=v;
 	}
 

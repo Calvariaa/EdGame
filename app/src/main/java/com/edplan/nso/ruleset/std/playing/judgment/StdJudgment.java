@@ -12,7 +12,7 @@ public class StdJudgment extends Judgment
 	public enum Level{
 		None(""),Miss("x"),S50("50"),S100("100"),S300("300");
 		private final String text;
-		public Level(String text){
+		Level(String text){
 			this.text=text;
 		}
 	}

@@ -87,7 +87,7 @@ public class MAnimation_old{
 
 	public enum Flag{
 		SKIP,STOP,PAUSE,RUN
-		}
+	}
 
 	public class AnimaThread extends Thread{
 

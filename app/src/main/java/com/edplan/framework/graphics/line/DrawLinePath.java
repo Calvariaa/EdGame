@@ -19,7 +19,7 @@ public class DrawLinePath<T extends BaseColorBatch>
 	
 	public static final float Z_SIDE=0.0f;
 	
-	private BaseColorBatch<?> batch;
+	private BaseColorBatch batch;
 	
 	private AbstractPath path;
 	
