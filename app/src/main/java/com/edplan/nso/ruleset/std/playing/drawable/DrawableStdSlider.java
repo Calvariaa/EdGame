@@ -199,7 +199,7 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 			// TODO: Implement this method
 			super.onFinish();
 			body.setAlpha(0);
-			startPiece.explode(getObjPredictedEndTime());
+			startPiece.explode(getObjPredictedEndTime(),DrawableStdSlider.this);
 			finish();
 			(new FadeOutAnimation()).post(getTimeLine());
 		}
@@ -208,7 +208,7 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 	public class FadeOutAnimation extends BasePreciseAnimation{
 		public FadeOutAnimation(){
 			setStartTime(getObjPredictedEndTime());
-			setDuration(getTimeFadein());
+			setDuration(getTimeFadein()/2);
 		}
 
 		@Override

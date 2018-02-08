@@ -2,6 +2,7 @@ package com.edplan.framework.graphics.opengl.bufferObjects;
 import java.util.ArrayList;
 import java.util.Iterator;
 import android.util.Log;
+import com.edplan.framework.graphics.layer.BufferedLayer;
 
 public class FBOPool
 {
@@ -9,9 +10,9 @@ public class FBOPool
 	
 	private int currentMemory=0;
 	
-	private int minWidth=120;
+	private int minWidth=500;
 	
-	private int minHeight=120;
+	private int minHeight=500;
 	
 	private ArrayList<WrappedEntry> list=new ArrayList<WrappedEntry>();
 	
@@ -62,6 +63,12 @@ public class FBOPool
 				return true;
 			}
 		}
+	}
+	
+	public static void initialGL(){
+		/*for(int i=0;i<10;i++){
+			BufferedLayer.DEF_FBOPOOL.saveFBO(FrameBufferObject.create(1000,1000,true));
+		}*/
 	}
 	
 	public static class WrappedEntry{

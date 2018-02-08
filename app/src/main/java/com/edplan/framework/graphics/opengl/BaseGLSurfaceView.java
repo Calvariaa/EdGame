@@ -5,6 +5,8 @@ import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLDisplay;
 import android.opengl.GLES20;
+import android.view.MotionEvent;
+import android.util.Log;
 
 public class BaseGLSurfaceView extends GLSurfaceView
 {
@@ -32,6 +34,13 @@ public class BaseGLSurfaceView extends GLSurfaceView
 	
 	public MainRenderer getMainRenderer(){
 		return mRenderer;
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		// TODO: Implement this method
+		//Log.v("thread","touch-thread: "+Thread.currentThread());
+		return super.onTouchEvent(event);
 	}
 	
 	

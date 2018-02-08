@@ -10,6 +10,7 @@ import com.edplan.framework.utils.advance.BooleanSetting;
 import com.edplan.framework.interfaces.Setter;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.interfaces.Copyable;
+import com.edplan.framework.graphics.opengl.bufferObjects.FBOPool;
 
 public class GLWrapped
 {
@@ -48,6 +49,7 @@ public class GLWrapped
 		//depthTest=false;
 		//GLES20.glDisable(GLES20.GL_DEPTH_TEST);
 		GLTexture.initial();
+		FBOPool.initialGL();
 	}
 	
 	private static int px1,px2,py1,py2;

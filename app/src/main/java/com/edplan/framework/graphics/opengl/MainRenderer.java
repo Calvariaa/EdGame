@@ -6,34 +6,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import com.edplan.framework.MContext;
+import com.edplan.framework.graphics.layer.BufferedLayer;
 import com.edplan.framework.graphics.layer.DefBufferedLayer;
-import com.edplan.framework.graphics.line.DrawLinePath;
-import com.edplan.framework.graphics.line.LinePath;
-import com.edplan.framework.graphics.line.PathMeasurer;
-import com.edplan.framework.graphics.opengl.batch.BaseColorBatch;
-import com.edplan.framework.graphics.opengl.drawui.DrawInfo;
+import com.edplan.framework.graphics.opengl.bufferObjects.FrameBufferObject;
 import com.edplan.framework.graphics.opengl.objs.Color4;
-import com.edplan.framework.graphics.opengl.objs.GLTexture;
-import com.edplan.framework.math.FMath;
-import com.edplan.framework.math.RectF;
-import com.edplan.framework.math.Vec2;
+import com.edplan.framework.test.TestView;
+import com.edplan.framework.ui.looper.UILooper;
 import com.edplan.framework.utils.MLog;
-import com.edplan.nso.ParsingBeatmap;
-import com.edplan.nso.ruleset.amodel.parser.HitObjectParser;
-import com.edplan.nso.ruleset.std.objects.drawables.StdSliderPathMaker;
-import com.edplan.nso.ruleset.std.parser.StdHitObjectParser;
-import java.io.IOException;
+import com.edplan.superutils.MTimer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-import com.edplan.nso.ruleset.std.objects.StdSlider;
-import com.edplan.nso.NsoException;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
-import com.edplan.nso.ruleset.amodel.playing.PlayField;
-import com.edplan.framework.ui.looper.UILooper;
-import com.edplan.superutils.MTimer;
-import com.edplan.framework.test.TestView;
 
 public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 {
@@ -54,6 +36,7 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 	@Override
 	public boolean onTouch(View p1,MotionEvent e) {
 		// TODO: Implement this method
+		//Log.v("thread","touch-thread: "+Thread.currentThread());
 		return true;
 	}
 
@@ -84,6 +67,11 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 	public void onSurfaceChanged(GL10 p1,int width,int heigth) {
 		// TODO: Implement this method
 		rootLayer=new DefBufferedLayer(context,width,heigth);
+		rootLayer.checkChange();
+		rootLayer.prepare();
+		for(int i=0;i<10;i++){
+			BufferedLayer.DEF_FBOPOOL.saveFBO(FrameBufferObject.create(1000,1000,true));
+		}
 		Log.v("ini-log","ini-scr: "+width+":"+heigth);
 	}
 
@@ -94,6 +82,7 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 	@Override
 	public void onDrawFrame(GL10 p1) {
 		// TODO: Implement this method
+		MLog.test.vOnce("thread","thread","draw-thread: "+Thread.currentThread());
 		tmer.refresh();
 		uiLooper.loop(tmer.getDeltaTime());
 		GLCanvas2D canvas=new GLCanvas2D(rootLayer);

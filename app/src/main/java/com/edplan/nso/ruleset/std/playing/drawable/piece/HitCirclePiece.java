@@ -40,14 +40,14 @@ public class HitCirclePiece extends BasePiece implements IScaleable2D,IFadeable
 		(new FadeInAnimation(obj)).post(getTimeline());
 	}
 	
-	public void explode(int startTime){
-		(new ExplodeAnimation(startTime)).post(getTimeline());
+	public void explode(int startTime,DrawableStdHitObject obj){
+		(new ExplodeAnimation(startTime,obj.getTimeFadein()/2)).post(getTimeline());
 	}
 	
 	public class ExplodeAnimation extends BasePreciseAnimation{
-		public ExplodeAnimation(int startTime){
+		public ExplodeAnimation(int startTime,int duration){
 			setStartTime(startTime);
-			setDuration(300);
+			setDuration(duration);
 			//(int)(m*(DrawableStdHitCircle.this.getHitObject().getStartTime()-getStartTimeAtTimeline())));
 		}
 
@@ -59,7 +59,7 @@ public class HitCirclePiece extends BasePiece implements IScaleable2D,IFadeable
 			fp=1-fp;
 			float a=fp;
 			setAlpha(a);
-			float s=1.6f-0.6f*fp;
+			float s=1.0f*fp+1.3f*(1-fp);
 			setScale(s,s);
 		}
 
@@ -94,7 +94,7 @@ public class HitCirclePiece extends BasePiece implements IScaleable2D,IFadeable
 			// TODO: Implement this method
 			super.onEnd();
 			//Log.v("test_anim","end:"+getStartTimeAtTimeline());
-			explode(obj.getHitObject().getStartTime());
+			explode(obj.getHitObject().getStartTime(),obj);
 		}
 	}
 }

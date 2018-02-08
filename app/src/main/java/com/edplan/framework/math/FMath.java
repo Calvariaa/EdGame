@@ -9,6 +9,10 @@ public class FMath
 
 	public static final float PiHalf=(float)(Math.PI*0.5);
 	
+	public static boolean inInterval(float x1,float x2,float t){
+		return t>x1&&t<x2;
+	}
+	
 	public static float sin(double v){
 		return (float)Math.sin(v);
 	}

@@ -89,9 +89,6 @@ public class BufferedLayer
 	}
 	
 	public void reCreateBuffer(){
-		if(false){
-			frameBuffer=FrameBufferObject.create(width,height,hasDepthBuffer);
-		}
 		//Log.v("fbo-test","start reCreateBuffer");
 		if(frameBuffer!=null){
 			if(frameBuffer.getCreatedHeight()>=height&&frameBuffer.getCreatedWidth()>=width){
@@ -121,7 +118,7 @@ public class BufferedLayer
 		}
 	}
 	
-	private void checkChange(){
+	public void checkChange(){
 		if(frameBuffer!=null&&frameBuffer.isBind()){
 			throw new RuntimeException("you can only check BufferedLayer when it is unbind");
 		}

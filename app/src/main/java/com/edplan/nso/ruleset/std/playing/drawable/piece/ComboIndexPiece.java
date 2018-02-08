@@ -94,7 +94,7 @@ public class ComboIndexPiece extends BasePiece
 		DrawableStdHitObject obj;
 		public FadeOutAnimation(DrawableStdHitObject obj,int startTime){
 			this.obj=obj;
-			setDuration(obj.getTimeFadein());
+			setDuration(obj.getTimeFadein()/2);
 			setStartTime(startTime);
 			setProgressTime(0);
 		}

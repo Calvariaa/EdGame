@@ -14,9 +14,13 @@ public class EdView implements IRunnableHandler
 {
 	protected static int CUSTOM_INDEX=0;
 	
+	private EdView parent;
+	
 	private String name;
 	
-	private Area2D touchArea;
+	private RectF area;
+	
+	//private Area2D touchArea;
 	
 	private Visibility visiblility=Visibility.Visible;
 	
@@ -31,6 +35,14 @@ public class EdView implements IRunnableHandler
 	public EdView(MContext context){
 		initialName();
 		this.context=context;
+	}
+
+	public void setParent(EdView parent) {
+		this.parent=parent;
+	}
+
+	public EdView getParent() {
+		return parent;
 	}
 
 	public void setBackground(EdDrawable background) {
@@ -90,6 +102,7 @@ public class EdView implements IRunnableHandler
 		return drawRequestParam;
 	}
 
+	/*
 	public void setTouchArea(Area2D touchArea) {
 		this.touchArea=touchArea;
 	}
@@ -97,6 +110,7 @@ public class EdView implements IRunnableHandler
 	public Area2D getTouchArea() {
 		return touchArea;
 	}
+	*/
 
 	public void setVisiblility(Visibility visiblility) {
 		this.visiblility=visiblility;
@@ -151,6 +165,6 @@ public class EdView implements IRunnableHandler
 	 */
 	public boolean inArea(Vec2 v) {
 		// TODO: Implement this method
-		return touchArea.inArea(v);
+		return area.inArea(v);
 	}
 }

@@ -6,8 +6,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import com.edplan.framework.MContext;
 import java.util.ArrayList;
+import com.edplan.framework.graphics.opengl.GLCanvas2D;
 
-public class EdAbstractViewGroup extends EdView
+public abstract class EdAbstractViewGroup extends EdView
 {
 	protected List<EdView> children=new ArrayList<EdView>();
 
@@ -18,6 +19,12 @@ public class EdAbstractViewGroup extends EdView
 	public EdAbstractViewGroup(MContext context){
 		super(context);
 	}
+	
+	public abstract void dispatchMesure();
+	
+	public abstract void dispatchTouchEvent();
+	
+	public abstract void dispatchDraw(GLCanvas2D canvas);
 	
 	public EdLayoutParam getDefaultLayoutParam(){
 		return null;

@@ -47,6 +47,22 @@ public class RectF implements Copyable,Area2D
 	public void setBasePoint(float x,float y){
 		getBasePoint().set(x,y);
 	}
+	
+	public Vec2 getTopLeft(){
+		return new Vec2(getTop(),getLeft());
+	}
+	
+	public Vec2 getTopRight(){
+		return new Vec2(getTop(),getRight());
+	}
+	
+	public Vec2 getBottomLeft(){
+		return new Vec2(getBottom(),getLeft());
+	}
+	
+	public Vec2 getBottomRight(){
+		return new Vec2(getBottom(),getRight());
+	}
 
 	public Vec2 getPoint(float x,float y){
 		return basePoint.copy().add(x*width,y*height);

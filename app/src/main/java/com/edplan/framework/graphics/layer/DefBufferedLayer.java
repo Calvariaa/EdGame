@@ -9,6 +9,11 @@ public class DefBufferedLayer extends BufferedLayer
 	public DefBufferedLayer(MContext con,int width,int height){
 		super(con,new FrameBufferObject.SystemFrameBuffer(width,height));
 	}
+	
+	public void prepare(){
+		bind();
+		unbind();
+	}
 
 	@Override
 	public void reCreateBuffer() {
