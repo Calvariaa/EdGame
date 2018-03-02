@@ -104,10 +104,10 @@ public class TestView extends EdView
 			//"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
 			//"UNDEAD CORPORATION - The Empress (Plutia) [STARBOW BREAK!].osu"
 			//"Mai Zang - Si Ye Cao De Huang Xiang (Axarious) [Despair].osu"
-			"Osu!Droid Tieba Challenge - Evolution Pack (Believer_zzr) [Future Cider].osu"
+			//"Osu!Droid Tieba Challenge - Evolution Pack (Believer_zzr) [Future Cider].osu"
 			//"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
 			//"Yueporu feat. Hatsune Miku - Kurikaeshi Hitotsubu (Zweib) [Hitotsubu].osu"
-			//"1/Chino (CV.Minase Inori) - Okashina yume o Ohitotsu douzo (- Skanbis -) [Asuka_-'s insane].osu"
+			"1/Chino (CV.Minase Inori) - Okashina yume o Ohitotsu douzo (- Skanbis -) [Asuka_-'s insane].osu"
 			//"2/Halozy - Kikoku Doukoku Jigokuraku (Hollow Wings) [Notch Hell].osu"
 			//"3/IAHN - Transform (Original Mix) (Monstrata) [Aspire].osu"
 			//"4/IOSYS - Marisa wa Taihen na Mono wo Nusunde Ikimashita (DJPop) [TAG4].osu"
@@ -118,12 +118,12 @@ public class TestView extends EdView
 												 );
 												 
 			audio=BassChannel.createStreamFromAsset(getContext(),"osu/test/beatmap/"+
-			"test.mp3"
+			//"test.mp3"
 			//"cloverfantasy.mp3"
 			//"audio.mp3"
 			//"hust.mp3"
 			//"No Poi!.mp3"
-			//"1/audio.mp3"
+			"1/audio.mp3"
 			//"2/Kikoku Doukoku Jigokuraku.mp3"
 			//"3/audio.mp3"
 			//"4/Marisa wa Taihen na Mono wo Nusunde Ikimashita.mp3"

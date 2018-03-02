@@ -4,11 +4,11 @@ import com.edplan.framework.timing.PreciseTimeline;
 import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.ui.drawable.interfaces.IRotateable2D;
 
-public class SliderBoll extends BasePiece implements IRotateable2D
+public class SliderBall extends BasePiece implements IRotateable2D
 {
 	private float rotation=0;
 	
-	public SliderBoll(MContext c,PreciseTimeline l){
+	public SliderBall(MContext c,PreciseTimeline l){
 		super(c,l);
 	}
 	

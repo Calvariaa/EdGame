@@ -126,12 +126,14 @@ public class SliderBody extends BasePiece
 				float v=1-x/(float)(bmp.getWidth()-1);
 
 				if(v<=border_portion){
-					bmp.setPixel(x,0,Color.argb((int)(Math.min(v/aa_portion,1)*255),255,255,255));
+					bmp.setPixel(x,0,Color4.gray(Math.min(v/aa_portion,1)).toIntBit());
+					//Color.argb((int)(Math.min(v/aa_portion,1)*255),255,255,255));
 				}else{
 					v-=border_portion;
-					bmp.setPixel(x,0,Color.argb(
-									 (int)((opacity_at_edge-(opacity_at_edge-opacity_at_centre)*v/gradient_portion)*255),
-									 255,255,255));
+					bmp.setPixel(x,0,Color4.gray(1-(opacity_at_edge-(opacity_at_edge-opacity_at_centre)*v/gradient_portion)).toIntBit());
+					//Color.argb(
+					//				 (int)((opacity_at_edge-(opacity_at_edge-opacity_at_centre)*v/gradient_portion)*255),
+					//				 255,255,255));
 				}
 			}
 			
