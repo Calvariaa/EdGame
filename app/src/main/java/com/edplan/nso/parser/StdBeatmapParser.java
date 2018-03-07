@@ -206,7 +206,7 @@ public class StdBeatmapParser implements StringMakeable
 			if(reader.hasEnd()){
 				break;
 			}
-			f=parseFormatLine(reader.bufferedString());
+			f=parseFormatLine(reader.getNowString());
 			if(f!=-1){
 				bd.setVersion(f);
 				setFormat(f);
@@ -224,7 +224,7 @@ public class StdBeatmapParser implements StringMakeable
 			if(reader.hasEnd()){
 				break;
 			}
-			tagTmp=parseTag(reader.bufferedString());
+			tagTmp=parseTag(reader.getNowString());
 			if(tagTmp!=null){
 				nowParser=parsers.get(tagTmp);
 				if(nowParser==null){
@@ -236,8 +236,8 @@ public class StdBeatmapParser implements StringMakeable
 			}else{
 				if(nowParser!=null){
 					try{
-						if(!nowParser.parse(reader.bufferedString())){
-							throw new NsoBeatmapParsingException("Parse line err: "+reader.bufferedString(), parsingBeatmap);
+						if(!nowParser.parse(reader.getNowString())){
+							throw new NsoBeatmapParsingException("Parse line err: "+reader.getNowString(), parsingBeatmap);
 						}
 					}
 					catch(NsoException e){
@@ -249,7 +249,7 @@ public class StdBeatmapParser implements StringMakeable
 	}
 	
 	private void nextLine() throws IOException{
-		reader.readLine();
+		reader.bufferToNext();
 		parsingBeatmap.nextLine();
 	}
 	

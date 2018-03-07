@@ -13,11 +13,13 @@ public class AdvancedBufferedReader
 	protected BufferedReader reader;
 	
 	protected String bufferedString=null;
+	protected String nowString=null;
 	protected boolean hasEnd=false;
 	protected int lineCount=0;
 	
 	public AdvancedBufferedReader(BufferedReader r){
 		reader=r;
+		prepare();
 	}
 	
 	public AdvancedBufferedReader(File f) throws FileNotFoundException{
@@ -32,28 +34,44 @@ public class AdvancedBufferedReader
 		this(new BufferedReader(r));
 	}
 	
+	private void prepare(){
+		try {
+			nowString=null;
+			bufferedString=reader.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public int getLineCount(){
 		return lineCount;
 	}
 	
-	public String readLine() throws IOException{
-		if(hasEnd())return null;
+	public void bufferToNext() throws IOException{
+		nowString=bufferedString;
 		bufferedString=reader.readLine();
-		if(bufferedString==null){
+		if(nowString==null){
 			hasEnd=true;
 		}else{
 			lineCount++;
 		}
-		return bufferedString;
 	}
 	
-	public String bufferedString(){
+	public String readLine() throws IOException{
+		if(hasEnd())return null;
+		bufferToNext();
+		return nowString;
+	}
+	
+	public String getNowString(){
+		return nowString;
+	}
+	
+	public String getBufferedString(){
 		return bufferedString;
 	}
 	
 	public boolean hasEnd(){
 		return hasEnd;
 	}
-	
-	
 }

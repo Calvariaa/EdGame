@@ -170,4 +170,8 @@ public class Color4
 	public static Color4 gray(float g){
 		return rgb(g,g,g);
 	}
+	
+	public static Color4 alphaMultipler(float a){
+		return Color4.rgba(1,1,1,a);
+	}
 }

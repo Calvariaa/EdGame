@@ -120,20 +120,37 @@ public class SliderBody extends BasePiece
 
             float opacity_at_centre = 0.3f;
             float opacity_at_edge = 0.8f;
-
+			
+			Color4 centerColor=Color4.gray(0.8f);
+			Color4 borderColor=Color4.gray(1);
+			
 			Bitmap bmp=Bitmap.createBitmap(512,1,Bitmap.Config.ARGB_8888);
 			for(int x=0;x<bmp.getWidth();x++){
 				float v=1-x/(float)(bmp.getWidth()-1);
 
 				if(v<=border_portion){
-					bmp.setPixel(x,0,Color4.gray(Math.min(v/aa_portion,1)).toIntBit());
-					//Color.argb((int)(Math.min(v/aa_portion,1)*255),255,255,255));
+					bmp.setPixel(x,0,
+						borderColor
+							 .copyNew()
+							 .multiple(
+							 	Color4.alphaMultipler(
+									Math.min(v/aa_portion,1)
+								)
+							).toIntBit());
+					//Color4.gray(Math.min(v/aa_portion,1)).toIntBit());
+					//Color.argb((int)(Math.min(v/aa_portion,1)*255),0,0,0));
 				}else{
 					v-=border_portion;
-					bmp.setPixel(x,0,Color4.gray(1-(opacity_at_edge-(opacity_at_edge-opacity_at_centre)*v/gradient_portion)).toIntBit());
-					//Color.argb(
-					//				 (int)((opacity_at_edge-(opacity_at_edge-opacity_at_centre)*v/gradient_portion)*255),
-					//				 255,255,255));
+					bmp.setPixel(x,0,
+								 centerColor
+								 .copyNew()
+								 .multiple(
+									 Color4.alphaMultipler(
+										 opacity_at_edge-(opacity_at_edge-opacity_at_centre)*v/gradient_portion
+									 )
+								 ).toIntBit());
+					//Color4.gray(1-(opacity_at_edge-(opacity_at_edge-opacity_at_centre)*v/gradient_portion)).toIntBit());
+					//Color.argb((int)((opacity_at_edge-(opacity_at_edge-opacity_at_centre)*v/gradient_portion)*255),0,0,0));
 				}
 			}
 			
