@@ -17,9 +17,9 @@ public class FNTKerning
 	}
 	
 	public static FNTKerning parse(String fntline){
-		String[] split=fntline.split(" ");
-		if(split.length!=11){
-			throw new IllegalArgumentException("a char line must has 11 parts : "+fntline);
+		String[] split=FNTHelper.removeEmpty(fntline.split(" "));
+		if(split.length!=4){
+			throw new IllegalArgumentException("a kerning line must has 4 parts : "+fntline);
 		}
 		char first=(char)FNTHelper.parseInt(FIRST,1,split[1]);
 		char second=(char)FNTHelper.parseInt(SECOND,1,split[2]);

@@ -1,5 +1,6 @@
 package com.edplan.framework.ui.text.font.bmfont;
 import com.edplan.superutils.U;
+import java.util.Arrays;
 
 /**
  *文档：
@@ -62,9 +63,9 @@ public class FNTChar
 	}
 	
 	public static FNTChar parse(String fntline){
-		String[] split=fntline.split(" ");
+		String[] split=FNTHelper.removeEmpty(fntline.split(" "));
 		if(split.length!=11){
-			throw new IllegalArgumentException("a char line must has 11 parts : "+fntline);
+			throw new IllegalArgumentException("a char line must has 11 parts : "+Arrays.toString(split));
 		}
 		char id=(char)FNTHelper.parseInt(ID,1,split[1]);
 		int x=FNTHelper.parseInt(X,1,split[2]);

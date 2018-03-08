@@ -1,5 +1,6 @@
 package com.edplan.framework.ui.text.font.bmfont;
 import com.edplan.superutils.U;
+import com.edplan.framework.io.FormatedStringParser;
 
 public class FNTInfo
 {
@@ -68,18 +69,33 @@ public class FNTInfo
 	
 	public static FNTInfo parse(String line){
 		String[] spl=line.split(" ");
-		String face=FNTHelper.parseString(FACE,1,spl[1]);
-		int size=FNTHelper.parseInt(SIZE,1,spl[2]);
-		boolean bold=FNTHelper.parseInt(BOLD,1,spl[3])==1;
-		boolean italic=FNTHelper.parseInt(ITALIC,1,spl[4])==1;
-		String charset=FNTHelper.parseString(CHARSET,1,spl[5]);
-		boolean unicode=FNTHelper.parseInt(UNICODE,1,spl[6])==1;
-		int stretchH=FNTHelper.parseInt(STRETCHH,1,spl[7]);
-		boolean smooth=FNTHelper.parseInt(SMOOTH,1,spl[8])==1;
-		int aa=FNTHelper.parseInt(AA,1,spl[9]);
-		int[] padding=FNTHelper.parseIntArray(PADDING,1,spl[10]);
-		int[] spacing=FNTHelper.parseIntArray(SPACING,1,spl[11]);
-		int outline=FNTHelper.parseInt(OUTLINE,1,spl[12]);
+		FormatedStringParser parser=new FormatedStringParser(line);
+		parser.setStringWrapType(FormatedStringParser.StringWrapType.WITH_QUOTATION);
+		parser.moveToNextUnit();
+		String face=parser.nextStringUnit(FACE);
+		//FNTHelper.parseString(FACE,1,spl[1]);
+		int size=parser.nextIntUnit(SIZE);
+		//FNTHelper.parseInt(SIZE,1,spl[2]);
+		boolean bold=parser.nextIntUnit(BOLD)==1;
+		//FNTHelper.parseInt(BOLD,1,spl[3])==1;
+		boolean italic=parser.nextIntUnit(ITALIC)==1;
+		//FNTHelper.parseInt(ITALIC,1,spl[4])==1;
+		String charset=parser.nextStringUnit(CHARSET);
+		//FNTHelper.parseString(CHARSET,1,spl[5]);
+		boolean unicode=parser.nextIntUnit(UNICODE)==1;
+		//FNTHelper.parseInt(UNICODE,1,spl[6])==1;
+		int stretchH=parser.nextIntUnit(STRETCHH);
+		//FNTHelper.parseInt(STRETCHH,1,spl[7]);
+		boolean smooth=parser.nextIntUnit(SMOOTH)==1;
+		//FNTHelper.parseInt(SMOOTH,1,spl[8])==1;
+		int aa=parser.nextIntUnit(AA);
+		//FNTHelper.parseInt(AA,1,spl[9]);
+		int[] padding=parser.nextIntList(PADDING,",");
+		//FNTHelper.parseIntArray(PADDING,1,spl[10]);
+		int[] spacing=parser.nextIntList(SPACING,",");
+		//FNTHelper.parseIntArray(SPACING,1,spl[11]);
+		int outline=parser.nextIntUnit(OUTLINE);
+		//FNTHelper.parseInt(OUTLINE,1,spl[12]);
 		return new FNTInfo(
 			face,
 			size,

@@ -39,6 +39,7 @@ import com.edplan.nso.ruleset.std.playing.StdPlayField;
 import com.edplan.nso.ruleset.std.playing.StdPlayingBeatmap;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdHitCircle;
 import java.io.IOException;
+import com.edplan.framework.ui.text.font.bmfont.BMFontDescription;
 
 public class TestView extends EdView
 {
@@ -86,6 +87,15 @@ public class TestView extends EdView
 		for(int i=0;i<bmds.length;i++){
 			bmds[i]=new BitmapDrawable(getContext());
 		}
+		
+		BMFontDescription font=new BMFontDescription();
+		try {
+			font.parse(getContext().getAssetResource().subResource("font").openInput("Exo2.0-Regular.fnt"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		
 		try {
 			skin=new OsuSkin();
 			skin.load(
