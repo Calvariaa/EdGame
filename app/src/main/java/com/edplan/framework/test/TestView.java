@@ -40,6 +40,8 @@ import com.edplan.nso.ruleset.std.playing.StdPlayingBeatmap;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdHitCircle;
 import java.io.IOException;
 import com.edplan.framework.ui.text.font.bmfont.BMFontDescription;
+import com.edplan.framework.ui.text.font.bmfont.BMFont;
+import com.edplan.framework.resource.IResource;
 
 public class TestView extends EdView
 {
@@ -88,9 +90,14 @@ public class TestView extends EdView
 			bmds[i]=new BitmapDrawable(getContext());
 		}
 		
-		BMFontDescription font=new BMFontDescription();
 		try {
-			font.parse(getContext().getAssetResource().subResource("font").openInput("Exo2.0-Regular.fnt"));
+			IResource res=getContext()
+				.getAssetResource()
+				.subResource("font");
+			BMFont font=BMFont.loadFont(
+						res,
+						"Noto-CJK-Basic.fnt");
+			font.addFont(res,"Noto-Basic.fnt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
