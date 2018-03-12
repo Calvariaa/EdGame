@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import java.nio.ByteBuffer;
 import java.io.BufferedInputStream;
 import java.nio.ByteOrder;
+import com.edplan.framework.graphics.opengl.objs.GLTexture;
 
 public abstract class IResource
 {
@@ -20,6 +21,10 @@ public abstract class IResource
 	
 	public IResource subResource(String path){
 		return new SubResource(this,path);
+	}
+	
+	public GLTexture loadTexture(String path) throws IOException{
+		return GLTexture.decodeResource(this,path);
 	}
 	
 	public Bitmap loadBitmap(String path) throws IOException{

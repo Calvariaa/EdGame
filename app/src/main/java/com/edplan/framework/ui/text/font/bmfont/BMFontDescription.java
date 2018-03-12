@@ -79,4 +79,10 @@ public class BMFontDescription
 			}
 		}
 	}
+	
+	public static BMFontDescription fromStream(InputStream in) throws IOException{
+		BMFontDescription d=new BMFontDescription();
+		d.parse(in);
+		return d;
+	}
 }

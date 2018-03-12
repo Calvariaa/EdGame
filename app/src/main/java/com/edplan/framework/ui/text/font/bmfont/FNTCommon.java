@@ -17,7 +17,7 @@ public class FNTCommon
 	public final int base;
 	public final int scaleW;
 	public final int scaleH;
-	public final int pages;
+	public int pages;
 	public final boolean packed;
 	public final int alphaChnl;
 	public final int redChnl;

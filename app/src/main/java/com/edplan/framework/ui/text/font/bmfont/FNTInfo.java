@@ -17,6 +17,7 @@ public class FNTInfo
 	public static final String SPACING="spacing";
 	public static final String OUTLINE="outline";
 	
+	//face决定这份字体应该放到哪个类
 	public final String face;
 	public final int size;
 	public final boolean bold;

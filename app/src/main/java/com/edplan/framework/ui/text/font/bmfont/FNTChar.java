@@ -28,7 +28,7 @@ public class FNTChar
 	public final int xoffset;
 	public final int yoffset;
 	public final int xadvance;
-	public final int page;
+	public int page;
 	public final int chnl;
 	
 	public FNTChar(

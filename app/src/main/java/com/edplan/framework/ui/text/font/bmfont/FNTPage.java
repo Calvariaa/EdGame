@@ -1,4 +1,5 @@
 package com.edplan.framework.ui.text.font.bmfont;
+import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 
 public class FNTPage
 {
@@ -7,6 +8,7 @@ public class FNTPage
 	
 	public final int id;
 	public final String file;
+	
 	
 	public FNTPage(int id,String file){
 		this.id=id;
