@@ -1,5 +1,6 @@
 package com.edplan.framework.graphics.opengl.objs;
 import com.edplan.framework.math.Vec2;
+import com.edplan.framework.math.RectF;
 
 public abstract class AbstractTexture
 {
@@ -12,4 +13,15 @@ public abstract class AbstractTexture
 	public abstract int getWidth();
 	
 	public abstract Vec2 toTexturePosition(float x,float y);
+	
+	//将一个width x height坐标的rect换成1x1坐标
+	public RectF toTextureRect(RectF raw){
+		return toTextureRect(raw.getLeft(),raw.getTop(),raw.getRight(),raw.getBottom());
+	}
+	
+	public RectF toTextureRect(float l,float t,float r,float b){
+		Vec2 lt=toTexturePosition(l,t);
+		Vec2 rb=toTexturePosition(r,b);
+		return RectF.ltrb(lt.x,lt.y,rb.x,rb.y);
+	}
 }

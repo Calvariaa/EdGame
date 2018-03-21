@@ -28,6 +28,14 @@ public class BMFont
 	BMFont(){
 
 	}
+
+	public FNTInfo getInfo() {
+		return info;
+	}
+
+	public FNTCommon getCommon() {
+		return common;
+	}
 	
 	public void addFont(IResource res,String fontFile){
 		try {
@@ -55,6 +63,12 @@ public class BMFont
 		}
 		for(FNTChar c:description.chars.values()){
 			c.page+=pageOffset;
+			c.rawTextureArea=pages
+								 .get(c.page)
+								  .texture
+								   .toTextureRect(
+								   	c.x,c.y,c.x+c.width,c.y+c.height
+								   );
 			charmap.put(c.id,c);
 		}
 		for(Map.Entry<KerningPair,FNTKerning> e:description.kernings.entrySet()){

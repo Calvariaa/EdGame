@@ -1,6 +1,7 @@
 package com.edplan.framework.ui.text.font.bmfont;
 import com.edplan.superutils.U;
 import java.util.Arrays;
+import com.edplan.framework.math.RectF;
 
 /**
  *文档：
@@ -30,6 +31,9 @@ public class FNTChar
 	public final int xadvance;
 	public int page;
 	public final int chnl;
+	
+	//预计算对应的原textureArea，对应于1x1坐标系
+	public RectF rawTextureArea;
 	
 	public FNTChar(
 		char id,

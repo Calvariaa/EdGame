@@ -7,7 +7,7 @@ import com.edplan.framework.ui.text.font.bmfont.FNTPage;
 /**
  *单个字体，包含所有face相同的字体文件
  */
-public class BMFont
+public class BMFont_old
 {
 	private BMFontDescription description=new BMFontDescription();
 	
@@ -15,7 +15,7 @@ public class BMFont
 	
 	private ArrayList<FNTPage> pages;
 	
-	BMFont(){
+	BMFont_old(){
 		
 	}
 	

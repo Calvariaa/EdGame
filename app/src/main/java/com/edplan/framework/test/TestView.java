@@ -135,12 +135,12 @@ public class TestView extends EdView
 												 );
 												 
 			audio=BassChannel.createStreamFromAsset(getContext(),"osu/test/beatmap/"+
-			//"test.mp3"
+			"test.mp3"
 			//"cloverfantasy.mp3"
 			//"audio.mp3"
 			//"hust.mp3"
 			//"No Poi!.mp3"
-			"1/audio.mp3"
+			//"1/audio.mp3"
 			//"2/Kikoku Doukoku Jigokuraku.mp3"
 			//"3/audio.mp3"
 			//"4/Marisa wa Taihen na Mono wo Nusunde Ikimashita.mp3"
