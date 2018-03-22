@@ -173,4 +173,8 @@ public class RectF implements Copyable,Area2D
 	public static RectF ltrb(float l,float t,float r,float b){
 		return (new RectF()).setLTRB(l,t,r,b);
 	}
+	
+	public static RectF xywh(float x,float y,float w,float h){
+		return new RectF(x,y,w,h);
+	}
 }

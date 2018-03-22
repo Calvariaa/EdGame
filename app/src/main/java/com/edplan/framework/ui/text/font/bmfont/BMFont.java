@@ -1,11 +1,10 @@
 package com.edplan.framework.ui.text.font.bmfont;
-import com.edplan.framework.ui.text.font.bmfont.BMFontDescription;
 import com.edplan.framework.resource.IResource;
-import java.util.ArrayList;
+import com.edplan.framework.ui.text.font.bmfont.BMFontDescription;
 import com.edplan.framework.ui.text.font.bmfont.FNTPage;
-import java.util.HashMap;
-import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,6 +12,8 @@ import java.util.Map;
  */
 public class BMFont
 {
+	private static char CHAR_NOT_FOUND=8709;
+	
 	private String face;
 	
 	private FNTInfo info;
@@ -37,6 +38,18 @@ public class BMFont
 		return common;
 	}
 	
+	public FNTChar getFNTChar(char c){
+		return charmap.get(c);
+	}
+	
+	public FNTKerning getKerning(char first,char second){
+		return kerningmap.get(new KerningPair(first,second));
+	}
+	
+	public LoadedPage getPage(int page){
+		return pages.get(page);
+	}
+	
 	public void addFont(IResource res,String fontFile){
 		try {
 			addFont(res, BMFontDescription.fromStream(res.openInput(fontFile)));
@@ -51,7 +64,6 @@ public class BMFont
 		}
 		int pageOffset=pages.size();
 		for(FNTPage page:description.getPages()){
-			//pages.add();
 			LoadedPage loadedPage=new LoadedPage();
 			loadedPage.id=pageOffset+page.id;
 			try {

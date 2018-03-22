@@ -13,7 +13,11 @@ public class KerningPair
 	@Override
 	public int hashCode() {
 		// TODO: Implement this method
-		return (int)first+((int)second)*31;
+		return hashCode(first,second);
+	}
+	
+	public static int hashCode(char first,char second){
+		return (int)first+((int)second)*157;
 	}
 
 	@Override

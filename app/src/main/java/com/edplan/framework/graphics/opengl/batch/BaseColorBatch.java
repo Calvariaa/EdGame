@@ -4,6 +4,7 @@ import com.edplan.framework.graphics.opengl.buffer.Vec3Buffer;
 import com.edplan.framework.graphics.opengl.objs.Vertex3D;
 import java.util.ArrayList;
 import java.util.List;
+import com.edplan.framework.graphics.opengl.objs.VertexList;
 
 public class BaseColorBatch<T extends Vertex3D>
 {
@@ -29,6 +30,10 @@ public class BaseColorBatch<T extends Vertex3D>
 
 	public float getColorMixRate() {
 		return colorMixRate;
+	}
+	
+	public BaseColorBatch add(VertexList<T> list){
+		return add(list.listVertex());
 	}
 	
 	public BaseColorBatch add(T... vs){
