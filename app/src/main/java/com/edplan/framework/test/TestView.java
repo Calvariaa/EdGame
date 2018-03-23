@@ -42,6 +42,7 @@ import java.io.IOException;
 import com.edplan.framework.ui.text.font.bmfont.BMFontDescription;
 import com.edplan.framework.ui.text.font.bmfont.BMFont;
 import com.edplan.framework.resource.IResource;
+import com.edplan.framework.ui.text.font.drawing.TextVertexPrinter;
 
 public class TestView extends EdView
 {
@@ -83,6 +84,8 @@ public class TestView extends EdView
 	
 	int delt=0;
 	
+	BMFont font;
+	
 	public TestView(MContext context){
 		super(context);
 		bmds=new BitmapDrawable[1];
@@ -94,10 +97,12 @@ public class TestView extends EdView
 			IResource res=getContext()
 				.getAssetResource()
 				.subResource("font");
-			BMFont font=BMFont.loadFont(
+			font=BMFont.loadFont(
 						res,
-						"Noto-CJK-Basic.fnt");
-			font.addFont(res,"Noto-Basic.fnt");
+						"Exo2.0-Regular.fnt");
+			//			"Noto-CJK-Basic.fnt");
+			
+			//font.addFont(res,"Noto-Basic.fnt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -698,6 +703,20 @@ public class TestView extends EdView
 		canvas.drawLine(10+min*lengthScale,40,10+min*lengthScale,60+6*timelist.length,ntp);
 		canvas.restore();
 		
+		float baseLine=300;
+		GLPaint textPaint=new GLPaint();
+		textPaint.setMixColor(Color4.rgba(1,1,1,1));
+		TextVertexPrinter printer=new TextVertexPrinter(font,100,baseLine,textPaint);
+		printer.setTextSize(100);
+		printer.printString("abcd efgh 罗");
+		printer.draw(canvas);
+		GLPaint baseLinePaint=new GLPaint();
+		baseLinePaint.setMixColor(Color4.rgba(1,0,0,0.6f));
+		baseLinePaint.setStrokeWidth(2);
+		baseLinePaint.setColorMixRate(1);
+		canvas.drawLine(0,baseLine,1000,baseLine,baseLinePaint);
+		baseLinePaint.setMixColor(Color4.rgba(0,1,0,0.6f));
+		canvas.drawLine(0,baseLine+font.getCommon().base*printer.getScale(),1000,baseLine+font.getCommon().base*printer.getScale(),baseLinePaint);
 	}
 	
 	public int[] timelist=new int[40];

@@ -8,6 +8,11 @@ import com.edplan.framework.ui.text.font.bmfont.FNTKerning;
 import com.edplan.framework.graphics.opengl.GLPaint;
 import com.edplan.framework.graphics.opengl.objs.TextureVertex3D;
 import com.edplan.framework.math.Vec3;
+import com.edplan.framework.graphics.opengl.objs.advanced.Texture3DRect;
+import com.edplan.framework.graphics.opengl.GLCanvas2D;
+import com.edplan.framework.graphics.opengl.objs.GLTexture;
+import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
+import android.util.Log;
 
 public class TextVertexPrinter
 {
@@ -26,11 +31,15 @@ public class TextVertexPrinter
 	
 	private float currentX;
 	
+	private float startX;
+	
+	private float startY;
+	
 	private float scale;
 	
 	private GLPaint paint;
 	
-	private ArrayList<Texture3DBatch> batchs;
+	private ArrayList<Texture3DBatch<TextureVertex3D>> batchs;
 	
 	private char preChar=0;
 	
@@ -39,11 +48,16 @@ public class TextVertexPrinter
 	public TextVertexPrinter(BMFont font,float startX,float startY,GLPaint paint){
 		this.font=font;
 		this.paint=paint;
+		this.startX=startX;
+		this.startY=startY;
 		initial(startX,startY);
 	}
 	
 	public void initial(float startX,float startY){
-		batchs=new ArrayList<Texture3DBatch>();
+		batchs=new ArrayList<Texture3DBatch<TextureVertex3D>>();
+		for(int i=0;i<font.getPageCount();i++){
+			batchs.add(new Texture3DBatch<TextureVertex3D>());
+		}
 		this.lineHeight=font.getCommon().lineHeight;
 		recalScale();
 		currentX=startX;
@@ -54,9 +68,25 @@ public class TextVertexPrinter
 		scale=textSize/lineHeight;
 	}
 	
+	public float getScale(){
+		return scale;
+	}
+
 	public void setTextSize(float s){
 		textSize=s;
 		recalScale();
+	}
+	
+	public void printString(String str){
+		for(int i=0;i<str.length();i++){
+			printChar(str.charAt(i));
+		}
+	}
+	
+	public void printChars(char... cs){
+		for(char c:cs){
+			printChar(c);
+		}
 	}
 	
 	public void printChar(char c){
@@ -72,29 +102,48 @@ public class TextVertexPrinter
 				}
 			}
 			xadvance*=scale;
-			Texture3DBatch batch=getBatchByPage(fntc.page);
-			
+			Texture3DBatch<TextureVertex3D> batch=getBatchByPage(fntc.page);
+			batch.add(Texture3DRect.makeup(area,fntc.rawTextureArea,paint));
 			preChar=c;
+			currentX+=xadvance;
 		}else{
 			printErrCharacter();
 		}
 	}
 	
-	private Texture3DBatch getBatchByPage(int page){
+	private Texture3DBatch<TextureVertex3D> getBatchByPage(int page){
 		return batchs.get(page);
 	}
 	
 	private RectF calCharArea(FNTChar fntc){
-		float x=currentX;
-		float h=fntc.height*scale;
-		float y=currentBaseY-h;
-		RectF area=RectF.xywh(x,y,fntc.width*scale,h);
+		float x=currentX+fntc.xoffset*scale;
+		float y=currentBaseY+fntc.yoffset*scale;
+		RectF area=RectF.xywh(x,y,fntc.width*scale,fntc.height*scale);
 		//y方向的offset和绘制坐标系的方向相反
-		area.move(fntc.xoffset*scale,-fntc.yoffset*scale);
+		//area.move(fntc.xoffset*scale,-fntc.yoffset*scale*0);
 		return area;
 	}
 	
 	public void printErrCharacter(){
-		
+		FNTChar fntc=font.getErrCharacter();
+		RectF area=calCharArea(fntc);
+		float xadvance=fntc.xadvance;
+		xadvance*=scale;
+		Texture3DBatch<TextureVertex3D> batch=getBatchByPage(fntc.page);
+		batch.add(Texture3DRect.makeup(area,fntc.rawTextureArea,paint));
+		preChar=NO_PREVIOUS_CHAR;
+		currentX+=xadvance;
 	}
+	
+	public void draw(GLCanvas2D canvas){
+		for(int i=0;i<font.getPageCount();i++){
+			Texture3DBatch<TextureVertex3D> batch=batchs.get(i);
+			AbstractTexture texture=font.getPage(i).texture;
+			if(batch.getVertexCount()>0){
+				canvas.drawTexture3DBatch(batch,texture,paint.getFinalAlpha(),paint.getMixColor());
+				//Log.v("text-test","post "+batch.getVertexCount()+" vertex to canvas");
+			}
+		}
+	}
+	
 }

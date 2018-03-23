@@ -26,8 +26,14 @@ public class BMFont
 
 	private HashMap<KerningPair,FNTKerning> kerningmap=new HashMap<KerningPair,FNTKerning>();
 
+	private FNTChar errCharacter;
+
 	BMFont(){
 
+	}
+
+	public FNTChar getErrCharacter() {
+		return errCharacter;
 	}
 
 	public FNTInfo getInfo() {
@@ -48,6 +54,10 @@ public class BMFont
 	
 	public LoadedPage getPage(int page){
 		return pages.get(page);
+	}
+	
+	public int getPageCount(){
+		return pages.size();
 	}
 	
 	public void addFont(IResource res,String fontFile){
@@ -93,15 +103,20 @@ public class BMFont
 		common=desc.getCommon();
 		face=info.face;
 	}
+	
+	public static BMFont loadFont(IResource res,String fontFile) throws IOException{
+		return loadFont(res,fontFile,CHAR_NOT_FOUND);
+	}
 
 	/**
 	 *
 	 */
-	public static BMFont loadFont(IResource res,String fontFile) throws IOException{
+	public static BMFont loadFont(IResource res,String fontFile,char errCharId) throws IOException{
 		BMFont font=new BMFont();
 		BMFontDescription desc=BMFontDescription.fromStream(res.openInput(fontFile));
 		font.initialFont(desc);
 		font.addFont(res,desc);
+		font.errCharacter=font.getFNTChar(errCharId);
 		return font;
 	}
 }
