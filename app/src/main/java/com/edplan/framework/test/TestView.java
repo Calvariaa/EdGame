@@ -708,7 +708,7 @@ public class TestView extends EdView
 		textPaint.setMixColor(Color4.rgba(1,1,1,1));
 		TextVertexPrinter printer=new TextVertexPrinter(font,100,baseLine,textPaint);
 		printer.setTextSize(100);
-		printer.printString("abcd efgh 罗");
+		printer.printString("DEVELOPMENT BUILD osu!lazer 2018.310.0");
 		printer.draw(canvas);
 		GLPaint baseLinePaint=new GLPaint();
 		baseLinePaint.setMixColor(Color4.rgba(1,0,0,0.6f));

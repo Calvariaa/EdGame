@@ -28,6 +28,8 @@ public class FNTChar
 	public final int height;
 	public final int xoffset;
 	public final int yoffset;
+	//与baseLine的距离
+	public int tobase;
 	public final int xadvance;
 	public int page;
 	public final int chnl;

@@ -117,7 +117,7 @@ public class TextVertexPrinter
 	
 	private RectF calCharArea(FNTChar fntc){
 		float x=currentX+fntc.xoffset*scale;
-		float y=currentBaseY+fntc.yoffset*scale;
+		float y=currentBaseY-fntc.tobase*scale;
 		RectF area=RectF.xywh(x,y,fntc.width*scale,fntc.height*scale);
 		//y方向的offset和绘制坐标系的方向相反
 		//area.move(fntc.xoffset*scale,-fntc.yoffset*scale*0);

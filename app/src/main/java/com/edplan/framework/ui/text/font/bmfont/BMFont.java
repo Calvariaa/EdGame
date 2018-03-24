@@ -85,6 +85,7 @@ public class BMFont
 		}
 		for(FNTChar c:description.chars.values()){
 			c.page+=pageOffset;
+			c.tobase=description.getCommon().base-c.yoffset;
 			c.rawTextureArea=pages
 								 .get(c.page)
 								  .texture
