@@ -14,7 +14,7 @@ import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 import android.util.Log;
 
-public class TextVertexPrinter
+public class TextPrinter
 {
 	public static final char NO_PREVIOUS_CHAR=0;
 	/**
@@ -41,11 +41,13 @@ public class TextVertexPrinter
 	
 	private ArrayList<Texture3DBatch<TextureVertex3D>> batchs;
 	
+	private BufferedTextRectGroup rectGroup;
+	
 	private char preChar=0;
 	
 	private BMFont font;
 	
-	public TextVertexPrinter(BMFont font,float startX,float startY,GLPaint paint){
+	public TextPrinter(BMFont font,float startX,float startY,GLPaint paint){
 		this.font=font;
 		this.paint=paint;
 		this.startX=startX;
@@ -89,7 +91,22 @@ public class TextVertexPrinter
 		}
 	}
 	
+	public void toNextLine(){
+		currentX=startX;
+		currentBaseY+=lineHeight*scale;
+	}
+	
+	//移动当前光标
+	public void addOffset(float x,float y){
+		currentX+=x;
+		currentBaseY+=y;
+	}
+	
 	public void printChar(char c){
+		if(c=='\n'){
+			toNextLine();
+			return;
+		}
 		FNTChar fntc=font.getFNTChar(c);
 		if(fntc!=null){
 			RectF area=calCharArea(fntc);
@@ -126,6 +143,9 @@ public class TextVertexPrinter
 	
 	public void printErrCharacter(){
 		FNTChar fntc=font.getErrCharacter();
+		if(fntc==null){
+			fntc=font.getFNTChar(' ');
+		}
 		RectF area=calCharArea(fntc);
 		float xadvance=fntc.xadvance;
 		xadvance*=scale;

@@ -42,7 +42,7 @@ import java.io.IOException;
 import com.edplan.framework.ui.text.font.bmfont.BMFontDescription;
 import com.edplan.framework.ui.text.font.bmfont.BMFont;
 import com.edplan.framework.resource.IResource;
-import com.edplan.framework.ui.text.font.drawing.TextVertexPrinter;
+import com.edplan.framework.ui.text.font.drawing.TextPrinter;
 
 public class TestView extends EdView
 {
@@ -99,10 +99,12 @@ public class TestView extends EdView
 				.subResource("font");
 			font=BMFont.loadFont(
 						res,
-						"Exo2.0-Regular.fnt");
-			//			"Noto-CJK-Basic.fnt");
+			//			"Exo2.0-Regular.fnt");
 			
-			//font.addFont(res,"Noto-Basic.fnt");
+						"Noto-CJK-Basic.fnt");
+			//font.setErrCharacter(BMFont.CHAR_NOT_FOUND);
+			font.addFont(res,"Noto-Basic.fnt");
+			font.setErrCharacter('⊙');
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -705,10 +707,16 @@ public class TestView extends EdView
 		
 		float baseLine=300;
 		GLPaint textPaint=new GLPaint();
-		textPaint.setMixColor(Color4.rgba(1,1,1,1));
-		TextVertexPrinter printer=new TextVertexPrinter(font,100,baseLine,textPaint);
+		textPaint.setMixColor(Color4.rgba(1,1,0,1));
+		TextPrinter printer=new TextPrinter(font,100,baseLine,textPaint);
 		printer.setTextSize(100);
-		printer.printString("DEVELOPMENT BUILD osu!lazer 2018.310.0");
+		printer.printString("DEVELOPMENT BUILD\nosu!lazer 2018.310.0");
+		printer.toNextLine();
+		printer.setTextSize(50);
+		printer.printString("osu!lab");
+		printer.toNextLine();
+		printer.toNextLine();
+		printer.printString("D̨Á̶̢T̛͝͡AÈ̶R͢͢Ŕ͡0R͟͟");
 		printer.draw(canvas);
 		GLPaint baseLinePaint=new GLPaint();
 		baseLinePaint.setMixColor(Color4.rgba(1,0,0,0.6f));

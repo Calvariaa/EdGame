@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class BMFont
 {
-	private static char CHAR_NOT_FOUND=8709;
+	public static char CHAR_NOT_FOUND=8709;
 	
 	private String face;
 	
@@ -30,6 +30,10 @@ public class BMFont
 
 	BMFont(){
 
+	}
+
+	public void setErrCharacter(char c) {
+		this.errCharacter=getFNTChar(c);
 	}
 
 	public FNTChar getErrCharacter() {
@@ -119,5 +123,40 @@ public class BMFont
 		font.addFont(res,desc);
 		font.errCharacter=font.getFNTChar(errCharId);
 		return font;
+	}
+	
+	public class FontType{
+		public boolean bold=false;
+		public boolean italic=false;
+		
+		public FontType(boolean bold,boolean italic){
+			this.bold=bold;
+			this.italic=italic;
+		}
+
+		@Override
+		public int hashCode() {
+			// TODO: Implement this method
+			return (bold?1:0)|(italic?2:0);
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			// TODO: Implement this method
+			if(obj instanceof FontType){
+				FontType other=(FontType)obj;
+				return other.bold==bold&&other.italic==italic;
+			}else{
+				throw new RuntimeException("you can only call equal with 2 FontType");
+			}
+		}
+	}
+	
+	public class FontEntry{
+		protected ArrayList<LoadedPage> pages=new ArrayList<LoadedPage>();
+
+		protected HashMap<Character,FNTChar> charmap=new HashMap<Character,FNTChar>();
+
+		protected HashMap<KerningPair,FNTKerning> kerningmap=new HashMap<KerningPair,FNTKerning>();
 	}
 }

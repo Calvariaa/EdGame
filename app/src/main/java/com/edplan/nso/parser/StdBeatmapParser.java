@@ -34,6 +34,8 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 import java.io.InputStream;
+import com.edplan.nso.parser.partParsers.StoryboardDecoder;
+import com.edplan.nso.filepart.PartVariables;
 
 public class StdBeatmapParser implements StringMakeable
 {
@@ -57,7 +59,7 @@ public class StdBeatmapParser implements StringMakeable
 	
 	private DifficultyParser difficultyParser;
 	
-	private EventsParser eventsParser;
+	private StoryboardDecoder storyboardDecoder;
 	
 	private TimingPointsParser timingPointsParser;
 	
@@ -138,14 +140,6 @@ public class StdBeatmapParser implements StringMakeable
 		return difficultyParser;
 	}
 
-	public void setEventsParser(EventsParser eventsParser){
-		this.eventsParser=eventsParser;
-	}
-
-	public EventsParser getEventsParser(){
-		return eventsParser;
-	}
-
 	public void setTimingPointsParser(TimingPointsParser timingPointsParser){
 		this.timingPointsParser=timingPointsParser;
 	}
@@ -179,10 +173,11 @@ public class StdBeatmapParser implements StringMakeable
 		editorParser       =  new EditorParser();
 		metadataParser     =  new MetadataParser();
 		difficultyParser   =  new DifficultyParser();
-		eventsParser       =  new EventsParser();
+		storyboardDecoder  =  new StoryboardDecoder();
 		timingPointsParser =  new TimingPointsParser();
 		coloursParser      =  new ColoursParser();
 		hitObjectsParser   =  new HitObjectsParser(parsingBeatmap);
+		
 		
 		parsers=new TreeMap<String,PartParser>();
 		
@@ -191,10 +186,11 @@ public class StdBeatmapParser implements StringMakeable
 		parsers.put(PartEditor.TAG       ,editorParser       );
 		parsers.put(PartMetadata.TAG     ,metadataParser     );
 		parsers.put(PartDifficulty.TAG   ,difficultyParser   );
-		parsers.put(PartEvents.TAG       ,eventsParser       );
+		parsers.put(PartEvents.TAG       ,storyboardDecoder  );
 		parsers.put(PartTimingPoints.TAG ,timingPointsParser );
 		parsers.put(PartColours.TAG      ,coloursParser      );
 		parsers.put(PartHitObjects.TAG   ,hitObjectsParser   );
+		parsers.put(PartVariables.TAG    ,storyboardDecoder.variableDecoder);
 	}
 	
 	public void parse() throws IOException, NsoBeatmapParsingException, NsoException{
@@ -237,7 +233,7 @@ public class StdBeatmapParser implements StringMakeable
 				if(nowParser!=null){
 					try{
 						if(!nowParser.parse(reader.getNowString())){
-							throw new NsoBeatmapParsingException("Parse line err: "+reader.getNowString(), parsingBeatmap);
+							throw new NsoBeatmapParsingException("\nParser:"+nowParser.getClass().getName()+"\nParse line err: "+nowParser.getErrMessage()+" \nres: "+reader.getNowString(), parsingBeatmap);
 						}
 					}
 					catch(NsoException e){
@@ -264,7 +260,7 @@ public class StdBeatmapParser implements StringMakeable
 				stdbeatmap.setMetadata(metadataParser.getPart());
 				stdbeatmap.setEditor(editorParser.getPart());
 				stdbeatmap.setDifficulty(difficultyParser.getPart());
-				stdbeatmap.setEvent(eventsParser.getPart());
+				stdbeatmap.setEvent(storyboardDecoder.getPart());
 				stdbeatmap.setTimingPoints(timingPointsParser.getPart());
 				stdbeatmap.setColours(coloursParser.getPart());
 				stdbeatmap.setHitObjects(hitObjectsParser.getPart().getStdHitObjects());
@@ -287,7 +283,7 @@ public class StdBeatmapParser implements StringMakeable
 		appendPart(sb,editorParser.getPart()       );
 		appendPart(sb,metadataParser.getPart()     );
 		appendPart(sb,difficultyParser.getPart()   );
-		appendPart(sb,eventsParser.getPart()       );
+		appendPart(sb,storyboardDecoder.getPart()       );
 		appendPart(sb,timingPointsParser.getPart() );
 		appendPart(sb,coloursParser.getPart()      );
 		appendPart(sb,hitObjectsParser.getPart()   );

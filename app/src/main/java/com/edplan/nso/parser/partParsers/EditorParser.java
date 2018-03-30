@@ -4,7 +4,7 @@ import com.edplan.nso.filepart.PartEditor;
 import com.edplan.nso.beatmapComponent.Bookmarks;
 import com.edplan.nso.OsuFilePart;
 
-public class EditorParser implements PartParser<PartEditor>
+public class EditorParser extends PartParser<PartEditor>
 {
 	private PartEditor part;
 	

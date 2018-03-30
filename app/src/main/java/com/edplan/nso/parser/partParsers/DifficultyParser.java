@@ -4,7 +4,7 @@ import com.edplan.nso.filepart.PartDifficulty;
 import com.edplan.superutils.U;
 import com.edplan.nso.OsuFilePart;
 
-public class DifficultyParser implements PartParser<PartDifficulty>
+public class DifficultyParser extends PartParser<PartDifficulty>
 {
 	private PartDifficulty part;
 	

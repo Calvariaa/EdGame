@@ -7,6 +7,16 @@ public class U
 {
 	public static final char NEXT_LINE='\n';
 	
+	public static String join(String[] list,String spl){
+		if(list.length==1)return list[0];
+		StringBuilder sb=new StringBuilder();
+		for(int i=0,end=list.length-1;i<end;i++){
+			sb.append(list[i]).append(spl);
+		}
+		sb.append(list[list.length-1]);
+		return sb.toString();
+	}
+	
 	public static StringBuilder nextLine(StringBuilder sb){
 		return sb.append(NEXT_LINE);
 	}
@@ -17,6 +27,7 @@ public class U
 	}
 	
 	public static String[] divide(String res,int index){
+		if(index<0||index>=res.length())return null;
 		return new String[]{res.substring(0,index).trim(),res.substring(index+1,res.length()).trim()};
 	}
 	

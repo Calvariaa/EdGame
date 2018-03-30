@@ -6,7 +6,7 @@ import com.edplan.nso.NsoException;
 import com.edplan.nso.filepart.PartHitObjects;
 import com.edplan.nso.ruleset.ModeManager;
 
-public class HitObjectsParser implements PartParser<PartHitObjects>
+public class HitObjectsParser extends PartParser<PartHitObjects>
 {
 	private ParsingBeatmap parsingBeatmap;
 	private PartHitObjects part;

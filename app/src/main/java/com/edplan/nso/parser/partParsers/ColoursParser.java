@@ -3,7 +3,7 @@ import com.edplan.nso.OsuFilePart;
 import com.edplan.nso.filepart.PartColours;
 import com.edplan.superutils.U;
 
-public class ColoursParser implements PartParser<PartColours>
+public class ColoursParser extends PartParser<PartColours>
 {
 	public static String COLOUR_HEAD="Combo";
 	

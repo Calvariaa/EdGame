@@ -5,7 +5,7 @@ import com.edplan.superutils.U;
 import com.edplan.nso.beatmapComponent.SampleSet;
 import com.edplan.nso.OsuFilePart;
 
-public class GeneralParser implements PartParser<PartGeneral>
+public class GeneralParser extends PartParser<PartGeneral>
 {
 	public PartGeneral part;
 	

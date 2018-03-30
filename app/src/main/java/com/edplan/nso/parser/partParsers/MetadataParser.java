@@ -4,7 +4,7 @@ import com.edplan.superutils.U;
 import com.edplan.nso.beatmapComponent.Tags;
 import com.edplan.nso.OsuFilePart;
 
-public class MetadataParser implements PartParser<PartMetadata>
+public class MetadataParser extends PartParser<PartMetadata>
 {
 	private PartMetadata part;
 	
