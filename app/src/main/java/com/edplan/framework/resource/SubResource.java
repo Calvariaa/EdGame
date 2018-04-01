@@ -2,13 +2,13 @@ package com.edplan.framework.resource;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class SubResource extends IResource
+public class SubResource extends AResource
 {
 	private String rPath;
 	
-	private IResource rootRes;
+	private AResource rootRes;
 	
-	public SubResource(IResource res,String path){
+	public SubResource(AResource res,String path){
 		if(res instanceof SubResource){
 			this.rootRes=((SubResource)res).getRootRes();
 			this.rPath=((SubResource)res).getRPath()+"/"+path;
@@ -18,7 +18,7 @@ public class SubResource extends IResource
 		}
 	}
 
-	public IResource getRootRes(){
+	public AResource getRootRes(){
 		return rootRes;
 	}
 	

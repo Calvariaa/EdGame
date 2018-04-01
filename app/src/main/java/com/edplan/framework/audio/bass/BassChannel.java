@@ -3,6 +3,8 @@ import android.util.Log;
 import com.un4seen.bass.BASS;
 import java.nio.ByteBuffer;
 import com.edplan.framework.MContext;
+import com.edplan.framework.resource.AResource;
+import java.io.IOException;
 
 public class BassChannel
 {
@@ -62,6 +64,10 @@ public class BassChannel
 
 	public boolean free(){
 		return BASS.BASS_StreamFree(getChannelId());
+	}
+	
+	public static BassChannel createStreamFromResource(AResource res,String path) throws IOException{
+		return createStreamFromBuffer(res.loadBuffer(path));
 	}
 	
 	public static BassChannel createStreamFromFile(String file,int offset,int length,int flags){

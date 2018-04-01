@@ -1,6 +1,6 @@
 package com.edplan.framework.ui.text.font;
 import com.edplan.framework.ui.text.font.bmfont.BMFontDescription;
-import com.edplan.framework.resource.IResource;
+import com.edplan.framework.resource.AResource;
 import java.util.ArrayList;
 import com.edplan.framework.ui.text.font.bmfont.FNTPage;
 
@@ -22,7 +22,7 @@ public class BMFont_old
 	/**
 	 *
 	 */
-	public static void loadFont(IResource res,String fontName){
+	public static void loadFont(AResource res,String fontName){
 		
 	}
 	

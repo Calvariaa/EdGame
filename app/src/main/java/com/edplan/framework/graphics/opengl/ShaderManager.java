@@ -3,7 +3,7 @@ import com.edplan.framework.graphics.opengl.shader.advance.Texture3DShader;
 import com.edplan.framework.main.GameContext;
 import com.edplan.framework.MContext;
 import java.io.IOException;
-import com.edplan.framework.resource.IResource;
+import com.edplan.framework.resource.AResource;
 import com.edplan.framework.graphics.opengl.shader.advance.RectTextureShader;
 import com.edplan.framework.graphics.opengl.shader.advance.RoundedRectTextureShader;
 import com.edplan.framework.graphics.opengl.shader.advance.ColorShader;
@@ -32,13 +32,13 @@ public class ShaderManager
 	
 	private ColorShader<BaseColorBatch> colorShader;
 	
-	private IResource res;
+	private AResource res;
 	
-	public ShaderManager(IResource _res){
+	public ShaderManager(AResource _res){
 		init(_res);
 	}
 	
-	public void init(IResource _res){
+	public void init(AResource _res){
 		res=_res;
 		loadShader();
 	}

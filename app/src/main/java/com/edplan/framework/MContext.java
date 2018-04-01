@@ -3,7 +3,7 @@ import com.edplan.superutils.classes.MLooperThread;
 import com.edplan.superutils.classes.MLooper;
 import com.edplan.superutils.MTimer;
 import android.content.Context;
-import com.edplan.framework.resource.IResource;
+import com.edplan.framework.resource.AResource;
 import com.edplan.framework.resource.AssetResource;
 import com.edplan.framework.resource.advance.ApplicationAssetResource;
 import com.edplan.framework.graphics.opengl.ShaderManager;

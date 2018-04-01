@@ -1,14 +1,14 @@
 package com.edplan.framework.resource.advance;
 import com.edplan.framework.resource.AssetResource;
 import android.content.res.AssetManager;
-import com.edplan.framework.resource.IResource;
+import com.edplan.framework.resource.AResource;
 import com.edplan.framework.resource.DefR;
 
 public class ApplicationAssetResource extends AssetResource
 {
-	private IResource shaderResource;
+	private AResource shaderResource;
 	
-	private IResource textureResource;
+	private AResource textureResource;
 	
 	public ApplicationAssetResource(AssetManager m){
 		super(m);
@@ -16,11 +16,11 @@ public class ApplicationAssetResource extends AssetResource
 		textureResource=this.subResource(DefR.textures);
 	}
 
-	public IResource getShaderResource() {
+	public AResource getShaderResource() {
 		return shaderResource;
 	}
 	
-	public IResource getTextureResource() {
+	public AResource getTextureResource() {
 		return textureResource;
 	}
 }

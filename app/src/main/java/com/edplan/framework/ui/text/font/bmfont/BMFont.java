@@ -1,5 +1,5 @@
 package com.edplan.framework.ui.text.font.bmfont;
-import com.edplan.framework.resource.IResource;
+import com.edplan.framework.resource.AResource;
 import com.edplan.framework.ui.text.font.bmfont.BMFontDescription;
 import com.edplan.framework.ui.text.font.bmfont.FNTPage;
 import java.io.IOException;
@@ -64,7 +64,7 @@ public class BMFont
 		return pages.size();
 	}
 	
-	public void addFont(IResource res,String fontFile){
+	public void addFont(AResource res,String fontFile){
 		try {
 			addFont(res, BMFontDescription.fromStream(res.openInput(fontFile)));
 		} catch (IOException e) {
@@ -72,7 +72,7 @@ public class BMFont
 		}
 	}
 	
-	public void addFont(IResource res,BMFontDescription description){
+	public void addFont(AResource res,BMFontDescription description){
 		if(!face.equals(description.getInfo().face)){
 			throw new BMFontException("only font with the same face can be added"); 
 		}
@@ -109,14 +109,14 @@ public class BMFont
 		face=info.face;
 	}
 	
-	public static BMFont loadFont(IResource res,String fontFile) throws IOException{
+	public static BMFont loadFont(AResource res,String fontFile) throws IOException{
 		return loadFont(res,fontFile,CHAR_NOT_FOUND);
 	}
 
 	/**
 	 *
 	 */
-	public static BMFont loadFont(IResource res,String fontFile,char errCharId) throws IOException{
+	public static BMFont loadFont(AResource res,String fontFile,char errCharId) throws IOException{
 		BMFont font=new BMFont();
 		BMFontDescription desc=BMFontDescription.fromStream(res.openInput(fontFile));
 		font.initialFont(desc);

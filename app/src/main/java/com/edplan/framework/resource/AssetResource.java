@@ -10,7 +10,7 @@ import java.util.SortedSet;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AssetResource extends IResource
+public class AssetResource extends AResource
 {
 	private AssetManager res;
 	

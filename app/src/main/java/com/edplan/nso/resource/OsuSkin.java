@@ -1,6 +1,6 @@
 package com.edplan.nso.resource;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
-import com.edplan.framework.resource.IResource;
+import com.edplan.framework.resource.AResource;
 import com.edplan.nso.resource.annotation.AResPath;
 import com.edplan.nso.resource.annotation.AResType;
 import com.edplan.nso.ruleset.std.playing.IComboColorGenerater;
@@ -100,7 +100,7 @@ public class OsuSkin
 		}
 	}
 	
-	public void load(IResource res){
+	public void load(AResource res){
 		try{
 			Class klass=OsuSkin.class;
 			Field[] fields=klass.getFields();
@@ -149,17 +149,17 @@ public class OsuSkin
 		}
 	}
 	
-	public void loadTextureRes(TextureInfo info,IResource res) throws IOException{
+	public void loadTextureRes(TextureInfo info,AResource res) throws IOException{
 		info.setTexture(GLTexture.decodeResource(res,info.getPath()));
 	}
 	
-	public void loadTextureFontRes(TextureFontInfo info,IResource res,String[] tag,char[] chars) throws IOException{
+	public void loadTextureFontRes(TextureFontInfo info,AResource res,String[] tag,char[] chars) throws IOException{
 		for(int i=0;i<tag.length;i++){
 			info.addToPool(chars[i],GLTexture.decodeResource(res,info.getPath()+'-'+tag[i]+".png"));
 		}
 	}
 	
-	public void loadFrameTextureRes(FrameTextureInfo info,IResource res)throws IOException{
+	public void loadFrameTextureRes(FrameTextureInfo info,AResource res)throws IOException{
 		int index=0;
 		String path=info.getPath()+index+".png";
 		GLTexture curTexture=GLTexture.decodeResource(res,path);

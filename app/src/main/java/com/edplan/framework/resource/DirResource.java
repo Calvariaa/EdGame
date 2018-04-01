@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.File;
 import java.io.FileInputStream;
 
-public class DirResource extends IResource
+public class DirResource extends AResource
 {
 	private File dir;
 	
@@ -25,7 +25,7 @@ public class DirResource extends IResource
 	}
 
 	@Override
-	public IResource subResource(String path) {
+	public AResource subResource(String path) {
 		// TODO: Implement this method
 		return new DirResource(new File(dir,path));
 	}

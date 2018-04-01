@@ -8,7 +8,7 @@ import android.opengl.GLES20;
 import android.opengl.GLES30;
 import android.opengl.GLUtils;
 import com.edplan.framework.math.Vec2;
-import com.edplan.framework.resource.IResource;
+import com.edplan.framework.resource.AResource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -187,7 +187,7 @@ public class GLTexture extends AbstractTexture
 		return decodeStream(new FileInputStream(f),true);
 	}
 	
-	public static GLTexture decodeResource(IResource res,String name) throws IOException{
+	public static GLTexture decodeResource(AResource res,String name) throws IOException{
 		InputStream in=res.openInput(name);
 		if(in==null)return null;
 		return decodeStream(in,true);

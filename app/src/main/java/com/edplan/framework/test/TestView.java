@@ -41,7 +41,7 @@ import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdHitCircle;
 import java.io.IOException;
 import com.edplan.framework.ui.text.font.bmfont.BMFontDescription;
 import com.edplan.framework.ui.text.font.bmfont.BMFont;
-import com.edplan.framework.resource.IResource;
+import com.edplan.framework.resource.AResource;
 import com.edplan.framework.ui.text.font.drawing.TextPrinter;
 
 public class TestView extends EdView
@@ -94,7 +94,7 @@ public class TestView extends EdView
 		}
 		
 		try {
-			IResource res=getContext()
+			AResource res=getContext()
 				.getAssetResource()
 				.subResource("font");
 			font=BMFont.loadFont(
@@ -126,7 +126,7 @@ public class TestView extends EdView
 			//"t+pazolite with siromaru - Chambarising (Bloodmoon) [Stream Practice (160)].osu"
 			//"Suzuki Konomi - Cyber Thunder Cider (Nattu) [Niat's Cider].osu"
 			//"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
-			"UNDEAD CORPORATION - The Empress (Plutia) [STARBOW BREAK!].osu"
+			//"UNDEAD CORPORATION - The Empress (Plutia) [STARBOW BREAK!].osu"
 			//"Mai Zang - Si Ye Cao De Huang Xiang (Axarious) [Despair].osu"
 			//"Osu!Droid Tieba Challenge - Evolution Pack (Believer_zzr) [Future Cider].osu"
 			//"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
@@ -137,12 +137,14 @@ public class TestView extends EdView
 			//"4/IOSYS - Marisa wa Taihen na Mono wo Nusunde Ikimashita (DJPop) [TAG4].osu"
 			//"5/Luo Tianyi - Xiao Ji Bibi ~ Remix ~ (MoleAkarin) [Bi~bi~].osu"
 			//"6/xi - FREEDOM DiVE (Nakagawa-Kanon) [FOUR DIMENSIONS].osu"
+					"7/Panda Eyes & Teminite - Highscore (Fort) [Game Over].osu"
 												   ),
 												"test case beatmap: " 
 												 );
 												 
-			audio=BassChannel.createStreamFromAsset(getContext(),"osu/test/beatmap/"+
-			"test.mp3"
+			audio=BassChannel.createStreamFromResource(getContext().getAssetResource(),"osu/test/beatmap/"+
+			//createStreamFromAsset(getContext(),"osu/test/beatmap/"+
+			//"test.mp3"
 			//"cloverfantasy.mp3"
 			//"audio.mp3"
 			//"hust.mp3"
@@ -153,6 +155,7 @@ public class TestView extends EdView
 			//"4/Marisa wa Taihen na Mono wo Nusunde Ikimashita.mp3"
 			//"5/bibibi.mp3"
 			//"6/Freedom Dive.mp3"
+			"7/Teminite & Panda Eyes - Highscore.mp3"
 			);
 			try
 			{
@@ -711,12 +714,12 @@ public class TestView extends EdView
 		TextPrinter printer=new TextPrinter(font,100,baseLine,textPaint);
 		printer.setTextSize(100);
 		printer.printString("DEVELOPMENT BUILD\nosu!lazer 2018.310.0");
-		printer.toNextLine();
-		printer.setTextSize(50);
-		printer.printString("osu!lab");
-		printer.toNextLine();
-		printer.toNextLine();
-		printer.printString("D̨Á̶̢T̛͝͡AÈ̶R͢͢Ŕ͡0R͟͟");
+		//printer.toNextLine();
+		//printer.setTextSize(50);
+		//printer.printString("osu!lab");
+		//printer.toNextLine();
+		//printer.toNextLine();
+		//printer.printString("D̨Á̶̢T̛͝͡AÈ̶R͢͢Ŕ͡0R͟͟");
 		printer.draw(canvas);
 		GLPaint baseLinePaint=new GLPaint();
 		baseLinePaint.setMixColor(Color4.rgba(1,0,0,0.6f));
