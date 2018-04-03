@@ -9,15 +9,16 @@ import com.edplan.framework.graphics.layer.BufferedLayer;
 import com.edplan.framework.MContext;
 import com.edplan.superutils.classes.advance.IRunnableHandler;
 import com.edplan.framework.ui.drawable.EdDrawable;
+import com.edplan.framework.input.MotionEvent;
 
 public class EdView implements IRunnableHandler
 {
 	protected static int CUSTOM_INDEX=0;
 	
-	private EdView parent;
-	
+	private EdAbstractViewGroup parent;
+
 	private String name;
-	
+
 	private RectF area;
 	
 	//private Area2D touchArea;
@@ -26,22 +27,27 @@ public class EdView implements IRunnableHandler
 	
 	private DrawRequestParam drawRequestParam=DrawRequestParam.NewLayer;
 	
-	private BufferedLayer layer;
-	
 	private MContext context;
 	
 	private EdDrawable background;
 	
 	public EdView(MContext context){
+		if(!checkCurrentThread()){
+			throw new RuntimeException("you can only create a view in main thread!");
+		}
 		initialName();
 		this.context=context;
 	}
+	
+	public boolean checkCurrentThread(){
+		return Thread.currentThread()==getContext().getMainThread();
+	}
 
-	public void setParent(EdView parent) {
+	public void setParent(EdAbstractViewGroup parent) {
 		this.parent=parent;
 	}
 
-	public EdView getParent() {
+	public EdAbstractViewGroup getParent() {
 		return parent;
 	}
 
@@ -84,14 +90,6 @@ public class EdView implements IRunnableHandler
 
 	public String getName() {
 		return name;
-	}
-
-	public void setLayer(BufferedLayer layer) {
-		this.layer=layer;
-	}
-
-	public BufferedLayer getLayer() {
-		return layer;
 	}
 
 	public void setDrawRequestParam(DrawRequestParam drawRequestParam) {
@@ -158,6 +156,11 @@ public class EdView implements IRunnableHandler
 	protected void measure(){
 
 	}
+	
+	public boolean onMotionEvent(MotionEvent e){
+		return false;
+	}
+	
 	
 
 	/**

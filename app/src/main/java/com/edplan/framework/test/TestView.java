@@ -708,6 +708,7 @@ public class TestView extends EdView
 		canvas.drawLine(10+min*lengthScale,40,10+min*lengthScale,60+6*timelist.length,ntp);
 		canvas.restore();
 		
+		canvas.setCanvasAlpha(0.5f);
 		float baseLine=300;
 		GLPaint textPaint=new GLPaint();
 		textPaint.setMixColor(Color4.rgba(1,1,0,1));

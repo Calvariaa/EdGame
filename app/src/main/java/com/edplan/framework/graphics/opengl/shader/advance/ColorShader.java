@@ -16,6 +16,7 @@ import com.edplan.framework.graphics.opengl.shader.uniforms.UniformSample2D;
 import com.edplan.framework.math.Mat4;
 import com.edplan.framework.graphics.opengl.GLPaint;
 import com.edplan.framework.graphics.opengl.batch.BaseColorBatch;
+import com.edplan.framework.graphics.opengl.GLCanvas2D;
 
 public class ColorShader<T extends BaseColorBatch> extends GLProgram 
 {
@@ -44,9 +45,9 @@ public class ColorShader<T extends BaseColorBatch> extends GLProgram
 		vColor=VertexAttrib.findAttrib(this,Attr.Color,VertexAttrib.Type.VEC4);
 	}
 	
-	public void loadPaint(GLPaint paint){
+	public void loadPaint(GLPaint paint,float alphaAdjust){
 		loadMixColor(paint.getMixColor());
-		loadAlpha(paint.getFinalAlpha());
+		loadAlpha(paint.getFinalAlpha()*alphaAdjust);
 		loadColorMixRate(paint.getColorMixRate());
 	}
 	

@@ -79,6 +79,14 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	public Mat4 getMaskMatrix(){
 		return getData().getCurrentMaskMatrix();
 	}
+	
+	public float getCanvasAlpha(){
+		return getData().getCanvasAlpha();
+	}
+
+	public void setCanvasAlpha(float a){
+		getData().setCanvasAlpha(a);
+	}
 
 	@Override
 	public void onSave(CanvasData t) {
@@ -171,7 +179,7 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		shader.useThis();
 		shader.loadMixColor(mixColor);
 		shader.loadColorMixRate(batch.getColorMixRate());
-		shader.loadAlpha(alpha);
+		shader.loadAlpha(alpha*getCanvasAlpha());
 		shader.loadMVPMatrix(getFinalMatrix());
 		shader.loadMaskMatrix(getMaskMatrix());
 		shader.loadTexture(texture.getTexture());
@@ -354,7 +362,7 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	public void drawColorBatch(GLPaint paint,BaseColorBatch cbatch){
 		ColorShader<BaseColorBatch> shader=getContext().getShaderManager().getColorShader();
 		shader.useThis();
-		shader.loadPaint(paint);
+		shader.loadPaint(paint,getCanvasAlpha());
 		MLog.test.vOnce("loadPaint","gl-test","loadPaint");
 		shader.loadMatrix(getFinalMatrix(),getMaskMatrix());
 		MLog.test.vOnce("loadMat","gl-test","loadMat");

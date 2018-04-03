@@ -15,6 +15,8 @@ import com.edplan.framework.ui.looper.UIStep;
 
 public class MContext
 {
+	private Thread mainThread;
+	
 	private MLooperThread loopThread;
 	
 	private MLooper looper;
@@ -37,7 +39,12 @@ public class MContext
 	
 	public MContext(Context androidContext){
 		this.androidContext=androidContext;
+		mainThread=Thread.currentThread();
 		//initial();
+	}
+
+	public Thread getMainThread() {
+		return mainThread;
 	}
 
 	public void setUiLooper(UILooper uiLooper) {

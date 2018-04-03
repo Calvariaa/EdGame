@@ -20,6 +20,8 @@ public class CanvasData implements Recycleable,Copyable {
 
 	private float pixelDensity=1;
 	
+	private float canvasAlpha=1;
+	
 	private Texture3DShader texture3DShader;
 
 	public CanvasData(CanvasData c){
@@ -30,11 +32,20 @@ public class CanvasData implements Recycleable,Copyable {
 		this.width=c.width;
 		this.height=c.height;
 		this.pixelDensity=c.pixelDensity;
+		this.canvasAlpha=c.canvasAlpha;
 	}
 
 	public CanvasData(){
 		currentProjMatrix=new Mat4();
 		currentMaskMatrix=new Mat4();
+	}
+
+	public void setCanvasAlpha(float canvasAlpha) {
+		this.canvasAlpha=canvasAlpha;
+	}
+
+	public float getCanvasAlpha() {
+		return canvasAlpha;
 	}
 
 	public void setPixelDensity(float pixelDensity) {
