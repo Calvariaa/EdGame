@@ -19,7 +19,7 @@ public class BaseLooper<T extends Loopable> implements AbstractLooper<T>
 		timer=new MTimer();
 	}
 	
-	public int getDeltaTime(){
+	public double getDeltaTime(){
 		return timer.getDeltaTime();
 	}
 
@@ -53,7 +53,7 @@ public class BaseLooper<T extends Loopable> implements AbstractLooper<T>
 	}
 
 	@Override
-	public void loop(int deltaTime){
+	public void loop(double deltaTime){
 		timer.refresh(deltaTime);
 
 		loopables.startIterate();

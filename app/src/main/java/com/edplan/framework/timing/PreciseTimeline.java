@@ -7,11 +7,11 @@ import java.util.Iterator;
 
 public class PreciseTimeline extends Loopable
 {
-	private int latestFrameTime=0;
+	private double latestFrameTime=0;
 	
 	private long latestFrameRealTime;
 	
-	private int preFrameDeltaTime;
+	private double preFrameDeltaTime;
 	
 	private long savedRealTime;
 	
@@ -30,7 +30,7 @@ public class PreciseTimeline extends Loopable
 	}
 	
 	@Override
-	public void onLoop(int deltaTime) {
+	public void onLoop(double deltaTime) {
 		// TODO: Implement this method
 		if(pausing){
 			
@@ -53,14 +53,14 @@ public class PreciseTimeline extends Loopable
 		}
 	}
 	
-	protected void handleFrame(int deltaTime){
+	protected void handleFrame(double deltaTime){
 		this.preFrameDeltaTime=deltaTime;
 		latestFrameTime+=deltaTime;
 		latestFrameRealTime=getRealTime();
 		handlerAnimation(deltaTime);
 	}
 	
-	protected void handlerAnimation(int deltaTime){
+	protected void handlerAnimation(double deltaTime){
 		animations.startIterate();
 		Iterator<AbstractPreciseAnimation> iter=animations.iterator();
 		AbstractPreciseAnimation anim;
@@ -96,8 +96,8 @@ public class PreciseTimeline extends Loopable
 	/**
 	 *返回值代表此动画是否Finish
 	 */
-	private boolean postProgress(AbstractPreciseAnimation anim,int postTime){
-		int p;
+	private boolean postProgress(AbstractPreciseAnimation anim,double postTime){
+		double p;
 		p=frameTime()-anim.getStartTimeAtTimeline();
 		if(p>=0)if(p<anim.getDuration()){
 			if(!anim.hasStart())anim.onStart();
@@ -177,21 +177,21 @@ public class PreciseTimeline extends Loopable
 	/**
 	 *当前准确时间（时间轴上的）
 	 */
-	public int currentTime(){
+	public double currentTime(){
 		return latestFrameTime+(int)((getRealTime()-getLatestFrameRealTime()));
 	}
 	
 	/**
 	 *当前帧刷新时的时间
 	 */
-	public int frameTime(){
+	public double frameTime(){
 		return latestFrameTime;
 	}
 
 	/**
 	 *上一帧到这一帧的时间差
 	 */
-	public int deltaTime(){
+	public double deltaTime(){
 		return preFrameDeltaTime;
 	}
 }

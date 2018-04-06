@@ -4,11 +4,11 @@ import com.edplan.framework.timing.PreciseTimeline;
 
 public class BasePreciseAnimation extends AbstractPreciseAnimation
 {
-	private int startTime;
+	private double startTime;
 	
-	private int duration;
+	private double duration;
 	
-	private int progressTime;
+	private double progressTime;
 	
 	private AnimState state=AnimState.Waiting;
 	
@@ -18,16 +18,16 @@ public class BasePreciseAnimation extends AbstractPreciseAnimation
 		setProgressTime(0);
 	}
 	
-	public void setStartTime(int startTime){
+	public void setStartTime(double startTime){
 		this.startTime=startTime;
 	}
 	
-	public void setDuration(int duration){
+	public void setDuration(double duration){
 		this.duration=duration;
 	}
 	
 	@Override
-	public int getDuration() {
+	public double getDuration() {
 		// TODO: Implement this method
 		return duration;
 	}
@@ -39,13 +39,13 @@ public class BasePreciseAnimation extends AbstractPreciseAnimation
 	}
 
 	@Override
-	public void setProgressTime(int p) {
+	public void setProgressTime(double p) {
 		// TODO: Implement this method
 		progressTime=p;
 	}
 
 	@Override
-	public int getProgressTime() {
+	public double getProgressTime() {
 		// TODO: Implement this method
 		return progressTime;
 	}
@@ -56,7 +56,7 @@ public class BasePreciseAnimation extends AbstractPreciseAnimation
 	}
 
 	@Override
-	public void onProgress(int p) {
+	public void onProgress(double p) {
 		// TODO: Implement this method
 	}
 
@@ -71,7 +71,7 @@ public class BasePreciseAnimation extends AbstractPreciseAnimation
 	}
 
 	@Override
-	public int getStartTimeAtTimeline() {
+	public double getStartTimeAtTimeline() {
 		// TODO: Implement this method
 		return startTime;
 	}

@@ -1,15 +1,13 @@
 package com.edplan.framework.ui;
-import com.edplan.framework.graphics.opengl.GLCanvas2D;
-import com.edplan.framework.math.Vec2;
-import com.edplan.framework.ui.uiobjs.Area2D;
-import com.edplan.framework.ui.uiobjs.Visibility;
-import com.edplan.framework.math.RectF;
-import com.edplan.framework.ui.uiobjs.DrawRequestParam;
-import com.edplan.framework.graphics.layer.BufferedLayer;
 import com.edplan.framework.MContext;
-import com.edplan.superutils.classes.advance.IRunnableHandler;
-import com.edplan.framework.ui.drawable.EdDrawable;
+import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.input.MotionEvent;
+import com.edplan.framework.math.RectF;
+import com.edplan.framework.math.Vec2;
+import com.edplan.framework.ui.drawable.EdDrawable;
+import com.edplan.framework.ui.uiobjs.DrawRequestParam;
+import com.edplan.framework.ui.uiobjs.Visibility;
+import com.edplan.superutils.classes.advance.IRunnableHandler;
 
 public class EdView implements IRunnableHandler
 {
@@ -32,11 +30,12 @@ public class EdView implements IRunnableHandler
 	private EdDrawable background;
 	
 	public EdView(MContext context){
+		this.context=context;
 		if(!checkCurrentThread()){
 			throw new RuntimeException("you can only create a view in main thread!");
 		}
 		initialName();
-		this.context=context;
+		
 	}
 	
 	public boolean checkCurrentThread(){
@@ -135,7 +134,7 @@ public class EdView implements IRunnableHandler
 	public void draw(GLCanvas2D canvas){
 		if(background!=null){
 			int s=canvas.save();
-			canvas.getMaskMatrix().post(background.getTranslationMatrix());
+			//canvas.getMaskMatrix().post(background.getTranslationMatrix());
 			background.draw(canvas);
 			canvas.restoreToCount(s);
 		}

@@ -118,11 +118,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 			c.drawARGB(255,0,0,0);
 			c.drawText("DeltaTime: "+context.getFrameDeltaTime(),10,30,tp);
 			c.drawLine(10,50,10+18*6,50,tp);
-			c.drawLine(10,60,10+context.getFrameDeltaTime()*6,60,tp);
+			c.drawLine(10,60,10+(float)context.getFrameDeltaTime()*6,60,tp);
 			for(int i=timelist.length-1;i>0;i--){
 				timelist[i]=timelist[i-1];
 			}
-			timelist[0]=context.getFrameDeltaTime();
+			timelist[0]=(int)context.getFrameDeltaTime();
 			for(int i=0;i<timelist.length;i++){
 				c.drawLine(10,55+5*i,10+timelist[i]*6,55+5*i,tp);
 			}
@@ -186,7 +186,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 	public class DrawThread extends MLooperThread{
 		
 		@Override
-		public void onFrame(int time){
+		public void onFrame(double time){
 			// TODO: Implement this method
 			super.onFrame(time);
 			idraw();

@@ -2,11 +2,11 @@ package com.edplan.framework.ui.animation;
 
 public class AnimationHelper
 {
-	public static float getFloatProgress(int progressTime,int duration){
+	public static float getFloatProgress(double progressTime,double duration){
 		if(duration==0){
 			return 1;
 		}else{
-			return progressTime/(float)duration;
+			return (float)(progressTime/duration);
 		}
 	}
 }

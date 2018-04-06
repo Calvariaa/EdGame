@@ -56,7 +56,7 @@ public class AdvancePreciseAnimation extends BasePreciseAnimation
 	}
 
 	@Override
-	public void onProgress(int p) {
+	public void onProgress(double p) {
 		// TODO: Implement this method
 		super.onProgress(p);
 		if(onProgressListener!=null)onProgressListener.onProgress(p);

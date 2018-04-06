@@ -109,7 +109,7 @@ public class DrawableStdFollowpoint extends DrawableStdHitObject
 		}
 
 		@Override
-		public void setProgressTime(int p) {
+		public void setProgressTime(double p) {
 			// TODO: Implement this method
 			super.setProgressTime(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
@@ -133,7 +133,7 @@ public class DrawableStdFollowpoint extends DrawableStdHitObject
 		}
 
 		@Override
-		public void setProgressTime(int p) {
+		public void setProgressTime(double p) {
 			// TODO: Implement this method
 			super.setProgressTime(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
@@ -159,7 +159,7 @@ public class DrawableStdFollowpoint extends DrawableStdHitObject
 		}
 
 		@Override
-		public void setProgressTime(int p) {
+		public void setProgressTime(double p) {
 			// TODO: Implement this method
 			super.setProgressTime(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
@@ -185,7 +185,7 @@ public class DrawableStdFollowpoint extends DrawableStdHitObject
 		}
 
 		@Override
-		public void setProgressTime(int p) {
+		public void setProgressTime(double p) {
 			// TODO: Implement this method
 			super.setProgressTime(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());

@@ -26,9 +26,9 @@ public class MAnimation extends Loopable
 	
 	private float progress;
 	
-	private int timepassed;
+	private double timepassed;
 
-	private int duration;
+	private double duration;
 	
 	public MAnimation(){
 		initial();
@@ -81,16 +81,16 @@ public class MAnimation extends Loopable
 		setFlag(Flag.Stop);
 	}
 	
-	public int getTimepassed(){
+	public double getTimepassed(){
 		return timepassed;
 	}
 
-	public MAnimation setDuration(int duration){
+	public MAnimation setDuration(double duration){
 		this.duration=duration;
 		return this;
 	}
 
-	public int getDuration(){
+	public double getDuration(){
 		return duration;
 	}
 
@@ -169,7 +169,7 @@ public class MAnimation extends Loopable
 	}
 	
 	@Override
-	public void onLoop(int deltaTime){
+	public void onLoop(double deltaTime){
 		// TODO: Implement this method
 		if(!ifHasStart()){
 			hasStart=true;
@@ -179,7 +179,7 @@ public class MAnimation extends Loopable
 		if(timepassed>=duration){
 			timepassed=duration;
 		}
-		setProgress(((float)timepassed)/duration);
+		setProgress((float)(timepassed/duration));
 		
 		if(callbackRate==0){
 			onProgress();

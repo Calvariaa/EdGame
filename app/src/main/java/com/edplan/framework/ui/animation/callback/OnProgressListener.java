@@ -2,5 +2,5 @@ package com.edplan.framework.ui.animation.callback;
 
 public interface OnProgressListener
 {
-	public void onProgress(int p);
+	public void onProgress(double p);
 }

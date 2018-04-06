@@ -1,10 +1,10 @@
 package com.edplan.nso.storyboard;
 import com.edplan.framework.math.Vec2;
 import java.util.HashMap;
+import com.edplan.framework.ui.Anchor;
 
 public class Storyboard
 {
-	
 	private HashMap<String,StoryboardLayer> layers=new HashMap<String,StoryboardLayer>();
 	
 	public Storyboard(){
@@ -27,7 +27,7 @@ public class Storyboard
 		Sample(5),
 		Animation(6);
 		private final int value;
-		public EventObjType(int v){
+		EventObjType(int v){
 			value=v;
 		}
 
@@ -50,7 +50,7 @@ public class Storyboard
 		private final int depth;
 		private final boolean enableWhenPassing;
 		private final boolean enableWhenFailing;
-		public Layer(int depth,boolean ewp,boolean ewf){
+		Layer(int depth,boolean ewp,boolean ewf){
 			this.depth=depth;
 			this.enableWhenPassing=ewp;
 			this.enableWhenFailing=ewf;
@@ -71,20 +71,32 @@ public class Storyboard
 		}
 	}
 	
+	public enum AnimationLoopType{
+		LoopOnce,
+		LoopForever;
+	}
+	
 	public enum Origin{
-		TopLeft(0,0),
-		TopCentre(0.5f,0),
-		TopRight(1,0),
-		CentreLeft(0,0.5f),
-		Centre(0.5f,0.5f),
-		CentreRight(1,0.5f),
-		BottomLeft(0,1),
-		BottomCentre(0.5f,1),
-		BottomRight(1,1);
-		private final float originX,originY;
-		public Origin(float x,float y){
-			originX=x;
-			originY=y;
+		TopLeft(Anchor.TopLeft),
+		TopCentre(Anchor.TopCenter),
+		TopRight(Anchor.TopRight),
+		CentreLeft(Anchor.CenterLeft),
+		Centre(Anchor.Center),
+		CentreRight(Anchor.CenterRight),
+		BottomLeft(Anchor.BottomLeft),
+		BottomCentre(Anchor.BottomCenter),
+		BottomRight(Anchor.BottomRight);
+		private final Anchor value;
+		Origin(Anchor anchor){
+			value=anchor;
+		}
+		
+		public Anchor getAnchor(){
+			return value;
+		}
+		
+		public static Origin parse(String s){
+			return valueOf(s);
 		}
 	}
 }

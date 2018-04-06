@@ -13,7 +13,7 @@ public class AnimationHandler extends Loopable
 	}
 	
 	@Override
-	public void onLoop(int deltaTime) {
+	public void onLoop(double deltaTime) {
 		// TODO: Implement this method
 		animations.startIterate();
 		Iterator<AbstractAnimation> iter=animations.iterator();
@@ -50,8 +50,8 @@ public class AnimationHandler extends Loopable
 	/**
 	 *返回值代表此动画是否Finish
 	 */
-	private boolean postProgress(AbstractAnimation anim,int postTime){
-		int p;
+	private boolean postProgress(AbstractAnimation anim,double postTime){
+		double p;
 		switch(anim.getLoopType()){
 			case None:
 				p=anim.getProgressTime()+postTime;

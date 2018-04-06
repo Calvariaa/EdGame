@@ -15,7 +15,7 @@ public class AudioTimeline extends PreciseTimeline
 	}
 
 	@Override
-	public void onLoop(int deltaTime)
+	public void onLoop(double deltaTime)
 	{
 		// TODO: Implement this method
 		int cur=channel.currentPlayTimeMS();

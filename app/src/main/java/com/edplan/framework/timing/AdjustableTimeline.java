@@ -23,11 +23,12 @@ public class AdjustableTimeline extends PreciseTimeline
 	}
 	
 	@Override
-	public void onLoop(int deltaTime) {
+	public void onLoop(double deltaTime) {
 		// TODO: Implement this method
-		curRealTime+=deltaTime;
-		realPostTime=(int)(curRealTime*timeRate);
-		super.onLoop(realPostTime-preRealPostTime);
-		preRealPostTime=realPostTime;
+		//curRealTime+=deltaTime;
+		//realPostTime=(int)(curRealTime*timeRate);
+		//super.onLoop(realPostTime-preRealPostTime);
+		//preRealPostTime=realPostTime;
+		super.onLoop(deltaTime*timeRate);
 	}
 }

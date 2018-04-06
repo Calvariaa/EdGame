@@ -10,7 +10,7 @@ public class LooperLoopable<T extends Loopable> extends Loopable
 	}
 	
 	@Override
-	public void onLoop(int deltaTime)
+	public void onLoop(double deltaTime)
 	{
 		// TODO: Implement this method
 		looper.loop(deltaTime);

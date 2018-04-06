@@ -8,7 +8,7 @@ public abstract class AbstractAnimation implements AnimationCallback
 	 *动画的持续时间，对于循环的动画而言这里的时间为一个循环的时间。
 	 *单位ms
 	 */
-	public abstract int getDuration();
+	public abstract double getDuration();
 	
 	/**
 	 *动画的循环方式
@@ -24,12 +24,12 @@ public abstract class AbstractAnimation implements AnimationCallback
 	 *设置当前进度
 	 *@param p: 设置的进度，0～getDuration()之间的int。
 	 */
-	public abstract void setProgressTime(int p);
+	public abstract void setProgressTime(double p);
 	
 	/**
 	 *获取当前状态下的progressTime
 	 */
-	public abstract int getProgressTime();
+	public abstract double getProgressTime();
 	
 	/**
 	 *对于循环的Animation，获取现在循环的次数。

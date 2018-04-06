@@ -10,7 +10,7 @@ import com.edplan.framework.MContext;
  */
 public abstract class EdDrawable
 {
-	private Mat4 translationMatrix=Mat4.createIdentity();
+//	private Mat4 translationMatrix=Mat4.createIdentity();
 
 	private MContext context;
 
@@ -22,13 +22,13 @@ public abstract class EdDrawable
 		return context;
 	}
 
-	public void setTranslationMatrix(Mat4 translationMatrix) {
-		this.translationMatrix.set(translationMatrix);
-	}
+//	public void setTranslationMatrix(Mat4 translationMatrix) {
+//		this.translationMatrix.set(translationMatrix);
+//	}
 
-	public Mat4 getTranslationMatrix() {
-		return translationMatrix;
-	}
+//	public Mat4 getTranslationMatrix() {
+//		return translationMatrix;
+//	}
 
 	public abstract void draw(GLCanvas2D canvas);
 }

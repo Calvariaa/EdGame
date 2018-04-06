@@ -19,7 +19,7 @@ public abstract class AbstractPreciseAnimation extends AbstractAnimation
 	 *在Timeline上的开始时间，
 	 *在动画实际开始的时候（对应的帧时间）会通过这个参数进行ms级别的调整
 	 */
-	public abstract int getStartTimeAtTimeline();
+	public abstract double getStartTimeAtTimeline();
 	
 	/**
 	 *默认只能为LoopType.None

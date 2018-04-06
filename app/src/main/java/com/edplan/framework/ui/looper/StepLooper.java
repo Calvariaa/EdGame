@@ -38,7 +38,7 @@ public class StepLooper extends BaseLooper<StepedLoopable>
 		}
 		
 		@Override
-		public void onLoop(int deltaTime) {
+		public void onLoop(double deltaTime) {
 			// TODO: Implement this method
 			loopable.onLoop(deltaTime);
 		}

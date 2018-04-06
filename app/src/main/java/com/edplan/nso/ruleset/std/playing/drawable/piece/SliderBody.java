@@ -116,19 +116,22 @@ public class SliderBody extends BasePiece
 		public void updateTexture(){
 			float aa_portion = 0.02f;
             float border_portion = 0.128f;
-            float gradient_portion = 1 - border_portion;
+			float mix_width=0.02f;
+			float mix_start=border_portion-mix_width;
+            float gradient_portion = 1 - border_portion+mix_width;
 
             float opacity_at_centre = 0.3f;
             float opacity_at_edge = 0.8f;
 			
-			Color4 centerColor=Color4.gray(0.8f);
-			Color4 borderColor=Color4.gray(1);
+			Color4 centerColor=Color4.rgba(0.8f,0.8f,0.8f,0.7f);
+			Color4 borderColor=Color4.rgba(1,1,1,1);
+			Color4 sideColor=Color4.rgba(0.25f,0.25f,0.25f,0.7f);
 			
 			Bitmap bmp=Bitmap.createBitmap(512,1,Bitmap.Config.ARGB_8888);
 			for(int x=0;x<bmp.getWidth();x++){
 				float v=1-x/(float)(bmp.getWidth()-1);
 
-				if(v<=border_portion){
+				if(v<=mix_start){
 					bmp.setPixel(x,0,
 						borderColor
 							 .copyNew()
@@ -139,16 +142,25 @@ public class SliderBody extends BasePiece
 							).toIntBit());
 					//Color4.gray(Math.min(v/aa_portion,1)).toIntBit());
 					//Color.argb((int)(Math.min(v/aa_portion,1)*255),0,0,0));
+				}else if(v<=border_portion){
+					Color4 c0=borderColor.copyNew();
+					float mix_rate=(v-mix_start)/mix_width;
+					v-=border_portion;
+					//float pro=opacity_at_edge-(opacity_at_edge-opacity_at_centre)*v/gradient_portion;
+					Color4 c1=Color4.mix(centerColor,sideColor,1-v/gradient_portion);
+					bmp.setPixel(x,0,Color4.mix(c0,c1,mix_rate).toIntBit());
 				}else{
 					v-=border_portion;
 					bmp.setPixel(x,0,
-								 centerColor
-								 .copyNew()
-								 .multiple(
-									 Color4.alphaMultipler(
-										 opacity_at_edge-(opacity_at_edge-opacity_at_centre)*v/gradient_portion
-									 )
-								 ).toIntBit());
+								 Color4.mix(centerColor,sideColor,1-v/gradient_portion).toIntBit()
+								 //centerColor
+								 //.copyNew()
+								 //.multiple(
+									// Color4.alphaMultipler(
+										 
+									// )
+								 //).toIntBit()
+								 );
 					//Color4.gray(1-(opacity_at_edge-(opacity_at_edge-opacity_at_centre)*v/gradient_portion)).toIntBit());
 					//Color.argb((int)((opacity_at_edge-(opacity_at_edge-opacity_at_centre)*v/gradient_portion)*255),0,0,0));
 				}

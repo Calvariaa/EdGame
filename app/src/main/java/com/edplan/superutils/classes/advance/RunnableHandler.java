@@ -49,7 +49,7 @@ public class RunnableHandler extends Loopable implements IRunnableHandler
 	}
 
 	@Override
-	public void onLoop(int deltaTime) {
+	public void onLoop(double deltaTime) {
 		// TODO: Implement this method
 		bufferedRunnables.startIterate();
 		Iterator<DelayedRunnable> iter=bufferedRunnables.iterator();

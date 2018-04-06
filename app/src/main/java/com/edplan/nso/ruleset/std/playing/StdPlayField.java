@@ -106,7 +106,7 @@ public class StdPlayField extends PlayField
 	@Override
 	public void draw(GLCanvas2D canvas) {
 		// TODO: Implement this method
-		int curTime=timeline.frameTime();
+		int curTime=(int)timeline.frameTime();
 		//添加新的物件
 		drawableHitObjects.prepareToDraw(curTime);
 		connectionDrawables.prepareToDraw(curTime);

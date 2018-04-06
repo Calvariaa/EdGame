@@ -31,5 +31,5 @@ public abstract class Loopable
 		
 	}
 	
-	public abstract void onLoop(int deltaTime);
+	public abstract void onLoop(double deltaTime);
 }

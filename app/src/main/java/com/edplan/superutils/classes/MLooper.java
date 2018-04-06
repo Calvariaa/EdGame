@@ -54,8 +54,8 @@ public class MLooper implements AbstractLooper
 	}
 	
 	@Override
-	public void loop(int deltaTime){
-		timer.refresh(deltaTime);
+	public void loop(double deltaTime){
+		timer.refresh((int)deltaTime);
 		for(Loopable l:addList){
 			loopables.add(l);
 		}

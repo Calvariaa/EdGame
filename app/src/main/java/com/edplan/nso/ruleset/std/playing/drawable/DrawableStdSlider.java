@@ -144,7 +144,7 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 		}
 
 		@Override
-		public void setProgressTime(int p) {
+		public void setProgressTime(double p) {
 			// TODO: Implement this method
 			super.onProgress(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
@@ -177,7 +177,7 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 		}
 	
 		@Override
-		public void setProgressTime(int p) {
+		public void setProgressTime(double p) {
 			// TODO: Implement this method
 			super.onProgress(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
@@ -212,7 +212,7 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 		}
 
 		@Override
-		public void setProgressTime(int p) {
+		public void setProgressTime(double p) {
 			// TODO: Implement this method
 			super.onProgress(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());

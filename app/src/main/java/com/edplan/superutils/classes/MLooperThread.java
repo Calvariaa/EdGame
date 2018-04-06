@@ -79,7 +79,7 @@ public class MLooperThread extends Thread
 		tasks.endIterate();
 	}
 	
-	public void onFrame(int time){
+	public void onFrame(double time){
 		looper.loop(time);
 	}
 	
@@ -87,7 +87,7 @@ public class MLooperThread extends Thread
 		try{
 			sleep(
 				(timer.getDeltaTime()>framTimeMillions)?
-					0:(framTimeMillions-timer.getDeltaTime())
+					0:(int)(framTimeMillions-timer.getDeltaTime())
 			);
 		}
 		catch(InterruptedException e){}

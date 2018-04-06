@@ -39,7 +39,6 @@ public class MContext
 	
 	public MContext(Context androidContext){
 		this.androidContext=androidContext;
-		mainThread=Thread.currentThread();
 		//initial();
 	}
 
@@ -96,6 +95,7 @@ public class MContext
 	}
 	
 	public void initial(){
+		mainThread=Thread.currentThread();
 		assetResource=new ApplicationAssetResource(getNativeContext().getAssets());
 		shaderManager=new ShaderManager(getAssetResource().getShaderResource());
 	}
@@ -112,7 +112,7 @@ public class MContext
 		return assetResource;
 	}
 	
-	public int getFrameDeltaTime(){
+	public double getFrameDeltaTime(){
 		return uiLooper.getTimer().getDeltaTime();
 	}
 	

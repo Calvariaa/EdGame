@@ -137,13 +137,14 @@ public class TestView extends EdView
 			//"4/IOSYS - Marisa wa Taihen na Mono wo Nusunde Ikimashita (DJPop) [TAG4].osu"
 			//"5/Luo Tianyi - Xiao Ji Bibi ~ Remix ~ (MoleAkarin) [Bi~bi~].osu"
 			//"6/xi - FREEDOM DiVE (Nakagawa-Kanon) [FOUR DIMENSIONS].osu"
-					"7/Panda Eyes & Teminite - Highscore (Fort) [Game Over].osu"
+			//"7/Panda Eyes & Teminite - Highscore (Fort) [Game Over].osu"
+			"8/Helblinde - The Solace of Oblivion (ProfessionalBox) [Aspire].osu"
 												   ),
 												"test case beatmap: " 
 												 );
 												 
-			audio=BassChannel.createStreamFromResource(getContext().getAssetResource(),"osu/test/beatmap/"+
-			//createStreamFromAsset(getContext(),"osu/test/beatmap/"+
+			audio=BassChannel//.createStreamFromResource(getContext().getAssetResource(),"osu/test/beatmap/"+
+			.createStreamFromAsset(getContext(),"osu/test/beatmap/"+
 			//"test.mp3"
 			//"cloverfantasy.mp3"
 			//"audio.mp3"
@@ -155,7 +156,8 @@ public class TestView extends EdView
 			//"4/Marisa wa Taihen na Mono wo Nusunde Ikimashita.mp3"
 			//"5/bibibi.mp3"
 			//"6/Freedom Dive.mp3"
-			"7/Teminite & Panda Eyes - Highscore.mp3"
+			//"7/Teminite & Panda Eyes - Highscore.mp3"
+			"8/audio.mp3"
 			);
 			try
 			{
@@ -354,7 +356,7 @@ public class TestView extends EdView
 		
 		
 		
-		canvas.drawColor(Color4.gray(0.0f));
+		canvas.drawColor(Color4.gray(0.4f));
 		//new Color4(c,c,c,1.0f));
 		canvas.clearDepthBuffer();
 		
@@ -555,7 +557,7 @@ public class TestView extends EdView
 		GLCanvas2D newCanvas=new GLCanvas2D(newLayer);
 		newCanvas.prepare();
 		
-		newCanvas.drawColor(Color4.gray(0));
+		newCanvas.drawColor(Color4.rgba(0,0,0,0));
 		newCanvas.clearDepthBuffer();
 		
 		float osuScale=PlayField.BASE_Y/canvas.getHeight();
@@ -661,7 +663,7 @@ public class TestView extends EdView
 			//break;
 		}
 		delt=(int)(System.currentTimeMillis()-ct);*/
-		int deltaTime=getContext().getFrameDeltaTime();
+		int deltaTime=(int)getContext().getFrameDeltaTime();
 		GLPaint ntp=new GLPaint();
 		ntp.setStrokeWidth(1.2f);
 		ntp.setColorMixRate(1);
@@ -736,10 +738,10 @@ public class TestView extends EdView
 	
 	public class SliderAnim extends AbstractAnimation {
 
-		int progressTime=0;
+		double progressTime=0;
 		
 		@Override
-		public int getDuration() {
+		public double getDuration() {
 			// TODO: Implement this method
 			return 1000;
 		}
@@ -757,16 +759,16 @@ public class TestView extends EdView
 		}
 
 		@Override
-		public void setProgressTime(int p) {
+		public void setProgressTime(double p) {
 			// TODO: Implement this method
 			progressTime=p;
-			float pr=p/(float)getDuration();
+			float pr=(float)(p/getDuration());
 			postAlpha=Math.min(1,pr*1.4f);
 			postProgress=pr;
 		}
 
 		@Override
-		public int getProgressTime() {
+		public double getProgressTime() {
 			// TODO: Implement this method
 			return progressTime;
 		}
@@ -777,7 +779,7 @@ public class TestView extends EdView
 		}
 
 		@Override
-		public void onProgress(int p) {
+		public void onProgress(double p) {
 			// TODO: Implement this method
 		}
 

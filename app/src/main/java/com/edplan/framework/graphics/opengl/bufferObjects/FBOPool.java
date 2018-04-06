@@ -6,7 +6,7 @@ import com.edplan.framework.graphics.layer.BufferedLayer;
 
 public class FBOPool
 {
-	private int maxMemory=1080*1920*10;
+	private int maxMemory=1080*1920*10*0;
 	
 	private int currentMemory=0;
 	
