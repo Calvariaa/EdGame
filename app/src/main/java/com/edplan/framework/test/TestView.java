@@ -133,12 +133,12 @@ public class TestView extends EdView
 			//"Yueporu feat. Hatsune Miku - Kurikaeshi Hitotsubu (Zweib) [Hitotsubu].osu"
 			//"1/Chino (CV.Minase Inori) - Okashina yume o Ohitotsu douzo (- Skanbis -) [Asuka_-'s insane].osu"
 			//"2/Halozy - Kikoku Doukoku Jigokuraku (Hollow Wings) [Notch Hell].osu"
-			//"3/IAHN - Transform (Original Mix) (Monstrata) [Aspire].osu"
+			"3/IAHN - Transform (Original Mix) (Monstrata) [Aspire].osu"
 			//"4/IOSYS - Marisa wa Taihen na Mono wo Nusunde Ikimashita (DJPop) [TAG4].osu"
 			//"5/Luo Tianyi - Xiao Ji Bibi ~ Remix ~ (MoleAkarin) [Bi~bi~].osu"
 			//"6/xi - FREEDOM DiVE (Nakagawa-Kanon) [FOUR DIMENSIONS].osu"
 			//"7/Panda Eyes & Teminite - Highscore (Fort) [Game Over].osu"
-			"8/Helblinde - The Solace of Oblivion (ProfessionalBox) [Aspire].osu"
+			//"8/Helblinde - The Solace of Oblivion (ProfessionalBox) [Aspire].osu"
 												   ),
 												"test case beatmap: " 
 												 );
@@ -152,12 +152,12 @@ public class TestView extends EdView
 			//"No Poi!.mp3"
 			//"1/audio.mp3"
 			//"2/Kikoku Doukoku Jigokuraku.mp3"
-			//"3/audio.mp3"
+			"3/audio.mp3"
 			//"4/Marisa wa Taihen na Mono wo Nusunde Ikimashita.mp3"
 			//"5/bibibi.mp3"
 			//"6/Freedom Dive.mp3"
 			//"7/Teminite & Panda Eyes - Highscore.mp3"
-			"8/audio.mp3"
+			//"8/audio.mp3"
 			);
 			try
 			{
@@ -397,7 +397,7 @@ public class TestView extends EdView
 		 
 		float dh=50;
 		GLPaint paint=new GLPaint();
-		paint.setColorMixRate(1f);
+		//paint.setColorMixRate(1f);
 		paint.setFinalAlpha(1f);
 		paint.setMixColor(new Color4(1,1,1,1));
 		paint.setPadding(10);
@@ -581,7 +581,7 @@ public class TestView extends EdView
 		GLWrapped.depthTest.restore();
 		GLPaint tp=new GLPaint();
 		tp.setVaryingColor(Color4.rgb(1,1,1));
-		tp.setColorMixRate(1);
+		//tp.setColorMixRate(1);
 		tp.setStrokeWidth(5);
 		tp.setFinalAlpha(1);
 		//newCanvas.drawLines(new float[]{0,0,PlayField.CANVAS_SIZE_X,PlayField.CANVAS_SIZE_Y},tp);
@@ -606,7 +606,7 @@ public class TestView extends EdView
 		//canvas.restore();
 		newCanvas.unprepare();
 
-		paint.setColorMixRate(0);
+		//paint.setColorMixRate(0);
 		
 		GLPaint newPaint=new GLPaint();
 		newPaint.setFinalAlpha(postAlpha);
@@ -666,7 +666,7 @@ public class TestView extends EdView
 		int deltaTime=(int)getContext().getFrameDeltaTime();
 		GLPaint ntp=new GLPaint();
 		ntp.setStrokeWidth(1.2f);
-		ntp.setColorMixRate(1);
+		//ntp.setColorMixRate(1);
 		ntp.setMixColor(Color4.White);
 		canvas.save();
 		//canvas.clipRect(c.getWidth()-200,c.getHeight()-600,c.getWidth(),c.getHeight());
@@ -727,7 +727,7 @@ public class TestView extends EdView
 		GLPaint baseLinePaint=new GLPaint();
 		baseLinePaint.setMixColor(Color4.rgba(1,0,0,0.6f));
 		baseLinePaint.setStrokeWidth(2);
-		baseLinePaint.setColorMixRate(1);
+		//baseLinePaint.setColorMixRate(1);
 		canvas.drawLine(0,baseLine,1000,baseLine,baseLinePaint);
 		baseLinePaint.setMixColor(Color4.rgba(0,1,0,0.6f));
 		canvas.drawLine(0,baseLine+font.getCommon().base*printer.getScale(),1000,baseLine+font.getCommon().base*printer.getScale(),baseLinePaint);

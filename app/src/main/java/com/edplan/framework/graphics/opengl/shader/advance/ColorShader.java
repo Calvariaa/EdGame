@@ -24,7 +24,7 @@ public class ColorShader<T extends BaseColorBatch> extends GLProgram
 	
 	private UniformMat4 uMaskMatrix;
 	
-	private UniformFloat uColorMixRate;
+	//private UniformFloat uColorMixRate;
 	
 	private UniformFloat uFinalAlpha;
 	
@@ -38,7 +38,7 @@ public class ColorShader<T extends BaseColorBatch> extends GLProgram
 		super(program.getVertexShader(),program.getFragmentShader(),program.getProgramId());
 		uMVPMatrix=UniformMat4.findUniform(this,Unif.MVPMatrix);
 		uMaskMatrix=UniformMat4.findUniform(this,Unif.MaskMatrix);
-		uColorMixRate=UniformFloat.findUniform(this,Unif.ColorMixRate);
+		//uColorMixRate=UniformFloat.findUniform(this,Unif.ColorMixRate);
 		uFinalAlpha=UniformFloat.findUniform(this,Unif.FinalAlpha);
 		uMixColor=UniformColor4.findUniform(this,Unif.MixColor);
 		vPosition=VertexAttrib.findAttrib(this,Attr.Position,VertexAttrib.Type.VEC3);
@@ -48,7 +48,7 @@ public class ColorShader<T extends BaseColorBatch> extends GLProgram
 	public void loadPaint(GLPaint paint,float alphaAdjust){
 		loadMixColor(paint.getMixColor());
 		loadAlpha(paint.getFinalAlpha()*alphaAdjust);
-		loadColorMixRate(paint.getColorMixRate());
+		//loadColorMixRate(paint.getColorMixRate());
 	}
 	
 	public void loadBatch(T batch){
@@ -80,11 +80,11 @@ public class ColorShader<T extends BaseColorBatch> extends GLProgram
 	public void loadColor(Color4Buffer buffer){
 		vColor.loadData(buffer);
 	}
-	
+	/*
 	public void loadColorMixRate(float f){
 		uColorMixRate.loadData(f);
 	}
-	
+	*/
 	public void loadAlpha(float a){
 		uFinalAlpha.loadData(a);
 	}

@@ -39,10 +39,10 @@ public class DifficultyParser extends PartParser<PartDifficulty>
 					part.setOverallDifficulty(U.toFloat(entry[1]));
 					return true;
 				case PartDifficulty.SliderMultiplier:
-					part.setSliderMultiplier(U.toFloat(entry[1]));
+					part.setSliderMultiplier(Double.parseDouble(entry[1]));
 					return true;
 				case PartDifficulty.SliderTickRate:
-					part.setSliderTickRate(U.toFloat(entry[1]));
+					part.setSliderTickRate(Double.parseDouble(entry[1]));
 					return true;
 				default:
 					//key not find

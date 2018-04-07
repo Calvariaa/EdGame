@@ -86,7 +86,7 @@ public class StdPlayField extends PlayField
 		
 		List<DrawableStdHitObject> l=drawableHitObjects.getObjectsInField();
 		GLPaint paint=new GLPaint();
-		paint.setColorMixRate(1);
+		//paint.setColorMixRate(1);
 		paint.setStrokeWidth(2f);
 		paint.setMixColor(Color4.rgba(1,0,0,1));
 		for(DrawableStdHitObject obj:l){

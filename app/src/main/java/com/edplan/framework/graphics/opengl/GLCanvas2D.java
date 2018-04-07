@@ -178,7 +178,7 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	private void injectData(Texture3DBatch batch,AbstractTexture texture,float alpha,Color4 mixColor,Texture3DShader shader){
 		shader.useThis();
 		shader.loadMixColor(mixColor);
-		shader.loadColorMixRate(batch.getColorMixRate());
+		//shader.loadColorMixRate(batch.getColorMixRate());
 		shader.loadAlpha(alpha*getCanvasAlpha());
 		shader.loadMVPMatrix(getFinalMatrix());
 		shader.loadMaskMatrix(getMaskMatrix());
@@ -248,35 +248,35 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	 *@param res:此处为Texture范围，使用实际像素坐标（原点左上）
 	 *@param dst:绘制在canvas上的坐标，也是实际像素坐标（原点左下）
 	 */
-	public void drawTexture(AbstractTexture texture,RectF res,RectF dst,Color4 mixColor,Color4 varyColor,float colorMixRate,float z,float alpha){
+	public void drawTexture(AbstractTexture texture,RectF res,RectF dst,Color4 mixColor,Color4 varyColor,float z,float alpha){
 		checkCanDraw();
 		tmpBatch.clear();
-		tmpBatch.setColorMixRate(colorMixRate);
+		//tmpBatch.setColorMixRate(colorMixRate);
 		RectVertex[] v=createRectVertexs(texture,res,dst,varyColor,z);
 		tmpBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
 		drawTexture3DBatch(tmpBatch,texture,alpha,mixColor);
 	}
 	
-	public void drawTexture(AbstractTexture texture,Vec2[] resV,Vec2[] dstV,float colorMixRate,Color4 varyColor,float finalAlpha,Color4 mixColor){
+	public void drawTexture(AbstractTexture texture,Vec2[] resV,Vec2[] dstV,Color4 varyColor,float finalAlpha,Color4 mixColor){
 		checkCanDraw();
 		tmpBatch.clear();
-		tmpBatch.setColorMixRate(colorMixRate);
+		//tmpBatch.setColorMixRate(colorMixRate);
 		tmpBatch.add(makeupVertex(texture,resV,dstV,varyColor));
 		drawTexture3DBatch(tmpBatch,texture,finalAlpha,mixColor);
 	}
 	
 	public void drawTexture(AbstractTexture texture,RectF res,RectF dst,GLPaint paint){
-		drawTexture(texture,res,dst,paint.getMixColor(),paint.getVaryingColor(),paint.getColorMixRate(),defZ,paint.getFinalAlpha());
+		drawTexture(texture,res,dst,paint.getMixColor(),paint.getVaryingColor(),defZ,paint.getFinalAlpha());
 	}
 	
-	public void drawTexture(AbstractTexture texture,RectF res,RectF dst,Color4 mixColor,Color4 color,float colorMixRate,float alpha){
-		drawTexture(texture,res,dst,mixColor,color,colorMixRate,defZ,alpha);
+	public void drawTexture(AbstractTexture texture,RectF res,RectF dst,Color4 mixColor,Color4 color,float alpha){
+		drawTexture(texture,res,dst,mixColor,color,defZ,alpha);
 	}
 	
-	public void drawTexture(AbstractTexture texture,RectF dst,Color4 mixColor,Color4 color,float colorMixRate,float z,float alpha){
+	public void drawTexture(AbstractTexture texture,RectF dst,Color4 mixColor,Color4 color,float z,float alpha){
 		checkCanDraw();
 		tmpBatch.clear();
-		tmpBatch.setColorMixRate(colorMixRate);
+		//tmpBatch.setColorMixRate(colorMixRate);
 		RectVertex[] v=createRectVertexs(texture,new RectF(0,0,texture.getWidth(),texture.getHeight()),dst,color,z);
 		tmpBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
 		drawTexture3DBatch(tmpBatch,texture,alpha,mixColor);
@@ -285,7 +285,7 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	public void drawRectTexture(AbstractTexture texture,RectF res,RectF dst,GLPaint paint){
 		checkCanDraw();
 		tmpRectBatch.clear();
-		tmpRectBatch.setColorMixRate(paint.getColorMixRate());
+		//tmpRectBatch.setColorMixRate(paint.getColorMixRate());
 		RectVertex[] v=createRectVertexs(texture,res,dst,paint.getVaryingColor(),defZ);
 		tmpRectBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
 		drawRectBatch(tmpRectBatch,texture,dst,paint);
@@ -294,18 +294,18 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	public void drawRoundedRectTexture(AbstractTexture texture,RectF res,RectF dst,GLPaint paint){
 		checkCanDraw();
 		tmpRectBatch.clear();
-		tmpRectBatch.setColorMixRate(paint.getColorMixRate());
+		//tmpRectBatch.setColorMixRate(paint.getColorMixRate());
 		RectVertex[] v=createRectVertexs(texture,res,dst,paint.getVaryingColor(),defZ);
 		tmpRectBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
 		drawRoundedRectBatch(tmpRectBatch,texture,dst,paint);
 	}
 	
 	public void drawTexture(AbstractTexture texture,RectF dst,GLPaint paint){
-		drawTexture(texture,dst,paint.getMixColor(),paint.getVaryingColor(),paint.getColorMixRate(),defZ,paint.getFinalAlpha());
+		drawTexture(texture,dst,paint.getMixColor(),paint.getVaryingColor(),defZ,paint.getFinalAlpha());
 	}
 	
-	public void drawTexture(AbstractTexture texture,RectF dst,Color4 mixColor,Color4 color,float colorMixRate,float alpha){
-		drawTexture(texture,dst,mixColor,color,colorMixRate,defZ,alpha);
+	public void drawTexture(AbstractTexture texture,RectF dst,Color4 mixColor,Color4 color,float alpha){
+		drawTexture(texture,dst,mixColor,color,defZ,alpha);
 	}
 	
 	public void drawRectBatch(RectVertexBatch batch,AbstractTexture texture,RectF dst,GLPaint paint){

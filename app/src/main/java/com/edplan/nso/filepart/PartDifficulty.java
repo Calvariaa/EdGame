@@ -17,8 +17,8 @@ public class PartDifficulty implements OsuFilePart
 	private float circleSize;
 	private float overallDifficulty;
 	private float approachRate;
-	private float sliderMultiplier;
-	private float sliderTickRate;
+	private double sliderMultiplier;
+	private double sliderTickRate;
 
 	public void setHPDrainRate(float hPDrainRate){
 		this.hPDrainRate=hPDrainRate;
@@ -52,19 +52,19 @@ public class PartDifficulty implements OsuFilePart
 		return approachRate;
 	}
 
-	public void setSliderMultiplier(float sliderMultiplier){
+	public void setSliderMultiplier(double sliderMultiplier){
 		this.sliderMultiplier=sliderMultiplier;
 	}
 
-	public float getSliderMultiplier(){
+	public double getSliderMultiplier(){
 		return sliderMultiplier;
 	}
 
-	public void setSliderTickRate(float sliderTickRate){
+	public void setSliderTickRate(double sliderTickRate){
 		this.sliderTickRate=sliderTickRate;
 	}
 
-	public float getSliderTickRate(){
+	public double getSliderTickRate(){
 		return sliderTickRate;
 	}
 

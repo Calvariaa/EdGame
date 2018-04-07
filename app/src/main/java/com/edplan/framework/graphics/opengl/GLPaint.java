@@ -7,9 +7,7 @@ public class GLPaint
 	//#Base Data，每一种绘制都会使用的
 	public Color4 mixColor=new Color4(1,1,1,1);
 	
-	public Color4 varyingColor=new Color4(0,0,0,0);
-	
-	public float colorMixRate=0;
+	public Color4 varyingColor=new Color4(1,1,1,1);
 	
 	public float finalAlpha=1;
 	//#end Base Data
@@ -39,7 +37,7 @@ public class GLPaint
 	public void set(GLPaint p){
 		setMixColor(p.getMixColor());
 		setVaryingColor(p.getVaryingColor());
-		setColorMixRate(p.getColorMixRate());
+		//setColorMixRate(p.getColorMixRate());
 		setFinalAlpha(p.getFinalAlpha());
 		setPadding(p.getPadding());
 		setRoundedRadius(p.getRoundedRadius());
@@ -107,7 +105,7 @@ public class GLPaint
 	public Color4 getVaryingColor() {
 		return varyingColor;
 	}
-
+/*
 	public void setColorMixRate(float colorMixRate) {
 		this.colorMixRate=colorMixRate;
 	}
@@ -115,7 +113,7 @@ public class GLPaint
 	public float getColorMixRate() {
 		return colorMixRate;
 	}
-
+*/
 	public void setFinalAlpha(float finalAlpha) {
 		this.finalAlpha=finalAlpha;
 	}

@@ -119,7 +119,7 @@ public class TextureDrawable extends EdDrawable implements IFadeable,IScaleable2
 			texture.getTexture(),
 			new Vec2[]{r0,r3,r1,r3,r2,r1},
 			new Vec2[]{d0,d3,d1,d3,d2,d1},
-			basePaint.getColorMixRate(),
+			//basePaint.getColorMixRate(),
 			basePaint.getVaryingColor(),
 			basePaint.getFinalAlpha()*texture.getAlpha(),
 			basePaint.getMixColor());

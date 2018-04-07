@@ -37,7 +37,7 @@ public class FollowpointPiece extends BasePiece
 		this.p1.set(p1);
 		this.p2.set(p2);
 		paint.setStrokeWidth(baseWidth);
-		paint.setColorMixRate(1);
+		//paint.setColorMixRate(1);
 	}
 
 	public void calOffCirclePoints(){

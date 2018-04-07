@@ -23,6 +23,10 @@ public class StoryboardSprite implements IStoryboardElements
 		this.initialPosition=initialPosition;
 		this.anchor=anchor;
 	}
+
+	public CommandTimeLineGroup getCommandTimeLineGroup() {
+		return commandTimeLineGroup;
+	}
 	
 	public boolean hasCommands(){
 		if(commandTimeLineGroup.hasCommands()){

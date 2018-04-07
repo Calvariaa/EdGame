@@ -6,7 +6,6 @@ varying vec4 f_VaryingColor;
 varying vec3 f_MaskPosition;
 varying vec2 f_RectPosition;
 
-uniform float u_ColorMixRate;
 uniform float u_FinalAlpha;
 uniform vec4 u_MixColor;
 uniform sampler2D u_Texture;

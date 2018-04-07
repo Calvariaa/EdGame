@@ -10,6 +10,8 @@ import com.edplan.nso.storyboard.elements.StoryboardSprite;
 import com.edplan.superutils.U;
 import com.edplan.framework.ui.animation.LoopType;
 import com.edplan.nso.storyboard.elements.StoryboardAnimation;
+import com.edplan.nso.storyboard.elements.StoryboardSample;
+import com.edplan.framework.ui.animation.Easing;
 
 public class StoryboardDecoder extends PartParser<PartEvents>
 {
@@ -66,12 +68,100 @@ public class StoryboardDecoder extends PartParser<PartEvents>
 					break;
 				case Sample:
 				{
-					
+					double time=Double.parseDouble(spl[1]);
+					Storyboard.Layer layer=parseLayer(spl[2]);
+					String path=cleanFilename(spl[3]);
+					float volume=spl.length>4?Float.parseFloat(spl[4]):100;
+					storyboard.getLayer(layer.name()).add(new StoryboardSample(path,time,volume));
 				}
 					break;
 			}
 		}else{
-			
+			if(depth<2){
+				timelineGroup=((storyboardSprite!=null)?storyboardSprite.getCommandTimeLineGroup():null);
+			}
+			String commandType=spl[0];
+			switch(commandType){
+				case "T":
+				{
+					String triggerName=spl[1];
+					double startTime=spl.length>2?Double.parseDouble(spl[2]):Double.MIN_VALUE;
+					double endTime=spl.length>3?Double.parseDouble(spl[3]):Double.MAX_VALUE;
+					int groupNumber=spl.length>4?Integer.parseInt(spl[4]):0;
+					timelineGroup=(storyboardSprite!=null)?storyboardSprite.addTrigger(triggerName,startTime,endTime,groupNumber):null;
+				}
+					break;
+				case "L":
+				{
+					double startTime=Double.parseDouble(spl[1]);
+					int loopCount=Integer.parseInt(spl[2]);
+					timelineGroup=(storyboardSprite!=null)?storyboardSprite.addLoop(startTime,loopCount):null;
+				}
+					break;
+				default:
+				{
+					if(spl[3]==null||spl[3].isEmpty()){
+						spl[3]=spl[2];
+					}
+					Easing easing=Easing.values()[Integer.parseInt(spl[1])];
+					double startTime=Double.parseDouble(spl[2]);
+					double endTime=Double.parseDouble(spl[3]);
+					
+					switch(commandType){
+						case "F":
+						{
+							
+						}
+							break;
+						case "S":
+						{
+							
+						}
+							break;
+						case "V":
+						{
+							
+						}
+							break;
+						case "R":
+						{
+							
+						}
+							break;
+						case "M":
+						{
+							
+						}
+							break;
+						case "MX":
+						{
+							
+						}
+							break;
+						case "MY":
+						{
+							
+						}
+							break;
+						case "C":
+						{
+							
+						}
+							break;
+						case "P":
+						{
+							String type=spl[4];
+							switch(type){
+								case "A":
+								case "H":
+								case "V":
+							}
+						}
+							break;
+						default:throw new NsoException("unknow command type: "+commandType);
+					}
+				}
+			}
 		}
 		return true;
 	}

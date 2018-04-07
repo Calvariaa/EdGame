@@ -18,7 +18,7 @@ import com.edplan.nso.ruleset.std.playing.drawable.piece.ComboIndexPiece;
 
 public class DrawableStdSlider extends DrawableStdHitObject implements IHasApproachCircle
 {
-	private final float BASE_SCORING_DISTANCE=100;
+	private final double BASE_SCORING_DISTANCE=100;
 	
 	private ApproachCircle approachCircle;
 	

@@ -14,14 +14,15 @@ import com.edplan.nso.filepart.PartGeneral;
 import com.edplan.nso.filepart.PartHitObjects;
 import com.edplan.nso.filepart.PartMetadata;
 import com.edplan.nso.filepart.PartTimingPoints;
+import com.edplan.nso.filepart.PartVariables;
 import com.edplan.nso.parser.partParsers.ColoursParser;
 import com.edplan.nso.parser.partParsers.DifficultyParser;
 import com.edplan.nso.parser.partParsers.EditorParser;
-import com.edplan.nso.parser.partParsers.EventsParser;
 import com.edplan.nso.parser.partParsers.GeneralParser;
 import com.edplan.nso.parser.partParsers.HitObjectsParser;
 import com.edplan.nso.parser.partParsers.MetadataParser;
 import com.edplan.nso.parser.partParsers.PartParser;
+import com.edplan.nso.parser.partParsers.StoryboardDecoder;
 import com.edplan.nso.parser.partParsers.TimingPointsParser;
 import com.edplan.nso.ruleset.ModeManager;
 import com.edplan.nso.ruleset.std.StdBeatmap;
@@ -31,26 +32,16 @@ import com.edplan.superutils.interfaces.StringMakeable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Map;
-import java.util.TreeMap;
 import java.io.InputStream;
-import com.edplan.nso.parser.partParsers.StoryboardDecoder;
-import com.edplan.nso.filepart.PartVariables;
+import java.util.HashMap;
+import java.util.Map;
 
-public class StdBeatmapParser implements StringMakeable
+public class StdBeatmapParser extends BaseDecoder implements StringMakeable
 {
-	public static String FORMAT_LINE_HEAD="osu file format v";
-	
-	private boolean parseable;
-	
 	private StdBeatmapBindingData bd;
-	
+
 	private int format;
-	
-	private AdvancedBufferedReader reader;
-	
-	private ParsingBeatmap parsingBeatmap;
-	
+
 	private GeneralParser generalParser;
 	
 	private EditorParser editorParser;
@@ -67,29 +58,21 @@ public class StdBeatmapParser implements StringMakeable
 	
 	private HitObjectsParser hitObjectsParser;
 	
-	private Map<String,PartParser> parsers;
-	
-	private PartParser nowParser=null;
 	
 	public StdBeatmapParser(InputStream in,String resInfo){
-		AdvancedBufferedReader r=new AdvancedBufferedReader(in);
-		ParsingBeatmap b=new ParsingBeatmap();
-		b.setResInfo(resInfo!=null?resInfo:"unknow");
-		setParseable(true);
-		initial(r,b);
+		super(in,resInfo);
+		initialParsers();
 	}
 	
 	public StdBeatmapParser(File file) throws FileNotFoundException{
-		AdvancedBufferedReader br=new AdvancedBufferedReader(file);
-		ParsingBeatmap pb=new ParsingBeatmap();
-		pb.setResInfo("file://"+file.getAbsolutePath());
-		setParseable(true);
-		initial(br,pb);
+		super(file);
+		initialParsers();
 	}
 	
+	
 	public StdBeatmapParser(AdvancedBufferedReader _reader,ParsingBeatmap bdmsg){
-		setParseable(true);
-		initial(_reader,bdmsg);
+		super(_reader,bdmsg);
+		initialParsers();
 	}
 
 	public void setFormat(int format){
@@ -98,14 +81,6 @@ public class StdBeatmapParser implements StringMakeable
 
 	public int getFormat(){
 		return format;
-	}
-
-	public void setParseable(boolean parseable){
-		this.parseable=parseable;
-	}
-
-	public boolean isParseable(){
-		return parseable;
 	}
 
 	public void setGeneralParser(GeneralParser generalParser){
@@ -164,9 +139,7 @@ public class StdBeatmapParser implements StringMakeable
 		return hitObjectsParser;
 	}
 	
-	public void initial(AdvancedBufferedReader _reader,ParsingBeatmap bdmsg){
-		this.reader=_reader;
-		this.parsingBeatmap=bdmsg;
+	public void initialParsers(){
 		bd=new StdBeatmapBindingData();
 		
 		generalParser      =  new GeneralParser();
@@ -178,23 +151,20 @@ public class StdBeatmapParser implements StringMakeable
 		coloursParser      =  new ColoursParser();
 		hitObjectsParser   =  new HitObjectsParser(parsingBeatmap);
 		
-		
-		parsers=new TreeMap<String,PartParser>();
-		
-		
-		parsers.put(PartGeneral.TAG      ,generalParser      );
-		parsers.put(PartEditor.TAG       ,editorParser       );
-		parsers.put(PartMetadata.TAG     ,metadataParser     );
-		parsers.put(PartDifficulty.TAG   ,difficultyParser   );
-		parsers.put(PartEvents.TAG       ,storyboardDecoder  );
-		parsers.put(PartTimingPoints.TAG ,timingPointsParser );
-		parsers.put(PartColours.TAG      ,coloursParser      );
-		parsers.put(PartHitObjects.TAG   ,hitObjectsParser   );
-		parsers.put(PartVariables.TAG    ,storyboardDecoder.variableDecoder);
+		addParser(PartGeneral.TAG      ,generalParser      );
+		addParser(PartEditor.TAG       ,editorParser       );
+		addParser(PartMetadata.TAG     ,metadataParser     );
+		addParser(PartDifficulty.TAG   ,difficultyParser   );
+		addParser(PartEvents.TAG       ,storyboardDecoder  );
+		addParser(PartTimingPoints.TAG ,timingPointsParser );
+		addParser(PartColours.TAG      ,coloursParser      );
+		addParser(PartHitObjects.TAG   ,hitObjectsParser   );
+		addParser(PartVariables.TAG    ,storyboardDecoder.variableDecoder);
 	}
 	
-	public void parse() throws IOException, NsoBeatmapParsingException, NsoException{
-		
+	@Override
+	protected void onParse() throws NsoException,NsoBeatmapParsingException,IOException{
+		super.onParse();
 		boolean hasFindFormatLine=false;
 		int f=0;
 		while(true){
@@ -210,46 +180,20 @@ public class StdBeatmapParser implements StringMakeable
 				break;
 			}
 		}
-		
+
 		if(!hasFindFormatLine){
 			throw new NsoBeatmapParsingException("format line NOT found",parsingBeatmap);
 		}
-		String tagTmp=null;
-		while(true){
-			nextLine();
-			if(reader.hasEnd()){
-				break;
-			}
-			tagTmp=parseTag(reader.getNowString());
-			if(tagTmp!=null){
-				nowParser=parsers.get(tagTmp);
-				if(nowParser==null){
-					throw new NsoBeatmapParsingException("Invalid tag : "+tagTmp,parsingBeatmap);
-				}
-				if(nowParser==hitObjectsParser){
-					hitObjectsParser.initial(((PartGeneral)(generalParser.getPart())).getMode());
-				}
-			}else{
-				if(nowParser!=null){
-					try{
-						if(!nowParser.parse(reader.getNowString())){
-							throw new NsoBeatmapParsingException("\nParser:"+nowParser.getClass().getName()+"\nParse line err: "+nowParser.getErrMessage()+" \nres: "+reader.getNowString(), parsingBeatmap);
-						}
-					}
-					catch(NsoException e){
-						throw e;
-					}
-				}
-			} 
+	}
+
+	@Override
+	protected void onSelectParser(PartParser parser) throws NsoException, NsoBeatmapParsingException, IOException {
+		// TODO: Implement this method
+		super.onSelectParser(parser);
+		if(parser==hitObjectsParser){
+			hitObjectsParser.initial(((PartGeneral)(generalParser.getPart())).getMode());
 		}
 	}
-	
-	private void nextLine() throws IOException{
-		reader.bufferToNext();
-		parsingBeatmap.nextLine();
-	}
-	
-	
 	
 	public OsuBeatmap makeupBeatmap(){
 		switch(generalParser.getPart().getMode()){
@@ -294,41 +238,4 @@ public class StdBeatmapParser implements StringMakeable
 		sb.append(reparseTag(part.getTag())).append(U.NEXT_LINE);
 		sb.append(part.makeString()).append(U.NEXT_LINE).append(U.NEXT_LINE);
 	}
-	
-	public static String reparseTag(String t){
-		StringBuilder sb=new StringBuilder("[");
-		sb.append(t).append("]");
-		return sb.toString();
-	}
-	
-	public static String parseTag(String s){
-		s=s.trim();
-		if(s.isEmpty()){
-			return null;
-		}else{
-			if(s.charAt(0)=='['&&s.charAt(s.length()-1)==']'){
-				return s.substring(1,s.length()-1);
-			}else{
-				return null;
-			}
-		}
-	}
-	
-	public static String reparseFormatLine(int f){
-		return (new StringBuilder(FORMAT_LINE_HEAD)).append(f).toString();
-	}
-	
-	public static int parseFormatLine(String s){
-		if(s.startsWith(FORMAT_LINE_HEAD)){
-			try{
-				return Integer.parseInt(s.substring(FORMAT_LINE_HEAD.length(),s.length()));
-			}catch(NumberFormatException e){
-				Log.w("parsing format line",e.getMessage());
-				return -1;
-			}
-		}else{
-			return -1;
-		}
-	}
-	
 }
