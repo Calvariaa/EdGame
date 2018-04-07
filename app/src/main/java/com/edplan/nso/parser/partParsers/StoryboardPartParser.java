@@ -13,7 +13,7 @@ import com.edplan.nso.storyboard.elements.StoryboardAnimation;
 import com.edplan.nso.storyboard.elements.StoryboardSample;
 import com.edplan.framework.ui.animation.Easing;
 
-public class StoryboardDecoder extends PartParser<PartEvents>
+public class StoryboardPartParser extends PartParser<PartEvents>
 {
 	private Storyboard storyboard=new Storyboard();
 	
@@ -26,7 +26,7 @@ public class StoryboardDecoder extends PartParser<PartEvents>
 	private StoryboardSprite storyboardSprite;
 	private CommandTimeLineGroup timelineGroup;
 	
-	public StoryboardDecoder(){
+	public StoryboardPartParser(){
 		variableDecoder=new VariablesDecoder();
 		variables=variableDecoder.getPart();
 	}

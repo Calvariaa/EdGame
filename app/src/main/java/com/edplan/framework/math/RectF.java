@@ -2,7 +2,7 @@ package com.edplan.framework.math;
 import com.edplan.framework.interfaces.Copyable;
 import com.edplan.framework.ui.uiobjs.Area2D;
 
-public class RectF implements Copyable,Area2D
+public class RectF implements Copyable,Area2D,IQuad
 {
 	private Vec2 basePoint=new Vec2();
 	
@@ -48,22 +48,27 @@ public class RectF implements Copyable,Area2D
 		getBasePoint().set(x,y);
 	}
 	
+	@Override
 	public Vec2 getTopLeft(){
-		return new Vec2(getTop(),getLeft());
+		return new Vec2(getLeft(),getTop());
 	}
 	
+	@Override
 	public Vec2 getTopRight(){
-		return new Vec2(getTop(),getRight());
+		return new Vec2(getRight(),getTop());
 	}
 	
+	@Override
 	public Vec2 getBottomLeft(){
-		return new Vec2(getBottom(),getLeft());
+		return new Vec2(getLeft(),getBottom());
 	}
 	
+	@Override
 	public Vec2 getBottomRight(){
-		return new Vec2(getBottom(),getRight());
+		return new Vec2(getRight(),getBottom());
 	}
 
+	@Override
 	public Vec2 getPoint(float x,float y){
 		return basePoint.copy().add(x*width,y*height);
 	}
@@ -93,11 +98,11 @@ public class RectF implements Copyable,Area2D
 	}
 	
 	public float getBottom(){
-		return getTop()+getHeight();
+		return basePoint.y+height;
 	}
 	
 	public float getRight(){
-		return getLeft()+getWidth();
+		return basePoint.x+width;
 	}
 	
 	public RectF setWidth(float width) {

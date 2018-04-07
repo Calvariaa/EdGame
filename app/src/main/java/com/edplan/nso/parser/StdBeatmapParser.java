@@ -22,7 +22,7 @@ import com.edplan.nso.parser.partParsers.GeneralParser;
 import com.edplan.nso.parser.partParsers.HitObjectsParser;
 import com.edplan.nso.parser.partParsers.MetadataParser;
 import com.edplan.nso.parser.partParsers.PartParser;
-import com.edplan.nso.parser.partParsers.StoryboardDecoder;
+import com.edplan.nso.parser.partParsers.StoryboardPartParser;
 import com.edplan.nso.parser.partParsers.TimingPointsParser;
 import com.edplan.nso.ruleset.ModeManager;
 import com.edplan.nso.ruleset.std.StdBeatmap;
@@ -50,7 +50,7 @@ public class StdBeatmapParser extends BaseDecoder implements StringMakeable
 	
 	private DifficultyParser difficultyParser;
 	
-	private StoryboardDecoder storyboardDecoder;
+	private StoryboardPartParser storyboardDecoder;
 	
 	private TimingPointsParser timingPointsParser;
 	
@@ -146,7 +146,7 @@ public class StdBeatmapParser extends BaseDecoder implements StringMakeable
 		editorParser       =  new EditorParser();
 		metadataParser     =  new MetadataParser();
 		difficultyParser   =  new DifficultyParser();
-		storyboardDecoder  =  new StoryboardDecoder();
+		storyboardDecoder  =  new StoryboardPartParser();
 		timingPointsParser =  new TimingPointsParser();
 		coloursParser      =  new ColoursParser();
 		hitObjectsParser   =  new HitObjectsParser(parsingBeatmap);

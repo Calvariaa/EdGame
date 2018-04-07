@@ -14,6 +14,10 @@ public abstract class AbstractTexture
 	
 	public abstract Vec2 toTexturePosition(float x,float y);
 	
+	public Vec2 toTexturePosition(Vec2 v){
+		return toTexturePosition(v.x,v.y);
+	}
+	
 	//将一个width x height坐标的rect换成1x1坐标
 	public RectF toTextureRect(RectF raw){
 		return toTextureRect(raw.getLeft(),raw.getTop(),raw.getRight(),raw.getBottom());

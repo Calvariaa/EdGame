@@ -21,6 +21,7 @@ import com.edplan.framework.math.Vec4;
 import com.edplan.framework.utils.AbstractSRable;
 import com.edplan.framework.graphics.opengl.shader.advance.ColorShader;
 import com.edplan.framework.utils.MLog;
+import com.edplan.framework.math.IQuad;
 
 public class GLCanvas2D extends AbstractSRable<CanvasData>
 {
@@ -206,27 +207,27 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, batch.getVertexCount());
 	}
 	
-	private RectVertex[] createRectVertexs(AbstractTexture texture,RectF res,RectF dst,Color4 color,float z){
+	private RectVertex[] createRectVertexs(AbstractTexture texture,IQuad res,IQuad dst,Color4 color,float z){
 		//  3          2
 		//   ┌────┐
 		//   └────┘
 		//  0          1
 		RectVertex v0=RectVertex.atRect(dst,0,1);
-		v0.setPosition(new Vec3(dst.getPoint(0,1),z));
+		v0.setPosition(new Vec3(dst.getBottomLeft(),z));
 		v0.setColor(color);
-		v0.setTexturePoint(texture.toTexturePosition(res.getX1(),res.getY2()));
+		v0.setTexturePoint(texture.toTexturePosition(res.getBottomLeft()));
 		RectVertex v1=RectVertex.atRect(dst,1,1);
-		v1.setPosition(new Vec3(dst.getPoint(1,1),z));
+		v1.setPosition(new Vec3(dst.getBottomRight(),z));
 		v1.setColor(color);
-		v1.setTexturePoint(texture.toTexturePosition(res.getX2(),res.getY2()));
+		v1.setTexturePoint(texture.toTexturePosition(res.getBottomRight()));
 		RectVertex v2=RectVertex.atRect(dst,1,0);
-		v2.setPosition(new Vec3(dst.getPoint(1,0),z));
+		v2.setPosition(new Vec3(dst.getTopRight(),z));
 		v2.setColor(color);
-		v2.setTexturePoint(texture.toTexturePosition(res.getX2(),res.getY1()));
+		v2.setTexturePoint(texture.toTexturePosition(res.getTopRight()));
 		RectVertex v3=RectVertex.atRect(dst,0,0);
-		v3.setPosition(new Vec3(dst.getPoint(0,0),z));
+		v3.setPosition(new Vec3(dst.getTopLeft(),z));
 		v3.setColor(color);
-		v3.setTexturePoint(texture.toTexturePosition(res.getX1(),res.getY1()));
+		v3.setTexturePoint(texture.toTexturePosition(res.getTopLeft()));
 		return new RectVertex[]{v0,v1,v2,v3};
 	}
 	
@@ -248,7 +249,7 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	 *@param res:此处为Texture范围，使用实际像素坐标（原点左上）
 	 *@param dst:绘制在canvas上的坐标，也是实际像素坐标（原点左下）
 	 */
-	public void drawTexture(AbstractTexture texture,RectF res,RectF dst,Color4 mixColor,Color4 varyColor,float z,float alpha){
+	public void drawTexture(AbstractTexture texture,IQuad res,IQuad dst,Color4 mixColor,Color4 varyColor,float z,float alpha){
 		checkCanDraw();
 		tmpBatch.clear();
 		//tmpBatch.setColorMixRate(colorMixRate);
@@ -265,15 +266,15 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		drawTexture3DBatch(tmpBatch,texture,finalAlpha,mixColor);
 	}
 	
-	public void drawTexture(AbstractTexture texture,RectF res,RectF dst,GLPaint paint){
+	public void drawTexture(AbstractTexture texture,IQuad res,IQuad dst,GLPaint paint){
 		drawTexture(texture,res,dst,paint.getMixColor(),paint.getVaryingColor(),defZ,paint.getFinalAlpha());
 	}
 	
-	public void drawTexture(AbstractTexture texture,RectF res,RectF dst,Color4 mixColor,Color4 color,float alpha){
+	public void drawTexture(AbstractTexture texture,IQuad res,IQuad dst,Color4 mixColor,Color4 color,float alpha){
 		drawTexture(texture,res,dst,mixColor,color,defZ,alpha);
 	}
 	
-	public void drawTexture(AbstractTexture texture,RectF dst,Color4 mixColor,Color4 color,float z,float alpha){
+	public void drawTexture(AbstractTexture texture,IQuad dst,Color4 mixColor,Color4 color,float z,float alpha){
 		checkCanDraw();
 		tmpBatch.clear();
 		//tmpBatch.setColorMixRate(colorMixRate);
@@ -282,7 +283,7 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		drawTexture3DBatch(tmpBatch,texture,alpha,mixColor);
 	}
 	
-	public void drawRectTexture(AbstractTexture texture,RectF res,RectF dst,GLPaint paint){
+	public void drawRectTexture(AbstractTexture texture,IQuad res,RectF dst,GLPaint paint){
 		checkCanDraw();
 		tmpRectBatch.clear();
 		//tmpRectBatch.setColorMixRate(paint.getColorMixRate());
@@ -291,7 +292,7 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		drawRectBatch(tmpRectBatch,texture,dst,paint);
 	}
 	
-	public void drawRoundedRectTexture(AbstractTexture texture,RectF res,RectF dst,GLPaint paint){
+	public void drawRoundedRectTexture(AbstractTexture texture,IQuad res,RectF dst,GLPaint paint){
 		checkCanDraw();
 		tmpRectBatch.clear();
 		//tmpRectBatch.setColorMixRate(paint.getColorMixRate());
@@ -300,11 +301,11 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		drawRoundedRectBatch(tmpRectBatch,texture,dst,paint);
 	}
 	
-	public void drawTexture(AbstractTexture texture,RectF dst,GLPaint paint){
+	public void drawTexture(AbstractTexture texture,IQuad dst,GLPaint paint){
 		drawTexture(texture,dst,paint.getMixColor(),paint.getVaryingColor(),defZ,paint.getFinalAlpha());
 	}
 	
-	public void drawTexture(AbstractTexture texture,RectF dst,Color4 mixColor,Color4 color,float alpha){
+	public void drawTexture(AbstractTexture texture,IQuad dst,Color4 mixColor,Color4 color,float alpha){
 		drawTexture(texture,dst,mixColor,color,defZ,alpha);
 	}
 	
