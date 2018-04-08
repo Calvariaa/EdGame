@@ -99,14 +99,19 @@ public class Vec2
 	
 	//顺时针，弧度
 	public Vec2 rotate(Vec2 o,float r){
-		float c=(float)Math.cos(r);
-		float s=(float)Math.sin(r);
-		float xr=x-o.x;
-		float yr=y-o.y;
-		x=o.x+xr*c-yr*s;
-		y=o.y+yr*c+xr*s;
+		return rotate(o.x,o.y,r);
+	}
+	
+	public Vec2 rotate(float ox,float oy,float r){
+		float c=FMath.cos(r);
+		float s=FMath.sin(r);
+		float xr=x-ox;
+		float yr=y-oy;
+		x=ox+xr*c-yr*s;
+		y=oy+yr*c+xr*s;
 		return this;
 	}
+	
 	
 	public Vec2 postMatrix(Mat2 m){
 		float tmpX=x;

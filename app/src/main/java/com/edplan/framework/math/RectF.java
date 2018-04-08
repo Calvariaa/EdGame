@@ -145,6 +145,10 @@ public class RectF implements Copyable,Area2D,IQuad
 		return padding(p.r,p.g,p.b,p.a);
 	}
 	
+	public Quad toQuad(){
+		return new Quad(this);
+	}
+	
 	@Override
 	public RectF copy(){
 		return new RectF(this);

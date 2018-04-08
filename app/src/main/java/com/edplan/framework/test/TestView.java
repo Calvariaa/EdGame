@@ -126,12 +126,12 @@ public class TestView extends EdView
 			//"t+pazolite with siromaru - Chambarising (Bloodmoon) [Stream Practice (160)].osu"
 			//"Suzuki Konomi - Cyber Thunder Cider (Nattu) [Niat's Cider].osu"
 			//"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
-			//"UNDEAD CORPORATION - The Empress (Plutia) [STARBOW BREAK!].osu"
+			"UNDEAD CORPORATION - The Empress (Plutia) [STARBOW BREAK!].osu"
 			//"Mai Zang - Si Ye Cao De Huang Xiang (Axarious) [Despair].osu"
 			//"Osu!Droid Tieba Challenge - Evolution Pack (Believer_zzr) [Future Cider].osu"
 			//"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
 			//"Yueporu feat. Hatsune Miku - Kurikaeshi Hitotsubu (Zweib) [Hitotsubu].osu"
-			"1/Chino (CV.Minase Inori) - Okashina yume o Ohitotsu douzo (- Skanbis -) [Asuka_-'s insane].osu"
+			//"1/Chino (CV.Minase Inori) - Okashina yume o Ohitotsu douzo (- Skanbis -) [Asuka_-'s insane].osu"
 			//"2/Halozy - Kikoku Doukoku Jigokuraku (Hollow Wings) [Notch Hell].osu"
 			//"3/IAHN - Transform (Original Mix) (Monstrata) [Aspire].osu"
 			//"4/IOSYS - Marisa wa Taihen na Mono wo Nusunde Ikimashita (DJPop) [TAG4].osu"
@@ -145,12 +145,12 @@ public class TestView extends EdView
 												 
 			audio=BassChannel//.createStreamFromResource(getContext().getAssetResource(),"osu/test/beatmap/"+
 			.createStreamFromAsset(getContext(),"osu/test/beatmap/"+
-			//"test.mp3"
+			"test.mp3"
 			//"cloverfantasy.mp3"
 			//"audio.mp3"
 			//"hust.mp3"
 			//"No Poi!.mp3"
-			"1/audio.mp3"
+			//"1/audio.mp3"
 			//"2/Kikoku Doukoku Jigokuraku.mp3"
 			//"3/audio.mp3"
 			//"4/Marisa wa Taihen na Mono wo Nusunde Ikimashita.mp3"
@@ -165,6 +165,7 @@ public class TestView extends EdView
 				bparser.parse();
 				Log.v("parse-osu","end parse");
 				beatmap=bparser.makeupBeatmap(StdBeatmap.class);
+				beatmap.getDifficulty().setCircleSize(beatmap.getDifficulty().getCircleSize());
 				timeline=//new AudioTimeline(audio);
 				//new PreciseTimeline();
 				new AdjustableTimeline(1f);
@@ -572,7 +573,7 @@ public class TestView extends EdView
 		GLWrapped.depthTest.set(false);
 		GLWrapped.depthTest.set(true);
 		GLWrapped.blend.save();
-		GLWrapped.blend.set(false);
+		GLWrapped.blend.setEnable(false);
 		//GLES20.glDisable(GLES20.GL_BLEND);
 		
 		//newCanvas.drawTexture3DBatch(batch,sliderTex,1,new Color4(1,0.8f,0.8f,1));
@@ -663,7 +664,7 @@ public class TestView extends EdView
 			//break;
 		}
 		delt=(int)(System.currentTimeMillis()-ct);*/
-		int deltaTime=(int)getContext().getFrameDeltaTime();
+		float deltaTime=(float)getContext().getFrameDeltaTime();
 		GLPaint ntp=new GLPaint();
 		ntp.setStrokeWidth(1.2f);
 		//ntp.setColorMixRate(1);
@@ -689,7 +690,7 @@ public class TestView extends EdView
 		float avg=0;
 		float max=0;
 		float min=99999;
-		for(int t:timelist){
+		for(float t:timelist){
 			avg+=t;
 			if(t<min){
 				min=t;
@@ -717,6 +718,8 @@ public class TestView extends EdView
 		TextPrinter printer=new TextPrinter(font,100,baseLine,textPaint);
 		printer.setTextSize(100);
 		printer.printString("DEVELOPMENT BUILD\nosu!lazer 2018.310.0");
+		printer.toNextLine();
+		printer.printString("fps: "+(int)(1000/avg));
 		//printer.toNextLine();
 		//printer.setTextSize(50);
 		//printer.printString("osu!lab");
@@ -733,7 +736,7 @@ public class TestView extends EdView
 		canvas.drawLine(0,baseLine+font.getCommon().base*printer.getScale(),1000,baseLine+font.getCommon().base*printer.getScale(),baseLinePaint);
 	}
 	
-	public int[] timelist=new int[40];
+	public float[] timelist=new float[40];
 	
 	
 	public class SliderAnim extends AbstractAnimation {

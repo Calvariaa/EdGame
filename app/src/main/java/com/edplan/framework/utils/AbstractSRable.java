@@ -21,6 +21,7 @@ public abstract class AbstractSRable<T extends Copyable> implements Recycleable
 		saves=new Stack<T>();
 		currentData=getDefData();
 		currentDataIndex=0;
+		//onSave(currentData);
 	}
 	
 	public T getData(){

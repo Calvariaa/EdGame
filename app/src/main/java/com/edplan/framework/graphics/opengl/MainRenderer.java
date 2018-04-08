@@ -48,7 +48,7 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 			context.initial();
 			GLWrapped.initial();
 			GLWrapped.depthTest.set(false);
-			GLWrapped.blend.set(true);
+			GLWrapped.blend.setEnable(true);
 			uiLooper=new UILooper();
 			context.setUiLooper(uiLooper);
 			tmer.initial();

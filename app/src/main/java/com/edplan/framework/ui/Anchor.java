@@ -19,4 +19,12 @@ public class Anchor
 	public Anchor(float x,float y){
 		value=new Vec2(x,y);
 	}
+	
+	public float x(){
+		return value.x;
+	}
+	
+	public float y(){
+		return value.y;
+	}
 }

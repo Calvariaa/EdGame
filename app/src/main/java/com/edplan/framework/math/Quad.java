@@ -1,4 +1,5 @@
 package com.edplan.framework.math;
+import com.edplan.framework.ui.Anchor;
 
 public class Quad implements IQuad
 {
@@ -56,7 +57,7 @@ public class Quad implements IQuad
 	@Override
 	public Vec2 getPoint(float x,float y) {
 		// TODO: Implement this method
-		return Triangle.mapPoint(topLeft,topRight,bottomLeft,new Vec2(x,y));
+		return mapPoint(topLeft,topRight,bottomLeft,bottomRight,x,y);
 	}
 	
 	private void initial(){
@@ -83,11 +84,37 @@ public class Quad implements IQuad
 		return set(r.getTopLeft(),r.getTopRight(),r.getBottomLeft(),r.getBottomRight());
 	}
 	
+	public void rotate(float ox,float oy,float ang){
+		for(Vec2 v:vertexs){
+			v.rotate(ox,oy,ang);
+		}
+	}
+	
+	public void rotate(Vec2 o,float ang){
+		rotate(o.x,o.y,ang);
+	}
+	
+	public void rotate(Anchor anchor,float ang){
+		rotate(getPoint(anchor.x(),anchor.y()),ang);
+	}
+	
+	public void translate(float tx,float ty){
+		for(Vec2 v:vertexs){
+			v.move(tx,ty);
+		}
+	}
+	
 	/**
 	 *通过射线法判断p是否在范围内
 	 */
 	public boolean inArea(Vec2 p){
 		return Polygon.inPolygon(p,vertexs);
+	}
+	
+	public static Vec2 mapPoint(Vec2 ptl,Vec2 ptr,Vec2 pbl,Vec2 pbr,float vx,float vy){
+		float x=((ptl.x+pbl.x)*vx+(ptr.x+pbr.x)*(1-vx))/2;
+		float y=((ptl.y+ptr.y)*vy+(pbl.y+pbr.y)*(1-vy))/2;
+		return new Vec2(x,y);
 	}
 	
 }

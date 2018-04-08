@@ -17,9 +17,13 @@ import com.edplan.nso.ruleset.std.objects.StdHitObject;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdFollowpoint;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdSlider;
 import com.edplan.framework.graphics.line.LinePath;
+import com.edplan.framework.utils.stream.IEnum;
+import com.edplan.nso.ruleset.std.playing.drawable.interfaces.IHasBackgroundDrawable;
 
 public class StdPlayField extends PlayField
 {
+	private FieldDrawables backgroundLayerExtension=new FieldDrawables();
+	
 	private FieldDrawables drawableHitObjects=new FieldDrawables();
 	
 	private FieldDrawables connectionDrawables=new FieldDrawables();
@@ -52,6 +56,16 @@ public class StdPlayField extends PlayField
 			throw new IllegalArgumentException("you can only apply a StdPlayingBeatmap to StdPlayField");
 		}
 	}
+	
+	protected void drawBackgroundLayer(GLCanvas2D canvas){
+		DrawableStdHitObject obj;
+		for(int i=drawableHitObjects.getObjectsInField().size()-1;i>=0;i--){
+			obj=drawableHitObjects.getObjectsInField().get(i);
+			if(obj instanceof IHasBackgroundDrawable){
+				((IHasBackgroundDrawable)obj).getBackgroundDrawable().draw(canvas);
+			}
+		}
+	}
 
 	protected void drawContentLayer(GLCanvas2D canvas){
 		DrawableStdHitObject obj;
@@ -64,7 +78,7 @@ public class StdPlayField extends PlayField
 		}
 	}
 	
-	private void drawConnectionLayer(GLCanvas2D canvas){
+	protected void drawConnectionLayer(GLCanvas2D canvas){
 		DrawableStdHitObject obj;
 		for(int i=connectionDrawables.getObjectsInField().size()-1;i>=0;i--){
 			obj=connectionDrawables.getObjectsInField().get(i);
@@ -72,7 +86,7 @@ public class StdPlayField extends PlayField
 		}
 	}
 	
-	private void drawApproachCircleLayer(GLCanvas2D canvas){
+	protected void drawApproachCircleLayer(GLCanvas2D canvas){
 		DrawableStdHitObject obj;
 		for(int i=drawableHitObjects.getObjectsInField().size()-1;i>=0;i--){
 			obj=drawableHitObjects.getObjectsInField().get(i);
@@ -110,7 +124,7 @@ public class StdPlayField extends PlayField
 		//添加新的物件
 		drawableHitObjects.prepareToDraw(curTime);
 		connectionDrawables.prepareToDraw(curTime);
-		
+		drawBackgroundLayer(canvas);
 		drawConnectionLayer(canvas);
 		drawContentLayer(canvas);
 		drawApproachCircleLayer(canvas);
@@ -118,6 +132,8 @@ public class StdPlayField extends PlayField
 
 	public class FieldDrawables{
 		private List<DrawableStdHitObject> drawableHitObjects;
+
+		//private IEnum<DrawableStdHitObject> hitObjects;
 
 		private List<DrawableStdHitObject> hitObjectsInField=new ArrayList<DrawableStdHitObject>();
 
@@ -157,8 +173,20 @@ public class StdPlayField extends PlayField
 			obj.onFinish();
 		}
 
+		//private DrawableStdHitObject currentObj;
 		private void pullNewAdded(int curTime){
 			DrawableStdHitObject obj;
+			/*
+			while(hitObjects.hasNext()){
+				obj=hitObjects.next();
+				if(obj.getShowTime()<=curTime){
+					showHitObject(obj);
+					hitObjects.next();
+				}else{
+					break;
+				}
+			}
+			*/
 			for(;savedIndex<drawableHitObjects.size();savedIndex++){
 				obj=drawableHitObjects.get(savedIndex);
 				if(obj.getShowTime()<=curTime){

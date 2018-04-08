@@ -195,7 +195,7 @@ public class SliderBody extends BasePiece
 			GLWrapped.depthTest.save();
 			GLWrapped.blend.save();
 			GLWrapped.depthTest.set(true);
-			GLWrapped.blend.set(false);
+			GLWrapped.blend.setEnable(false);
 			canvas.drawTexture3DBatch(batch,sliderPathTexture,1,Color4.White);
 			GLWrapped.blend.restore();
 			GLWrapped.depthTest.restore();

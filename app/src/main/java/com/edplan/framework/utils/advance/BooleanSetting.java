@@ -1,9 +1,8 @@
 package com.edplan.framework.utils.advance;
 
-import android.opengl.GLES20;
+import com.edplan.framework.interfaces.Setter;
 import com.edplan.framework.utils.SRable;
 import com.edplan.framework.utils.SRable.SROperation;
-import com.edplan.framework.interfaces.Setter;
 public class BooleanSetting 
 {
 	private SRable<BooleanCopyable> saves;
@@ -18,6 +17,7 @@ public class BooleanSetting
 	}
 	
 	public BooleanSetting initial(){
+		setter.set(defValue);
 		saves=new SRable<BooleanCopyable>(new SROperation<BooleanCopyable>(){
 				@Override
 				public void onSave(BooleanCopyable v) {

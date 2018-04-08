@@ -28,6 +28,7 @@ public class GLWrapped
 		},
 		false).initial();
 
+	/*
 	public static final
 	BooleanSetting blend=new BooleanSetting(new Setter<Boolean>(){
 			@Override
@@ -44,6 +45,9 @@ public class GLWrapped
 			}
 		},
 		false).initial();
+	*/
+	
+	public static BlendSetting blend=new BlendSetting().setUp();
 	
 	public static void initial(){
 		//depthTest=false;
@@ -103,13 +107,67 @@ public class GLWrapped
         }
 	}
 	
+	public static class BlendSetting extends AbstractSRable<BlendPropert> {
+		
+		public BlendSetting(){
+			
+		}
+
+		public BlendSetting setUp(){
+			initial();
+			getData().applyToGL();
+			return this;
+		}
+		
+		public boolean isEnable(){
+			return getData().enable;
+		}
+		
+		public BlendType getBlendType(){
+			return getData().blendType;
+		}
+		
+		public void set(boolean enable,BlendType blendType){
+			BlendPropert prop=new BlendPropert(enable,blendType);
+			if(!getData().equals(prop)){
+				setCurrentData(prop);
+				prop.applyToGL();
+			}
+		}
+		
+		public void setEnable(boolean enable){
+			set(enable,getBlendType());
+		}
+		
+		public void setBlendType(BlendType type){
+			set(isEnable(),type);
+		}
+		
+		@Override
+		public void onSave(BlendPropert t) {
+			// TODO: Implement this method
+		}
+
+		@Override
+		public void onRestore(BlendPropert now,BlendPropert pre) {
+			// TODO: Implement this method
+			if(!now.equals(pre)){
+				now.applyToGL();
+			}
+		}
+
+		@Override
+		public GLWrapped.BlendPropert getDefData() {
+			// TODO: Implement this method
+			return new BlendPropert();
+		}
+	}
+	
 	public static class BlendPropert implements Copyable {
 		
 		public boolean enable=true;
 		
-		public int srcType=GLES20.GL_ONE;
-		
-		public int dstType=GLES20.GL_ONE_MINUS_SRC_ALPHA;
+		public BlendType blendType=BlendType.Normal;
 		
 		public BlendPropert(){
 			
@@ -119,23 +177,23 @@ public class GLWrapped
 			set(b);
 		}
 		
+		public BlendPropert(boolean e,BlendType t){
+			this.enable=e;
+			this.blendType=t;
+		}
+		
 		public void set(BlendPropert b){
 			this.enable=b.enable;
-			this.srcType=b.srcType;
-			this.dstType=b.dstType;
+			this.blendType=b.blendType;
 		}
 		
 		public void applyToGL(){
 			if(enable){
 				GLES20.glEnable(GLES20.GL_BLEND);
-				GLES20.glBlendFunc(srcType,dstType);
+				GLES20.glBlendFunc(blendType.srcType,blendType.dstType);
 			}else{
 				GLES20.glDisable(GLES20.GL_BLEND);
 			}
-		}
-		
-		public void setAddictiveMode(){
-			
 		}
 
 		@Override
@@ -143,7 +201,7 @@ public class GLWrapped
 			// TODO: Implement this method
 			if(obj instanceof BlendPropert){
 				BlendPropert b=(GLWrapped.BlendPropert) obj;
-				return (enable==b.enable)&&(srcType==b.srcType)&&(dstType==b.srcType);
+				return (enable==b.enable)&&(blendType==b.blendType);
 			}else return false;
 		}
 		
