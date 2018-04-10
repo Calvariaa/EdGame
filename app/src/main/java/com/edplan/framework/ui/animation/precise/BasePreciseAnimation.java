@@ -45,11 +45,13 @@ public class BasePreciseAnimation extends AbstractPreciseAnimation
 		progressTime=p;
 	}
 
+	/*
 	@Override
 	public void postProgressTime(double deltaTime) {
 		// TODO: Implement this method
 		progressTime+=deltaTime;
 	}
+	*/
 
 	@Override
 	public double getProgressTime() {

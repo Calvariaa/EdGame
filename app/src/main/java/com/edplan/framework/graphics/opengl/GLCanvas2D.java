@@ -347,6 +347,8 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		return new Vertex3D[]{v1,v2,v3,v4};
 	}
 	
+	
+	
 	public Vertex3D[] rectToTriangles(Vertex3D[] v){
 		return new Vertex3D[]{v[0],v[1],v[3],v[0],v[3],v[2]};
 	}
@@ -380,6 +382,12 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	public void postColorBatch(GLPaint paint){
 		drawColorBatch(paint,tmpColorBatch);
 	}
+	
+	/*
+	public void drawRect(IQuad quad,Color4 color){
+		
+	}
+	*/
 	
 	public void drawLines(float[] lines,GLPaint paint){
 		tmpColorBatch.clear();

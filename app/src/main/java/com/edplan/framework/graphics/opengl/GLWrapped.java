@@ -128,8 +128,9 @@ public class GLWrapped
 		}
 		
 		public void set(boolean enable,BlendType blendType){
-			if(!getData().equals(enable,blendType)){
-				BlendPropert prop=new BlendPropert(enable,blendType);
+			BlendPropert prop=new BlendPropert(enable,blendType);
+			if(!getData().equals(prop)/*(enable,blendType)*/){
+				
 				setCurrentData(prop);
 				prop.applyToGL();
 			}
@@ -196,8 +197,8 @@ public class GLWrapped
 			}
 		}
 		
-		public boolean equals(boolean enable,BlendType blendType){
-			return this.enable==enable&&this.blendType==blendType;
+		public boolean equals(boolean _enable,BlendType _blendType){
+			return this.enable==_enable&&this.blendType==_blendType;
 		}
 
 		@Override

@@ -28,15 +28,13 @@ public class AssetResource extends AResource
 	private void initial(){
 		try {
 			addSubRes("");
-			//Log.v("res-list",Arrays.toString(list("osu")));
+			Log.v("res-list",Arrays.toString(list("osu")));
+			Log.v("res-list",Arrays.toString(list("osu")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	/**
-	 *返回这个path是否是文件
-	 */
 	private boolean addSubRes(String path) throws IOException{
 		String[] l=list(path);
 		String tmp;
@@ -58,6 +56,12 @@ public class AssetResource extends AResource
 	public String[] list(String dir) throws IOException
 	{
 		// TODO: Implement this method
+		/*
+		String[] lists=res.list(dir);
+		String[] 
+		for(int i=0;i<lists.length;i++){
+			//lists[i]=lists[i].substring(
+		}*/
 		return res.list(dir);
 	}
 
