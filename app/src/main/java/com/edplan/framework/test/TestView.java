@@ -18,13 +18,16 @@ import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.Vec2;
-import com.edplan.framework.timing.AdjustableTimeline;
+import com.edplan.framework.resource.AResource;
+import com.edplan.framework.timing.AudioTimeline;
 import com.edplan.framework.timing.PreciseTimeline;
 import com.edplan.framework.ui.EdView;
 import com.edplan.framework.ui.animation.AbstractAnimation;
 import com.edplan.framework.ui.animation.AnimState;
 import com.edplan.framework.ui.animation.LoopType;
 import com.edplan.framework.ui.drawable.BitmapDrawable;
+import com.edplan.framework.ui.text.font.bmfont.BMFont;
+import com.edplan.framework.ui.text.font.drawing.TextPrinter;
 import com.edplan.framework.utils.MLog;
 import com.edplan.nso.NsoException;
 import com.edplan.nso.ParsingBeatmap;
@@ -39,10 +42,7 @@ import com.edplan.nso.ruleset.std.playing.StdPlayField;
 import com.edplan.nso.ruleset.std.playing.StdPlayingBeatmap;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdHitCircle;
 import java.io.IOException;
-import com.edplan.framework.ui.text.font.bmfont.BMFontDescription;
-import com.edplan.framework.ui.text.font.bmfont.BMFont;
-import com.edplan.framework.resource.AResource;
-import com.edplan.framework.ui.text.font.drawing.TextPrinter;
+import com.edplan.framework.timing.AdjustableTimeline;
 
 public class TestView extends EdView
 {
@@ -126,12 +126,12 @@ public class TestView extends EdView
 			//"t+pazolite with siromaru - Chambarising (Bloodmoon) [Stream Practice (160)].osu"
 			//"Suzuki Konomi - Cyber Thunder Cider (Nattu) [Niat's Cider].osu"
 			//"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
-			"UNDEAD CORPORATION - The Empress (Plutia) [STARBOW BREAK!].osu"
+			//"UNDEAD CORPORATION - The Empress (Plutia) [STARBOW BREAK!].osu"
 			//"Mai Zang - Si Ye Cao De Huang Xiang (Axarious) [Despair].osu"
 			//"Osu!Droid Tieba Challenge - Evolution Pack (Believer_zzr) [Future Cider].osu"
 			//"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
 			//"Yueporu feat. Hatsune Miku - Kurikaeshi Hitotsubu (Zweib) [Hitotsubu].osu"
-			//"1/Chino (CV.Minase Inori) - Okashina yume o Ohitotsu douzo (- Skanbis -) [Asuka_-'s insane].osu"
+			"1/Chino (CV.Minase Inori) - Okashina yume o Ohitotsu douzo (- Skanbis -) [Asuka_-'s insane].osu"
 			//"2/Halozy - Kikoku Doukoku Jigokuraku (Hollow Wings) [Notch Hell].osu"
 			//"3/IAHN - Transform (Original Mix) (Monstrata) [Aspire].osu"
 			//"4/IOSYS - Marisa wa Taihen na Mono wo Nusunde Ikimashita (DJPop) [TAG4].osu"
@@ -139,18 +139,19 @@ public class TestView extends EdView
 			//"6/xi - FREEDOM DiVE (Nakagawa-Kanon) [FOUR DIMENSIONS].osu"
 			//"7/Panda Eyes & Teminite - Highscore (Fort) [Game Over].osu"
 			//"8/Helblinde - The Solace of Oblivion (ProfessionalBox) [Aspire].osu"
+			//"9/Knife Party - Centipede (Sugoi-_-Desu) [This isn't a map, just a simple visualisation].osu"
 												   ),
 												"test case beatmap: " 
 												 );
 												 
 			audio=BassChannel//.createStreamFromResource(getContext().getAssetResource(),"osu/test/beatmap/"+
 			.createStreamFromAsset(getContext(),"osu/test/beatmap/"+
-			"test.mp3"
+			//"test.mp3"
 			//"cloverfantasy.mp3"
 			//"audio.mp3"
 			//"hust.mp3"
 			//"No Poi!.mp3"
-			//"1/audio.mp3"
+			"1/audio.mp3"
 			//"2/Kikoku Doukoku Jigokuraku.mp3"
 			//"3/audio.mp3"
 			//"4/Marisa wa Taihen na Mono wo Nusunde Ikimashita.mp3"
@@ -158,6 +159,7 @@ public class TestView extends EdView
 			//"6/Freedom Dive.mp3"
 			//"7/Teminite & Panda Eyes - Highscore.mp3"
 			//"8/audio.mp3"
+			//"9/02-knife_party-centipede.mp3"
 			);
 			try
 			{
@@ -256,7 +258,7 @@ public class TestView extends EdView
 	public void playAnim(){
 		postAlpha=0;
 		postProgress=0;
-		getContext().getUiLooper().getAnimaHandler().addAnimation(new SliderAnim());
+		//getContext().getUiLooper().getAnimaHandler().addAnimation(new SliderAnim());
 	}
 	
 	boolean ifend=false;
@@ -716,10 +718,14 @@ public class TestView extends EdView
 		GLPaint textPaint=new GLPaint();
 		textPaint.setMixColor(Color4.rgba(1,1,0,1));
 		TextPrinter printer=new TextPrinter(font,100,baseLine,textPaint);
-		printer.setTextSize(100);
-		printer.printString("DEVELOPMENT BUILD\nosu!lazer 2018.310.0");
+		printer.setTextSize(80);
+		printer.printString("DEVELOPMENT BUILD\nosu!lab 2018.4.9");
 		printer.toNextLine();
 		printer.printString("fps: "+(int)(1000/avg));
+		printer.toNextLine();
+		printer.printString(timeline.frameTime()+"");
+		printer.toNextLine();
+		printer.printString(playField.objectInFieldCount()+"");
 		//printer.toNextLine();
 		//printer.setTextSize(50);
 		//printer.printString("osu!lab");
@@ -738,7 +744,7 @@ public class TestView extends EdView
 	
 	public float[] timelist=new float[40];
 	
-	
+	/*
 	public class SliderAnim extends AbstractAnimation {
 
 		double progressTime=0;
@@ -795,7 +801,7 @@ public class TestView extends EdView
 		public void onEnd() {
 			// TODO: Implement this method
 		}
-	}
+	}*/
 	
 	
 }

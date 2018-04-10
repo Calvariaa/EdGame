@@ -16,6 +16,7 @@ public class BasePreciseAnimation extends AbstractPreciseAnimation
 		state=AnimState.Running;
 		timeline.addAnimation(this);
 		setProgressTime(0);
+		//timeline.frameTime()-getStartTimeAtTimeline());
 	}
 	
 	public void setStartTime(double startTime){
@@ -42,6 +43,12 @@ public class BasePreciseAnimation extends AbstractPreciseAnimation
 	public void setProgressTime(double p) {
 		// TODO: Implement this method
 		progressTime=p;
+	}
+
+	@Override
+	public void postProgressTime(double deltaTime) {
+		// TODO: Implement this method
+		progressTime+=deltaTime;
 	}
 
 	@Override

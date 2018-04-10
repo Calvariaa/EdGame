@@ -270,6 +270,10 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		drawTexture(texture,res,dst,paint.getMixColor(),paint.getVaryingColor(),defZ,paint.getFinalAlpha());
 	}
 	
+	public void drawTexture(AbstractTexture texture,IQuad dst,Color4 varyingColor,float alpha){
+		drawTexture(texture,RectF.xywh(0,0,texture.getWidth(),texture.getHeight()),dst,Color4.ONE,varyingColor,defZ,alpha);
+	}
+	
 	public void drawTexture(AbstractTexture texture,IQuad res,IQuad dst,Color4 mixColor,Color4 color,float alpha){
 		drawTexture(texture,res,dst,mixColor,color,defZ,alpha);
 	}

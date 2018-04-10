@@ -1,6 +1,7 @@
 package com.edplan.framework.math;
 import com.edplan.framework.interfaces.Copyable;
 import com.edplan.framework.ui.uiobjs.Area2D;
+import com.edplan.framework.ui.Anchor;
 
 public class RectF implements Copyable,Area2D,IQuad
 {
@@ -185,5 +186,9 @@ public class RectF implements Copyable,Area2D,IQuad
 	
 	public static RectF xywh(float x,float y,float w,float h){
 		return new RectF(x,y,w,h);
+	}
+	
+	public static RectF anchorOWH(Anchor anchor,float ox,float oy,float width,float height){
+		return xywh(ox-anchor.x()*width,oy-anchor.y()*height,width,height);
 	}
 }

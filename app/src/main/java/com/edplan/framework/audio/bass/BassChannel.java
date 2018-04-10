@@ -32,14 +32,21 @@ public class BassChannel
 		return play(false);
 	}
 	
-	public int currentPlayTimeMS(){
-		return (int)(currentPlayTimeS()*1000);
+	public double currentPlayTimeMS(){
+		return currentPlayTimeS()*1000;
 	}
 	
 	public double currentPlayTimeS(){
 		return BASS.BASS_ChannelBytes2Seconds(chaId,BASS.BASS_ChannelGetPosition(chaId,BASS.BASS_POS_BYTE));
 	}
 
+	public void seekTo(int ms){
+		if(ms>=0){
+			BASS.BASS_ChannelSetPosition(chaId, BASS.BASS_ChannelSeconds2Bytes(chaId, ms), BASS.BASS_POS_BYTE);
+		}else{
+			
+		}
+	}
 	
 	public int getFFT(ByteBuffer buf){
 		Log.v("ffts","try get fft data");

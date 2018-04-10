@@ -6,7 +6,7 @@ import com.edplan.framework.audio.bass.BassChannel;
  */
 public class AudioTimeline extends PreciseTimeline
 {
-	private int preTime=0;
+	private double preTime=0;
 	
 	private BassChannel channel;
 	
@@ -18,7 +18,7 @@ public class AudioTimeline extends PreciseTimeline
 	public void onLoop(double deltaTime)
 	{
 		// TODO: Implement this method
-		int cur=channel.currentPlayTimeMS();
+		double cur=channel.currentPlayTimeMS();
 		super.onLoop(cur-preTime);
 		preTime=cur;
 	}

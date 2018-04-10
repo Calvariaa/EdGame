@@ -38,6 +38,10 @@ public class StdPlayField extends PlayField
 		super(context);
 		this.timeline=timeline;
 	}
+	
+	public int objectInFieldCount(){
+		return drawableHitObjects.getObjectsInField().size();
+	}
 
 	public List<DrawableStdHitObject> getDrawableHitObjects() {
 		return drawableHitObjects.getObjects();
@@ -124,6 +128,7 @@ public class StdPlayField extends PlayField
 		//添加新的物件
 		drawableHitObjects.prepareToDraw(curTime);
 		connectionDrawables.prepareToDraw(curTime);
+		
 		drawBackgroundLayer(canvas);
 		drawConnectionLayer(canvas);
 		drawContentLayer(canvas);
@@ -143,6 +148,8 @@ public class StdPlayField extends PlayField
 			
 		}
 
+		
+		
 		public void setObjectsInField(List<DrawableStdHitObject> hitObjectsInField) {
 			this.hitObjectsInField=hitObjectsInField;
 		}
