@@ -10,6 +10,14 @@ public class TypedCommand<T> implements ICommand
 	private T startValue;
 	private T endValue;
 
+	public TypedCommand(Easing e,double startTime,double endTime,T startValue,T endValue){
+		this.easing=e;
+		this.startTime=startTime;
+		this.endTime=endTime;
+		this.startValue=startValue;
+		this.endValue=endValue;
+	}
+	
 	public void setStartValue(T startValue) {
 		this.startValue=startValue;
 	}

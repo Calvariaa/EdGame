@@ -157,12 +157,16 @@ public class Color4
 		return new Color4(r,g,b,a);
 	}
 
-	public static Color4 rgba255(int r,int g,int b,int a){
+	public static Color4 rgba255(float r,float g,float b,float a){
 		return new Color4(r/255f,g/255f,b/255f,a/255f);
 	}
 	
-	public static Color4 argb255(int a,int r,int g,int b){
+	public static Color4 argb255(float a,float r,float g,float b){
 		return new Color4(r/255f,g/255f,b/255f,a/255f);
+	}
+	
+	public static Color4 rgb255(float r,float g,float b){
+		return new Color4(r/255f,g/255f,b/255f,1);
 	}
 	
 	public static Color4 argb255(int v){

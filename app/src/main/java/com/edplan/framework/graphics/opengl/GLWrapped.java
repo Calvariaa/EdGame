@@ -128,9 +128,8 @@ public class GLWrapped
 		}
 		
 		public void set(boolean enable,BlendType blendType){
-			BlendPropert prop=new BlendPropert(enable,blendType);
-			if(!getData().equals(prop)/*(enable,blendType)*/){
-				
+			if(!getData().equals(enable,blendType)){
+				BlendPropert prop=new BlendPropert(enable,blendType);
 				setCurrentData(prop);
 				prop.applyToGL();
 			}

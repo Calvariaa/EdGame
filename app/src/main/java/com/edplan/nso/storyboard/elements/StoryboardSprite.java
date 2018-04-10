@@ -11,9 +11,6 @@ public class StoryboardSprite implements IStoryboardElements
 	
 	private CommandTimeLineGroup commandTimeLineGroup=new CommandTimeLineGroup();
 	
-	private CommandTimeLineGroup startTimeObj;
-	private CommandTimeLineGroup endTimeObj;
-	
 	private String path;
 	private Vec2 initialPosition;
 	private Anchor anchor;
@@ -22,6 +19,32 @@ public class StoryboardSprite implements IStoryboardElements
 		this.path=path;
 		this.initialPosition=initialPosition;
 		this.anchor=anchor;
+	}
+
+	public double getStartTime(){
+		double v1=commandTimeLineGroup.hasCommands()?commandTimeLineGroup.getCommandsStartTime():Double.MAX_VALUE;
+		double v2=Double.MAX_VALUE;
+		for(CommandLoop l:loops){
+			if(l.hasCommands()){
+				v2=Math.min(v2,l.getCommandsStartTime());
+			}
+		}
+		return Math.min(v1,v2);
+	}
+	
+	public double getEndTime(){
+		double v1=commandTimeLineGroup.hasCommands()?commandTimeLineGroup.getCommandsEndTime():Double.MIN_VALUE;
+		double v2=Double.MIN_VALUE;
+		for(CommandLoop l:loops){
+			if(l.hasCommands()){
+				v2=Math.max(v2,l.getCommandsEndTime());
+			}
+		}
+		return Math.max(v1,v2);
+	}
+
+	public double getDuration(){
+		return getEndTime()-getStartTime();
 	}
 
 	public CommandTimeLineGroup getCommandTimeLineGroup() {
@@ -39,14 +62,9 @@ public class StoryboardSprite implements IStoryboardElements
 		}
 	}
 	
-	private void onAddCommand(CommandTimeLineGroup command){
-		//if(startTimeObj==null||startTimeObj.getc
-	}
-	
 	public CommandLoop addLoop(double startTime,int loopCount){
 		CommandLoop loop=new CommandLoop(startTime,loopCount);
 		loops.add(loop);
-		
 		return loop;
 	}
 	
@@ -59,7 +77,7 @@ public class StoryboardSprite implements IStoryboardElements
 	@Override
 	public boolean isDrawable() {
 		// TODO: Implement this method
-		return true;
+		return hasCommands();
 	}
 	
 	public void setPath(String path){

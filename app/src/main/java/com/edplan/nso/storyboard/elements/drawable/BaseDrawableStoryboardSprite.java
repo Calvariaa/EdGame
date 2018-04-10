@@ -10,6 +10,10 @@ import com.edplan.framework.math.RectF;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.BlendType;
 import com.edplan.framework.graphics.opengl.GLWrapped;
+import com.edplan.framework.timing.PreciseTimeline;
+import com.edplan.nso.storyboard.elements.StoryboardSprite;
+import com.edplan.nso.storyboard.Storyboard;
+import com.edplan.nso.storyboard.PlayingStoryboard;
 
 public class BaseDrawableStoryboardSprite extends EdDrawable
 {
@@ -23,14 +27,38 @@ public class BaseDrawableStoryboardSprite extends EdDrawable
 	
 	private Vec2 scale=new Vec2(1,1);
 	
+	private boolean flipH=false;
+	
+	private boolean flipV=false;
+	
 	private float alpha=1;
 	
 	private Color4 varyingColor=Color4.ONE.copyNew();
 	
 	private BlendType blendType=BlendType.Normal;
 	
-	public BaseDrawableStoryboardSprite(MContext context){
+	private PreciseTimeline timeline;
+	
+	private PlayingStoryboard storyboard;
+	
+	private double startTime;
+	
+	private double endTime;
+	
+	public BaseDrawableStoryboardSprite(MContext context,PlayingStoryboard storyboard,StoryboardSprite sprite,PreciseTimeline timeline){
 		super(context);
+		this.timeline=timeline;
+		this.storyboard=storyboard;
+		startTime=sprite.getStartTime();
+		endTime=sprite.getEndTime();
+	}
+
+	public void setTimeline(PreciseTimeline timeline) {
+		this.timeline=timeline;
+	}
+
+	public PreciseTimeline getTimeline() {
+		return timeline;
 	}
 
 	public void setAlpha(float alpha) {
@@ -107,11 +135,14 @@ public class BaseDrawableStoryboardSprite extends EdDrawable
 				currentPosition.y,
 				texture.getWidth(),
 				texture.getHeight()
-			).toQuad();
+			).scale(anchor,scale.x*(flipH?-1:1),scale.y*(flipV?-1:1))
+			.toQuad();
 		quad.rotate(anchor,rotation);
 		
 		//默认只按次流程绘制且只绘制StoryboardSprite，这里省去save/restore节省时间
 		GLWrapped.blend.setBlendType(blendType);
 		canvas.drawTexture(texture,quad,varyingColor,alpha);
 	}
+	
+	
 }

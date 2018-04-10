@@ -21,6 +21,10 @@ public class Vec2
 		this.y=res.y;
 	}
 	
+	public Vec2(float v){
+		this(v,v);
+	}
+	
 	public Vec2 set(float x,float y){
 		this.x=x;
 		this.y=y;

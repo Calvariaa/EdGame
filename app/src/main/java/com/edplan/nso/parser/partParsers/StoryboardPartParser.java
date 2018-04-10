@@ -12,6 +12,8 @@ import com.edplan.framework.ui.animation.LoopType;
 import com.edplan.nso.storyboard.elements.StoryboardAnimation;
 import com.edplan.nso.storyboard.elements.StoryboardSample;
 import com.edplan.framework.ui.animation.Easing;
+import com.edplan.framework.graphics.opengl.objs.Color4;
+import com.edplan.framework.graphics.opengl.BlendType;
 
 public class StoryboardPartParser extends PartParser<PartEvents>
 {
@@ -110,42 +112,69 @@ public class StoryboardPartParser extends PartParser<PartEvents>
 					switch(commandType){
 						case "F":
 						{
-							
+							float startValue=Float.parseFloat(spl[4]);
+							float endValue=(spl.length>5)?Float.parseFloat(spl[5]):startValue;
+							if(timelineGroup!=null)timelineGroup.Alpha.add(easing,startTime,endTime,startValue,endValue);
 						}
 							break;
 						case "S":
 						{
-							
+							float startValue=Float.parseFloat(spl[4]);
+							float endValue=(spl.length>5)?Float.parseFloat(spl[5]):startValue;
+							if(timelineGroup!=null)timelineGroup.Scale.add(easing,startTime,endTime,new Vec2(startValue),new Vec2(endValue));
 						}
 							break;
 						case "V":
 						{
-							
+							float startX=Float.parseFloat(spl[4]);
+							float startY=Float.parseFloat(spl[5]);
+							float endX=(spl.length>6)?Float.parseFloat(spl[6]):startX;
+							float endY=(spl.length>7)?Float.parseFloat(spl[7]):startY;
+							if(timelineGroup!=null)timelineGroup.Scale.add(easing,startTime,endTime,new Vec2(startX,startY),new Vec2(endX,endY));
 						}
 							break;
 						case "R":
 						{
-							
+							float startValue=Float.parseFloat(spl[4]);
+							float endValue=(spl.length>5)?Float.parseFloat(spl[5]):startValue;
+							if(timelineGroup!=null)timelineGroup.Rotation.add(easing,startTime,endTime,startValue,endValue);
 						}
 							break;
 						case "M":
 						{
-							
+							float startX=Float.parseFloat(spl[4]);
+							float startY=Float.parseFloat(spl[5]);
+							float endX=(spl.length>6)?Float.parseFloat(spl[6]):startX;
+							float endY=(spl.length>7)?Float.parseFloat(spl[7]):startY;
+							if(timelineGroup!=null){
+								timelineGroup.X.add(easing,startTime,endTime,startX,endX);
+								timelineGroup.Y.add(easing,startTime,endTime,startY,endY);
+							}
 						}
 							break;
 						case "MX":
 						{
-							
+							float startValue=Float.parseFloat(spl[4]);
+							float endValue=(spl.length>5)?Float.parseFloat(spl[5]):startValue;
+							if(timelineGroup!=null)timelineGroup.X.add(easing,startTime,endTime,startValue,endValue);
 						}
 							break;
 						case "MY":
 						{
-							
+							float startValue=Float.parseFloat(spl[4]);
+							float endValue=(spl.length>5)?Float.parseFloat(spl[5]):startValue;
+							if(timelineGroup!=null)timelineGroup.Y.add(easing,startTime,endTime,startValue,endValue);
 						}
 							break;
 						case "C":
 						{
-							
+							float startR=Float.parseFloat(spl[4]);
+							float startG=Float.parseFloat(spl[5]);
+							float startB=Float.parseFloat(spl[6]);
+							float endR=(spl.length>7)?Float.parseFloat(spl[7]):startR;
+							float endG=(spl.length>8)?Float.parseFloat(spl[8]):startG;
+							float endB=(spl.length>9)?Float.parseFloat(spl[9]):startB;
+							if(timelineGroup!=null)timelineGroup.Colour.add(easing,startTime,endTime,Color4.rgb255(startR,startG,startB),Color4.rgb255(endR,endG,endB));
 						}
 							break;
 						case "P":
@@ -153,8 +182,20 @@ public class StoryboardPartParser extends PartParser<PartEvents>
 							String type=spl[4];
 							switch(type){
 								case "A":
+									if(timelineGroup!=null){
+										timelineGroup.BlendingMode.add(easing,startTime,endTime,BlendType.Additive,(startTime==endTime?BlendType.Additive:BlendType.Normal));
+									}
+									break;
 								case "H":
+									if(timelineGroup!=null){
+										timelineGroup.FlipH.add(easing,startTime,endTime,true,startTime==endTime);
+									}
+									break;
 								case "V":
+									if(timelineGroup!=null){
+										timelineGroup.FlipV.add(easing,startTime,endTime,true,startTime==endTime);
+									}
+									break;
 							}
 						}
 							break;

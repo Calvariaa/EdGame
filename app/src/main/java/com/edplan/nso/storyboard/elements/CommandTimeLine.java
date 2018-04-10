@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import com.edplan.framework.ui.animation.Easing;
 import com.edplan.superutils.DefUtil;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class CommandTimeLine<T> implements ICommandTimeLine
 {
-	private List<TypedCommand> commands=new ArrayList<TypedCommand>();
+	private static final boolean STRICT_SORT=true;
+	
+	private List<TypedCommand<T>> commands=new ArrayList<TypedCommand<T>>();
 	
 	private TypedCommand<T> startValueCommand;
 	
@@ -15,12 +19,7 @@ public class CommandTimeLine<T> implements ICommandTimeLine
 	
 	public void add(Easing easing,double startTime,double endTime,T startValue,T endValue){
 		if(endTime<startTime)return;
-		TypedCommand<T> command=new TypedCommand<T>();
-		command.setEasing(easing);
-		command.setStartTime(startTime);
-		command.setEndTime(endTime);
-		command.setStartValue(startValue);
-		command.setEndValue(endValue);
+		TypedCommand<T> command=new TypedCommand<T>(easing,startTime,endTime,startValue,endValue);
 		
 		commands.add(command);
 		
@@ -32,8 +31,15 @@ public class CommandTimeLine<T> implements ICommandTimeLine
 		}
 	}
 	
-	public void iterateCommands(){
-		
+	public List<TypedCommand<T>> getCommands(){
+		if(STRICT_SORT)Collections.sort(commands, new Comparator<TypedCommand<T>>(){
+				@Override
+				public int compare(TypedCommand<T> p1,TypedCommand<T> p2) {
+					// TODO: Implement this method
+					return (int)Math.signum(p2.getStartTime()-p1.getStartTime());
+				}
+			});
+		return commands;
 	}
 	
 	public T getStartValue(){

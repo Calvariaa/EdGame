@@ -2,19 +2,44 @@ package com.edplan.nso.storyboard.elements;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.utils.stream.MaxMin;
+import com.edplan.framework.graphics.opengl.BlendType;
+import java.util.List;
+import java.util.ArrayList;
 
 public class CommandTimeLineGroup
 {
-	public CommandTimeLine<Vec2> XY=new CommandTimeLine<Vec2>();
+	public CommandTimeLine<Float> X=new CommandTimeLine<Float>();
+	public CommandTimeLine<Float> Y=new CommandTimeLine<Float>();
 	public CommandTimeLine<Vec2> Scale=new CommandTimeLine<Vec2>();
 	public CommandTimeLine<Float> Rotation=new CommandTimeLine<Float>();
 	public CommandTimeLine<Color4> Colour=new CommandTimeLine<Color4>();
 	public CommandTimeLine<Float> Alpha=new CommandTimeLine<Float>();
-	public CommandTimeLine<Boolean> BlendingMode=new CommandTimeLine<Boolean>();
+	public CommandTimeLine<BlendType> BlendingMode=new CommandTimeLine<BlendType>();
 	public CommandTimeLine<Boolean> FlipH=new CommandTimeLine<Boolean>();
 	public CommandTimeLine<Boolean> FlipV=new CommandTimeLine<Boolean>();
 	
-	private CommandTimeLine[] timeLines={XY,Scale,Rotation,Colour,Alpha,BlendingMode,FlipH,FlipV};
+	private CommandTimeLine[] timeLines={X,Y,Scale,Rotation,Colour,Alpha,BlendingMode,FlipH,FlipV};
+	
+	public <T> List<TypedCommand<T>> getCommands(CommandTimeLine<T> timeline,double offset){
+		if(offset!=0){
+			List<TypedCommand<T>> res=timeline.getCommands();
+			List<TypedCommand<T>> list=new ArrayList<TypedCommand<T>>(res.size());
+			for(TypedCommand<T> c:res){
+				list.add(
+					new TypedCommand<T>(
+						c.getEasing(),
+						c.getStartTime()+offset,
+						c.getEndTime()+offset,
+						c.getStartValue(),
+						c.getEndValue()));
+			}
+			return list;
+		}else{
+			return timeline.getCommands();
+		}
+	}
+	
+	
 	
 	public boolean hasCommands(){
 		for(CommandTimeLine c:timeLines){

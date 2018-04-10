@@ -48,7 +48,7 @@ public class BassChannel
 		}
 	}
 	
-	public int getFFT(ByteBuffer buf){
+	private int getFFT(ByteBuffer buf,int fft_size){
 		Log.v("ffts","try get fft data");
 		return BASS.BASS_ChannelGetData(getChannelId(),buf,BASS.BASS_DATA_FFT512);
 	}
@@ -56,7 +56,7 @@ public class BassChannel
 	public int getFFT(float[] b){
 		ByteBuffer buf=ByteBuffer.allocateDirect(1024*2);
 		buf.order(null);
-		int r=BASS.BASS_ChannelGetData(getChannelId(),buf,BASS.BASS_DATA_FFT1024);
+		int r=getFFT(buf,BASS.BASS_DATA_FFT1024);
 		buf.asFloatBuffer().get(b);
 		return r;
 	}
@@ -101,5 +101,44 @@ public class BassChannel
 	
 	static{
 		Bass.prepare();
+	}
+	
+	public class AudioDelayHolder extends Thread{
+		
+		boolean ifStop=false;
+		
+		int delayMS;
+		
+		long startTime;
+		
+		boolean ifLoop;
+		
+		public AudioDelayHolder(int delayMS,boolean ifLoop){
+			this.delayMS=delayMS;
+			this.ifLoop=ifLoop;
+		}
+
+		@Override
+		public void start() {
+			// TODO: Implement this method
+			super.start();
+			startTime=System.currentTimeMillis();
+		}
+
+		@Override
+		public void run() {
+			// TODO: Implement this method
+			super.run();
+			while(!ifStop){
+				try {
+					sleep(1);
+				} catch (InterruptedException e) {}
+				if(delayMS<System.currentTimeMillis()-startTime){
+					play(ifLoop);
+					break;
+				}
+			}
+		}
+		
 	}
 }

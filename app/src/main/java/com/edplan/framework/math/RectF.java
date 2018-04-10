@@ -146,6 +146,18 @@ public class RectF implements Copyable,Area2D,IQuad
 		return padding(p.r,p.g,p.b,p.a);
 	}
 	
+	public RectF scale(Anchor anchor,float sx,float sy){
+		Vec2 o=getPoint(anchor.x(),anchor.y());
+		basePoint.zoom(o,sx,sy);
+		width*=sx;
+		height*=sy;
+		return this;
+	}
+	
+	public RectF scale(Anchor anchor,Vec2 s){
+		return scale(anchor,s.x,s.y);
+	}
+	
 	public Quad toQuad(){
 		return new Quad(this);
 	}
