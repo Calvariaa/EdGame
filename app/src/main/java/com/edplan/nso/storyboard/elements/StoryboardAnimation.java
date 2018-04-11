@@ -16,4 +16,10 @@ public class StoryboardAnimation extends StoryboardSprite
 		this.frameDelay=frameDelay;
 		this.loopType=loopType;
 	}
+
+	@Override
+	public String getInitialPath() {
+		// TODO: Implement this method
+		return getPath().substring(0,getPath().lastIndexOf("."))+"0"+getPath().substring(getPath().lastIndexOf("."),getPath().length());
+	}
 }

@@ -36,7 +36,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StdBeatmapParser extends BaseDecoder implements StringMakeable
+public class StdBeatmapDecoder extends BaseDecoder implements StringMakeable
 {
 	private StdBeatmapBindingData bd;
 
@@ -59,18 +59,18 @@ public class StdBeatmapParser extends BaseDecoder implements StringMakeable
 	private HitObjectsParser hitObjectsParser;
 	
 	
-	public StdBeatmapParser(InputStream in,String resInfo){
+	public StdBeatmapDecoder(InputStream in,String resInfo){
 		super(in,resInfo);
 		initialParsers();
 	}
 	
-	public StdBeatmapParser(File file) throws FileNotFoundException{
+	public StdBeatmapDecoder(File file) throws FileNotFoundException{
 		super(file);
 		initialParsers();
 	}
 	
 	
-	public StdBeatmapParser(AdvancedBufferedReader _reader,ParsingBeatmap bdmsg){
+	public StdBeatmapDecoder(AdvancedBufferedReader _reader,ParsingBeatmap bdmsg){
 		super(_reader,bdmsg);
 		initialParsers();
 	}

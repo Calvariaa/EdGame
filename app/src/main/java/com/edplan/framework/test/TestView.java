@@ -31,7 +31,7 @@ import com.edplan.framework.ui.text.font.drawing.TextPrinter;
 import com.edplan.framework.utils.MLog;
 import com.edplan.nso.NsoException;
 import com.edplan.nso.ParsingBeatmap;
-import com.edplan.nso.parser.StdBeatmapParser;
+import com.edplan.nso.parser.StdBeatmapDecoder;
 import com.edplan.nso.resource.OsuSkin;
 import com.edplan.nso.ruleset.amodel.playing.PlayField;
 import com.edplan.nso.ruleset.std.StdBeatmap;
@@ -111,7 +111,7 @@ public class TestView extends EdView
 				   .subResource("skins")
 				    .subResource("default"));
 			
-			StdBeatmapParser bparser=new StdBeatmapParser(
+			StdBeatmapDecoder bparser=new StdBeatmapDecoder(
 												getContext()
 												 .getAssetResource()
 												  .subResource("osu/test/beatmap").openInput(

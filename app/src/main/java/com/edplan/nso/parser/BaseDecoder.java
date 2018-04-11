@@ -25,6 +25,12 @@ public class BaseDecoder
 
 	protected PartParser nowParser=null;
 	
+	//protected boolean enableProgressNotice=true;
+	
+	//protected int totalLine;
+	
+	protected int parsedLine;
+	
 	public BaseDecoder(InputStream in,String resInfo){
 		AdvancedBufferedReader r=new AdvancedBufferedReader(in);
 		ParsingBeatmap b=new ParsingBeatmap();
@@ -93,6 +99,7 @@ public class BaseDecoder
 	protected void nextLine() throws IOException{
 		reader.bufferToNext();
 		parsingBeatmap.nextLine();
+		parsedLine++;
 	}
 
 	public static String reparseTag(String t){

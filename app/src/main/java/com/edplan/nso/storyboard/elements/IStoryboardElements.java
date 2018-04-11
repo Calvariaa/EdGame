@@ -12,6 +12,4 @@ public interface IStoryboardElements
 	public BaseDrawableSprite createDrawable(PlayingStoryboard storyboard);
 	
 	public void onApply(ADrawableStoryboardElement sprite,PlayingStoryboard storyboard);
-	
-	public void finalBuild();
 }

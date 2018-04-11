@@ -34,6 +34,10 @@ public class StoryboardPartParser extends PartParser<PartEvents>
 		variables=variableDecoder.getPart();
 	}
 	
+	public Storyboard getStoryboard(){
+		return storyboard;
+	}
+	
 	private boolean handleEvents(String l,int depth) throws NsoException{
 		String[] spl=l.split(",");
 		if(depth==0){

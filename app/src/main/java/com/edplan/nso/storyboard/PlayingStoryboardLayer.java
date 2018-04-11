@@ -23,11 +23,12 @@ public class PlayingStoryboardLayer extends EdDrawable
 		super(storyboard.getContext());
 		this.storyboard=storyboard;
 		for(IStoryboardElements ele:layer.getElements()){
-			ele.finalBuild();
 			if(ele.isDrawable()){
 				ADrawableStoryboardElement drawable=ele.createDrawable(storyboard);
 				sprites.add(drawable);
 				ele.onApply(drawable,storyboard);
+			}else{
+				ele.onApply(null,storyboard);
 			}
 		}
 	}

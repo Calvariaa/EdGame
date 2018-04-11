@@ -20,9 +20,9 @@ public class CommandTimeLineGroup
 	
 	private CommandTimeLine[] timeLines={X,Y,Scale,Rotation,Colour,Alpha,BlendingMode,FlipH,FlipV};
 	
-	public <T> List<TypedCommand<T>> getCommands(CommandTimeLine<T> timeline,double offset){
+	public <T> List<TypedCommand<T>> getCommands(CommandTimelineSelecter<T> timeline,double offset){
 		if(offset!=0){
-			List<TypedCommand<T>> res=timeline.getCommands();
+			List<TypedCommand<T>> res=timeline.select(this);
 			List<TypedCommand<T>> list=new ArrayList<TypedCommand<T>>(res.size());
 			for(TypedCommand<T> c:res){
 				list.add(
@@ -35,7 +35,7 @@ public class CommandTimeLineGroup
 			}
 			return list;
 		}else{
-			return timeline.getCommands();
+			return timeline.select(this);
 		}
 	}
 	
@@ -83,4 +83,6 @@ public class CommandTimeLineGroup
 	public double getEndTime(){
 		return getCommandsEndTime();
 	}
+	
+	
 }

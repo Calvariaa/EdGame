@@ -36,7 +36,7 @@ public class CommandTimeLine<T> implements ICommandTimeLine
 				@Override
 				public int compare(TypedCommand<T> p1,TypedCommand<T> p2) {
 					// TODO: Implement this method
-					return (int)Math.signum(p2.getStartTime()-p1.getStartTime());
+					return (int)Math.signum(p1.getStartTime()-p2.getStartTime());
 				}
 			});
 		return commands;

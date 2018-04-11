@@ -13,7 +13,7 @@ public class CommandLoop extends CommandTimeLineGroup
 	}
 
 	@Override
-	public <T> List<TypedCommand<T>> getCommands(CommandTimeLine<T> timeline,double offset) {
+	public <T> List<TypedCommand<T>> getCommands(CommandTimelineSelecter<T> timeline,double offset) {
 		// TODO: Implement this method
 		//return super.getCommands(timeline, offset);
 		List<TypedCommand<T>> res=super.getCommands(timeline,offset);

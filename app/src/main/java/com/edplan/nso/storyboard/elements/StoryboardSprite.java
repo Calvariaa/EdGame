@@ -7,6 +7,15 @@ import com.edplan.nso.storyboard.elements.drawable.BaseDrawableSprite;
 import com.edplan.nso.storyboard.PlayingStoryboard;
 import com.edplan.nso.storyboard.elements.drawable.ADrawableStoryboardElement;
 import com.edplan.framework.ui.animation.QueryAnimation;
+import com.edplan.framework.ui.animation.interpolate.ValueInterpolator;
+import com.edplan.framework.interfaces.InvokeSetter;
+import java.util.Collections;
+import java.util.Comparator;
+import com.edplan.framework.ui.animation.Easing;
+import com.edplan.framework.ui.animation.interpolate.FloatInterpolator;
+import com.edplan.framework.ui.animation.interpolate.Vec2Interpolator;
+import com.edplan.framework.ui.animation.interpolate.Color4Interpolator;
+import com.edplan.framework.ui.animation.interpolate.InvalidInterpolator;
 
 public class StoryboardSprite implements IStoryboardElements
 {
@@ -96,15 +105,57 @@ public class StoryboardSprite implements IStoryboardElements
 		return c;
 	}
 	
-	@Override
-	public void finalBuild(){
-		QueryAnimation<BaseDrawableSprite,Float> x;
+	private static Comparator<TypedCommand> comparator=new Comparator<TypedCommand>(){
+		@Override
+		public int compare(TypedCommand p1,TypedCommand p2) {
+			// TODO: Implement this method
+			return (int)Math.signum(p1.getStartTime()-p2.getStartTime());
+		}
+	};
+	private <T> void applyCommands(BaseDrawableSprite sprite,List<TypedCommand<T>> command,ValueInterpolator<T> interpolator,InvokeSetter<BaseDrawableSprite,T> setter){
+		QueryAnimation<BaseDrawableSprite,T> anim=new QueryAnimation<BaseDrawableSprite,T>(sprite,interpolator,setter,true);
+		Collections.sort(command,comparator);
+		if(command.size()==0)return;
+		TypedCommand<T> tmp=command.get(0);
+		anim.transform(tmp.getStartValue(),tmp.getStartTime(),tmp.getEasing());
+		for(TypedCommand<T> c:command){
+			anim.transform(c.getStartValue(),c.getStartTime()-anim.getEndTime(),Easing.Jump);
+			anim.transform(c.getEndValue(),c.getDuration(),c.getEasing());
+		}
+		animations.add(anim);
+	}
+	
+	public <T> List<TypedCommand<T>> getCommands(CommandTimelineSelecter<T> selecter){
+		List<TypedCommand<T>> list=new ArrayList<TypedCommand<T>>();
+		list.addAll(commandTimeLineGroup.getCommands(selecter,0));
+		for(CommandLoop l:loops){
+			list.addAll(l.getCommands(selecter,0));
+		}
+		return list;
+	}
+	
+	public String getInitialPath(){
+		return path;
+	}
+	
+	public void initialTexture(BaseDrawableSprite sprite,PlayingStoryboard storyboard){
+		sprite.setTexture(storyboard.getTexturePool().getTexture(getInitialPath()));
 	}
 
 	@Override
 	public void onApply(ADrawableStoryboardElement ele,PlayingStoryboard storyboard) {
 		// TODO: Implement this method
 		BaseDrawableSprite sprite=(BaseDrawableSprite)ele;
+		initialTexture(sprite,storyboard);
+		applyCommands(sprite,getCommands(Selecters.SX),FloatInterpolator.Instance,BaseDrawableSprite.X);
+		applyCommands(sprite,getCommands(Selecters.SY),FloatInterpolator.Instance,BaseDrawableSprite.Y);
+		applyCommands(sprite,getCommands(Selecters.SScale),Vec2Interpolator.Instance,BaseDrawableSprite.Scale);
+		applyCommands(sprite,getCommands(Selecters.SRotation),FloatInterpolator.Instance,BaseDrawableSprite.Rotation);
+		applyCommands(sprite,getCommands(Selecters.SColour),Color4Interpolator.Instance,BaseDrawableSprite.Color);
+		applyCommands(sprite,getCommands(Selecters.SAlpha),FloatInterpolator.Instance,BaseDrawableSprite.Alpha);
+		applyCommands(sprite,getCommands(Selecters.SBlendType),InvalidInterpolator.ForBlendType,BaseDrawableSprite.Blend);
+		applyCommands(sprite,getCommands(Selecters.SFlipH),InvalidInterpolator.ForBoolean,BaseDrawableSprite.FlipH);
+		applyCommands(sprite,getCommands(Selecters.SFlipV),InvalidInterpolator.ForBoolean,BaseDrawableSprite.FlipV);
 		for(QueryAnimation a:animations){
 			sprite.addAnimation(a);
 		}

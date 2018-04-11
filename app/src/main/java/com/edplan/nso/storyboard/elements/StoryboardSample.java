@@ -58,9 +58,4 @@ public class StoryboardSample implements IStoryboardElements
 		// TODO: Implement this method
 		return null;
 	}
-
-	@Override
-	public void finalBuild() {
-		// TODO: Implement this method
-	}
 }

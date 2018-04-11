@@ -29,6 +29,7 @@ public class QueryAnimation<T,V> extends BasePreciseAnimation
 	}
 	
 	public void transform(V value,double duration,Easing easing){
+		//if(duration<0)duration=0;
 		if(hasNode()){
 			AnimNode pre=getEndNode();
 			AnimNode next=new AnimNode(value,pre.endTime,duration,easing);
@@ -109,6 +110,10 @@ public class QueryAnimation<T,V> extends BasePreciseAnimation
 	public double getDuration() {
 		// TODO: Implement this method
 		return (nodes.size()>0)?(getEndNode().endTime):0;
+	}
+	
+	public double getEndTime(){
+		return (hasNode())?getEndNode().endTime:0;
 	}
 	
 	private AnimNode getEndNode(){
