@@ -76,7 +76,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		}
 	};
 	
-	private float alpha=0;
+	private float alpha=1;
 	public static InvokeSetter<BaseDrawableSprite,Float> Alpha=new InvokeSetter<BaseDrawableSprite,Float>(){
 		@Override
 		public void invoke(BaseDrawableSprite target,Float value) {
@@ -120,6 +120,10 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		//System.out.println("sprite-data: "+startTime+","+endTime);
 		anchor=sprite.getAnchor();
 		currentPosition.set(sprite.getInitialPosition());
+	}
+	
+	public List<QueryAnimation> getAnimations(){
+		return animations;
 	}
 	
 	public void addAnimation(QueryAnimation anim){
@@ -228,11 +232,6 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 	public void draw(GLCanvas2D canvas) {
 		// TODO: Implement this method
 		if(alpha<0.002)return;
-		/*
-		if(enableTextures.containsKey(path)){
-			if(!enableTextures.get(path))return;
-		}else return;
-		*/
 		
 		Quad quad=
 			RectF.anchorOWH(
@@ -248,22 +247,26 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		//默认只按次流程绘制且只绘制StoryboardSprite，这里省去save/restore节省时间
 		GLWrapped.blend.setBlendType(blendType);
 		canvas.drawTexture(texture,quad,varyingColor,alpha);
+		
 		/*
+		GLWrapped.blend.setBlendType(BlendType.Normal);
 		GLPaint p=new GLPaint();
 		p.setStrokeWidth(1f);
 		if(blendType==BlendType.Additive){
 			p.setMixColor(Color4.rgba(1,0,0,1));
 		}
 		canvas.drawLine(quad.getTopLeft(),quad.getBottomRight(),p);
-		canvas.drawLine(quad.getTopRight(),quad.getBottomLeft(),p);*/
+		canvas.drawLine(quad.getTopRight(),quad.getBottomLeft(),p);
+		*/
 	}
 	
+	/*
 	private static final HashMap<String,Boolean> enableTextures=new HashMap<String,Boolean>();
 	static{
 		enableTextures.put("sb/xgreen.png",true);
 		//enableTextures.put("sb/blue.png",true);
 		enableTextures.put("sb/burst.png",true);
 		enableTextures.put("sb/highlight.png",true);
-	}
+	}*/
 	
 }

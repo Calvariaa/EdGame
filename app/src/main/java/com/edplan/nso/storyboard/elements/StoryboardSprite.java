@@ -123,17 +123,8 @@ public class StoryboardSprite implements IStoryboardElements
 		for(TypedCommand<T> c:command){
 			anim.transform(c.getStartValue(),c.getStartTime(),0,c.getEasing());
 			anim.transform(c.getEndValue(),c.getStartTime(),c.getDuration(),c.getEasing());
-			/*if(setter==BaseDrawableSprite.Alpha){
-				MLog.test.vOnce("duration","duration",c.getDuration()+","+anim.getStartTimeAtTimeline()+","+anim.getEndNodeTime());
-			}*/
 		}
 		animations.add(anim);
-		/*
-		if(getPath().equals("sb/lyrics/a.png")&&(tmpI==3)){
-			//System.out.println(setter);
-			System.out.println("find "+setter);
-			System.out.println(anim.toString());
-		}*/
 	}
 	
 	public static int tmpI=0;
@@ -159,11 +150,7 @@ public class StoryboardSprite implements IStoryboardElements
 	public void onApply(ADrawableStoryboardElement ele,PlayingStoryboard storyboard) {
 		// TODO: Implement this method
 		if(ele==null)return;
-		/*
-		if(getPath().equals("sb/lyrics/a.png")){
-			//System.out.println(setter);
-			tmpI++;
-		}*/
+		
 		BaseDrawableSprite sprite=(BaseDrawableSprite)ele;
 		initialTexture(sprite,storyboard);
 		applyCommands(sprite,getCommands(Selecters.SX),FloatInterpolator.Instance,BaseDrawableSprite.X);

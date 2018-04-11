@@ -33,6 +33,7 @@ import com.edplan.nso.storyboard.elements.drawable.BaseDrawableSprite;
 import java.io.File;
 import java.io.IOException;
 import com.edplan.framework.timing.AdjustableTimeline;
+import java.util.Arrays;
 
 public class TestView extends EdView
 {
@@ -177,20 +178,22 @@ public class TestView extends EdView
 				//"/storage/emulated/0/ADM/186911 Function Phantom - Neuronecia2/Function Phantom - Neuronecia (Amamiya Yuko).osb");
 				//"/storage/emulated/0/ADM/151720 ginkiha - EOS1/ginkiha - EOS (alacat).osb");
 				"/storage/emulated/0/ADM/389179 Jay Chou - Fa Ru Xue3/Jay Chou - Fa Ru Xue (KaedekaShizuru).osb");
-				StoryboardDecoder decoder=new StoryboardDecoder(osb);
+				StoryboardDecoder decoder=new StoryboardDecoder(
+				test.testFloder().openInput(test.getOsbPath()),"ahh");
 				
 				try {
 					long s=System.currentTimeMillis();
 					decoder.parse();
 					storyboard=decoder.getStoryboard();
 					System.out.println("end edcode osb");
-					playingStoryboard=new PlayingStoryboard(getContext(),timeline,storyboard,new DirResource(osb.getParentFile()));
+					playingStoryboard=new PlayingStoryboard(getContext(),timeline,storyboard,test.testFloder().subResource(test.testBeatmapFloder+""));
+					//new DirResource(osb.getParentFile()));
 					System.out.println("end transform to playing state");
 					System.out.println("storyboard parse done in: "+(System.currentTimeMillis()-s)+"ms");
 					
-					for(int i=0;i<50;i++){
+					for(int i=0;i<5;i++){
 						BaseDrawableSprite spr=(BaseDrawableSprite) playingStoryboard.getLayer(Storyboard.Layer.Foreground.name()).getSprites().get(i);
-						System.out.println(i+": "+spr.getStartTime()+","+spr.getEndTime());
+						System.out.println(spr.getAnimations());
 					}
 					
 				} catch (Exception e) {
@@ -321,7 +324,7 @@ public class TestView extends EdView
 		playingStoryboard.draw(newCanvas);
 		newCanvas.restore();
 		
-		//playField.draw(newCanvas);
+		playField.draw(newCanvas);
 		//firstObj.draw(newCanvas);
 		newCanvas.unprepare();
 
@@ -471,7 +474,7 @@ public class TestView extends EdView
 	public class TestData{
 		public String testPath="osu/test/beatmap";
 		
-		public int testBeatmapFloder=2;
+		public int testBeatmapFloder=13;
 		
 		public String getBeatmapPath(){
 			AResource res=getContext().getAssetResource().subResource(testPath);
@@ -517,6 +520,10 @@ public class TestView extends EdView
 				e.printStackTrace();
 			}
 			return null;
+		}
+		
+		public AResource testFloder(){
+			return getContext().getAssetResource().subResource(testPath);
 		}
 		
 	}
