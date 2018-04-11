@@ -33,13 +33,26 @@ public class PlayingStoryboard extends EdDrawable
 						return PlayingStoryboard.this.resource.loadTexture(msg);
 					} catch (IOException e) {
 						e.printStackTrace();
-						return null;
+						//return null;
+						throw new RuntimeException(e.getMessage());
 					}
 				}
 		});
 		for(Map.Entry<String,StoryboardLayer> l:storyboard.getLayers().entrySet()){
 			layers.put(l.getKey(),new PlayingStoryboardLayer(l.getValue(),this));
 		}
+	}
+	
+	public PlayingStoryboardLayer getLayer(String key){
+		return layers.get(key);
+	}
+	
+	public int objectsInField(){
+		int c=0;
+		for(PlayingStoryboardLayer l:layers.values()){
+			c+=l.objectInField();
+		}
+		return c;
 	}
 	
 	public TexturePool getTexturePool(){

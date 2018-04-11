@@ -407,6 +407,10 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	public void drawLine(float x1,float y1,float x2,float y2,GLPaint paint){
 		drawLines(new float[]{x1,y1,x2,y2},paint);
 	}
+	
+	public void drawLine(Vec2 v1,Vec2 v2,GLPaint paint){
+		drawLine(v1.x,v1.y,v2.x,v2.y,paint);
+	}
 
 	/**
 	 *通过简便的参数以canvas上某一点为中心绘制一张Texture

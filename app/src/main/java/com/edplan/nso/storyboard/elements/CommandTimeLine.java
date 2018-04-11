@@ -23,10 +23,10 @@ public class CommandTimeLine<T> implements ICommandTimeLine
 		
 		commands.add(command);
 		
-		if(startValue==null||startValueCommand.getStartTime()>command.getStartTime()){
+		if(startValueCommand==null||startValueCommand.getStartTime()>command.getStartTime()){
 			startValueCommand=command;
 		}
-		if(endValue==null||endValueCommand.getEndTime()<command.getEndTime()){
+		if(endValueCommand==null||endValueCommand.getEndTime()<command.getEndTime()){
 			endValueCommand=command;
 		}
 	}

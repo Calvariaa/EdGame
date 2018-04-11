@@ -14,6 +14,9 @@ import com.edplan.nso.storyboard.elements.StoryboardSprite;
 import java.util.ArrayList;
 import java.util.List;
 import com.edplan.framework.interfaces.InvokeSetter;
+import com.edplan.framework.utils.MLog;
+import com.edplan.framework.graphics.opengl.GLPaint;
+import java.util.HashMap;
 
 public class BaseDrawableSprite extends ADrawableStoryboardElement
 {
@@ -73,7 +76,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		}
 	};
 	
-	private float alpha=1;
+	private float alpha=0;
 	public static InvokeSetter<BaseDrawableSprite,Float> Alpha=new InvokeSetter<BaseDrawableSprite,Float>(){
 		@Override
 		public void invoke(BaseDrawableSprite target,Float value) {
@@ -104,12 +107,17 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 	
 	private double endTime;
 	
+	private String path;
+	
 	private List<QueryAnimation> animations=new ArrayList<QueryAnimation>();
 	
 	public BaseDrawableSprite(PlayingStoryboard storyboard,StoryboardSprite sprite){
 		super(storyboard);
+		path=sprite.getPath();
 		startTime=sprite.getStartTime();
 		endTime=sprite.getEndTime();
+		//MLog.test.vOnce("sprite-data",
+		//System.out.println("sprite-data: "+startTime+","+endTime);
 		anchor=sprite.getAnchor();
 		currentPosition.set(sprite.getInitialPosition());
 	}
@@ -194,12 +202,21 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		return scale;
 	}
 
+	
+	boolean hasAdd=false;
 	@Override
 	public void onAdd() {
 		// TODO: Implement this method
+		hasAdd=true;
 		for(QueryAnimation anim:animations){
 			anim.post(getTimeline());
 		}
+	}
+
+	@Override
+	public boolean hasAdd() {
+		// TODO: Implement this method
+		return hasAdd;
 	}
 
 	@Override
@@ -210,6 +227,13 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 	@Override
 	public void draw(GLCanvas2D canvas) {
 		// TODO: Implement this method
+		if(alpha<0.002)return;
+		/*
+		if(enableTextures.containsKey(path)){
+			if(!enableTextures.get(path))return;
+		}else return;
+		*/
+		
 		Quad quad=
 			RectF.anchorOWH(
 				anchor,
@@ -224,7 +248,22 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		//默认只按次流程绘制且只绘制StoryboardSprite，这里省去save/restore节省时间
 		GLWrapped.blend.setBlendType(blendType);
 		canvas.drawTexture(texture,quad,varyingColor,alpha);
+		/*
+		GLPaint p=new GLPaint();
+		p.setStrokeWidth(1f);
+		if(blendType==BlendType.Additive){
+			p.setMixColor(Color4.rgba(1,0,0,1));
+		}
+		canvas.drawLine(quad.getTopLeft(),quad.getBottomRight(),p);
+		canvas.drawLine(quad.getTopRight(),quad.getBottomLeft(),p);*/
 	}
 	
+	private static final HashMap<String,Boolean> enableTextures=new HashMap<String,Boolean>();
+	static{
+		enableTextures.put("sb/xgreen.png",true);
+		//enableTextures.put("sb/blue.png",true);
+		enableTextures.put("sb/burst.png",true);
+		enableTextures.put("sb/highlight.png",true);
+	}
 	
 }

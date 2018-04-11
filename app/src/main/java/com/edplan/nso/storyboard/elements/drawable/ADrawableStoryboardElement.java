@@ -32,4 +32,6 @@ public abstract class ADrawableStoryboardElement extends EdDrawable
 	public abstract double getStartTime();
 	
 	public abstract double getEndTime();
+	
+	public abstract boolean hasAdd();
 }

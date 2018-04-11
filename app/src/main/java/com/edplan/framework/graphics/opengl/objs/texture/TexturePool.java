@@ -17,6 +17,7 @@ public class TexturePool
 			return pool.get(msg);
 		}else{
 			AbstractTexture t=loader.load(msg);
+			if(t==null)throw new RuntimeException("err load Texture: "+msg);
 			pool.put(msg,t);
 			return t;
 		}

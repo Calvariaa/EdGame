@@ -1,46 +1,36 @@
 package com.edplan.framework.test;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.util.Log;
 import com.edplan.framework.MContext;
 import com.edplan.framework.audio.bass.BassChannel;
 import com.edplan.framework.graphics.layer.BufferedLayer;
-import com.edplan.framework.graphics.line.DrawLinePath;
-import com.edplan.framework.graphics.line.LinePath;
-import com.edplan.framework.graphics.line.PathMeasurer;
 import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.graphics.opengl.GLPaint;
-import com.edplan.framework.graphics.opengl.GLWrapped;
-import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
-import com.edplan.framework.graphics.opengl.drawui.DrawInfo;
 import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.resource.AResource;
+import com.edplan.framework.resource.DirResource;
 import com.edplan.framework.timing.AudioTimeline;
 import com.edplan.framework.timing.PreciseTimeline;
 import com.edplan.framework.ui.EdView;
-import com.edplan.framework.ui.animation.AbstractAnimation;
-import com.edplan.framework.ui.animation.AnimState;
-import com.edplan.framework.ui.animation.LoopType;
-import com.edplan.framework.ui.drawable.BitmapDrawable;
 import com.edplan.framework.ui.text.font.bmfont.BMFont;
 import com.edplan.framework.ui.text.font.drawing.TextPrinter;
 import com.edplan.framework.utils.MLog;
 import com.edplan.nso.NsoException;
-import com.edplan.nso.ParsingBeatmap;
 import com.edplan.nso.parser.StdBeatmapDecoder;
+import com.edplan.nso.parser.StoryboardDecoder;
 import com.edplan.nso.resource.OsuSkin;
 import com.edplan.nso.ruleset.amodel.playing.PlayField;
 import com.edplan.nso.ruleset.std.StdBeatmap;
-import com.edplan.nso.ruleset.std.objects.StdSlider;
-import com.edplan.nso.ruleset.std.objects.drawables.StdSliderPathMaker;
-import com.edplan.nso.ruleset.std.parser.StdHitObjectParser;
 import com.edplan.nso.ruleset.std.playing.StdPlayField;
 import com.edplan.nso.ruleset.std.playing.StdPlayingBeatmap;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdHitCircle;
+import com.edplan.nso.storyboard.PlayingStoryboard;
+import com.edplan.nso.storyboard.Storyboard;
+import com.edplan.nso.storyboard.elements.drawable.BaseDrawableSprite;
+import java.io.File;
 import java.io.IOException;
 import com.edplan.framework.timing.AdjustableTimeline;
 
@@ -53,6 +43,10 @@ public class TestView extends EdView
 
 	private StdPlayingBeatmap playingBeatmap;
 
+	private Storyboard storyboard;
+	
+	private PlayingStoryboard playingStoryboard;
+	
 	private PreciseTimeline timeline;
 	
 	private BassChannel audio;
@@ -94,6 +88,7 @@ public class TestView extends EdView
 			//font.setErrCharacter(BMFont.CHAR_NOT_FOUND);
 			font.addFont(res,"Noto-Basic.fnt");
 			font.setErrCharacter('⊙');
+			TextPrinter.addFont(font,"default");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -103,6 +98,11 @@ public class TestView extends EdView
 		System.out.println(test.getSongPath());
 		
 		try {
+			
+			
+
+			
+			
 			skin=new OsuSkin();
 			skin.load(
 				getContext()
@@ -162,13 +162,42 @@ public class TestView extends EdView
 				Log.v("parse-osu","end parse");
 				beatmap=bparser.makeupBeatmap(StdBeatmap.class);
 				beatmap.getDifficulty().setCircleSize(beatmap.getDifficulty().getCircleSize());
-				timeline=new AudioTimeline(audio);
+				timeline=//new AudioTimeline(audio);
 				//new PreciseTimeline();
-				//new AdjustableTimeline(1f);
+				new AdjustableTimeline(1f);
 				playingBeatmap=new StdPlayingBeatmap(getContext(),beatmap,timeline,skin);
 				Log.v("osu","objs: "+playingBeatmap.getHitObjects().size()+" first: "+playingBeatmap.getHitObjects().get(0).getStartTime());
 				playField=new StdPlayField(getContext(),timeline);
 				playField.applyBeatmap(playingBeatmap);
+				
+				
+				//# osb test
+				
+				File osb=new File(//"/storage/emulated/0/ADM/470977 Mili - world.execute(me)/Mili - world.execute(me); (Exile-).osb");
+				//"/storage/emulated/0/ADM/186911 Function Phantom - Neuronecia2/Function Phantom - Neuronecia (Amamiya Yuko).osb");
+				//"/storage/emulated/0/ADM/151720 ginkiha - EOS1/ginkiha - EOS (alacat).osb");
+				"/storage/emulated/0/ADM/389179 Jay Chou - Fa Ru Xue3/Jay Chou - Fa Ru Xue (KaedekaShizuru).osb");
+				StoryboardDecoder decoder=new StoryboardDecoder(osb);
+				
+				try {
+					long s=System.currentTimeMillis();
+					decoder.parse();
+					storyboard=decoder.getStoryboard();
+					System.out.println("end edcode osb");
+					playingStoryboard=new PlayingStoryboard(getContext(),timeline,storyboard,new DirResource(osb.getParentFile()));
+					System.out.println("end transform to playing state");
+					System.out.println("storyboard parse done in: "+(System.currentTimeMillis()-s)+"ms");
+					
+					for(int i=0;i<50;i++){
+						BaseDrawableSprite spr=(BaseDrawableSprite) playingStoryboard.getLayer(Storyboard.Layer.Foreground.name()).getSprites().get(i);
+						System.out.println(i+": "+spr.getStartTime()+","+spr.getEndTime());
+					}
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				//# end osb test
 			}
 			catch (NsoException e)
 			{
@@ -227,7 +256,7 @@ public class TestView extends EdView
 		
 		
 		
-		canvas.drawColor(Color4.gray(0.4f));
+		canvas.drawColor(Color4.gray(0.0f));
 		//new Color4(c,c,c,1.0f));
 		canvas.clearDepthBuffer();
 		 
@@ -285,7 +314,14 @@ public class TestView extends EdView
 		tp.setFinalAlpha(1);
 		//newCanvas.drawLines(new float[]{0,0,PlayField.CANVAS_SIZE_X,PlayField.CANVAS_SIZE_Y},tp);
 		
-		playField.draw(newCanvas);
+		
+		newCanvas.save();
+		newCanvas.translate(-PlayField.PADDING_X,-PlayField.PADDING_Y);
+		//newCanvas.translate(-(PlayField.BASE_Y*16/9f-PlayField.BASE_X)/2,0);
+		playingStoryboard.draw(newCanvas);
+		newCanvas.restore();
+		
+		//playField.draw(newCanvas);
 		//firstObj.draw(newCanvas);
 		newCanvas.unprepare();
 
@@ -398,10 +434,10 @@ public class TestView extends EdView
 		//canvas.drawTexture(cardPng,RectF.xywh(0,0,canvas.getWidth(),canvas.getHeight()),newPaint);
 		
 		
-		canvas.setCanvasAlpha(0.5f);
+		canvas.setCanvasAlpha(1f);
 		float baseLine=300;
 		GLPaint textPaint=new GLPaint();
-		textPaint.setMixColor(Color4.rgba(1,1,0,1));
+		textPaint.setMixColor(Color4.rgba(1,0,0,1));
 		TextPrinter printer=new TextPrinter(font,100,baseLine,textPaint);
 		printer.setTextSize(70);
 		printer.printString("DEVELOPMENT BUILD\nosu!lab 2018.4.9");
@@ -412,7 +448,7 @@ public class TestView extends EdView
 		printer.toNextLine();
 		printer.printString(audioOffset+"");
 		printer.toNextLine();
-		printer.printString(playField.objectInFieldCount()+"");
+		printer.printString(playingStoryboard.objectsInField()+"");
 		//printer.toNextLine();
 		//printer.setTextSize(50);
 		//printer.printString("osu!lab");
@@ -435,7 +471,7 @@ public class TestView extends EdView
 	public class TestData{
 		public String testPath="osu/test/beatmap";
 		
-		public int testBeatmapFloder=1;
+		public int testBeatmapFloder=2;
 		
 		public String getBeatmapPath(){
 			AResource res=getContext().getAssetResource().subResource(testPath);
@@ -459,6 +495,21 @@ public class TestView extends EdView
 				String[] list=res.list(testBeatmapFloder + "");
 				for(String s:list){
 					if(s.endsWith(".mp3")){
+						return testBeatmapFloder+"/"+s;
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+		
+		public String getOsbPath(){
+			AResource res=getContext().getAssetResource().subResource(testPath);
+			try {
+				String[] list=res.list(testBeatmapFloder + "");
+				for(String s:list){
+					if(s.endsWith(".osb")){
 						return testBeatmapFloder+"/"+s;
 					}
 				}

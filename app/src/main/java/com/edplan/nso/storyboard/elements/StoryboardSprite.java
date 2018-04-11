@@ -16,6 +16,7 @@ import com.edplan.framework.ui.animation.interpolate.FloatInterpolator;
 import com.edplan.framework.ui.animation.interpolate.Vec2Interpolator;
 import com.edplan.framework.ui.animation.interpolate.Color4Interpolator;
 import com.edplan.framework.ui.animation.interpolate.InvalidInterpolator;
+import com.edplan.framework.utils.MLog;
 
 public class StoryboardSprite implements IStoryboardElements
 {
@@ -113,17 +114,29 @@ public class StoryboardSprite implements IStoryboardElements
 		}
 	};
 	private <T> void applyCommands(BaseDrawableSprite sprite,List<TypedCommand<T>> command,ValueInterpolator<T> interpolator,InvokeSetter<BaseDrawableSprite,T> setter){
-		QueryAnimation<BaseDrawableSprite,T> anim=new QueryAnimation<BaseDrawableSprite,T>(sprite,interpolator,setter,true);
+		double offset=sprite.getStartTime();
+		QueryAnimation<BaseDrawableSprite,T> anim=new QueryAnimation<BaseDrawableSprite,T>(sprite,offset,interpolator,setter,true);
 		Collections.sort(command,comparator);
 		if(command.size()==0)return;
 		TypedCommand<T> tmp=command.get(0);
-		anim.transform(tmp.getStartValue(),tmp.getStartTime(),tmp.getEasing());
+		anim.transform(tmp.getStartValue(),0,Easing.None);
 		for(TypedCommand<T> c:command){
-			anim.transform(c.getStartValue(),c.getStartTime()-anim.getEndTime(),Easing.Jump);
-			anim.transform(c.getEndValue(),c.getDuration(),c.getEasing());
+			anim.transform(c.getStartValue(),c.getStartTime(),0,c.getEasing());
+			anim.transform(c.getEndValue(),c.getStartTime(),c.getDuration(),c.getEasing());
+			/*if(setter==BaseDrawableSprite.Alpha){
+				MLog.test.vOnce("duration","duration",c.getDuration()+","+anim.getStartTimeAtTimeline()+","+anim.getEndNodeTime());
+			}*/
 		}
 		animations.add(anim);
+		/*
+		if(getPath().equals("sb/lyrics/a.png")&&(tmpI==3)){
+			//System.out.println(setter);
+			System.out.println("find "+setter);
+			System.out.println(anim.toString());
+		}*/
 	}
+	
+	public static int tmpI=0;
 	
 	public <T> List<TypedCommand<T>> getCommands(CommandTimelineSelecter<T> selecter){
 		List<TypedCommand<T>> list=new ArrayList<TypedCommand<T>>();
@@ -145,6 +158,12 @@ public class StoryboardSprite implements IStoryboardElements
 	@Override
 	public void onApply(ADrawableStoryboardElement ele,PlayingStoryboard storyboard) {
 		// TODO: Implement this method
+		if(ele==null)return;
+		/*
+		if(getPath().equals("sb/lyrics/a.png")){
+			//System.out.println(setter);
+			tmpI++;
+		}*/
 		BaseDrawableSprite sprite=(BaseDrawableSprite)ele;
 		initialTexture(sprite,storyboard);
 		applyCommands(sprite,getCommands(Selecters.SX),FloatInterpolator.Instance,BaseDrawableSprite.X);

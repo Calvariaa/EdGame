@@ -13,9 +13,12 @@ import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 import android.util.Log;
+import java.util.HashMap;
 
 public class TextPrinter
 {
+	private static HashMap<String,BMFont> fonts=new HashMap<String,BMFont>();
+	
 	public static final char NO_PREVIOUS_CHAR=0;
 	/**
 	 *@field textSize:实际绘制时的大小
@@ -53,6 +56,14 @@ public class TextPrinter
 		this.startX=startX;
 		this.startY=startY;
 		initial(startX,startY);
+	}
+	
+	public TextPrinter(String font,float startX,float startY,GLPaint paint){
+		this(fonts.get(font),startX,startY,paint);
+	}
+	
+	public static void addFont(BMFont font,String name){
+		fonts.put(name,font);
 	}
 	
 	public void initial(float startX,float startY){

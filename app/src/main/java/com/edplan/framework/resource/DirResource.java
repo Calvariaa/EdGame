@@ -20,7 +20,10 @@ public class DirResource extends AResource
 	public InputStream openInput(String path) throws IOException {
 		// TODO: Implement this method
 		File f=new File(dir,path);
-		if((!f.exists())||f.isDirectory())return null;
+		if((!f.exists())||f.isDirectory()){
+			//return null;
+			throw new RuntimeException("err open input: "+f.exists()+","+f.isDirectory()+","+f.getAbsolutePath());
+		}
 		return new FileInputStream(f);
 	}
 

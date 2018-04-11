@@ -19,13 +19,17 @@ public class QueryAnimation<T,V> extends BasePreciseAnimation
 	
 	private AnimNode currentNode;
 	
+	private double initialOffset;
+	
 	private T target;
 	
-	public QueryAnimation(T target,ValueInterpolator<V> interpolator,InvokeSetter<T,V> setter,boolean alwaysInitial){
+	public QueryAnimation(T target,double initialOffset,ValueInterpolator<V> interpolator,InvokeSetter<T,V> setter,boolean alwaysInitial){
 		this.target=target;
 		this.interpolator=interpolator;
 		this.setter=setter;
 		this.alwaysInitial=alwaysInitial;
+		this.initialOffset=initialOffset;
+		setStartTime(initialOffset);
 	}
 	
 	public void transform(V value,double duration,Easing easing){
@@ -34,27 +38,53 @@ public class QueryAnimation<T,V> extends BasePreciseAnimation
 			AnimNode pre=getEndNode();
 			AnimNode next=new AnimNode(value,pre.endTime,duration,easing);
 			pre.next=next;
+			next.pre=pre;
 			nodes.add(next);
 		}else{
-			nodes.add(new AnimNode(value,0,duration,easing));
+			nodes.add(new AnimNode(value,initialOffset,duration,easing));
 		}
+	}
+	
+	public void transform(V value,double startTime,double duration,Easing easing){
+		if(hasNode()){
+			AnimNode pre=getEndNode();
+			if(startTime<pre.endTime){
+				double offset=pre.endTime-startTime;
+				startTime+=offset;
+				duration-=offset;
+			}
+			AnimNode next=new AnimNode(value,startTime,duration,easing);
+			pre.next=next;
+			next.pre=pre;
+			nodes.add(next);
+		}else{
+			nodes.add(new AnimNode(value,initialOffset,duration,easing));
+		}
+	}
+	
+	public void skip(double time){
+		transform(getEndNode().value,time,Easing.None);
+	}
+	
+	public double currentTime(){
+		return initialOffset+getProgressTime();
 	}
 	
 	@Override
 	protected void postTime(double deltaTime,double progressTime) {
 		// TODO: Implement this method
-		if(hasNode()&&progressTime<getDuration()){
+		if(hasNode()){
 			if(currentNode==null){
-				seekToTime(progressTime);
+				seekToTime(currentTime());
 			}else{
-				while(currentNode.endTime<progressTime){
+				while(currentNode.endTime<currentTime()){
 					if(currentNode.next==null){
 						break;
 					}else{
 						currentNode=currentNode.next;
 					}
 				}
-				currentNode.apply(progressTime);
+				currentNode.apply(currentTime());
 			}
 		}
 	}
@@ -72,7 +102,7 @@ public class QueryAnimation<T,V> extends BasePreciseAnimation
 					setter.invoke(target,getEndNode().value);
 				}else{
 					currentNode=nodes.get(idx);
-					currentNode.apply(progressTime);
+					currentNode.apply(currentTime());
 				}
 			}
 		}
@@ -109,10 +139,10 @@ public class QueryAnimation<T,V> extends BasePreciseAnimation
 	@Override
 	public double getDuration() {
 		// TODO: Implement this method
-		return (nodes.size()>0)?(getEndNode().endTime):0;
+		return (nodes.size()>0)?(getEndNode().endTime-getStartTimeAtTimeline()):0;
 	}
-	
-	public double getEndTime(){
+
+	public double getEndNodeTime(){
 		return (hasNode())?getEndNode().endTime:0;
 	}
 	
@@ -129,6 +159,7 @@ public class QueryAnimation<T,V> extends BasePreciseAnimation
 		double startTime;
 		
 		public AnimNode next;
+		public AnimNode pre;
 		
 		public AnimNode(V value,double startTime,double duration,Easing easing){
 			this.value=value;
@@ -139,16 +170,35 @@ public class QueryAnimation<T,V> extends BasePreciseAnimation
 		}
 		
 		public V interplate(double time){
-			if(next==null){
+			if(pre==null){
 				return value;
 			}else{
-				return interpolator.applyInterplate(value,next.value,time,easing);
+				return interpolator.applyInterplate(pre.value,value,time,easing);
 			}
 		}
 		
 		public void apply(double progressTime){
-			double p=(currentNode.duration==0)?0:((progressTime-currentNode.startTime)/currentNode.duration);
-			setter.invoke(target,currentNode.interplate(p));
+			double p=Math.min(1,Math.max(0,(duration==0)?1:((progressTime-startTime)/duration)));
+			setter.invoke(target,interplate(p));
 		}
 	}
+
+	@Override
+	public String toString() {
+		// TODO: Implement this method
+		StringBuilder sb=new StringBuilder();
+		for(AnimNode n:nodes){
+			sb.append("->(v:")
+			.append(n.value)
+			.append(",s:")
+			.append(n.startTime)
+			.append(",d:")
+			.append(n.duration)
+			.append(",e:")
+			.append(n.endTime)
+			.append(")\n");
+		}
+		return sb.toString();
+	}
+	
 }

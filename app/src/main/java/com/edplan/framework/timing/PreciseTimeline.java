@@ -29,6 +29,10 @@ public class PreciseTimeline extends Loopable
 		latestFrameTime=offset;
 	}
 	
+	public int animationCount(){
+		return animations.size();
+	}
+	
 	public void addAnimation(AbstractPreciseAnimation a){
 		animations.add(a);
 	}

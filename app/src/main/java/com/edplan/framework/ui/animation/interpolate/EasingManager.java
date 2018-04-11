@@ -196,7 +196,7 @@ public class EasingManager
 				case OutPow10:
 					return --v * Math.pow(v, 10) + 1;
 				case Jump:
-					return (v==1)?1:0;
+					//return (v==1)?1:0;
 				default:
 					return v;
 			}
