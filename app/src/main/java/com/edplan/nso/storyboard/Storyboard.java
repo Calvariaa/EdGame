@@ -13,6 +13,10 @@ public class Storyboard
 		layers.put(Layer.Pass.name(),Layer.Pass.createLayer());
 		layers.put(Layer.Foreground.name(),Layer.Foreground.createLayer());
 	}
+
+	public HashMap<String, StoryboardLayer> getLayers() {
+		return layers;
+	}
 	
 	public StoryboardLayer getLayer(String name){
 		return layers.get(name);

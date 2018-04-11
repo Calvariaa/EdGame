@@ -46,9 +46,8 @@ public class ApproachCircle extends BasePiece
 		}
 
 		@Override
-		public void setProgressTime(double p) {
+		protected void seekToTime(double p) {
 			// TODO: Implement this method
-			super.setProgressTime(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
 			//p/(float)getDuration();
 			float s=4.5f*(1-fp)+1.0f*fp;
@@ -72,9 +71,8 @@ public class ApproachCircle extends BasePiece
 		}
 
 		@Override
-		public void setProgressTime(double p) {
+		protected void seekToTime(double p) {
 			// TODO: Implement this method
-			super.setProgressTime(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
 			//p/(float)getDuration();
 			setAlpha(fp);

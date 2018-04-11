@@ -19,8 +19,11 @@ public class AudioTimeline extends PreciseTimeline
 	{
 		// TODO: Implement this method
 		double cur=channel.currentPlayTimeMS();
-		super.onLoop(cur-preTime);
+		if(Math.abs(frameTime()+deltaTime-cur)>3){
+			super.onLoop(cur-frameTime());
+		}else{
+			super.onLoop(deltaTime);
+		}
 		preTime=cur;
 	}
-	
 }

@@ -9,11 +9,7 @@ public class PreciseTimeline extends Loopable
 {
 	private double latestFrameTime=0;
 	
-	private long latestFrameRealTime;
-	
 	private double preFrameDeltaTime;
-	
-	private long savedRealTime;
 	
 	private boolean pausing=false;
 	
@@ -25,6 +21,14 @@ public class PreciseTimeline extends Loopable
 	
 	private SafeList<AbstractPreciseAnimation> animations=new SafeList<AbstractPreciseAnimation>();
 
+	public PreciseTimeline(){
+		
+	}
+	
+	public PreciseTimeline(double offset){
+		latestFrameTime=offset;
+	}
+	
 	public void addAnimation(AbstractPreciseAnimation a){
 		animations.add(a);
 	}
@@ -38,14 +42,12 @@ public class PreciseTimeline extends Loopable
 			if(askPause){
 				//接受暂停请求时应该将当前帧处理完
 				handleFrame(deltaTime);
-				savedRealTime=System.currentTimeMillis();
 				pausing=true;
 				hasRestart=false;
 				onPause();
 			}else if(hasRestart){
 				handleFrame(deltaTime);
 			}else{
-				savedRealTime=-1;
 				hasRestart=true;
 				onRestart();
 				handleFrame(deltaTime);
@@ -56,7 +58,6 @@ public class PreciseTimeline extends Loopable
 	protected void handleFrame(double deltaTime){
 		this.preFrameDeltaTime=deltaTime;
 		latestFrameTime+=deltaTime;
-		latestFrameRealTime=getRealTime();
 		handlerAnimation(deltaTime);
 	}
 	
@@ -99,18 +100,20 @@ public class PreciseTimeline extends Loopable
 	private boolean postProgress(AbstractPreciseAnimation anim,double postTime){
 		double p;
 		p=frameTime()-anim.getStartTimeAtTimeline();
-		if(p>=0)if(p<anim.getDuration()){
-			if(!anim.hasStart())anim.onStart();
-			anim.setProgressTime(p);
-			anim.onProgress(p);
-		}else{
-			p=anim.getDuration();
-			if(!anim.hasStart())anim.onStart();
-			anim.setProgressTime(p);
-			anim.onProgress(p);
-			return true;
-		}
-		return false;
+		if(p>=0){
+			if(p<anim.getDuration()){
+				if(!anim.hasStart())anim.onStart();
+				anim.postProgressTime(p-anim.getProgressTime());
+				anim.onProgress(p);
+				return false;
+			}else{
+				p=anim.getDuration();
+				if(!anim.hasStart())anim.onStart();
+				anim.postProgressTime(p-anim.getProgressTime());
+				anim.onProgress(p);
+				return true;
+			}
+		}else return false;
 	}
 
 	private void finishAnimation(AbstractPreciseAnimation anim){
@@ -157,28 +160,6 @@ public class PreciseTimeline extends Loopable
 	 */
 	protected void onRestart(){
 		
-	}
-
-	public void setLatestFrameRealTime(long latestFrameRealTime) {
-		this.latestFrameRealTime=latestFrameRealTime;
-	}
-
-	public long getLatestFrameRealTime() {
-		return latestFrameRealTime;
-	}
-	
-	/**
-	 *通过savedRealTime解决暂停问题
-	 */
-	public long getRealTime(){
-		return (savedRealTime!=-1)?savedRealTime:System.currentTimeMillis();
-	}
-
-	/**
-	 *当前准确时间（时间轴上的）
-	 */
-	public double currentTime(){
-		return latestFrameTime+(int)((getRealTime()-getLatestFrameRealTime()));
 	}
 	
 	/**

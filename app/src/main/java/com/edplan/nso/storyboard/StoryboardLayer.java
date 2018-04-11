@@ -18,6 +18,14 @@ public class StoryboardLayer
 		this.enableWhenPassing=enableWhenPassing;
 		this.enableWhenFailing=enableWhenFailing;
 	}
+
+	public void setElements(List<IStoryboardElements> elements) {
+		this.elements=elements;
+	}
+
+	public List<IStoryboardElements> getElements() {
+		return elements;
+	}
 	
 	public void add(IStoryboardElements e){
 		elements.add(e);

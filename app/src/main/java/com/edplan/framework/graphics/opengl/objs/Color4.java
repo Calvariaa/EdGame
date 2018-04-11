@@ -142,7 +142,7 @@ public class Color4
 	
 	
 	public static Color4 mix(Color4 c1,Color4 c2,float fac){
-		return c1.copyNew().multiple(1-fac).add(c2.copyNew().multiple(fac));
+		return c1.copyNew().multiple(1-fac).add(c2.r*fac,c2.g*fac,c2.b*fac,c2.a*fac);
 	}
 	
 	public static Color4 mixByAlpha(Color4 dst,Color4 rsc){

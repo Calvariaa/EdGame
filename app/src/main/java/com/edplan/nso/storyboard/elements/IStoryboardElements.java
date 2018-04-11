@@ -1,4 +1,7 @@
 package com.edplan.nso.storyboard.elements;
+import com.edplan.nso.storyboard.elements.drawable.BaseDrawableSprite;
+import com.edplan.nso.storyboard.PlayingStoryboard;
+import com.edplan.nso.storyboard.elements.drawable.ADrawableStoryboardElement;
 
 public interface IStoryboardElements
 {
@@ -6,5 +9,9 @@ public interface IStoryboardElements
 	
 	public String getPath();
 	
+	public BaseDrawableSprite createDrawable(PlayingStoryboard storyboard);
 	
+	public void onApply(ADrawableStoryboardElement sprite,PlayingStoryboard storyboard);
+	
+	public void finalBuild();
 }

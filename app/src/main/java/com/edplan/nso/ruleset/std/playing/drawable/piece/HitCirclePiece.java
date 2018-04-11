@@ -52,9 +52,8 @@ public class HitCirclePiece extends BasePiece implements IScaleable2D,IFadeable
 		}
 
 		@Override
-		public void setProgressTime(double p) {
+		protected void seekToTime(double p) {
 			// TODO: Implement this method
-			super.onProgress(p);
 			float fp=Math.max(0,(float)(p/getDuration()));
 			fp=1-fp;
 			float a=fp;
@@ -81,12 +80,10 @@ public class HitCirclePiece extends BasePiece implements IScaleable2D,IFadeable
 		}
 
 		@Override
-		public void setProgressTime(double p) {
+		protected void seekToTime(double p) {
 			// TODO: Implement this method
-			super.setProgressTime(p);
 			float fp=(float)(p/getDuration());
 			setAlpha(FMath.sin(fp*FMath.PiHalf));
-			//Log.v("anim-pro","prog:"+fp);
 		}
 
 		@Override

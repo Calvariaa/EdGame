@@ -3,6 +3,10 @@ import java.util.List;
 import java.util.ArrayList;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.ui.Anchor;
+import com.edplan.nso.storyboard.elements.drawable.BaseDrawableSprite;
+import com.edplan.nso.storyboard.PlayingStoryboard;
+import com.edplan.nso.storyboard.elements.drawable.ADrawableStoryboardElement;
+import com.edplan.framework.ui.animation.QueryAnimation;
 
 public class StoryboardSprite implements IStoryboardElements
 {
@@ -14,11 +18,29 @@ public class StoryboardSprite implements IStoryboardElements
 	private String path;
 	private Vec2 initialPosition;
 	private Anchor anchor;
+	
+	private List<QueryAnimation> animations=new ArrayList<QueryAnimation>();
 
 	public StoryboardSprite(String path,Anchor anchor,Vec2 initialPosition){
 		this.path=path;
 		this.initialPosition=initialPosition;
 		this.anchor=anchor;
+	}
+
+	public void setInitialPosition(Vec2 initialPosition) {
+		this.initialPosition=initialPosition;
+	}
+
+	public Vec2 getInitialPosition() {
+		return initialPosition;
+	}
+
+	public void setAnchor(Anchor anchor) {
+		this.anchor=anchor;
+	}
+
+	public Anchor getAnchor() {
+		return anchor;
 	}
 
 	public double getStartTime(){
@@ -73,6 +95,20 @@ public class StoryboardSprite implements IStoryboardElements
 		triggers.add(c);
 		return c;
 	}
+	
+	@Override
+	public void finalBuild(){
+		QueryAnimation<BaseDrawableSprite,Float> x;
+	}
+
+	@Override
+	public void onApply(ADrawableStoryboardElement ele,PlayingStoryboard storyboard) {
+		// TODO: Implement this method
+		BaseDrawableSprite sprite=(BaseDrawableSprite)ele;
+		for(QueryAnimation a:animations){
+			sprite.addAnimation(a);
+		}
+	}
 
 	@Override
 	public boolean isDrawable() {
@@ -90,5 +126,9 @@ public class StoryboardSprite implements IStoryboardElements
 		return path;
 	}
 
-	
+	@Override
+	public BaseDrawableSprite createDrawable(PlayingStoryboard storyboard) {
+		// TODO: Implement this method
+		return new BaseDrawableSprite(storyboard,this);
+	}
 }

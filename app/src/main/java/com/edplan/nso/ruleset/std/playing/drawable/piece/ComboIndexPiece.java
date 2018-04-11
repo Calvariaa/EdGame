@@ -74,9 +74,8 @@ public class ComboIndexPiece extends BasePiece
 		}
 
 		@Override
-		public void setProgressTime(double p) {
+		protected void seekToTime(double p) {
 			// TODO: Implement this method
-			super.setProgressTime(p);
 			float fp=(float)(p/getDuration());
 			setAlpha(FMath.sin(fp*FMath.PiHalf));
 		}
@@ -100,9 +99,8 @@ public class ComboIndexPiece extends BasePiece
 		}
 
 		@Override
-		public void setProgressTime(double p) {
+		protected void seekToTime(double p) {
 			// TODO: Implement this method
-			super.setProgressTime(p);
 			float fp=(float)(p/(float)getDuration());
 			setAlpha(1-fp);
 			float s=1.0f*(1-fp)+1.5f*fp;

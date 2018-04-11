@@ -38,5 +38,14 @@ public enum Easing
 	InBounce,
 	OutBounce,
 	InOutBounce,
-	OutPow10,
+	OutPow10;
+	public final int id;
+	
+	Easing(){
+		id=$ordinal;
+	}
+	
+	public static Easing getEasing(int ord){
+		return $VALUES[ord];
+	}
 }

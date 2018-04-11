@@ -109,9 +109,9 @@ public class DrawableStdFollowpoint extends DrawableStdHitObject
 		}
 
 		@Override
-		public void setProgressTime(double p) {
+		protected void seekToTime(double p) {
 			// TODO: Implement this method
-			super.setProgressTime(p);
+			super.seekToTime(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
 			followpointPiece.setProgress(fp);
 		}
@@ -133,9 +133,8 @@ public class DrawableStdFollowpoint extends DrawableStdHitObject
 		}
 
 		@Override
-		public void setProgressTime(double p) {
+		protected void seekToTime(double p) {
 			// TODO: Implement this method
-			super.setProgressTime(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
 			Color4 c=followpointPiece.getColor1().copyNew();
 			c.a=1-fp;
@@ -159,9 +158,8 @@ public class DrawableStdFollowpoint extends DrawableStdHitObject
 		}
 
 		@Override
-		public void setProgressTime(double p) {
+		protected void seekToTime(double p) {
 			// TODO: Implement this method
-			super.setProgressTime(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
 			Color4 c=followpointPiece.getColor2().copyNew();
 			c.a=fp;
@@ -185,9 +183,8 @@ public class DrawableStdFollowpoint extends DrawableStdHitObject
 		}
 
 		@Override
-		public void setProgressTime(double p) {
+		protected void seekToTime(double p) {
 			// TODO: Implement this method
-			super.setProgressTime(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
 			Color4 c=followpointPiece.getColor2().copyNew();
 			c.a=1-fp;

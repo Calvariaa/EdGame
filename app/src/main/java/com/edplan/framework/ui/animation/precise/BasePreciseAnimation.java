@@ -13,9 +13,20 @@ public class BasePreciseAnimation extends AbstractPreciseAnimation
 	private AnimState state=AnimState.Waiting;
 	
 	public void post(PreciseTimeline timeline){
-		state=AnimState.Running;
-		timeline.addAnimation(this);
-		setProgressTime(0);
+		/*
+		double endTime=getEndTime();
+		if(endTime<=timeline.frameTime()){
+			//如果当前时间已经晚于frameTime了，直接模拟一次生命周期
+			onStart();
+			setProgressTime(getDuration());
+			onFinish();
+			onEnd();
+		}else{
+			*/
+			state=AnimState.Running;
+			timeline.addAnimation(this);
+			setProgressTime(0);
+		//}
 		//timeline.frameTime()-getStartTimeAtTimeline());
 	}
 	
@@ -25,6 +36,14 @@ public class BasePreciseAnimation extends AbstractPreciseAnimation
 	
 	public void setDuration(double duration){
 		this.duration=duration;
+	}
+	
+	protected void postTime(double deltaTime,double progressTime){
+		seekToTime(progressTime);
+	}
+	
+	protected void seekToTime(double progressTime){
+		
 	}
 	
 	@Override
@@ -43,15 +62,15 @@ public class BasePreciseAnimation extends AbstractPreciseAnimation
 	public void setProgressTime(double p) {
 		// TODO: Implement this method
 		progressTime=p;
+		seekToTime(p);
 	}
 
-	/*
 	@Override
 	public void postProgressTime(double deltaTime) {
 		// TODO: Implement this method
 		progressTime+=deltaTime;
+		postTime(deltaTime,progressTime);
 	}
-	*/
 
 	@Override
 	public double getProgressTime() {

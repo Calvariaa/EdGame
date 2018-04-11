@@ -144,9 +144,8 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 		}
 
 		@Override
-		public void setProgressTime(double p) {
+		protected void seekToTime(double p) {
 			// TODO: Implement this method
-			super.onProgress(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
 			startPiece.setAlpha(fp);
 			comboPiece.setAlpha(fp);
@@ -175,23 +174,22 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 			comboPiece.finish();
 			//comboPiece.fadeOut(DrawableStdSlider.this,getObjStartTime());
 		}
-	
+
 		@Override
-		public void setProgressTime(double p) {
+		protected void seekToTime(double p) {
 			// TODO: Implement this method
-			super.onProgress(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
 			float repeatProgress=(fp*slider.getRepeat())%1;
 			int repeatCount=(int)(fp*slider.getRepeat());
 			float positionProgress=((repeatCount%2==0)?repeatProgress:(1-repeatProgress));
 			startPiece.setOrigin(body.getPointAt((float)(slider.getPixelLength()*positionProgress)));
 			if(snakeOut)if(repeatCount==slider.getRepeat()-1){
-				if(repeatCount%2==0){
-					body.setProgress1(positionProgress);
-				}else{
-					body.setProgress2(positionProgress);
+					if(repeatCount%2==0){
+						body.setProgress1(positionProgress);
+					}else{
+						body.setProgress2(positionProgress);
+					}
 				}
-			}
 		}
 
 		@Override
@@ -212,9 +210,8 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 		}
 
 		@Override
-		public void setProgressTime(double p) {
+		protected void seekToTime(double p) {
 			// TODO: Implement this method
-			super.onProgress(p);
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
 			//startPiece.setAlpha(1-fp);
 			body.setAlpha(1-fp);

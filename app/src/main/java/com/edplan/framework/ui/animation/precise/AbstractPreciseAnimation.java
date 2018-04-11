@@ -15,6 +15,10 @@ public abstract class AbstractPreciseAnimation extends AbstractAnimation
 		return hasStart;
 	}
 	
+	public double getEndTime(){
+		return getStartTimeAtTimeline()+getDuration();
+	}
+	
 	/**
 	 *在Timeline上的开始时间，
 	 *在动画实际开始的时候（对应的帧时间）会通过这个参数进行ms级别的调整

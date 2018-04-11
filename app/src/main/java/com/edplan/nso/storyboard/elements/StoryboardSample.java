@@ -1,4 +1,7 @@
 package com.edplan.nso.storyboard.elements;
+import com.edplan.nso.storyboard.elements.drawable.BaseDrawableSprite;
+import com.edplan.nso.storyboard.PlayingStoryboard;
+import com.edplan.nso.storyboard.elements.drawable.ADrawableStoryboardElement;
 
 public class StoryboardSample implements IStoryboardElements
 {
@@ -30,6 +33,11 @@ public class StoryboardSample implements IStoryboardElements
 	}
 
 	@Override
+	public void onApply(ADrawableStoryboardElement sprite,PlayingStoryboard storyboard) {
+		// TODO: Implement this method
+	}
+
+	@Override
 	public boolean isDrawable() {
 		// TODO: Implement this method
 		return false;
@@ -45,4 +53,14 @@ public class StoryboardSample implements IStoryboardElements
 		return path;
 	}
 
+	@Override
+	public BaseDrawableSprite createDrawable(PlayingStoryboard storyboard) {
+		// TODO: Implement this method
+		return null;
+	}
+
+	@Override
+	public void finalBuild() {
+		// TODO: Implement this method
+	}
 }

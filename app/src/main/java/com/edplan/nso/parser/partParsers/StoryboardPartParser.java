@@ -26,6 +26,7 @@ public class StoryboardPartParser extends PartParser<PartEvents>
 	private PartEvents partEvents=new PartEvents();
 	
 	private StoryboardSprite storyboardSprite;
+	
 	private CommandTimeLineGroup timelineGroup;
 	
 	public StoryboardPartParser(){

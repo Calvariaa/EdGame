@@ -26,7 +26,7 @@ public abstract class AbstractAnimation implements AnimationCallback
 	 */
 	public abstract void setProgressTime(double p);
 	
-	//public abstract void postProgressTime(double deltaTime);
+	public abstract void postProgressTime(double deltaTime);
 	
 	/**
 	 *获取当前状态下的progressTime

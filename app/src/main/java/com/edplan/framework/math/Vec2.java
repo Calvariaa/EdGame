@@ -1,7 +1,10 @@
 package com.edplan.framework.math;
 import java.util.List;
+import com.edplan.framework.ui.animation.interpolate.Interplateable;
+import com.edplan.framework.ui.animation.interpolate.ValueInterpolator;
+import com.edplan.framework.ui.animation.interpolate.Vec2Interpolator;
 
-public class Vec2
+public class Vec2 implements Interplateable<Vec2>
 {
 	public static final Vec2 BASE_POINT=new Vec2(0,0);
 	
@@ -154,6 +157,12 @@ public class Vec2
 	
 	public Vec2 copy(){
 		return new Vec2(this);
+	}
+
+	@Override
+	public ValueInterpolator<Vec2> getInterpolator() {
+		// TODO: Implement this method
+		return Vec2Interpolator.Instance;
 	}
 	
 	public Vec3 toVec3(float z){

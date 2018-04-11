@@ -60,7 +60,6 @@ public class AdvancePreciseAnimation extends BasePreciseAnimation
 		// TODO: Implement this method
 		super.onProgress(p);
 		if(onProgressListener!=null)onProgressListener.onProgress(p);
-		setValueProgress(AnimationHelper.getFloatProgress(p,getDuration()));
 	}
 	
 	public void setValueProgress(float fp){
