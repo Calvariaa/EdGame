@@ -113,9 +113,12 @@ public class PlayingStoryboardLayer extends EdDrawable
 		// TODO: Implement this method
 		refreshObjects();
 		int c=GLWrapped.blend.save();
+		canvas.setEnablePost(true);
 		for(ADrawableStoryboardElement ele:spriteInField){
 			ele.draw(canvas);
 		}
+		canvas.postDraw();
+		canvas.setEnablePost(false);
 		GLWrapped.blend.restoreToCount(c);
 	}
 	

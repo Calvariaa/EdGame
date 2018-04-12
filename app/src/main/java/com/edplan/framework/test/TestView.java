@@ -486,7 +486,7 @@ public class TestView extends EdView
 	public class TestData{
 		public String testPath="osu/test/beatmap";
 		
-		public int testBeatmapFloder=15;
+		public int testBeatmapFloder=11;
 		
 		public AResource res=new DirResource("/storage/emulated/0/MyDisk/WorkBench/bin/testdata");
 		

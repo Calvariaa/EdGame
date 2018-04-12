@@ -22,6 +22,7 @@ import com.edplan.framework.utils.AbstractSRable;
 import com.edplan.framework.graphics.opengl.shader.advance.ColorShader;
 import com.edplan.framework.utils.MLog;
 import com.edplan.framework.math.IQuad;
+import com.edplan.framework.graphics.opengl.objs.GLTexture;
 
 public class GLCanvas2D extends AbstractSRable<CanvasData>
 {
@@ -35,11 +36,24 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	
 	private BaseColorBatch<Vertex3D> tmpColorBatch=new BaseColorBatch<Vertex3D>();
 	
+	/**
+	 *对于开启了post的应该手动post
+	 */
+	private boolean enablePost=false;
+	
 	public GLCanvas2D(BufferedLayer layer){
 		this.layer=layer;
 		initial();
 		getData().setWidth(layer.getWidth());
 		getData().setHeight(layer.getHeight());
+	}
+
+	public void setEnablePost(boolean enablePost) {
+		this.enablePost=enablePost;
+	}
+
+	public boolean isEnablePost() {
+		return enablePost;
 	}
 	
 	public GLCanvas2D translate(float tx,float ty){
@@ -249,21 +263,57 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	 *@param res:此处为Texture范围，使用实际像素坐标（原点左上）
 	 *@param dst:绘制在canvas上的坐标，也是实际像素坐标（原点左下）
 	 */
+	private GLTexture preTexture;
+	private BlendType preBlend;
+	
+	public void postDraw(){
+		if(preTexture==null||!enablePost)return;
+		drawTexture3DBatch(tmpBatch,preTexture,1,Color4.ONE);
+		tmpBatch.clear();
+		preTexture=null;
+		preBlend=null;
+	}
+	
+	public void checkPost(AbstractTexture texture){
+		if(texture.getTexture()!=preTexture||GLWrapped.blend.getBlendType()!=preBlend){
+			if(preTexture!=null&&preBlend!=null){
+				BlendType nowBlend=GLWrapped.blend.getBlendType();
+				GLWrapped.blend.setBlendType(preBlend);
+				postDraw();
+				GLWrapped.blend.setBlendType(nowBlend);
+			}
+			preTexture=texture.getTexture();
+			preBlend=GLWrapped.blend.getBlendType();
+		}
+	}
+	
 	public void drawTexture(AbstractTexture texture,IQuad res,IQuad dst,Color4 mixColor,Color4 varyColor,float z,float alpha){
 		checkCanDraw();
-		tmpBatch.clear();
-		//tmpBatch.setColorMixRate(colorMixRate);
-		RectVertex[] v=createRectVertexs(texture,res,dst,varyColor,z);
-		tmpBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
-		drawTexture3DBatch(tmpBatch,texture,alpha,mixColor);
+		if(enablePost){
+			checkPost(texture);
+			varyColor=varyColor.copyNew().multiple(mixColor).multiple(alpha);
+			RectVertex[] v=createRectVertexs(texture,res,dst,varyColor,z);
+			tmpBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
+		}else{
+			tmpBatch.clear();
+			RectVertex[] v=createRectVertexs(texture,res,dst,varyColor,z);
+			tmpBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
+			drawTexture3DBatch(tmpBatch,texture,alpha,mixColor);
+		}
 	}
+	
 	
 	public void drawTexture(AbstractTexture texture,Vec2[] resV,Vec2[] dstV,Color4 varyColor,float finalAlpha,Color4 mixColor){
 		checkCanDraw();
-		tmpBatch.clear();
-		//tmpBatch.setColorMixRate(colorMixRate);
-		tmpBatch.add(makeupVertex(texture,resV,dstV,varyColor));
-		drawTexture3DBatch(tmpBatch,texture,finalAlpha,mixColor);
+		if(enablePost){
+			checkPost(texture);
+			varyColor=varyColor.copyNew().multiple(mixColor).multiple(finalAlpha);
+			tmpBatch.add(makeupVertex(texture,resV,dstV,varyColor));
+		}else{
+			tmpBatch.clear();
+			tmpBatch.add(makeupVertex(texture,resV,dstV,varyColor));
+			drawTexture3DBatch(tmpBatch,texture,finalAlpha,mixColor);
+		}
 	}
 	
 	public void drawTexture(AbstractTexture texture,IQuad res,IQuad dst,GLPaint paint){
@@ -279,12 +329,7 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	}
 	
 	public void drawTexture(AbstractTexture texture,IQuad dst,Color4 mixColor,Color4 color,float z,float alpha){
-		checkCanDraw();
-		tmpBatch.clear();
-		//tmpBatch.setColorMixRate(colorMixRate);
-		RectVertex[] v=createRectVertexs(texture,new RectF(0,0,texture.getWidth(),texture.getHeight()),dst,color,z);
-		tmpBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
-		drawTexture3DBatch(tmpBatch,texture,alpha,mixColor);
+		drawTexture(texture,new RectF(0,0,texture.getWidth(),texture.getHeight()),dst,mixColor,color,z,alpha);
 	}
 	
 	public void drawRectTexture(AbstractTexture texture,IQuad res,RectF dst,GLPaint paint){
