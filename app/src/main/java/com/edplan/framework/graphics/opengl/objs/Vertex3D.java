@@ -16,6 +16,11 @@ public class Vertex3D
 		color=DEF_COLOR.copyNew();
 	}
 	
+	public Vertex3D(float x,float y,float z,Color4 color){
+		this.position=new Vec3(x,y,z);
+		this.color=color.copyNew();
+	}
+	
 	public Vertex3D(Vec3 p){
 		this.position=p.copy();
 		color=DEF_COLOR.copyNew();

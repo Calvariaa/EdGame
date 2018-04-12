@@ -1,5 +1,5 @@
 package com.edplan.framework.timing;
-import com.edplan.framework.audio.bass.BassChannel;
+import com.edplan.framework.media.bass.BassChannel;
 
 /**
  *一个同步音频的Timeline

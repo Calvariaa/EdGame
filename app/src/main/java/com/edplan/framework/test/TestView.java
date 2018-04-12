@@ -1,7 +1,7 @@
 package com.edplan.framework.test;
 import android.util.Log;
 import com.edplan.framework.MContext;
-import com.edplan.framework.audio.bass.BassChannel;
+import com.edplan.framework.media.bass.BassChannel;
 import com.edplan.framework.graphics.layer.BufferedLayer;
 import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.graphics.opengl.GLPaint;
@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.IOException;
 import com.edplan.framework.timing.AdjustableTimeline;
 import java.util.Arrays;
+import org.json.JSONObject;
 
 public class TestView extends EdView
 {
@@ -180,8 +181,8 @@ public class TestView extends EdView
 				//"/storage/emulated/0/ADM/389179 Jay Chou - Fa Ru Xue3/Jay Chou - Fa Ru Xue (KaedekaShizuru).osb");
 					"/storage/emulated/0/osu!droid/Songs/470977 Mili - world.execute(me)/Mili - world.execute(me); (Exile-).osb");
 				StoryboardDecoder decoder=new StoryboardDecoder(
-				osb);
-				//test.testFloder().openInput(test.getOsbPath()),"ahh");
+				//osb);
+				test.testFloder().openInput(test.getOsbPath()),"ahh");
 				
 				try {
 					long s=System.currentTimeMillis();
@@ -189,11 +190,15 @@ public class TestView extends EdView
 					storyboard=decoder.getStoryboard();
 					System.out.println("end edcode osb: "+storyboard.getObjectCount());
 					playingStoryboard=new PlayingStoryboard(getContext(),timeline,storyboard,
-					new DirResource(osb.getParentFile()));
-					//test.testFloder().subResource(test.testBeatmapFloder+""));
+					//new DirResource(osb.getParentFile()));
+					test.testFloder().subResource(test.testBeatmapFloder+""));
 					//new DirResource(osb.getParentFile()));
 					System.out.println("end transform to playing state");
 					System.out.println("storyboard parse done in: "+(System.currentTimeMillis()-s)+"ms");
+					
+					JSONObject jobj=new JSONObject("{\"a\":100}");
+					System.out.println(jobj.toString());
+					
 					
 					/*
 					for(int i=0;i<5;i++){
@@ -331,7 +336,7 @@ public class TestView extends EdView
 		playingStoryboard.draw(newCanvas);
 		newCanvas.restore();
 		
-		//playField.draw(newCanvas);
+		playField.draw(newCanvas);
 		//firstObj.draw(newCanvas);
 		newCanvas.unprepare();
 
@@ -481,10 +486,11 @@ public class TestView extends EdView
 	public class TestData{
 		public String testPath="osu/test/beatmap";
 		
-		public int testBeatmapFloder=11;
+		public int testBeatmapFloder=15;
+		
+		public AResource res=new DirResource("/storage/emulated/0/MyDisk/WorkBench/bin/testdata");
 		
 		public String getBeatmapPath(){
-			AResource res=getContext().getAssetResource().subResource(testPath);
 			try {
 				String[] list=res.list(testBeatmapFloder + "");
 				for(String s:list){
@@ -500,7 +506,6 @@ public class TestView extends EdView
 		}
 		
 		public String getSongPath(){
-			AResource res=getContext().getAssetResource().subResource(testPath);
 			try {
 				String[] list=res.list(testBeatmapFloder + "");
 				for(String s:list){
@@ -515,7 +520,6 @@ public class TestView extends EdView
 		}
 		
 		public String getOsbPath(){
-			AResource res=getContext().getAssetResource().subResource(testPath);
 			try {
 				String[] list=res.list(testBeatmapFloder + "");
 				for(String s:list){
@@ -530,7 +534,7 @@ public class TestView extends EdView
 		}
 		
 		public AResource testFloder(){
-			return getContext().getAssetResource().subResource(testPath);
+			return res;
 		}
 		
 	}

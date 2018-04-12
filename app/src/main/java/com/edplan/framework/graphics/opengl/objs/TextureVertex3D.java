@@ -7,11 +7,14 @@ public class TextureVertex3D extends Vertex3D
 	public static final Vec2 DEF_TEXTURE_POINT=new Vec2(0,0);	
 	public Vec2 texturePoint;
 	
-	
-	
 	public TextureVertex3D(){
 		super();
 		texturePoint=DEF_TEXTURE_POINT;
+	}
+	
+	public TextureVertex3D(float tx,float ty,float x,float y,float z,Color4 color){
+		super(x,y,z,color);
+		this.texturePoint=new Vec2(tx,ty);
 	}
 	
 	public TextureVertex3D(Vec3 p){

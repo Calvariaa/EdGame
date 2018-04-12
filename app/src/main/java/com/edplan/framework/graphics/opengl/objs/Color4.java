@@ -122,6 +122,7 @@ public class Color4
 		return (int)(b*255);
 	}
 	
+	//默认模式是argb
 	public int toIntBit(){
 		return Color.argb(getA255(),getR255(),getG255(),getB255());
 	}

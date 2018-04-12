@@ -140,4 +140,11 @@ public class PlayingStoryboardLayer extends EdDrawable
 		}
 		
 	}
+	
+	
+	public class ApplyThread extends Thread{
+		
+		
+	}
+	
 }
