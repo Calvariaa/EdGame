@@ -112,7 +112,7 @@ public class GLTexture extends AbstractTexture
 
 	@Override
 	public Vec2 toTexturePosition(float x,float y){
-		return Vec2.instance(glWidth*x/width,glHeight*y/height);
+		return new Vec2(glWidth*x/width,glHeight*y/height);
 	}
 	
 	public void delete(){

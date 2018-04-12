@@ -15,21 +15,21 @@ public class Vec2 implements Interplateable<Vec2>
 	
 	public float x,y;
 	
-	Vec2(){
+	public Vec2(){
 		
 	}
 	
-	Vec2(float x,float y){
+	public Vec2(float x,float y){
 		this.x=x;
 		this.y=y;
 	}
 	
-	Vec2(Vec2 res){
+	public Vec2(Vec2 res){
 		this.x=res.x;
 		this.y=res.y;
 	}
 	
-	Vec2(float v){
+	public Vec2(float v){
 		this(v,v);
 	}
 	
@@ -161,7 +161,7 @@ public class Vec2 implements Interplateable<Vec2>
 	//}
 	
 	public Vec2 copy(){
-		return instance().set(this);
+		return new Vec2().set(this);
 	}
 
 	@Override
@@ -174,6 +174,7 @@ public class Vec2 implements Interplateable<Vec2>
 		return new Vec3(this,z);
 	}
 	
+	/*
 	public static Vec2 instance(){
 		if(cache.isEmpty()){
 			return new Vec2();
@@ -189,6 +190,7 @@ public class Vec2 implements Interplateable<Vec2>
 	public static Vec2 instance(float v){
 		return instance().set(v,v);
 	}
+	*/
 	
 	public static float sizeOfTriangle(Vec2 v1,Vec2 v2,Vec2 v3){
 		return (v1.x*v2.y+v2.x*v3.y+v3.x*v1.y-v1.x*v3.y-v2.x*v1.y-v3.x*v2.y)/2;
@@ -254,15 +256,5 @@ public class Vec2 implements Interplateable<Vec2>
 	public String toString() {
 		// TODO: Implement this method
 		return (new StringBuilder("(")).append(x).append(",").append(y).append(")").toString();
-	}
-
-	@Override
-	protected void finalize() throws Throwable {
-		// TODO: Implement this method
-		super.finalize();
-		if(cache.size()<MAX_CACHE){
-			this.set(0,0);
-			cache.push(this);
-		}
 	}
 }

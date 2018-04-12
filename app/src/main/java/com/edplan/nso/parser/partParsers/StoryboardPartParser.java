@@ -55,7 +55,7 @@ public class StoryboardPartParser extends PartParser<PartEvents>
 					String path=cleanFilename(spl[3]);
 					float x=Float.parseFloat(spl[4]);
 					float y=Float.parseFloat(spl[5]);
-					storyboardSprite=new StoryboardSprite(path,origin.getAnchor(),Vec2.instance(x,y));
+					storyboardSprite=new StoryboardSprite(path,origin.getAnchor(),new Vec2(x,y));
 					storyboard.getLayer(layer.name()).add(storyboardSprite);
 					
 					storyboardSprite.rawData.append(l).append("\n");
@@ -71,7 +71,7 @@ public class StoryboardPartParser extends PartParser<PartEvents>
 					int frameCount=Integer.parseInt(spl[6]);
 					double frameDelay=Double.parseDouble(spl[7]);
 					Storyboard.AnimationLoopType loopType=(spl.length>8)?Storyboard.AnimationLoopType.valueOf(spl[8]):Storyboard.AnimationLoopType.LoopForever;
-					storyboardSprite=new StoryboardAnimation(path,origin.getAnchor(),Vec2.instance(x,y),frameCount,frameDelay,loopType);
+					storyboardSprite=new StoryboardAnimation(path,origin.getAnchor(),new Vec2(x,y),frameCount,frameDelay,loopType);
 					storyboard.getLayer(layer.name()).add(storyboardSprite);
 					
 					storyboardSprite.rawData.append(l).append("\n");
@@ -132,7 +132,7 @@ public class StoryboardPartParser extends PartParser<PartEvents>
 						{
 							float startValue=Float.parseFloat(spl[4]);
 							float endValue=(spl.length>5)?Float.parseFloat(spl[5]):startValue;
-							if(timelineGroup!=null)timelineGroup.Scale.add(easing,startTime,endTime,Vec2.instance(startValue),Vec2.instance(endValue));
+							if(timelineGroup!=null)timelineGroup.Scale.add(easing,startTime,endTime,new Vec2(startValue),new Vec2(endValue));
 						}
 							break;
 						case "V":
@@ -141,7 +141,7 @@ public class StoryboardPartParser extends PartParser<PartEvents>
 							float startY=Float.parseFloat(spl[5]);
 							float endX=(spl.length>6)?Float.parseFloat(spl[6]):startX;
 							float endY=(spl.length>7)?Float.parseFloat(spl[7]):startY;
-							if(timelineGroup!=null)timelineGroup.Scale.add(easing,startTime,endTime,Vec2.instance(startX,startY),Vec2.instance(endX,endY));
+							if(timelineGroup!=null)timelineGroup.Scale.add(easing,startTime,endTime,new Vec2(startX,startY),new Vec2(endX,endY));
 						}
 							break;
 						case "R":

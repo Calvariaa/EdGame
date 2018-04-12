@@ -24,7 +24,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 	
 	private Anchor anchor=Anchor.Center;
 	
-	private Vec2 currentPosition=Vec2.instance();
+	private Vec2 currentPosition=new Vec2();
 	public static InvokeSetter<BaseDrawableSprite,Float> X=new InvokeSetter<BaseDrawableSprite,Float>(){
 		@Override
 		public void invoke(BaseDrawableSprite target,Float value) {
@@ -49,7 +49,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		}
 	};
 	
-	private Vec2 scale=Vec2.instance(1,1);
+	private Vec2 scale=new Vec2(1,1);
 	public static InvokeSetter<BaseDrawableSprite,Vec2> Scale=new InvokeSetter<BaseDrawableSprite,Vec2>(){
 		@Override
 		public void invoke(BaseDrawableSprite target,Vec2 value) {

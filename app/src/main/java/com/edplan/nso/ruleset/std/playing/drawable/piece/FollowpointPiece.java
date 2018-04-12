@@ -14,9 +14,9 @@ public class FollowpointPiece extends BasePiece
 {
 	private GLTexture followpoint;
 	
-	private Vec2 p1=Vec2.instance();
+	private Vec2 p1=new Vec2();
 	
-	private Vec2 p2=Vec2.instance();
+	private Vec2 p2=new Vec2();
 	
 	private Vec2 offCircleP1;
 	

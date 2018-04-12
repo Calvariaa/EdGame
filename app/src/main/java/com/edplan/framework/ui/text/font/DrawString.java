@@ -164,7 +164,7 @@ public class DrawString
 				break;
 			default:break;
 		}
-		drawToCanvas(canvas,paint,Vec2.instance(basePoint.x+xoffset,basePoint.y+yoffset));
+		drawToCanvas(canvas,paint,new Vec2(basePoint.x+xoffset,basePoint.y+yoffset));
 	}
 	
 	private RectF makeNodeArea(DrawStringNode node,Vec2 basePoint){

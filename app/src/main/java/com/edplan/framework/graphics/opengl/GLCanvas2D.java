@@ -394,8 +394,8 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		for(int i=0;i<lines.length;i+=4){
 			addToColorBatch(
 				createLineRectVertexTriangles(
-					Vec2.instance(lines[i],lines[i+1]),
-					Vec2.instance(lines[i+2],lines[i+3]),
+					new Vec2(lines[i],lines[i+1]),
+					new Vec2(lines[i+2],lines[i+3]),
 					paint.getStrokeWidth(),
 					paint.getMixColor()
 				)

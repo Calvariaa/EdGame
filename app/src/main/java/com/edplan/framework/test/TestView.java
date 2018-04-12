@@ -54,7 +54,7 @@ public class TestView extends EdView
 	
 	private OsuSkin skin;
 	
-	private Vec2 point=Vec2.instance();
+	private Vec2 point=new Vec2();
 	
 	//private DrawableStdSlider sld2;
 	
@@ -304,7 +304,7 @@ public class TestView extends EdView
 		newCanvas.translate(newCanvas.getWidth()/2-PlayField.BASE_X/2/osuScale,0);
 		newCanvas.scaleContent(osuScale);
 		newCanvas.translate(PlayField.PADDING_X,PlayField.PADDING_Y);
-		newCanvas.clip(Vec2.instance(PlayField.CANVAS_SIZE_X,PlayField.CANVAS_SIZE_Y));
+		newCanvas.clip(new Vec2(PlayField.CANVAS_SIZE_X,PlayField.CANVAS_SIZE_Y));
 		
 		GLPaint testLine=new GLPaint();
 		testLine.setMixColor(Color4.rgba(0,0,1,0.5f));
@@ -343,7 +343,7 @@ public class TestView extends EdView
 		AbstractTexture texture=newLayer.getTexture();
 		//canvas.drawTexture(texture,new RectF(0,0,texture.getWidth(),texture.getHeight()),new RectF(0,0,canvas.getWidth(),canvas.getHeight()),newPaint);
 		//canvas.drawTextureAnchorCenter(testPng,new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),newPaint);
-		canvas.drawTextureAnchorCenter(texture,Vec2.instance(canvas.getWidth()/2,canvas.getHeight()/2),Vec2.instance(canvas.getWidth()/2,canvas.getHeight()/2),newPaint);
+		canvas.drawTextureAnchorCenter(texture,new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),newPaint);
 		//canvas.drawTexture(GLTexture.Black,RectF.xywh(0,0,canvas.getWidth(),canvas.getHeight()),newPaint);
 		//newLayer.recycle();
 		

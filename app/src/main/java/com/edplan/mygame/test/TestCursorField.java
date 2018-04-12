@@ -32,7 +32,7 @@ public class TestCursorField extends BaseView
 		super(con);
 		touchField=new RectF();
 		canvasField=new RectF();
-		cursorPoint=Vec2.instance(0,0);
+		cursorPoint=new Vec2(0,0);
 		touchFieldPaint=new Paint();
 		touchFieldPaint.setARGB(100,240,100,100);
 		cursorPaint=new Paint();

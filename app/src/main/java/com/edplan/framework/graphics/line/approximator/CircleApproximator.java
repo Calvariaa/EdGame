@@ -59,7 +59,7 @@ public class CircleApproximator
 		float thetaRange=thetaEnd-thetaStart;
 		
 		Vec2 orthoAtoC=p3.copy().minus(p1);
-		orthoAtoC=Vec2.instance(orthoAtoC.y,-orthoAtoC.x);
+		orthoAtoC=new Vec2(orthoAtoC.y,-orthoAtoC.x);
 		
 		if(orthoAtoC.dot(p2.copy().minus(p1))<0){
 			dir=-dir;
@@ -72,7 +72,7 @@ public class CircleApproximator
 		float currTheta;
 		for(int i=0;i<amountPoints;i++){
 			currTheta=thetaStart+dir*i/(amountPoints-1)*thetaRange;
-			output.add((Vec2.instance(FMath.cos(currTheta),FMath.sin(currTheta))).zoom(r).add(center));
+			output.add((new Vec2(FMath.cos(currTheta),FMath.sin(currTheta))).zoom(r).add(center));
 		}
 		return output;
 	}

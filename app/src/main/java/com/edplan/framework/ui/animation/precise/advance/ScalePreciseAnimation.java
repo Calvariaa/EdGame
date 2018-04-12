@@ -7,9 +7,9 @@ public class ScalePreciseAnimation extends AdvancePreciseAnimation
 {
 	private IScaleable2D target;
 	
-	private Vec2 startScale=Vec2.instance(1,1);
+	private Vec2 startScale=new  Vec2(1,1);
 	
-	private Vec2 endScale=Vec2.instance(1,1);
+	private Vec2 endScale=new Vec2(1,1);
 
 	public void setTarget(IScaleable2D target) {
 		this.target=target;

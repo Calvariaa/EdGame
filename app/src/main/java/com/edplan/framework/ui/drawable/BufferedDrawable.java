@@ -63,7 +63,7 @@ public abstract class BufferedDrawable extends EdDrawable implements IFadeable
 	private Vec2 calBufferSize(GLCanvas2D canvas){
 		float x=area.getWidth()/canvas.getPixelDensity();
 		float y=area.getHeight()/canvas.getPixelDensity();
-		return Vec2.instance(x,y);
+		return new Vec2(x,y);
 	}
 	
 	/**

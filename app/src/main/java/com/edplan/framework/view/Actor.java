@@ -16,7 +16,7 @@ public class Actor
 	public boolean visible=true;
 	
 	public Actor(){
-		basePoint=Vec2.instance(0,0);
+		basePoint=new Vec2(0,0);
 	}
 
 	public void setVisible(boolean visible){

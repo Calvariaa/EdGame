@@ -8,9 +8,9 @@ public class BindTexture
 	private GLTexture texture;
 	
 	//这里是1x1坐标里的坐标
-	private Vec2 org=Vec2.instance(0.5f,0.5f);
+	private Vec2 org=new Vec2(0.5f,0.5f);
 	
-	private Vec2 scale=Vec2.instance(1,1);
+	private Vec2 scale=new Vec2(1,1);
 	
 	private float rotation=0;
 	

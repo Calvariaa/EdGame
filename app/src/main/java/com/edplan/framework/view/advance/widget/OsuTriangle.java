@@ -17,7 +17,7 @@ public class OsuTriangle
 	public float radius;
 	
 	public OsuTriangle(){
-		centerPoint=Vec2.instance(0,0);
+		centerPoint=new Vec2(0,0);
 	}
 
 	public float getTop(){

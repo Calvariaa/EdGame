@@ -18,7 +18,7 @@ public class StdPath
 	}
 	
 	public void addControlPoint(float x,float y){
-		addControlPoint(Vec2.instance(x,y));
+		addControlPoint(new Vec2(x,y));
 	}
 
 	public void setType(Type type){

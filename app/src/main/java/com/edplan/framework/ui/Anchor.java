@@ -17,7 +17,7 @@ public class Anchor
 	private Vec2 value;
 	
 	public Anchor(float x,float y){
-		value=Vec2.instance(x,y);
+		value=new Vec2(x,y);
 	}
 	
 	public float x(){
