@@ -15,7 +15,7 @@ public class DrawableStdHitObject extends DrawableHitObject
 {
 	private float baseSize=64;
 	
-	private Vec2 origin=new Vec2();
+	private Vec2 origin=Vec2.instance();
 	
 	private StdHitObject hitObject;
 	
@@ -38,7 +38,7 @@ public class DrawableStdHitObject extends DrawableHitObject
 	public DrawableStdHitObject(MContext c,StdHitObject obj){
 		super(c);
 		hitObject=obj;
-		setOrigin(new Vec2(obj.getStartX(),obj.getStartY()));
+		setOrigin(Vec2.instance(obj.getStartX(),obj.getStartY()));
 	}
 
 	public void setComboIndex(int comboIndex) {
@@ -62,11 +62,11 @@ public class DrawableStdHitObject extends DrawableHitObject
 	}
 	
 	public Vec2 getStartPoint(){
-		return new Vec2(getHitObject().getStartX(),getHitObject().getStartY());
+		return Vec2.instance(getHitObject().getStartX(),getHitObject().getStartY());
 	}
 	
 	public Vec2 getEndPoint(){
-		return new Vec2(getHitObject().getStartX(),getHitObject().getStartY());
+		return Vec2.instance(getHitObject().getStartX(),getHitObject().getStartY());
 	}
 
 	public void setAccentColor(Color4 accentColor) {

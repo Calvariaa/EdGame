@@ -1,8 +1,13 @@
 package com.edplan.framework.math;
 import com.edplan.framework.ui.Anchor;
+import java.util.Stack;
 
 public class Quad implements IQuad
 {
+	public static final Stack<Quad> cache=new Stack<Quad>();
+	public static final int MAX_CACHE=5000;
+	
+	
 	public Vec2 topLeft=new Vec2();
 	public Vec2 topRight=new Vec2();
 	public Vec2 bottomLeft=new Vec2();
@@ -114,7 +119,16 @@ public class Quad implements IQuad
 	public static Vec2 mapPoint(Vec2 ptl,Vec2 ptr,Vec2 pbl,Vec2 pbr,float vx,float vy){
 		float x=((ptl.x+pbl.x)*vx+(ptr.x+pbr.x)*(1-vx))/2;
 		float y=((ptl.y+ptr.y)*vy+(pbl.y+pbr.y)*(1-vy))/2;
-		return new Vec2(x,y);
+		return Vec2.instance().set(x,y);
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		// TODO: Implement this method
+		super.finalize();
+		if(cache.size()<MAX_CACHE){
+			cache.push(this);
+		}
 	}
 	
 }

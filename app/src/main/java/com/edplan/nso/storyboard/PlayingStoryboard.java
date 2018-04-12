@@ -10,6 +10,7 @@ import com.edplan.framework.resource.AResource;
 import com.edplan.framework.graphics.opengl.objs.texture.TexturePool;
 import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 import java.io.IOException;
+import com.edplan.framework.resource.BufferedListResource;
 
 public class PlayingStoryboard extends EdDrawable
 {
@@ -17,13 +18,16 @@ public class PlayingStoryboard extends EdDrawable
 	
 	private PreciseTimeline timeline;
 	
-	private AResource resource;
+	private BufferedListResource resource;
 	
 	private TexturePool pool;
 	
 	public PlayingStoryboard(MContext context,PreciseTimeline timeline,Storyboard storyboard,AResource resource){
 		super(context);
-		this.resource=resource;
+		this.resource=new BufferedListResource(resource);
+		this.resource.setIgnoreCase(true);
+		//new BufferedListResource(resource.subResource("SB/Font")).printDetails();
+		//this.resource.printDetails();
 		this.timeline=timeline;
 		pool=new TexturePool(new TexturePool.TextureLoader(){
 				@Override

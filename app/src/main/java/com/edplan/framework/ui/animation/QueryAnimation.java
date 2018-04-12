@@ -77,12 +77,8 @@ public class QueryAnimation<T,V> extends BasePreciseAnimation
 			if(currentNode==null){
 				currentNode=nodes.get(0);
 			}
-			while(currentNode.endTime<currentTime()){
-				if(currentNode.next==null){
-					break;
-				}else{
-					currentNode=currentNode.next;
-				}
+			while(currentNode.next!=null&&currentNode.next.startTime<currentTime()){
+				currentNode=currentNode.next;
 			}
 			currentNode.apply(currentTime());
 		}
@@ -91,6 +87,7 @@ public class QueryAnimation<T,V> extends BasePreciseAnimation
 	@Override
 	protected void seekToTime(double progressTime) {
 		// TODO: Implement this method
+		/*
 		if(hasNode()){
 			int idx=search(progressTime);
 			if(idx==-1){
@@ -104,7 +101,7 @@ public class QueryAnimation<T,V> extends BasePreciseAnimation
 					currentNode.apply(currentTime());
 				}
 			}
-		}
+		}*/
 	}
 	
 	public boolean hasNode(){

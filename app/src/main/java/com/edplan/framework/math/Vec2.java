@@ -3,28 +3,33 @@ import java.util.List;
 import com.edplan.framework.ui.animation.interpolate.Interplateable;
 import com.edplan.framework.ui.animation.interpolate.ValueInterpolator;
 import com.edplan.framework.ui.animation.interpolate.Vec2Interpolator;
+import java.util.Stack;
 
 public class Vec2 implements Interplateable<Vec2>
 {
 	public static final Vec2 BASE_POINT=new Vec2(0,0);
 	
+	public static final Stack<Vec2> cache=new Stack<Vec2>();
+	
+	public static final int MAX_CACHE=2000;
+	
 	public float x,y;
 	
-	public Vec2(){
+	Vec2(){
 		
 	}
 	
-	public Vec2(float x,float y){
+	Vec2(float x,float y){
 		this.x=x;
 		this.y=y;
 	}
 	
-	public Vec2(Vec2 res){
+	Vec2(Vec2 res){
 		this.x=res.x;
 		this.y=res.y;
 	}
 	
-	public Vec2(float v){
+	Vec2(float v){
 		this(v,v);
 	}
 	
@@ -156,7 +161,7 @@ public class Vec2 implements Interplateable<Vec2>
 	//}
 	
 	public Vec2 copy(){
-		return new Vec2(this);
+		return instance().set(this);
 	}
 
 	@Override
@@ -167,6 +172,22 @@ public class Vec2 implements Interplateable<Vec2>
 	
 	public Vec3 toVec3(float z){
 		return new Vec3(this,z);
+	}
+	
+	public static Vec2 instance(){
+		if(cache.isEmpty()){
+			return new Vec2();
+		}else{
+			return cache.pop();
+		}
+	}
+	
+	public static Vec2 instance(float x,float y){
+		return instance().set(x,y);
+	}
+	
+	public static Vec2 instance(float v){
+		return instance().set(v,v);
 	}
 	
 	public static float sizeOfTriangle(Vec2 v1,Vec2 v2,Vec2 v3){
@@ -233,5 +254,15 @@ public class Vec2 implements Interplateable<Vec2>
 	public String toString() {
 		// TODO: Implement this method
 		return (new StringBuilder("(")).append(x).append(",").append(y).append(")").toString();
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		// TODO: Implement this method
+		super.finalize();
+		if(cache.size()<MAX_CACHE){
+			this.set(0,0);
+			cache.push(this);
+		}
 	}
 }

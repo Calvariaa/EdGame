@@ -17,13 +17,13 @@ public class TextureDrawable extends EdDrawable implements IFadeable,IScaleable2
 {
 	private float rotation;
 	
-	private Vec2 origin=new Vec2();
+	private Vec2 origin=Vec2.instance();
 	
-	private Vec2 baseSize=new Vec2();
+	private Vec2 baseSize=Vec2.instance();
 	
 	private GLPaint basePaint=new GLPaint();
 	
-	private Vec2 scale=new Vec2(1,1);
+	private Vec2 scale=Vec2.instance(1,1);
 	
 	private List<BindTexture> textures=new ArrayList<BindTexture>();
 
@@ -101,7 +101,7 @@ public class TextureDrawable extends EdDrawable implements IFadeable,IScaleable2
 	private Vec2 makeupVec(BindTexture t,float x,float y){
 		return origin.copy()
 			 .add(
-			  (new Vec2(x,y))
+			  (Vec2.instance(x,y))
 			  .multiple(scale)
 			  .multiple(t.getScale()));
 	}
@@ -111,10 +111,10 @@ public class TextureDrawable extends EdDrawable implements IFadeable,IScaleable2
 		Vec2 d1=makeupVec(texture,baseSize.x,-baseSize.y);
 		Vec2 d2=makeupVec(texture,baseSize.x,baseSize.y);
 		Vec2 d3=makeupVec(texture,-baseSize.x,baseSize.y);
-		Vec2 r0=new Vec2(0,0);
-		Vec2 r1=new Vec2(texture.getWidth(),0);
-		Vec2 r2=new Vec2(texture.getWidth(),texture.getHeight());
-		Vec2 r3=new Vec2(0,texture.getHeight());
+		Vec2 r0=Vec2.instance(0,0);
+		Vec2 r1=Vec2.instance(texture.getWidth(),0);
+		Vec2 r2=Vec2.instance(texture.getWidth(),texture.getHeight());
+		Vec2 r3=Vec2.instance(0,texture.getHeight());
 		canvas.drawTexture(
 			texture.getTexture(),
 			new Vec2[]{r0,r3,r1,r3,r2,r1},

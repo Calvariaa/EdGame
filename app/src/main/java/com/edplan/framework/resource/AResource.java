@@ -62,6 +62,11 @@ public abstract class AResource
 		return buffer;
 	}
 	
+	public boolean isFile(String path) throws IOException{
+		String[] l=list(path);
+		return !(l!=null&&l.length>0);
+	}
+	
 	public abstract String[] list(String dir) throws IOException;
 	
 	public abstract boolean contain(String file);

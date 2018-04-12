@@ -29,6 +29,8 @@ public class StoryboardSprite implements IStoryboardElements
 	private Vec2 initialPosition;
 	private Anchor anchor;
 	
+	public StringBuilder rawData=new StringBuilder();
+	
 	private List<QueryAnimation> animations=new ArrayList<QueryAnimation>();
 
 	public StoryboardSprite(String path,Anchor anchor,Vec2 initialPosition){
@@ -58,7 +60,7 @@ public class StoryboardSprite implements IStoryboardElements
 		double v2=Double.MAX_VALUE;
 		for(CommandLoop l:loops){
 			if(l.hasCommands()){
-				v2=Math.min(v2,l.getCommandsStartTime());
+				v2=Math.min(v2,l.getStartTime());
 			}
 		}
 		return Math.min(v1,v2);
@@ -115,11 +117,13 @@ public class StoryboardSprite implements IStoryboardElements
 	};
 	private <T> void applyCommands(BaseDrawableSprite sprite,List<TypedCommand<T>> command,ValueInterpolator<T> interpolator,InvokeSetter<BaseDrawableSprite,T> setter){
 		double offset=sprite.getStartTime();
-		QueryAnimation<BaseDrawableSprite,T> anim=new QueryAnimation<BaseDrawableSprite,T>(sprite,offset,interpolator,setter,true);
-		Collections.sort(command,comparator);
+		double obj_offset=getStartTime();
+		QueryAnimation<BaseDrawableSprite,T> anim=new QueryAnimation<BaseDrawableSprite,T>(sprite,obj_offset,interpolator,setter,true);
+		//Collections.sort(command,comparator);
 		if(command.size()==0)return;
 		TypedCommand<T> tmp=command.get(0);
-		anim.transform(tmp.getStartValue(),0,Easing.None);
+		setter.invoke(sprite,tmp.getStartValue());
+		anim.transform(tmp.getStartValue(),offset-obj_offset,Easing.None);
 		for(TypedCommand<T> c:command){
 			anim.transform(c.getStartValue(),c.getStartTime(),0,c.getEasing());
 			anim.transform(c.getEndValue(),c.getStartTime(),c.getDuration(),c.getEasing());
@@ -165,6 +169,7 @@ public class StoryboardSprite implements IStoryboardElements
 		for(QueryAnimation a:animations){
 			sprite.addAnimation(a);
 		}
+		animations.clear();
 	}
 
 	@Override

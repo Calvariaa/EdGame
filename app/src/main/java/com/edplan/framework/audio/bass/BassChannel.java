@@ -42,7 +42,7 @@ public class BassChannel
 
 	public void seekTo(int ms){
 		if(ms>=0){
-			BASS.BASS_ChannelSetPosition(chaId, BASS.BASS_ChannelSeconds2Bytes(chaId, ms), BASS.BASS_POS_BYTE);
+			BASS.BASS_ChannelSetPosition(chaId, BASS.BASS_ChannelSeconds2Bytes(chaId, ms/1000d), BASS.BASS_POS_BYTE);
 		}else{
 			
 		}

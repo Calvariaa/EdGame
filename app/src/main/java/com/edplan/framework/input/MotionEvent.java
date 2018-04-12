@@ -12,7 +12,7 @@ public class MotionEvent
 	 */
 	private RawType rawType;
 	
-	private Vec2 eventPosition=new Vec2();
+	private Vec2 eventPosition=Vec2.instance();
 	
 	private EventType eventType;
 	

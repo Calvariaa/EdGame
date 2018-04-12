@@ -22,6 +22,14 @@ public class Storyboard
 		return layers.get(name);
 	}
 	
+	public int getObjectCount(){
+		int c=0;
+		for(StoryboardLayer l:layers.values()){
+			c+=l.getElementsCount();
+		}
+		return c;
+	}
+	
 	public enum EventObjType{
 		Background(0),
 		Video(1),

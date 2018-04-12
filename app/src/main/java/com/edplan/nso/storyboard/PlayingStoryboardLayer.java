@@ -11,10 +11,11 @@ import java.util.Iterator;
 import java.util.Collections;
 import java.util.Comparator;
 import com.edplan.framework.graphics.opengl.GLWrapped;
+import com.edplan.nso.storyboard.elements.StoryboardSprite;
 
 public class PlayingStoryboardLayer extends EdDrawable
 {
-	private List<ADrawableStoryboardElement> sprites=new ArrayList<ADrawableStoryboardElement>();
+	private List<ElementNode> sprites=new ArrayList<ElementNode>();
 	
 	private int index=0;
 	
@@ -25,11 +26,33 @@ public class PlayingStoryboardLayer extends EdDrawable
 	public PlayingStoryboardLayer(StoryboardLayer layer,PlayingStoryboard storyboard){
 		super(storyboard.getContext());
 		this.storyboard=storyboard;
+		int depth=-1;
 		for(IStoryboardElements ele:layer.getElements()){
 			if(ele.isDrawable()){
+				depth++;
+				/*
+				if(depth>=31593||depth<31592)continue;
+				*/
+				
+				
 				ADrawableStoryboardElement drawable=ele.createDrawable(storyboard);
-				sprites.add(drawable);
+				ElementNode node=new ElementNode();
+				node.startTime=drawable.getStartTime();
+				node.endTime=drawable.getEndTime();
+				node.element=drawable;
+				node.rawElement=ele;
+				node.depth=sprites.size();
+				//System.out.println("to "+node.depth);
+				//if(node.depth%2000==0||node.depth>76500)System.out.println(node.depth);
+				sprites.add(node);
+				
+				/*
 				ele.onApply(drawable,storyboard);
+				
+				System.out.println(((BaseDrawableSprite)drawable).getAnimations());
+				System.out.println(((StoryboardSprite)ele).rawData);
+				*/
+				
 			}else{
 				ele.onApply(null,storyboard);
 			}
@@ -45,13 +68,11 @@ public class PlayingStoryboardLayer extends EdDrawable
 		*/
 	}
 
-	public void setSprites(List<ADrawableStoryboardElement> sprites) {
-		this.sprites=sprites;
-	}
-
+	/*
 	public List<ADrawableStoryboardElement> getSprites() {
 		return sprites;
 	}
+	*/
 	
 	public int objectInField(){
 		return spriteInField.size();
@@ -61,10 +82,12 @@ public class PlayingStoryboardLayer extends EdDrawable
 		double time=storyboard.getTimeline().frameTime(); 
 		
 		spriteInField.clear();
-		for(ADrawableStoryboardElement ele:sprites){
-			if(ele.getStartTime()<=time&&ele.getEndTime()>=time){
-				spriteInField.add(ele);
-				if(!ele.hasAdd())ele.onAdd();
+		for(ElementNode ele:sprites){
+			if(ele.startTime<=time&&ele.endTime>=time){
+				spriteInField.add(ele.element);
+				if(!ele.hasAdded()){
+					ele.apply();
+				}
 			}
 		}
 		
@@ -94,5 +117,27 @@ public class PlayingStoryboardLayer extends EdDrawable
 			ele.draw(canvas);
 		}
 		GLWrapped.blend.restoreToCount(c);
+	}
+	
+	
+	public class ElementNode{
+		public int depth;
+		public double startTime;
+		public double endTime;
+		public ADrawableStoryboardElement element;
+		public IStoryboardElements rawElement;
+		
+		boolean added=false;
+	
+		public boolean hasAdded(){
+			return added;
+		}
+		
+		public void apply(){
+			added=true;
+			rawElement.onApply(element,storyboard);
+			element.onAdd();
+		}
+		
 	}
 }

@@ -89,7 +89,7 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 		path=maker.calculatePath();
 		path.measure();
 		path.bufferLength((float)slider.getPixelLength());
-		endPoint=(slider.getRepeat()%2==1)?path.getMeasurer().atLength((float)slider.getPixelLength()):new Vec2(slider.getStartX(),slider.getStartY());
+		endPoint=(slider.getRepeat()%2==1)?path.getMeasurer().atLength((float)slider.getPixelLength()):Vec2.instance(slider.getStartX(),slider.getStartY());
 		
 		body=new SliderBody(getContext(),beatmap.getTimeLine(),this);
 		applyPiece(body,beatmap);

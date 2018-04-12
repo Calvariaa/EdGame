@@ -29,7 +29,7 @@ public class BaseView implements MDrawable
 	
 	
 	public BaseView(MContext _context){
-		basePoint=new Vec2(0,0);
+		basePoint=Vec2.instance(0,0);
 		setContext(_context);
 	}
 	

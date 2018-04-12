@@ -54,7 +54,7 @@ public class TestView extends EdView
 	
 	private OsuSkin skin;
 	
-	private Vec2 point=new Vec2();
+	private Vec2 point=Vec2.instance();
 	
 	//private DrawableStdSlider sld2;
 	
@@ -163,9 +163,9 @@ public class TestView extends EdView
 				Log.v("parse-osu","end parse");
 				beatmap=bparser.makeupBeatmap(StdBeatmap.class);
 				beatmap.getDifficulty().setCircleSize(beatmap.getDifficulty().getCircleSize());
-				timeline=//new AudioTimeline(audio);
+				timeline=new AudioTimeline(audio);
 				//new PreciseTimeline();
-				new AdjustableTimeline(1f);
+				//new AdjustableTimeline(1f);
 				playingBeatmap=new StdPlayingBeatmap(getContext(),beatmap,timeline,skin);
 				Log.v("osu","objs: "+playingBeatmap.getHitObjects().size()+" first: "+playingBeatmap.getHitObjects().get(0).getStartTime());
 				playField=new StdPlayField(getContext(),timeline);
@@ -177,24 +177,30 @@ public class TestView extends EdView
 				File osb=new File(//"/storage/emulated/0/ADM/470977 Mili - world.execute(me)/Mili - world.execute(me); (Exile-).osb");
 				//"/storage/emulated/0/ADM/186911 Function Phantom - Neuronecia2/Function Phantom - Neuronecia (Amamiya Yuko).osb");
 				//"/storage/emulated/0/ADM/151720 ginkiha - EOS1/ginkiha - EOS (alacat).osb");
-				"/storage/emulated/0/ADM/389179 Jay Chou - Fa Ru Xue3/Jay Chou - Fa Ru Xue (KaedekaShizuru).osb");
+				//"/storage/emulated/0/ADM/389179 Jay Chou - Fa Ru Xue3/Jay Chou - Fa Ru Xue (KaedekaShizuru).osb");
+					"/storage/emulated/0/osu!droid/Songs/470977 Mili - world.execute(me)/Mili - world.execute(me); (Exile-).osb");
 				StoryboardDecoder decoder=new StoryboardDecoder(
-				test.testFloder().openInput(test.getOsbPath()),"ahh");
+				osb);
+				//test.testFloder().openInput(test.getOsbPath()),"ahh");
 				
 				try {
 					long s=System.currentTimeMillis();
 					decoder.parse();
 					storyboard=decoder.getStoryboard();
-					System.out.println("end edcode osb");
-					playingStoryboard=new PlayingStoryboard(getContext(),timeline,storyboard,test.testFloder().subResource(test.testBeatmapFloder+""));
+					System.out.println("end edcode osb: "+storyboard.getObjectCount());
+					playingStoryboard=new PlayingStoryboard(getContext(),timeline,storyboard,
+					new DirResource(osb.getParentFile()));
+					//test.testFloder().subResource(test.testBeatmapFloder+""));
 					//new DirResource(osb.getParentFile()));
 					System.out.println("end transform to playing state");
 					System.out.println("storyboard parse done in: "+(System.currentTimeMillis()-s)+"ms");
 					
+					/*
 					for(int i=0;i<5;i++){
 						BaseDrawableSprite spr=(BaseDrawableSprite) playingStoryboard.getLayer(Storyboard.Layer.Foreground.name()).getSprites().get(i);
 						System.out.println(spr.getAnimations());
 					}
+					*/
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -252,6 +258,7 @@ public class TestView extends EdView
 								// TODO: Implement this method
 								getContext().getUiLooper().addLoopableBeforeDraw(timeline);
 								audio.play();
+								//audio.seekTo(65000);
 							}
 					},2000);
 				}
@@ -297,7 +304,7 @@ public class TestView extends EdView
 		newCanvas.translate(newCanvas.getWidth()/2-PlayField.BASE_X/2/osuScale,0);
 		newCanvas.scaleContent(osuScale);
 		newCanvas.translate(PlayField.PADDING_X,PlayField.PADDING_Y);
-		newCanvas.clip(new Vec2(PlayField.CANVAS_SIZE_X,PlayField.CANVAS_SIZE_Y));
+		newCanvas.clip(Vec2.instance(PlayField.CANVAS_SIZE_X,PlayField.CANVAS_SIZE_Y));
 		
 		GLPaint testLine=new GLPaint();
 		testLine.setMixColor(Color4.rgba(0,0,1,0.5f));
@@ -324,7 +331,7 @@ public class TestView extends EdView
 		playingStoryboard.draw(newCanvas);
 		newCanvas.restore();
 		
-		playField.draw(newCanvas);
+		//playField.draw(newCanvas);
 		//firstObj.draw(newCanvas);
 		newCanvas.unprepare();
 
@@ -336,7 +343,7 @@ public class TestView extends EdView
 		AbstractTexture texture=newLayer.getTexture();
 		//canvas.drawTexture(texture,new RectF(0,0,texture.getWidth(),texture.getHeight()),new RectF(0,0,canvas.getWidth(),canvas.getHeight()),newPaint);
 		//canvas.drawTextureAnchorCenter(testPng,new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),newPaint);
-		canvas.drawTextureAnchorCenter(texture,new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),newPaint);
+		canvas.drawTextureAnchorCenter(texture,Vec2.instance(canvas.getWidth()/2,canvas.getHeight()/2),Vec2.instance(canvas.getWidth()/2,canvas.getHeight()/2),newPaint);
 		//canvas.drawTexture(GLTexture.Black,RectF.xywh(0,0,canvas.getWidth(),canvas.getHeight()),newPaint);
 		//newLayer.recycle();
 		
@@ -474,7 +481,7 @@ public class TestView extends EdView
 	public class TestData{
 		public String testPath="osu/test/beatmap";
 		
-		public int testBeatmapFloder=13;
+		public int testBeatmapFloder=11;
 		
 		public String getBeatmapPath(){
 			AResource res=getContext().getAssetResource().subResource(testPath);

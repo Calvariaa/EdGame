@@ -18,9 +18,9 @@ public abstract class BasePiece extends EdDrawable implements IScaleable2D,IFade
 	
 	private float baseSize=DEF_SIZE;
 
-	private Vec2 origin=new Vec2();
+	private Vec2 origin=Vec2.instance();
 
-	private Vec2 scale=new Vec2(1, 1);
+	private Vec2 scale=Vec2.instance(1, 1);
 
 	protected GLPaint paint=new GLPaint();
 	
@@ -110,13 +110,13 @@ public abstract class BasePiece extends EdDrawable implements IScaleable2D,IFade
 	}
 	
 	protected void simpleDraw(GLTexture t,GLCanvas2D c){
-		c.drawTextureAnchorCenter(t,getOrigin(),(new Vec2(getBaseSize(),getBaseSize())).multiple(getScale()),paint);
+		c.drawTextureAnchorCenter(t,getOrigin(),(Vec2.instance(getBaseSize(),getBaseSize())).multiple(getScale()),paint);
 	}
 	
 	protected void simpleDrawWithAccentColor(GLTexture t,GLCanvas2D c){
 		if(tmpPaint==null)tmpPaint=new GLPaint();
 		tmpPaint.set(paint);
 		tmpPaint.setMixColor(tmpPaint.getMixColor().copyNew().multiple(getAccentColor()));
-		c.drawTextureAnchorCenter(t,getOrigin(),(new Vec2(getBaseSize(),getBaseSize())).multiple(getScale()),tmpPaint);
+		c.drawTextureAnchorCenter(t,getOrigin(),(Vec2.instance(getBaseSize(),getBaseSize())).multiple(getScale()),tmpPaint);
 	}
 }

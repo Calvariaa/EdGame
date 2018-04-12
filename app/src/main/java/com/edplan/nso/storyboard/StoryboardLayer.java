@@ -27,6 +27,10 @@ public class StoryboardLayer
 		return elements;
 	}
 	
+	public int getElementsCount(){
+		return elements.size();
+	}
+	
 	public void add(IStoryboardElements e){
 		elements.add(e);
 	}

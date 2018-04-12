@@ -51,16 +51,16 @@ public class Texture3DRect implements VertexList<TextureVertex3D>
 	private float defZ=0;
 	public Texture3DRect make(){
 		v[0]=TextureVertex3D.atPosition(new Vec3(drawRect.getLeft(),drawRect.getTop(),defZ))
-			.setTexturePoint(new Vec2(textureRect.getLeft(),textureRect.getTop()))
+			.setTexturePoint(Vec2.instance(textureRect.getLeft(),textureRect.getTop()))
 			.setColor(paint.getVaryingColor());
 		v[1]=TextureVertex3D.atPosition(new Vec3(drawRect.getRight(),drawRect.getTop(),defZ))
-			.setTexturePoint(new Vec2(textureRect.getRight(),textureRect.getTop()))
+			.setTexturePoint(Vec2.instance(textureRect.getRight(),textureRect.getTop()))
 			.setColor(paint.getVaryingColor());
 		v[2]=TextureVertex3D.atPosition(new Vec3(drawRect.getRight(),drawRect.getBottom(),defZ))
-			.setTexturePoint(new Vec2(textureRect.getRight(),textureRect.getBottom()))
+			.setTexturePoint(Vec2.instance(textureRect.getRight(),textureRect.getBottom()))
 			.setColor(paint.getVaryingColor());
 		v[3]=TextureVertex3D.atPosition(new Vec3(drawRect.getLeft(),drawRect.getBottom(),defZ))
-			.setTexturePoint(new Vec2(textureRect.getLeft(),textureRect.getBottom()))
+			.setTexturePoint(Vec2.instance(textureRect.getLeft(),textureRect.getBottom()))
 			.setColor(paint.getVaryingColor());
 		return this;
 	}

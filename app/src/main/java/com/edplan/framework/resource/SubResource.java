@@ -31,7 +31,7 @@ public class SubResource extends AResource
 	}
 	
 	public String toRealPath(String path){
-		return getRPath()+"/"+path;
+		return getRPath()+((path!=null&&path.length()!=0)?("/"+path):"");
 	}
 
 	@Override

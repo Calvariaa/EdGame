@@ -60,7 +60,7 @@ public class PathMeasurer
 	private void measureDirections(){
 		directions=new ArrayList<Vec2>(path.size());
 		if(path.size()<2){
-			directions.add(new Vec2(1,0));
+			directions.add(Vec2.instance(1,0));
 		}else{
 			Vec2 cur;
 			Vec2 pre=path.get(0);
@@ -80,7 +80,7 @@ public class PathMeasurer
 			endDirection=path.getLast().copy().minus(path.get(path.size()-2)).toNormal();
 			endHalf=(lengthes.get(lengthes.size()-1)+lengthes.get(lengthes.size()-2))/2;
 		}else{
-			endDirection=new Vec2(0,0);
+			endDirection=Vec2.instance(0,0);
 		}
 	}
 	

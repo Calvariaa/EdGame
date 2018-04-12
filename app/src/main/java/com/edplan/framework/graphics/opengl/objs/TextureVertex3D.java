@@ -4,7 +4,7 @@ import com.edplan.framework.math.Vec3;
 
 public class TextureVertex3D extends Vertex3D
 {
-	public static final Vec2 DEF_TEXTURE_POINT=new Vec2(0,0);	
+	public static final Vec2 DEF_TEXTURE_POINT=Vec2.instance(0,0);	
 	public Vec2 texturePoint;
 	
 	

@@ -19,7 +19,7 @@ public class Circle2D implements Area2D,IHasAreaSize
 	}
 	
 	public Circle2D(float ox,float oy,float radius){
-		this.origin=new Vec2(ox,oy);
+		this.origin=Vec2.instance(ox,oy);
 		this.radius=radius;
 		compute();
 	}

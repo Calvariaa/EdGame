@@ -24,9 +24,9 @@ public class DrawLinePath<T extends BaseColorBatch>
 	
 	private AbstractPath path;
 	
-	private Vec2 textureStart=new Vec2(0,0);
+	private Vec2 textureStart=Vec2.instance(0,0);
 	
-	private Vec2 textureEnd=new Vec2(1,1);
+	private Vec2 textureEnd=Vec2.instance(1,1);
 	
 	private DrawInfo info;
 	

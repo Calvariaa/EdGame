@@ -57,7 +57,7 @@ public class StdHitObjectParser implements HitObjectParser<StdHitObject>
 					case Slider:
 						StdSlider s=new StdSlider();
 						injectBaseDatas(bd,s);
-						s.setPath(parsePath(new Vec2(s.getStartX(),s.getStartY()),spl));
+						s.setPath(parsePath(Vec2.instance().set(s.getStartX(),s.getStartY()),spl));
 						s.setRepeat(U.toInt(spl.next()));
 						s.setPixelLength(U.toDouble(spl.next()));
 						s.setEdgeHitsounds(parseEdgeHitsounds(spl));
@@ -160,7 +160,7 @@ public class StdHitObjectParser implements HitObjectParser<StdHitObject>
 	
 	public Vec2 parseVec2FF(String s)throws Exception{
 		String[] sp=s.split(":");
-		return new Vec2(U.toFloat(sp[0]),U.toFloat(sp[1]));
+		return Vec2.instance().set(U.toFloat(sp[0]),U.toFloat(sp[1]));
 	}
 	
 	public Vct2<Integer,Integer> parseVct2II(String s)throws Exception{
