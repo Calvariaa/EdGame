@@ -27,13 +27,14 @@ public class PlayingStoryboardLayer extends EdDrawable
 		super(storyboard.getContext());
 		this.storyboard=storyboard;
 		int depth=-1;
+		int maxDepth=30000;
 		for(IStoryboardElements ele:layer.getElements()){
 			if(ele.isDrawable()){
 				depth++;
 				/*
 				if(depth>=31593||depth<31592)continue;
 				*/
-				
+				if(depth>maxDepth)break;
 				
 				ADrawableStoryboardElement drawable=ele.createDrawable(storyboard);
 				ElementNode node=new ElementNode();

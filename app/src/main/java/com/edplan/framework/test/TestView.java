@@ -75,9 +75,11 @@ public class TestView extends EdView
 	
 	BMFont font;
 	
+	TestData test;
+	
 	public TestView(MContext context){
 		super(context);
-		
+		test=new TestData();
 		try {
 			AResource res=getContext()
 				.getAssetResource()
@@ -95,7 +97,7 @@ public class TestView extends EdView
 			e.printStackTrace();
 		}
 
-		TestData test=new TestData();
+		
 		System.out.println(test.getBeatmapPath());
 		System.out.println(test.getSongPath());
 		
@@ -114,9 +116,10 @@ public class TestView extends EdView
 				    .subResource("default"));
 			
 			StdBeatmapDecoder bparser=new StdBeatmapDecoder(
-												getContext()
-												 .getAssetResource()
-												  .subResource("osu/test/beatmap").openInput(
+												//getContext()
+												 //.getAssetResource()
+												  //.subResource("osu/test/beatmap")
+												  test.testFloder().openInput(
 			//"t+pazolite with siromaru - Chambarising (Bloodmoon) [Stream Practice (160)].osu"
 			//"Suzuki Konomi - Cyber Thunder Cider (Nattu) [Niat's Cider].osu"
 			//"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
@@ -139,8 +142,10 @@ public class TestView extends EdView
 												"test case beatmap: " 
 												 );
 												 
-			audio=BassChannel//.createStreamFromResource(getContext().getAssetResource(),"osu/test/beatmap/"+
-			.createStreamFromAsset(getContext(),"osu/test/beatmap/"+
+			audio=BassChannel.createStreamFromFile(
+			test.dir+"/"+
+			//.createStreamFromResource(getContext().getAssetResource(),"osu/test/beatmap/"+
+			//.createStreamFromAsset(getContext(),"osu/test/beatmap/"+
 			//"test.mp3"
 			//"cloverfantasy.mp3"
 			//"audio.mp3"
@@ -174,7 +179,7 @@ public class TestView extends EdView
 				
 				
 				//# osb test
-				
+				if(test.enableStoryboard){
 				File osb=new File(//"/storage/emulated/0/ADM/470977 Mili - world.execute(me)/Mili - world.execute(me); (Exile-).osb");
 				//"/storage/emulated/0/ADM/186911 Function Phantom - Neuronecia2/Function Phantom - Neuronecia (Amamiya Yuko).osb");
 				//"/storage/emulated/0/ADM/151720 ginkiha - EOS1/ginkiha - EOS (alacat).osb");
@@ -212,6 +217,7 @@ public class TestView extends EdView
 				}
 				
 				//# end osb test
+				}
 			}
 			catch (NsoException e)
 			{
@@ -312,7 +318,7 @@ public class TestView extends EdView
 		newCanvas.clip(new Vec2(PlayField.CANVAS_SIZE_X,PlayField.CANVAS_SIZE_Y));
 		
 		GLPaint testLine=new GLPaint();
-		testLine.setMixColor(Color4.rgba(0,0,1,0.5f));
+		testLine.setVaryingColor(Color4.rgba(0,0,1,0.5f));
 		testLine.setStrokeWidth(2);
 		newCanvas.drawLine(0,0,newCanvas.getWidth(),newCanvas.getHeight(),testLine);
 		newCanvas.drawLine(newCanvas.getWidth(),0,0,newCanvas.getHeight(),testLine);
@@ -333,10 +339,10 @@ public class TestView extends EdView
 		newCanvas.save();
 		newCanvas.translate(-PlayField.PADDING_X,-PlayField.PADDING_Y);
 		//newCanvas.translate(-(PlayField.BASE_Y*16/9f-PlayField.BASE_X)/2,0);
-		playingStoryboard.draw(newCanvas);
+		if(test.enableStoryboard)playingStoryboard.draw(newCanvas);
 		newCanvas.restore();
 		
-		playField.draw(newCanvas);
+		if(test.enablePlayField)playField.draw(newCanvas);
 		//firstObj.draw(newCanvas);
 		newCanvas.unprepare();
 
@@ -463,7 +469,7 @@ public class TestView extends EdView
 		printer.toNextLine();
 		printer.printString(audioOffset+"");
 		printer.toNextLine();
-		printer.printString(playingStoryboard.objectsInField()+"");
+		if(test.enableStoryboard)printer.printString(playingStoryboard.objectsInField()+"");
 		//printer.toNextLine();
 		//printer.setTextSize(50);
 		//printer.printString("osu!lab");
@@ -486,7 +492,13 @@ public class TestView extends EdView
 	public class TestData{
 		public String testPath="osu/test/beatmap";
 		
+		public String dir="/storage/emulated/0/MyDisk/WorkBench/bin/testdata";
+		
 		public int testBeatmapFloder=11;
+		
+		public boolean enableStoryboard=true;
+		
+		public boolean enablePlayField=false;
 		
 		public AResource res=new DirResource("/storage/emulated/0/MyDisk/WorkBench/bin/testdata");
 		

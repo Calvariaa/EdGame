@@ -105,9 +105,9 @@ public class FollowpointPiece extends BasePiece
 			v[3].setColor(color2);
 			Vertex3D[] o=canvas.createLineRectVertex(p1,p2,paint.getStrokeWidth(),Color4.Alpha);
 			canvas.clearTmpColorBatch();
-			canvas.addToColorBatch(canvas.rectToTriangles(new Vertex3D[]{o[0],o[1],v[0],v[1]}));
-			canvas.addToColorBatch(canvas.rectToTriangles(v));
-			canvas.addToColorBatch(canvas.rectToTriangles(new Vertex3D[]{v[3],v[2],o[3],o[2]}));
+			canvas.addToColorBatch(canvas.rectToTriangles(new Vertex3D[]{o[0],o[1],v[0],v[1]}),paint);
+			canvas.addToColorBatch(canvas.rectToTriangles(v),paint);
+			canvas.addToColorBatch(canvas.rectToTriangles(new Vertex3D[]{v[3],v[2],o[3],o[2]}),paint);
 			canvas.postColorBatch(paint);
 		}
 	}

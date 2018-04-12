@@ -267,7 +267,13 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	private BlendType preBlend;
 	
 	public void postDraw(){
-		if(preTexture==null||!enablePost)return;
+		if(!enablePost)return;
+		/*
+		GLPaint paint=new GLPaint();
+		drawColorBatch(paint,tmpColorBatch);
+		tmpColorBatch.clear();
+		*/
+		if(preTexture==null)return;
 		drawTexture3DBatch(tmpBatch,preTexture,1,Color4.ONE);
 		tmpBatch.clear();
 		preTexture=null;
@@ -407,8 +413,19 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		tmpColorBatch.clear();
 	}
 	
-	public void addToColorBatch(Vertex3D[] v){
+	private void postToColorBatch(Vertex3D[] v){
 		tmpColorBatch.add(v);
+	}
+	
+	public void addToColorBatch(Vertex3D[] vs,GLPaint paint){
+		/*if(enablePost){
+			for(Vertex3D v:vs){
+				v.color.multiple(paint.getMixColor()).multiple(paint.getFinalAlpha());
+			}
+			postToColorBatch(vs);
+		}else{*/
+			postToColorBatch(vs);
+		//}
 	}
 	
 	public void drawColorBatch(GLPaint paint,BaseColorBatch cbatch){
@@ -442,8 +459,9 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 					new Vec2(lines[i],lines[i+1]),
 					new Vec2(lines[i+2],lines[i+3]),
 					paint.getStrokeWidth(),
-					paint.getMixColor()
-				)
+					paint.getVaryingColor()
+				),
+				paint
 			);
 		}
 		postColorBatch(paint);
