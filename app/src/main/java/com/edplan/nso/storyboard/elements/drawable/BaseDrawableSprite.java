@@ -252,12 +252,14 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		/*
 		GLWrapped.blend.setBlendType(BlendType.Normal);
 		GLPaint p=new GLPaint();
-		p.setStrokeWidth(1f);
+		p.setStrokeWidth(0.5f);
+		p.setMixColor(Color4.rgba(1,1,1,1));
 		if(blendType==BlendType.Additive){
-			p.setMixColor(Color4.rgba(1,0,0,1));
+			p.setMixColor(Color4.rgba(1,1,1,1));
 		}
-		canvas.drawLine(quad.getTopLeft(),quad.getBottomRight(),p);
-		canvas.drawLine(quad.getTopRight(),quad.getBottomLeft(),p);
+		//canvas.drawLine(quad.getPoint(anchor.x()-1f,anchor.y()-1f),quad.getPoint(anchor.x()+1f,anchor.y()+1f),p);
+		//canvas.drawLine(quad.getTopRight(),quad.getBottomLeft(),p);
+		canvas.drawLine(quad.getTopLeft(),quad.getPoint(1f,1f),p);
 		*/
 	}
 	

@@ -171,7 +171,7 @@ public class TestView extends EdView
 				beatmap.getDifficulty().setCircleSize(beatmap.getDifficulty().getCircleSize());
 				timeline=new AudioTimeline(audio);
 				//new PreciseTimeline();
-				//new AdjustableTimeline(1f);
+				//new AdjustableTimeline(1/5f);
 				playingBeatmap=new StdPlayingBeatmap(getContext(),beatmap,timeline,skin);
 				Log.v("osu","objs: "+playingBeatmap.getHitObjects().size()+" first: "+playingBeatmap.getHitObjects().get(0).getStartTime());
 				playField=new StdPlayField(getContext(),timeline);
@@ -269,7 +269,8 @@ public class TestView extends EdView
 								// TODO: Implement this method
 								getContext().getUiLooper().addLoopableBeforeDraw(timeline);
 								audio.play();
-								//audio.seekTo(65000);
+								audio.seekTo(100000);
+								//timeline.onLoop(103000*5);
 							}
 					},2000);
 				}
@@ -316,7 +317,7 @@ public class TestView extends EdView
 		newCanvas.scaleContent(osuScale);
 		newCanvas.translate(PlayField.PADDING_X,PlayField.PADDING_Y);
 		newCanvas.clip(new Vec2(PlayField.CANVAS_SIZE_X,PlayField.CANVAS_SIZE_Y));
-		
+		/*
 		GLPaint testLine=new GLPaint();
 		testLine.setVaryingColor(Color4.rgba(0,0,1,0.5f));
 		testLine.setStrokeWidth(2);
@@ -326,6 +327,8 @@ public class TestView extends EdView
 		newCanvas.drawLine(newCanvas.getWidth(),0,newCanvas.getWidth(),newCanvas.getHeight(),testLine);
 		newCanvas.drawLine(0,0,0,newCanvas.getHeight(),testLine);
 		newCanvas.drawLine(0,newCanvas.getHeight(),newCanvas.getWidth(),newCanvas.getHeight(),testLine);
+		*/
+		
 		//paint.setMixColor(Color4.rgb(1,0.5f,0.5f));
 		
 		GLPaint tp=new GLPaint();
@@ -339,7 +342,9 @@ public class TestView extends EdView
 		newCanvas.save();
 		newCanvas.translate(-PlayField.PADDING_X,-PlayField.PADDING_Y);
 		//newCanvas.translate(-(PlayField.BASE_Y*16/9f-PlayField.BASE_X)/2,0);
+		newCanvas.setCanvasAlpha(1f);
 		if(test.enableStoryboard)playingStoryboard.draw(newCanvas);
+		newCanvas.setCanvasAlpha(1);
 		newCanvas.restore();
 		
 		if(test.enablePlayField)playField.draw(newCanvas);
@@ -494,7 +499,7 @@ public class TestView extends EdView
 		
 		public String dir="/storage/emulated/0/MyDisk/WorkBench/bin/testdata";
 		
-		public int testBeatmapFloder=11;
+		public int testBeatmapFloder=23;
 		
 		public boolean enableStoryboard=true;
 		

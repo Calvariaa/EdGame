@@ -27,14 +27,14 @@ public class PlayingStoryboardLayer extends EdDrawable
 		super(storyboard.getContext());
 		this.storyboard=storyboard;
 		int depth=-1;
-		int maxDepth=30000;
+		//int maxDepth=30000;
 		for(IStoryboardElements ele:layer.getElements()){
 			if(ele.isDrawable()){
 				depth++;
 				/*
 				if(depth>=31593||depth<31592)continue;
 				*/
-				if(depth>maxDepth)break;
+				//if(depth>maxDepth)break;
 				
 				ADrawableStoryboardElement drawable=ele.createDrawable(storyboard);
 				ElementNode node=new ElementNode();
@@ -47,12 +47,12 @@ public class PlayingStoryboardLayer extends EdDrawable
 				//if(node.depth%2000==0||node.depth>76500)System.out.println(node.depth);
 				sprites.add(node);
 				
-				/*
+				
 				ele.onApply(drawable,storyboard);
 				
 				System.out.println(((BaseDrawableSprite)drawable).getAnimations());
 				System.out.println(((StoryboardSprite)ele).rawData);
-				*/
+				
 				
 			}else{
 				ele.onApply(null,storyboard);
@@ -139,7 +139,7 @@ public class PlayingStoryboardLayer extends EdDrawable
 		
 		public void apply(){
 			added=true;
-			rawElement.onApply(element,storyboard);
+			//rawElement.onApply(element,storyboard);
 			element.onAdd();
 		}
 		

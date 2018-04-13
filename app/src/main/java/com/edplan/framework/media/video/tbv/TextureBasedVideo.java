@@ -31,8 +31,8 @@ import com.edplan.framework.media.video.tbv.encode.TBVOutputStream;
  *	每一帧包含帧头数据以及许多事件，以帧结束事件结束
  *
  *  帧头数据：
- *    本帧的数据长度(int)
- *    为0表示跳过
+ *    本帧的数据长度(int)（为0表示跳过）
+ *    帧开始时间(float) 结束时间(float)
  *
  *  事件种类：
  *    帧结束（-1）
@@ -75,6 +75,13 @@ public class TextureBasedVideo
 				throw new TBVException("err type: "+h.type);
 			}
 			h.jsonData=in.readJSONObject();
+			int textureCount=in.readInt();
+			h.textures=new TextureNode[textureCount];
+			for(int i=0;i<textureCount;i++){
+				TextureNode node=new TextureNode();
+				node.id=i;
+				node.texture=in.readString();
+			}
 			return h;
 		}
 		
@@ -84,6 +91,10 @@ public class TextureBasedVideo
 			}
 			out.writeString(h.type);
 			out.writeJSONObject(h.jsonData);
+			out.writeInt(h.textures.length);
+			for(int i=0;i<h.textures.length;i++){
+				out.writeString(h.textures[i].texture);
+			}
 		}
 	}
 }

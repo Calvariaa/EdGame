@@ -113,8 +113,8 @@ public class Quad implements IQuad
 	}
 	
 	public static Vec2 mapPoint(Vec2 ptl,Vec2 ptr,Vec2 pbl,Vec2 pbr,float vx,float vy){
-		float x=((ptl.x+pbl.x)*vx+(ptr.x+pbr.x)*(1-vx))/2;
-		float y=((ptl.y+ptr.y)*vy+(pbl.y+pbr.y)*(1-vy))/2;
+		float x=((ptl.x+pbl.x)*(1-vx)+(ptr.x+pbr.x)*vx)/2;
+		float y=((ptl.y+ptr.y)*(1-vy)+(pbl.y+pbr.y)*vy)/2;
 		return new Vec2().set(x,y);
 	}
 }

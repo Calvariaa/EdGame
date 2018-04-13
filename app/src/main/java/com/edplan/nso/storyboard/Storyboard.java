@@ -90,13 +90,14 @@ public class Storyboard
 	
 	public enum Origin{
 		TopLeft(Anchor.TopLeft),
-		TopCentre(Anchor.TopCenter),
-		TopRight(Anchor.TopRight),
-		CentreLeft(Anchor.CenterLeft),
 		Centre(Anchor.Center),
+		CentreLeft(Anchor.CenterLeft),
+		TopRight(Anchor.TopRight),
+		BottomCentre(Anchor.BottomCenter),
+		TopCentre(Anchor.TopCenter),
+		Custom(Anchor.Center),
 		CentreRight(Anchor.CenterRight),
 		BottomLeft(Anchor.BottomLeft),
-		BottomCentre(Anchor.BottomCenter),
 		BottomRight(Anchor.BottomRight);
 		private final Anchor value;
 		Origin(Anchor anchor){
