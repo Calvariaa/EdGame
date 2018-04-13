@@ -429,7 +429,7 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	}
 	
 	public void drawColorBatch(GLPaint paint,BaseColorBatch cbatch){
-		ColorShader<BaseColorBatch> shader=getContext().getShaderManager().getColorShader();
+		ColorShader shader=getContext().getShaderManager().getColorShader();
 		shader.useThis();
 		shader.loadPaint(paint,getCanvasAlpha());
 		MLog.test.vOnce("loadPaint","gl-test","loadPaint");

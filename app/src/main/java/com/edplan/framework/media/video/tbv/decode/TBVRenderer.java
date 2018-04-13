@@ -4,6 +4,7 @@ import com.edplan.framework.media.video.tbv.TBV;
 import com.edplan.framework.media.video.tbv.TextureBasedVideo;
 import java.io.IOException;
 import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
+import com.edplan.framework.media.video.tbv.element.DataDrawBaseTexture;
 
 public class TBVRenderer
 {
@@ -121,7 +122,9 @@ public class TBVRenderer
 		
 	}
 	
-	protected void drawBaseTexture(){
+	DataDrawBaseTexture dataDrawBaseTexture;
+	protected void drawBaseTexture() throws IOException{
+		dataDrawBaseTexture=DataDrawBaseTexture.read(in,dataDrawBaseTexture);
 		
 	}
 	

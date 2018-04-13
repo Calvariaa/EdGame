@@ -10,7 +10,7 @@ import com.edplan.framework.math.Vec4;
 import com.edplan.framework.graphics.opengl.GLPaint;
 import com.edplan.framework.graphics.opengl.batch.RectVertexBatch;
 
-public class RoundedRectTextureShader<T extends RectVertexBatch> extends RectTextureShader<T>
+public class RoundedRectTextureShader extends RectTextureShader
 {
 	public static final float DEFAULT_GLOW_FACTOR=0.5f;
 	
@@ -48,7 +48,7 @@ public class RoundedRectTextureShader<T extends RectVertexBatch> extends RectTex
 		loadRectData(drawingRect, padding,0,Color4.Alpha,DEFAULT_GLOW_FACTOR);
 	}
 	
-	public static final <T extends RectVertexBatch> RoundedRectTextureShader<T> createRRTS(String vs,String fs,Class<T> klass){
-		return new RoundedRectTextureShader<T>(GLProgram.createProgram(vs,fs));
+	public static final RoundedRectTextureShader createRRTS(String vs,String fs){
+		return new RoundedRectTextureShader(GLProgram.createProgram(vs,fs));
 	}
 }

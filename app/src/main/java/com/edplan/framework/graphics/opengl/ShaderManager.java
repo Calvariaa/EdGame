@@ -24,13 +24,13 @@ public class ShaderManager
 	
 	private static ShaderManager shaderManager;
 	
-	private Texture3DShader<Texture3DBatch> texture3DShader;
+	private Texture3DShader texture3DShader;
 	
-	private RectTextureShader<RectVertexBatch> rectShader;
+	private RectTextureShader rectShader;
 	
-	private RoundedRectTextureShader<RectVertexBatch> roundedRectShader;
+	private RoundedRectTextureShader roundedRectShader;
 	
-	private ColorShader<BaseColorBatch> colorShader;
+	private ColorShader colorShader;
 	
 	private AResource res;
 	
@@ -48,54 +48,54 @@ public class ShaderManager
 			texture3DShader=
 				Texture3DShader.createT3S(
 					res.loadText(PATH.PATH_Texture3DShader + ".vs"),
-					res.loadText(PATH.PATH_Texture3DShader + ".fs"),
-					Texture3DBatch.class);
+					res.loadText(PATH.PATH_Texture3DShader + ".fs")
+					);
 			rectShader=
 				RectTextureShader.createRTS(
 					res.loadText(PATH.PATH_RectShader_VS),
-					res.loadText(PATH.PATH_RectShader_FS),
-					RectVertexBatch.class);
+					res.loadText(PATH.PATH_RectShader_FS)
+					);
 			roundedRectShader=
 				RoundedRectTextureShader.createRRTS(
 					res.loadText(PATH.PATH_RectShader_VS),
-					res.loadText(PATH.PATH_RoundedRectShader_FS),
-					RectVertexBatch.class);
+					res.loadText(PATH.PATH_RoundedRectShader_FS)
+					);
 			colorShader=
 				ColorShader.createCS(
 					res.loadText(PATH.PATH_ColorShader + ".vs"),
-					res.loadText(PATH.PATH_ColorShader + ".fs"),
-					BaseColorBatch.class);
+					res.loadText(PATH.PATH_ColorShader + ".fs")
+					);
 		}catch(IOException e){
 			e.printStackTrace();
 			throw new GLException("err load shader from asset! msg: "+e.getMessage(),e);
 		}
 	}
 	
-	public void setColorShader(ColorShader<BaseColorBatch> colorShader) {
+	public void setColorShader(ColorShader colorShader) {
 		this.colorShader=colorShader;
 	}
 
-	public ColorShader<BaseColorBatch> getColorShader() {
+	public ColorShader getColorShader() {
 		return colorShader;
 	}
 	
-	public void setRectShader(RectTextureShader<RectVertexBatch> rectShader) {
+	public void setRectShader(RectTextureShader rectShader) {
 		this.rectShader=rectShader;
 	}
 
-	public RectTextureShader<RectVertexBatch> getRectShader() {
+	public RectTextureShader getRectShader() {
 		return rectShader;
 	}
 
-	public void setRoundedRectShader(RoundedRectTextureShader<RectVertexBatch> roundedRectShader) {
+	public void setRoundedRectShader(RoundedRectTextureShader roundedRectShader) {
 		this.roundedRectShader=roundedRectShader;
 	}
 
-	public RoundedRectTextureShader<RectVertexBatch> getRoundedRectShader() {
+	public RoundedRectTextureShader getRoundedRectShader() {
 		return roundedRectShader;
 	}
 	
-	public Texture3DShader<Texture3DBatch> getTexture3DShader(){
+	public Texture3DShader getTexture3DShader(){
 		return texture3DShader;
 	}
 	

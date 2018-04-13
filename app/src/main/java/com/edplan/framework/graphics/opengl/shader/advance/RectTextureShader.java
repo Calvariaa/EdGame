@@ -12,8 +12,10 @@ import com.edplan.framework.math.Vec4;
 import com.edplan.framework.graphics.opengl.objs.TextureVertex3D;
 import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
 import com.edplan.framework.graphics.opengl.batch.RectVertexBatch;
+import com.edplan.framework.graphics.opengl.batch.BaseBatch;
+import com.edplan.framework.graphics.opengl.batch.base.IHasRectPosition;
 
-public class RectTextureShader<T extends RectVertexBatch> extends Texture3DShader<T>
+public class RectTextureShader extends Texture3DShader
 {
 	private VertexAttrib vRectPosition;
 	
@@ -42,13 +44,21 @@ public class RectTextureShader<T extends RectVertexBatch> extends Texture3DShade
 	}
 
 	@Override
-	public void loadBatch(T batch) {
+	public boolean loadBatch(BaseBatch batch) {
 		// TODO: Implement this method
-		super.loadBatch(batch);
-		loadRectPositions(batch.makeRectPositionBuffer());
+		if(super.loadBatch(batch)){
+			if(batch instanceof IHasRectPosition){
+				loadRectPositions(((IHasRectPosition)batch).makeRectPositionBuffer());
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			return false;
+		}
 	}
 	
-	public static final <T extends RectVertexBatch> RectTextureShader<T> createRTS(String vs,String fs,Class<T> klass){
-		return new RectTextureShader<T>(GLProgram.createProgram(vs,fs));
+	public static final RectTextureShader createRTS(String vs,String fs){
+		return new RectTextureShader(GLProgram.createProgram(vs,fs));
 	}
 }

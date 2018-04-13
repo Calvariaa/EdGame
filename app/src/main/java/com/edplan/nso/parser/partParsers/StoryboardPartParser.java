@@ -248,10 +248,11 @@ public class StoryboardPartParser extends PartParser<PartEvents>
 		// TODO: Implement this method
 		
 		//if(parsingData.getParsingLineIndex()==172240)parsedObjects=0;
-		
+		/*
 		if(parsingData.getParsingLineIndex()<161204||parsedObjects>=2){
 			return true;
 		}
+		*/
 		/*else if(parsingData.getParsingLineIndex()==172087){
 			System.out.println(l);
 			throw new RuntimeException("停!");

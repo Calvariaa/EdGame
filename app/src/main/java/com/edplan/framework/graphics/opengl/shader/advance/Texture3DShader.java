@@ -19,8 +19,10 @@ import com.edplan.framework.interfaces.Recycleable;
 import com.edplan.framework.graphics.opengl.batch.BaseColorBatch;
 import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
 import com.edplan.framework.graphics.opengl.objs.texture.TextureRegion;
+import com.edplan.framework.graphics.opengl.batch.BaseBatch;
+import com.edplan.framework.graphics.opengl.batch.base.IHasTexturePosition;
 
-public class Texture3DShader<T extends Texture3DBatch> extends ColorShader<T>
+public class Texture3DShader extends ColorShader
 {	
 	private UniformSample2D uTexture;
 	
@@ -33,10 +35,18 @@ public class Texture3DShader<T extends Texture3DBatch> extends ColorShader<T>
 	}
 
 	@Override
-	public void loadBatch(T batch) {
+	public boolean loadBatch(BaseBatch batch) {
 		// TODO: Implement this method
-		super.loadBatch(batch);
-		loadTexturePosition(batch.makeTexturePositionBuffer());
+		if(super.loadBatch(batch)){
+			if(batch instanceof IHasTexturePosition){
+				loadTexturePosition(((IHasTexturePosition)batch).makeTexturePositionBuffer());
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			return false;
+		}
 	}
 	
 	public void loadTexture(GLTexture texture){
@@ -52,7 +62,7 @@ public class Texture3DShader<T extends Texture3DBatch> extends ColorShader<T>
 	}
 
 	
-	public static final <T extends Texture3DBatch> Texture3DShader<T> createT3S(String vs,String fs,Class<T> klass){
-		return new Texture3DShader<T>(GLProgram.createProgram(vs,fs));
+	public static final Texture3DShader createT3S(String vs,String fs){
+		return new Texture3DShader(GLProgram.createProgram(vs,fs));
 	}
 }

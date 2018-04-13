@@ -5,12 +5,12 @@ import com.edplan.framework.graphics.opengl.objs.Vertex3D;
 import java.util.ArrayList;
 import java.util.List;
 import com.edplan.framework.graphics.opengl.objs.VertexList;
+import com.edplan.framework.graphics.opengl.batch.base.IHasColor;
+import com.edplan.framework.graphics.opengl.batch.base.IHasPosition;
 
-public class BaseColorBatch<T extends Vertex3D>
+public class BaseColorBatch<T extends Vertex3D> extends BaseBatch implements IHasColor,IHasPosition
 {
 	protected List<T> vertexs;
-
-	private float colorMixRate;
 	
 	public BaseColorBatch(){
 		vertexs=new ArrayList<T>();
@@ -22,14 +22,6 @@ public class BaseColorBatch<T extends Vertex3D>
 
 	public int getVertexCount(){
 		return vertexs.size();
-	}
-
-	public void setColorMixRate(float colorMixRate) {
-		this.colorMixRate=colorMixRate;
-	}
-
-	public float getColorMixRate() {
-		return colorMixRate;
 	}
 	
 	public BaseColorBatch add(VertexList<T> list){
@@ -52,6 +44,7 @@ public class BaseColorBatch<T extends Vertex3D>
 	}
 
 	private Color4Buffer colorBuffer;
+	@Override
 	public Color4Buffer makeColorBuffer(){
 		if(colorBuffer!=null)colorBuffer.clear();
 		colorBuffer=new Color4Buffer();
@@ -62,6 +55,7 @@ public class BaseColorBatch<T extends Vertex3D>
 	}
 
 	private Vec3Buffer positionBuffer;
+	@Override
 	public Vec3Buffer makePositionBuffer(){
 		if(positionBuffer!=null)positionBuffer.clear();
 		positionBuffer=new Vec3Buffer();

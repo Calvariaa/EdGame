@@ -23,7 +23,7 @@ public class PlayingStoryboardLayer extends EdDrawable
 	
 	private PlayingStoryboard storyboard;
 	
-	private boolean preApplyMode=true;
+	private boolean preApplyMode=false;
 	
 	public PlayingStoryboardLayer(StoryboardLayer layer,PlayingStoryboard storyboard){
 		super(storyboard.getContext());

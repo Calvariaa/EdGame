@@ -17,8 +17,11 @@ import com.edplan.framework.math.Mat4;
 import com.edplan.framework.graphics.opengl.GLPaint;
 import com.edplan.framework.graphics.opengl.batch.BaseColorBatch;
 import com.edplan.framework.graphics.opengl.GLCanvas2D;
+import com.edplan.framework.graphics.opengl.batch.base.IHasColor;
+import com.edplan.framework.graphics.opengl.batch.base.IHasPosition;
+import com.edplan.framework.graphics.opengl.batch.BaseBatch;
 
-public class ColorShader<T extends BaseColorBatch> extends GLProgram 
+public class ColorShader extends GLProgram 
 {
 	private UniformMat4 uMVPMatrix;
 	
@@ -50,10 +53,15 @@ public class ColorShader<T extends BaseColorBatch> extends GLProgram
 		loadAlpha(paint.getFinalAlpha()*alphaAdjust);
 		//loadColorMixRate(paint.getColorMixRate());
 	}
-	
-	public void loadBatch(T batch){
-		loadColor(batch.makeColorBuffer());
-		loadPosition(batch.makePositionBuffer());
+
+	public boolean loadBatch(BaseBatch batch){
+		if(batch instanceof IHasColor&&batch instanceof IHasPosition){
+			loadColor(((IHasColor)batch).makeColorBuffer());
+			loadPosition(((IHasPosition)batch).makePositionBuffer());
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 	public void loadMatrix(Mat4 mvp,Mat4 mask){
@@ -89,7 +97,7 @@ public class ColorShader<T extends BaseColorBatch> extends GLProgram
 		uFinalAlpha.loadData(a);
 	}
 	
-	public static final <T extends BaseColorBatch> ColorShader<T> createCS(String vs,String fs,Class<T> klass){
-		return new ColorShader<T>(GLProgram.createProgram(vs,fs));
+	public static final ColorShader createCS(String vs,String fs){
+		return new ColorShader(GLProgram.createProgram(vs,fs));
 	}
 }
