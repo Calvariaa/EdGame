@@ -54,6 +54,12 @@ public class StoryboardSample implements IStoryboardElements
 	}
 
 	@Override
+	public String[] getTexturePaths() {
+		// TODO: Implement this method
+		return new String[0];
+	}
+
+	@Override
 	public BaseDrawableSprite createDrawable(PlayingStoryboard storyboard) {
 		// TODO: Implement this method
 		return null;

@@ -13,6 +13,7 @@ public class FrameBufferObject
 {
 	private DepthBufferObject depthAttachment;
 	
+	private boolean permissionToDeleteTexture=true;
 	private GLTexture colorAttachment;
 	
 	private TextureRegion region;
@@ -156,7 +157,7 @@ public class FrameBufferObject
 	}
 	
 	public void deleteWithAttachment(){
-		if(hasColorAttachment()){
+		if(hasColorAttachment()&&permissionToDeleteTexture){
 			getColorAttachment().delete();
 		}
 		if(hasDepthAttachment()){
@@ -170,6 +171,22 @@ public class FrameBufferObject
 		// TODO: Implement this method
 		super.finalize();
 		delete();
+	}
+	
+	public static FrameBufferObject create(GLTexture texture){
+		FrameBufferObject fbo=createFBO();
+		fbo.permissionToDeleteTexture=false;
+		fbo.width=texture.getWidth();
+		fbo.height=texture.getHeight();
+		fbo.setCreatedHeight(texture.getWidth());
+		fbo.setCreatedWidth(texture.getHeight());
+		fbo.bind();
+		//if(useDepth){
+			fbo.linkDepthBuffer(DepthBufferObject.create(texture.getHeight(),texture.getWidth()));
+		//}
+		fbo.linkColorAttachment(GLTexture.createGPUTexture(texture.getWidth(),texture.getHeight()));
+		fbo.unBind();
+		return fbo;
 	}
 	
 	public static FrameBufferObject create(int width,int height,boolean useDepth){

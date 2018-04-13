@@ -111,6 +111,10 @@ public class RectI implements Copyable
 		return this;
 	}
 
+	public static RectI xywh(int x,int y,int width,int height){
+		return new RectI(x,y,width,height);
+	}
+	
 	/*
 	public RectI padding(Vec4 p){
 		return padding(p.r,p.g,p.b,p.a);

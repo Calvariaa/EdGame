@@ -11,6 +11,9 @@ import com.edplan.framework.graphics.opengl.objs.texture.TexturePool;
 import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 import java.io.IOException;
 import com.edplan.framework.resource.BufferedListResource;
+import com.edplan.framework.graphics.opengl.objs.texture.AutoPackTexturePool;
+import com.edplan.nso.storyboard.elements.IStoryboardElements;
+import java.io.File;
 
 public class PlayingStoryboard extends EdDrawable
 {
@@ -20,7 +23,7 @@ public class PlayingStoryboard extends EdDrawable
 	
 	private BufferedListResource resource;
 	
-	private TexturePool pool;
+	public AutoPackTexturePool pool;
 	
 	public PlayingStoryboard(MContext context,PreciseTimeline timeline,Storyboard storyboard,AResource resource){
 		super(context);
@@ -29,11 +32,12 @@ public class PlayingStoryboard extends EdDrawable
 		//new BufferedListResource(resource.subResource("SB/Font")).printDetails();
 		//this.resource.printDetails();
 		this.timeline=timeline;
-		pool=new TexturePool(new TexturePool.TextureLoader(){
+		pool=new AutoPackTexturePool(new TexturePool.TextureLoader(){
 				@Override
 				public AbstractTexture load(String msg) {
 					// TODO: Implement this method
 					try {
+						System.out.println("on load texture: "+msg);
 						return PlayingStoryboard.this.resource.loadTexture(msg);
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -41,7 +45,15 @@ public class PlayingStoryboard extends EdDrawable
 						throw new RuntimeException(e.getMessage());
 					}
 				}
-		});
+		},context);
+		for(Map.Entry<String,StoryboardLayer> l:storyboard.getLayers().entrySet()){
+			for(IStoryboardElements ele:l.getValue().getElements()){
+				for(String res:ele.getTexturePaths()){
+					pool.getTexture(res);
+				}
+			}
+		}
+		pool.writeToDir(new File("/storage/emulated/0/MyDisk/bin/pool/1"),"pool");
 		for(Map.Entry<String,StoryboardLayer> l:storyboard.getLayers().entrySet()){
 			layers.put(l.getKey(),new PlayingStoryboardLayer(l.getValue(),this));
 		}

@@ -22,4 +22,10 @@ public class StoryboardAnimation extends StoryboardSprite
 		// TODO: Implement this method
 		return getPath().substring(0,getPath().lastIndexOf("."))+"0"+getPath().substring(getPath().lastIndexOf("."),getPath().length());
 	}
+
+	@Override
+	public String[] getTexturePaths() {
+		// TODO: Implement this method
+		return new String[]{getInitialPath()};
+	}
 }

@@ -79,16 +79,21 @@ public class TestView extends EdView
 	
 	public TestView(MContext context){
 		super(context);
+		
+	}
+	
+	
+	
+	@Override
+	public void onCreate(){
 		test=new TestData();
 		try {
-			AResource res=getContext()
-				.getAssetResource()
-				.subResource("font");
+			AResource res=getContext().getAssetResource().subResource("font");
 			font=BMFont.loadFont(
-						res,
-			//			"Exo2.0-Regular.fnt");
-			
-						"Noto-CJK-Basic.fnt");
+				res,
+				//			"Exo2.0-Regular.fnt");
+
+				"Noto-CJK-Basic.fnt");
 			//font.setErrCharacter(BMFont.CHAR_NOT_FOUND);
 			font.addFont(res,"Noto-Basic.fnt");
 			font.setErrCharacter('⊙');
@@ -97,70 +102,67 @@ public class TestView extends EdView
 			e.printStackTrace();
 		}
 
-		
+
 		System.out.println(test.getBeatmapPath());
 		System.out.println(test.getSongPath());
-		
-		try {
-			
-			
 
-			
-			
+		try {
+
+
 			skin=new OsuSkin();
 			skin.load(
 				getContext()
-				 .getAssetResource()
-				  .subResource("osu")
-				   .subResource("skins")
-				    .subResource("default"));
-			
+				.getAssetResource()
+				.subResource("osu")
+				.subResource("skins")
+				.subResource("default"));
+
 			StdBeatmapDecoder bparser=new StdBeatmapDecoder(
-												//getContext()
-												 //.getAssetResource()
-												  //.subResource("osu/test/beatmap")
-												  test.testFloder().openInput(
-			//"t+pazolite with siromaru - Chambarising (Bloodmoon) [Stream Practice (160)].osu"
-			//"Suzuki Konomi - Cyber Thunder Cider (Nattu) [Niat's Cider].osu"
-			//"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
-			//"UNDEAD CORPORATION - The Empress (Plutia) [STARBOW BREAK!].osu"
-			//"Mai Zang - Si Ye Cao De Huang Xiang (Axarious) [Despair].osu"
-			//"Osu!Droid Tieba Challenge - Evolution Pack (Believer_zzr) [Future Cider].osu"
-			//"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
-			//"Yueporu feat. Hatsune Miku - Kurikaeshi Hitotsubu (Zweib) [Hitotsubu].osu"
-			//"1/Chino (CV.Minase Inori) - Okashina yume o Ohitotsu douzo (- Skanbis -) [Asuka_-'s insane].osu"
-			//"2/Halozy - Kikoku Doukoku Jigokuraku (Hollow Wings) [Notch Hell].osu"
-			//"3/IAHN - Transform (Original Mix) (Monstrata) [Aspire].osu"
-			//"4/IOSYS - Marisa wa Taihen na Mono wo Nusunde Ikimashita (DJPop) [TAG4].osu"
-			//"5/Luo Tianyi - Xiao Ji Bibi ~ Remix ~ (MoleAkarin) [Bi~bi~].osu"
-			//"6/xi - FREEDOM DiVE (Nakagawa-Kanon) [FOUR DIMENSIONS].osu"
-			//"7/Panda Eyes & Teminite - Highscore (Fort) [Game Over].osu"
-			//"8/Helblinde - The Solace of Oblivion (ProfessionalBox) [Aspire].osu"
-			//"9/Knife Party - Centipede (Sugoi-_-Desu) [This isn't a map, just a simple visualisation].osu"
-			test.getBeatmapPath()
-												   ),
-												"test case beatmap: " 
-												 );
-												 
+				//getContext()
+				//.getAssetResource()
+				//.subResource("osu/test/beatmap")
+				test.testFloder().openInput(
+					//"t+pazolite with siromaru - Chambarising (Bloodmoon) [Stream Practice (160)].osu"
+					//"Suzuki Konomi - Cyber Thunder Cider (Nattu) [Niat's Cider].osu"
+					//"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
+					//"UNDEAD CORPORATION - The Empress (Plutia) [STARBOW BREAK!].osu"
+					//"Mai Zang - Si Ye Cao De Huang Xiang (Axarious) [Despair].osu"
+					//"Osu!Droid Tieba Challenge - Evolution Pack (Believer_zzr) [Future Cider].osu"
+					//"Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"
+					//"Yueporu feat. Hatsune Miku - Kurikaeshi Hitotsubu (Zweib) [Hitotsubu].osu"
+					//"1/Chino (CV.Minase Inori) - Okashina yume o Ohitotsu douzo (- Skanbis -) [Asuka_-'s insane].osu"
+					//"2/Halozy - Kikoku Doukoku Jigokuraku (Hollow Wings) [Notch Hell].osu"
+					//"3/IAHN - Transform (Original Mix) (Monstrata) [Aspire].osu"
+					//"4/IOSYS - Marisa wa Taihen na Mono wo Nusunde Ikimashita (DJPop) [TAG4].osu"
+					//"5/Luo Tianyi - Xiao Ji Bibi ~ Remix ~ (MoleAkarin) [Bi~bi~].osu"
+					//"6/xi - FREEDOM DiVE (Nakagawa-Kanon) [FOUR DIMENSIONS].osu"
+					//"7/Panda Eyes & Teminite - Highscore (Fort) [Game Over].osu"
+					//"8/Helblinde - The Solace of Oblivion (ProfessionalBox) [Aspire].osu"
+					//"9/Knife Party - Centipede (Sugoi-_-Desu) [This isn't a map, just a simple visualisation].osu"
+					test.getBeatmapPath()
+				),
+				"test case beatmap: " 
+			);
+
 			audio=BassChannel.createStreamFromFile(
-			test.dir+"/"+
-			//.createStreamFromResource(getContext().getAssetResource(),"osu/test/beatmap/"+
-			//.createStreamFromAsset(getContext(),"osu/test/beatmap/"+
-			//"test.mp3"
-			//"cloverfantasy.mp3"
-			//"audio.mp3"
-			//"hust.mp3"
-			//"No Poi!.mp3"
-			//"1/audio.mp3"
-			//"2/Kikoku Doukoku Jigokuraku.mp3"
-			//"3/audio.mp3"
-			//"4/Marisa wa Taihen na Mono wo Nusunde Ikimashita.mp3"
-			//"5/bibibi.mp3"
-			//"6/Freedom Dive.mp3"
-			//"7/Teminite & Panda Eyes - Highscore.mp3"
-			//"8/audio.mp3"
-			//"9/02-knife_party-centipede.mp3"
-			test.getSongPath()
+				test.dir+"/"+
+				//.createStreamFromResource(getContext().getAssetResource(),"osu/test/beatmap/"+
+				//.createStreamFromAsset(getContext(),"osu/test/beatmap/"+
+				//"test.mp3"
+				//"cloverfantasy.mp3"
+				//"audio.mp3"
+				//"hust.mp3"
+				//"No Poi!.mp3"
+				//"1/audio.mp3"
+				//"2/Kikoku Doukoku Jigokuraku.mp3"
+				//"3/audio.mp3"
+				//"4/Marisa wa Taihen na Mono wo Nusunde Ikimashita.mp3"
+				//"5/bibibi.mp3"
+				//"6/Freedom Dive.mp3"
+				//"7/Teminite & Panda Eyes - Highscore.mp3"
+				//"8/audio.mp3"
+				//"9/02-knife_party-centipede.mp3"
+				test.getSongPath()
 			);
 			try
 			{
@@ -176,47 +178,47 @@ public class TestView extends EdView
 				Log.v("osu","objs: "+playingBeatmap.getHitObjects().size()+" first: "+playingBeatmap.getHitObjects().get(0).getStartTime());
 				playField=new StdPlayField(getContext(),timeline);
 				playField.applyBeatmap(playingBeatmap);
-				
-				
+
+
 				//# osb test
 				if(test.enableStoryboard){
-				File osb=new File(//"/storage/emulated/0/ADM/470977 Mili - world.execute(me)/Mili - world.execute(me); (Exile-).osb");
-				//"/storage/emulated/0/ADM/186911 Function Phantom - Neuronecia2/Function Phantom - Neuronecia (Amamiya Yuko).osb");
-				//"/storage/emulated/0/ADM/151720 ginkiha - EOS1/ginkiha - EOS (alacat).osb");
-				//"/storage/emulated/0/ADM/389179 Jay Chou - Fa Ru Xue3/Jay Chou - Fa Ru Xue (KaedekaShizuru).osb");
-					"/storage/emulated/0/osu!droid/Songs/470977 Mili - world.execute(me)/Mili - world.execute(me); (Exile-).osb");
-				StoryboardDecoder decoder=new StoryboardDecoder(
-				//osb);
-				test.testFloder().openInput(test.getOsbPath()),"ahh");
-				
-				try {
-					long s=System.currentTimeMillis();
-					decoder.parse();
-					storyboard=decoder.getStoryboard();
-					System.out.println("end edcode osb: "+storyboard.getObjectCount());
-					playingStoryboard=new PlayingStoryboard(getContext(),timeline,storyboard,
-					//new DirResource(osb.getParentFile()));
-					test.testFloder().subResource(test.testBeatmapFloder+""));
-					//new DirResource(osb.getParentFile()));
-					System.out.println("end transform to playing state");
-					System.out.println("storyboard parse done in: "+(System.currentTimeMillis()-s)+"ms");
-					
-					JSONObject jobj=new JSONObject("{\"a\":100}");
-					System.out.println(jobj.toString());
-					
-					
-					/*
-					for(int i=0;i<5;i++){
-						BaseDrawableSprite spr=(BaseDrawableSprite) playingStoryboard.getLayer(Storyboard.Layer.Foreground.name()).getSprites().get(i);
-						System.out.println(spr.getAnimations());
+					File osb=new File(//"/storage/emulated/0/ADM/470977 Mili - world.execute(me)/Mili - world.execute(me); (Exile-).osb");
+						//"/storage/emulated/0/ADM/186911 Function Phantom - Neuronecia2/Function Phantom - Neuronecia (Amamiya Yuko).osb");
+						//"/storage/emulated/0/ADM/151720 ginkiha - EOS1/ginkiha - EOS (alacat).osb");
+						//"/storage/emulated/0/ADM/389179 Jay Chou - Fa Ru Xue3/Jay Chou - Fa Ru Xue (KaedekaShizuru).osb");
+						"/storage/emulated/0/osu!droid/Songs/470977 Mili - world.execute(me)/Mili - world.execute(me); (Exile-).osb");
+					StoryboardDecoder decoder=new StoryboardDecoder(
+						//osb);
+						test.testFloder().openInput(test.getOsbPath()),"ahh");
+
+					try {
+						long s=System.currentTimeMillis();
+						decoder.parse();
+						storyboard=decoder.getStoryboard();
+						System.out.println("end edcode osb: "+storyboard.getObjectCount());
+						playingStoryboard=new PlayingStoryboard(getContext(),timeline,storyboard,
+																//new DirResource(osb.getParentFile()));
+																test.testFloder().subResource(test.testBeatmapFloder+""));
+						//new DirResource(osb.getParentFile()));
+						System.out.println("end transform to playing state");
+						System.out.println("storyboard parse done in: "+(System.currentTimeMillis()-s)+"ms");
+
+						JSONObject jobj=new JSONObject("{\"a\":100}");
+						System.out.println(jobj.toString());
+
+
+						/*
+						 for(int i=0;i<5;i++){
+						 BaseDrawableSprite spr=(BaseDrawableSprite) playingStoryboard.getLayer(Storyboard.Layer.Foreground.name()).getSprites().get(i);
+						 System.out.println(spr.getAnimations());
+						 }
+						 */
+
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-					*/
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-				//# end osb test
+
+					//# end osb test
 				}
 			}
 			catch (NsoException e)
@@ -229,16 +231,16 @@ public class TestView extends EdView
 				e.printStackTrace();
 			}
 
-			
+
 			testPng=skin.hitcircle.getRes();
 			/*
-				GLTexture.decodeStream(
-				context
-				.getAssetResource()
-				.getTextureResource()
-				.openInput
-				("ic_launcher.png"));*/
-			cardPng=GLTexture.decodeResource(context.getAssetResource().getTextureResource(),
+			 GLTexture.decodeStream(
+			 context
+			 .getAssetResource()
+			 .getTextureResource()
+			 .openInput
+			 ("ic_launcher.png"));*/
+			cardPng=GLTexture.decodeResource(getContext().getAssetResource().getTextureResource(),
 											 "card.jpg");
 			//"default-bg.png");
 		} catch (IOException e) {
@@ -247,11 +249,12 @@ public class TestView extends EdView
 	}
 	
 	boolean ifend=false;
+	double renderTime=0;
 	@Override
 	public void draw(GLCanvas2D canvas) {
 		// TODO: Implement this method
 		super.draw(canvas);
-		
+		renderTime+=getContext().getFrameDeltaTime();
 		int audioOffset=(int)(timeline.frameTime()-audio.currentPlayTimeMS());
 		
 		a+=0.005;
@@ -311,6 +314,16 @@ public class TestView extends EdView
 		
 		newCanvas.drawColor(Color4.gray(0.3f));
 		newCanvas.clearDepthBuffer();
+		
+		/*
+		GLPaint rp=new GLPaint();
+		AbstractTexture pack=playingStoryboard.pool.getPacks().get(0).getTexture();
+		newCanvas.drawTexture(pack,new RectF(0,0,1000,1000),rp);
+		int idx=(int)(renderTime/1000);
+		AbstractTexture part=playingStoryboard.pool.getPackedTextures().get(idx);
+		newCanvas.drawTexture(part,new RectF(1100,100,part.getWidth()*1.5f,part.getHeight()*1.5f),rp);
+		*/
+		
 		
 		float osuScale=PlayField.BASE_Y/canvas.getHeight();
 		newCanvas.translate(newCanvas.getWidth()/2-PlayField.BASE_X/2/osuScale,0);

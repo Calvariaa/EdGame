@@ -51,10 +51,10 @@ public class PlayingStoryboardLayer extends EdDrawable
 				
 				
 				if(preApplyMode)ele.onApply(drawable,storyboard);
-				
+				/*
 				System.out.println(((BaseDrawableSprite)drawable).getAnimations());
 				System.out.println(((StoryboardSprite)ele).rawData);
-				
+				*/
 				
 				
 			}else{

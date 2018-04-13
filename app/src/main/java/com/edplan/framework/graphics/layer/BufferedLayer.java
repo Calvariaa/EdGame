@@ -30,6 +30,10 @@ public class BufferedLayer
 	
 	private int height;
 	
+	private boolean permissionToTexture=true;
+	
+	private boolean joinPool=true;
+	
 	public BufferedLayer(MContext context,int width,int height,boolean hasDepthBuffer){
 		this.context=context;
 		this.width=width;
@@ -45,6 +49,19 @@ public class BufferedLayer
 		this.height=fbo.getHeight();
 		this.hasDepthBuffer=fbo.hasDepthAttachment();
 		bufferedPool=DEF_FBOPOOL;
+	}
+	
+	public BufferedLayer(MContext context,GLTexture texture){
+		this(context,FrameBufferObject.create(texture));
+		permissionToTexture=false;
+	}
+
+	public void setJoinPool(boolean joinPool) {
+		this.joinPool=joinPool;
+	}
+
+	public boolean isJoinPool() {
+		return joinPool;
 	}
 	
 	public MContext getContext(){
@@ -96,10 +113,10 @@ public class BufferedLayer
 				frameBuffer.setHeight(height);
 				//Log.v("fbo-test","1 resize fbo "+frameBuffer.getFBOId());
 			}else{
-				if(!bufferedPool.saveFBO(frameBuffer)){
+				if(joinPool&&!bufferedPool.saveFBO(frameBuffer)){
 					frameBuffer.deleteWithAttachment();
 				}//else Log.v("fbo-test","save fbo to pool "+frameBuffer.getFBOId());
-				frameBuffer=bufferedPool.requireFBO(width,height);
+				if(joinPool)frameBuffer=bufferedPool.requireFBO(width,height);
 				if(frameBuffer==null){
 					frameBuffer=FrameBufferObject.create(width,height,hasDepthBuffer);
 					//frameBuffer.setWidth(width);
@@ -108,7 +125,7 @@ public class BufferedLayer
 				}//else Log.v("fbo-test","1 load fbo from pool "+frameBuffer.getFBOId());
 			}
 		}else{
-			frameBuffer=bufferedPool.requireFBO(width,height);
+			if(joinPool)frameBuffer=bufferedPool.requireFBO(width,height);
 			if(frameBuffer==null){
 				frameBuffer=FrameBufferObject.create(width,height,hasDepthBuffer);
 				//Log.v("fbo-test","2 create fbo "+frameBuffer.getFBOId());
@@ -146,7 +163,11 @@ public class BufferedLayer
 		if(recycled){
 			return;
 		}else{
-			if(!bufferedPool.saveFBO(frameBuffer))frameBuffer.deleteWithAttachment();
+			if(permissionToTexture){
+				if(joinPool)if(!bufferedPool.saveFBO(frameBuffer))frameBuffer.deleteWithAttachment();
+			}else{
+				frameBuffer.deleteWithAttachment();
+			}
 			recycled=true;
 		}
 	}

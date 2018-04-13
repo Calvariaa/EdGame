@@ -35,7 +35,6 @@ public class EdView implements IRunnableHandler
 			throw new RuntimeException("you can only create a view in main thread!");
 		}
 		initialName();
-		
 	}
 	
 	public boolean checkCurrentThread(){
@@ -115,6 +114,10 @@ public class EdView implements IRunnableHandler
 
 	public Visibility getVisiblility() {
 		return visiblility;
+	}
+	
+	public void onCreate(){
+		
 	}
 	
 	/**

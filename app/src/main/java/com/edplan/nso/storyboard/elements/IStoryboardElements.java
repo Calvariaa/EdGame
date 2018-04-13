@@ -9,6 +9,8 @@ public interface IStoryboardElements
 	
 	public String getPath();
 	
+	public String[] getTexturePaths()
+	
 	public BaseDrawableSprite createDrawable(PlayingStoryboard storyboard);
 	
 	public void onApply(ADrawableStoryboardElement sprite,PlayingStoryboard storyboard);

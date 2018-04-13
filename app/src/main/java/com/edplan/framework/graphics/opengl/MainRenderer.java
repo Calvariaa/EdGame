@@ -72,6 +72,7 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 		for(int i=0;i<10;i++){
 			BufferedLayer.DEF_FBOPOOL.saveFBO(FrameBufferObject.create(1000,1000,true));
 		}
+		context.getContent().onCreate();
 		Log.v("ini-log","ini-scr: "+width+":"+heigth);
 	}
 

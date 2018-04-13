@@ -16,11 +16,22 @@ public class TexturePool
 		if(pool.containsKey(msg)){
 			return pool.get(msg);
 		}else{
-			AbstractTexture t=loader.load(msg);
-			if(t==null)throw new RuntimeException("err load Texture: "+msg);
+			AbstractTexture t=loadTexture(msg);
 			pool.put(msg,t);
 			return t;
 		}
+	}
+	
+	public AbstractTexture addTexture(String msg){
+		AbstractTexture t=loadTexture(msg);
+		pool.put(msg,t);
+		return t;
+	}
+	
+	protected AbstractTexture loadTexture(String msg){
+		AbstractTexture t=loader.load(msg);
+		if(t==null)throw new RuntimeException("err load Texture: "+msg);
+		return t;
 	}
 	
 	//全部清除，但是不会直接释放纹理

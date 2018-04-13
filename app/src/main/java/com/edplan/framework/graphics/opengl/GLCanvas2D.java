@@ -47,6 +47,10 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 		getData().setWidth(layer.getWidth());
 		getData().setHeight(layer.getHeight());
 	}
+	
+	public GLCanvas2D(GLTexture texture,MContext context){
+		this(new BufferedLayer(context,texture));
+	}
 
 	public void setEnablePost(boolean enablePost) {
 		this.enablePost=enablePost;

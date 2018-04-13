@@ -189,6 +189,12 @@ public class StoryboardSprite implements IStoryboardElements
 	}
 
 	@Override
+	public String[] getTexturePaths() {
+		// TODO: Implement this method
+		return new String[]{getPath()};
+	}
+
+	@Override
 	public BaseDrawableSprite createDrawable(PlayingStoryboard storyboard) {
 		// TODO: Implement this method
 		return new BaseDrawableSprite(storyboard,this);
