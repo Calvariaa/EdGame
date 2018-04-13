@@ -31,7 +31,7 @@ public class DrawableStdHitObject extends DrawableHitObject
 	
 	private boolean finished=false;
 	
-	private Color4 accentColor=new Color4(1,1,1,1);
+	private Color4 accentColor=Color4.rgba(1,1,1,1);
 	
 	private int comboIndex=1;
 

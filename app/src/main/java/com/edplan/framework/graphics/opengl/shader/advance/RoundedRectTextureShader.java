@@ -45,7 +45,7 @@ public class RoundedRectTextureShader<T extends RectVertexBatch> extends RectTex
 	@Override
 	public void loadRectData(RectF drawingRect,Vec4 padding) {
 		// TODO: Implement this method
-		loadRectData(drawingRect, padding,0,new Color4(0,0,0,0),DEFAULT_GLOW_FACTOR);
+		loadRectData(drawingRect, padding,0,Color4.Alpha,DEFAULT_GLOW_FACTOR);
 	}
 	
 	public static final <T extends RectVertexBatch> RoundedRectTextureShader<T> createRRTS(String vs,String fs,Class<T> klass){

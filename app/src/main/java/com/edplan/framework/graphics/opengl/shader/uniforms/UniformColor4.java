@@ -34,8 +34,11 @@ public class UniformColor4  implements DataUniform<Color4>
 	@Override
 	public void loadData(Color4 t) {
 		// TODO: Implement this method
-		t=t.toPremultipled();
-		GLES20.glUniform4f(getHandle(),t.r,t.g,t.b,t.a);
+		if(!t.premultiple){
+			GLES20.glUniform4f(getHandle(),t.r*t.a,t.g*t.a,t.b*t.a,t.a);
+		}else{
+			GLES20.glUniform4f(getHandle(),t.r,t.g,t.b,t.a);
+		}
 	}
 
 	@Override

@@ -5,7 +5,7 @@ import com.edplan.framework.graphics.opengl.objs.Color4;
 public class Vec4 extends Color4 
 {
 	public Vec4(float x,float y,float z,float w){
-		super(x,y,z,w);
+		set(x,y,z,w);
 	}
 	
 	public Vec4(Color4 r){
@@ -17,6 +17,13 @@ public class Vec4 extends Color4
 		return this;
 	}
 
+	public void setVec4(float r,float g,float b,float a){
+		this.r=r;
+		this.g=g;
+		this.b=b;
+		this.a=a;
+	}
+	
 	@Override
 	public Vec4 copyNew() {
 		// TODO: Implement this method

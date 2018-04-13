@@ -3,7 +3,7 @@ import com.edplan.framework.math.Vec3;
 
 public class Vertex3D
 {
-	public static final Color4 DEF_COLOR=new Color4(1.0f,1.0f,1.0f,1.0f);
+	public static final Color4 DEF_COLOR=Color4.rgba(1.0f,1.0f,1.0f,1.0f);
 	
 	public static final Vec3 DEF_POSITION=new Vec3(0,0,0);
 	

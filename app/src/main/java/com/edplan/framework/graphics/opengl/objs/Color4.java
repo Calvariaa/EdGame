@@ -4,46 +4,81 @@ import android.graphics.Color;
 
 public class Color4
 {
-	public static final Color4 ONE=Color4.rgba(1,1,1,1);
+	public static final Color4 ONE=Color4.rgba(1,1,1,1,true);
 	
-	public static final Color4 White=Color4.rgb(1,1,1);
+	public static final Color4 White=Color4.rgba(1,1,1,1,true);
 	
-	public static final Color4 Alpha=Color4.rgba(0,0,0,0);
+	public static final Color4 Alpha=Color4.rgba(0,0,0,0,true);
 	
-	public static final Color4 Black=Color4.rgb(0,0,0);
+	public static final Color4 Black=Color4.rgba(0,0,0,1,true);
 	
-	public static final Color4 Blue=Color4.rgb(0,0,1);
+	public static final Color4 Blue=Color4.rgba(0,0,1,1,true);
+	
+	public static final Color4 Green=Color4.rgba(0,1,0,1,true);
+	
+	public static final Color4 Red=Color4.rgba(1,0,0,1,true);
 	
 	public float r,g,b,a;
 	
 	public boolean premultiple=false;
 
-	public Color4(){
+	protected Color4(){
 
 	}
 
-	public Color4(float ar,float ag,float ab,float aa){
-		set(ar,ag,ab,aa);
+	protected Color4(float ar,float ag,float ab,float aa,boolean premu){
+		set(ar,ag,ab,aa,premu);
 	}
 
-	public Color4(Color4 c){
+	protected Color4(Color4 c){
 		set(c);
 	}
 	
 	public Color4 set(Color4 c){
-		set(c.r,c.g,c.b,c.a);
-		premultiple=c.premultiple;
+		set(c.r,c.g,c.b,c.a,c.premultiple);
 		return this;
+	}
+
+	public void set(int numberBit,boolean prem){
+		r=Color.red(numberBit)/255f;
+		g=Color.green(numberBit)/255f;
+		b=Color.blue(numberBit)/255f;
+		a=Color.alpha(numberBit)/255f;
+		premultiple=prem;
+	}
+
+	public Color4 toPremultipledThis(){
+		if(premultiple){
+			return this;
+		}else{
+			applyPremu();
+			return this;
+		}
+	}
+
+	private void applyPremu(){
+		premultiple=true;
+		r*=a;
+		g*=a;
+		b*=a;
 	}
 
 	public Color4 toPremultipled(){
 		if(premultiple){
 			return this.copyNew();
 		}else{
-			Color4 c=new Color4(r*a,g*a,b*a,a);
-			c.premultiple=true;
-			return c;
+			Color4 c=this.copyNew();
+			return c.toPremultipledThis();
 		}
+	}
+
+	public Color4 set(float r,float g,float b,float a,boolean premu){
+		this.r=r;
+		this.g=g;
+		this.b=b;
+		this.a=a;
+		this.premultiple=premu;
+		return this;
 	}
 
 	public Color4 set(float r,float g,float b,float a){
@@ -133,13 +168,15 @@ public class Color4
 		return "(r,g,b,a)=("+r+","+g+","+b+","+a+")";
 	}
 	
+	/*
 	public static Color4 max(Color4 c1,Color4 c2){
-		return new Color4(Math.max(c1.r,c2.r),Math.max(c1.g,c2.g),Math.max(c1.b,c2.b),Math.max(c1.a,c2.a));
+		return Color4.rgba(Math.max(c1.r,c2.r),Math.max(c1.g,c2.g),Math.max(c1.b,c2.b),Math.max(c1.a,c2.a));
 	}
 	
 	public static Color4 min(Color4 c1,Color4 c2){
-		return new Color4(Math.min(c1.r,c2.r),Math.min(c1.g,c2.g),Math.min(c1.b,c2.b),Math.min(c1.a,c2.a));
+		return Color4.rgba(Math.min(c1.r,c2.r),Math.min(c1.g,c2.g),Math.min(c1.b,c2.b),Math.min(c1.a,c2.a));
 	}
+	*/
 	
 	
 	public static Color4 mix(Color4 c1,Color4 c2,float fac){
@@ -155,19 +192,23 @@ public class Color4
 	}
 	
 	public static Color4 rgba(float r,float g,float b,float a){
-		return new Color4(r,g,b,a);
+		return new Color4(r,g,b,a,false);
+	}
+	
+	public static Color4 rgba(float r,float g,float b,float a,boolean premu){
+		return new Color4(r,g,b,a,premu);
 	}
 
 	public static Color4 rgba255(float r,float g,float b,float a){
-		return new Color4(r/255f,g/255f,b/255f,a/255f);
+		return Color4.rgba(r/255f,g/255f,b/255f,a/255f);
 	}
 	
 	public static Color4 argb255(float a,float r,float g,float b){
-		return new Color4(r/255f,g/255f,b/255f,a/255f);
+		return Color4.rgba(r/255f,g/255f,b/255f,a/255f);
 	}
 	
 	public static Color4 rgb255(float r,float g,float b){
-		return new Color4(r/255f,g/255f,b/255f,1);
+		return Color4.rgba(r/255f,g/255f,b/255f,1);
 	}
 	
 	public static Color4 argb255(int v){

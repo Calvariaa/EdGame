@@ -9,7 +9,7 @@ public class TextureVertex3D extends Vertex3D
 	
 	public TextureVertex3D(){
 		super();
-		texturePoint=DEF_TEXTURE_POINT;
+		texturePoint=DEF_TEXTURE_POINT.copy();
 	}
 	
 	public TextureVertex3D(float tx,float ty,float x,float y,float z,Color4 color){
@@ -19,7 +19,7 @@ public class TextureVertex3D extends Vertex3D
 	
 	public TextureVertex3D(Vec3 p){
 		super(p);
-		texturePoint=DEF_TEXTURE_POINT;
+		texturePoint=DEF_TEXTURE_POINT.copy();
 	}
 	
 	public TextureVertex3D(Vec3 p,Vec2 tp){

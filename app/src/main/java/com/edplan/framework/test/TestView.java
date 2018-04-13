@@ -286,9 +286,9 @@ public class TestView extends EdView
 		GLPaint paint=new GLPaint();
 		//paint.setColorMixRate(1f);
 		paint.setFinalAlpha(1f);
-		paint.setMixColor(new Color4(1,1,1,1));
+		paint.setMixColor(Color4.rgba(1,1,1,1));
 		paint.setPadding(10);
-		paint.setVaryingColor(new Color4(1,1,1,1));
+		paint.setVaryingColor(Color4.rgba(1,1,1,1));
 		paint.setRoundedRadius(30);
 		paint.setGlowFactor
 		//(0.1f);

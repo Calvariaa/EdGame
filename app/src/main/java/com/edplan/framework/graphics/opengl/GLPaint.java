@@ -5,9 +5,9 @@ import com.edplan.framework.math.Vec4;
 public class GLPaint
 {
 	//#Base Data，每一种绘制都会使用的
-	public Color4 mixColor=new Color4(1,1,1,1);
+	public Color4 mixColor=Color4.rgba(1,1,1,1);
 	
-	public Color4 varyingColor=new Color4(1,1,1,1);
+	public Color4 varyingColor=Color4.rgba(1,1,1,1);
 	
 	public float finalAlpha=1;
 	//#end Base Data
@@ -19,7 +19,7 @@ public class GLPaint
 	
 	public float glowFactor=0.5f;
 	
-	public Color4 glowColor=new Color4(1, 1, 1, 0.2f);
+	public Color4 glowColor=Color4.rgba(1, 1, 1, 0.2f);
 	//#end Rect Data
 	
 	//#Line Data，绘制线时的各种参数
