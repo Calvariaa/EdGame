@@ -28,7 +28,7 @@ public abstract class BasePiece extends EdDrawable implements IScaleable2D,IFade
 
 	private PreciseTimeline timeline;
 	
-	private Color4 accentColor=new Color4(1,1,1,1);
+	private Color4 accentColor=Color4.rgba(1,1,1,1);
 	
 	private boolean finished=false;
 

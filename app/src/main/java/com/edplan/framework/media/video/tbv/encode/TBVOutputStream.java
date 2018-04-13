@@ -10,7 +10,13 @@ public class TBVOutputStream
 {
 	private DataOutputStream out;
 	
+	public void writeBoolean(boolean b) throws IOException{
+		out.writeBoolean(b);
+	}
 	
+	public void writeShort(short s) throws IOException{
+		out.writeShort(s);
+	}
 	
 	public void writeInt(int i) throws IOException{
 		out.write(i);
@@ -46,7 +52,7 @@ public class TBVOutputStream
 		writeFloat(v.position.x);
 		writeFloat(v.position.y);
 		writeFloat(v.position.z);
-		writeARGB255(v.color);
+		writeARGB255(v.color.toPremultipled());
 		writeFloat(v.texturePoint.x);
 		writeFloat(v.texturePoint.y);
 	}

@@ -45,14 +45,17 @@ public class TBVInputStream
 		return Color4.argb255(readInt());
 	}
 	
-	public TextureVertex3D readTextureVertex3D() throws IOException{
+	public void readTextureVertex3D(TextureVertex3D vertex) throws IOException{
 		float x=readFloat();
 		float y=readFloat();
 		float z=readFloat();
-		Color4 color=readARGB255();
+		int color=readInt();
 		float tx=readFloat();
 		float ty=readFloat();
-		return new TextureVertex3D(tx,ty,x,y,z,color);
+		vertex.position.set(x,y,z);
+		vertex.color.set(color,true);
+		vertex.texturePoint.set(tx,ty);
+		return;
 	}
 	
 	public BlendType readBlendType() throws IOException{
@@ -68,6 +71,18 @@ public class TBVInputStream
 	
 	public JSONObject readJSONObject() throws JSONException, IOException{
 		return new JSONObject(readString());
+	}
+	
+	public void skip(int size) throws IOException{
+		in.skipBytes(size);
+	}
+	
+	public void mark(int buffer){
+		in.mark(buffer);
+	}
+	
+	public void reset() throws IOException{
+		in.reset();
 	}
 	
 	public static BlendType[] BlendTypes=new BlendType[]{
