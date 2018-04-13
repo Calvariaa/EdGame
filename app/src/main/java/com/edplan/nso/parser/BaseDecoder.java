@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import com.edplan.framework.utils.MLog;
+import java.util.Arrays;
+import java.io.UnsupportedEncodingException;
 
 public class BaseDecoder 
 {
@@ -66,6 +69,7 @@ public class BaseDecoder
 			if(reader.hasEnd()){
 				break;
 			}
+			onParseLine(parsingBeatmap.getParsingLineIndex(),reader.getNowString());
 			tagTmp=parseTag(reader.getNowString());
 			if(tagTmp!=null){
 				nowParser=parsers.get(tagTmp);
@@ -86,6 +90,10 @@ public class BaseDecoder
 				}
 			} 
 		}
+	}
+	
+	protected void onParseLine(int line,String l){
+		
 	}
 
 	protected void onParse() throws NsoException,NsoBeatmapParsingException,IOException{
@@ -126,10 +134,12 @@ public class BaseDecoder
 	}
 
 	public static int parseFormatLine(String s){
-		if(s.startsWith(FORMAT_LINE_HEAD)){
+		if (s.contains(FORMAT_LINE_HEAD)) {
 			try{
-				return Integer.parseInt(s.substring(FORMAT_LINE_HEAD.length(),s.length()));
+				String[] l=s.split("v");
+				return Integer.parseInt(l[l.length-1]);
 			}catch(NumberFormatException e){
+				e.printStackTrace();
 				Log.w("parsing format line",e.getMessage());
 				return -1;
 			}

@@ -23,6 +23,23 @@ public class Quad implements IQuad
 		this.topLeft.set(topLeft);
 	}
 
+	public void flip(boolean h,boolean v){
+		if(h){
+			swap(topLeft,topRight);
+			swap(bottomLeft,bottomRight);
+		}
+		if(v){
+			swap(topLeft,bottomLeft);
+			swap(topRight,bottomRight);
+		}
+	}
+	
+	private void swap(Vec2 v1,Vec2 v2){
+		Vec2 v3=v1.copy();
+		v1.set(v2);
+		v2.set(v3);
+	}
+	
 	@Override
 	public Vec2 getTopLeft() {
 		return topLeft.copy();

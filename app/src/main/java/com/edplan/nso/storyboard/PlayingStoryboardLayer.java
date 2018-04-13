@@ -23,6 +23,8 @@ public class PlayingStoryboardLayer extends EdDrawable
 	
 	private PlayingStoryboard storyboard;
 	
+	private boolean preApplyMode=true;
+	
 	public PlayingStoryboardLayer(StoryboardLayer layer,PlayingStoryboard storyboard){
 		super(storyboard.getContext());
 		this.storyboard=storyboard;
@@ -48,10 +50,11 @@ public class PlayingStoryboardLayer extends EdDrawable
 				sprites.add(node);
 				
 				
-				ele.onApply(drawable,storyboard);
+				if(preApplyMode)ele.onApply(drawable,storyboard);
 				
 				System.out.println(((BaseDrawableSprite)drawable).getAnimations());
 				System.out.println(((StoryboardSprite)ele).rawData);
+				
 				
 				
 			}else{
@@ -139,7 +142,7 @@ public class PlayingStoryboardLayer extends EdDrawable
 		
 		public void apply(){
 			added=true;
-			//rawElement.onApply(element,storyboard);
+			if(!preApplyMode)rawElement.onApply(element,storyboard);
 			element.onAdd();
 		}
 		

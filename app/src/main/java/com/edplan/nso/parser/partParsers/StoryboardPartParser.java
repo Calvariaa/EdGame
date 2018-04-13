@@ -14,6 +14,7 @@ import com.edplan.nso.storyboard.elements.StoryboardSample;
 import com.edplan.framework.ui.animation.Easing;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.BlendType;
+import com.edplan.nso.ParsingBeatmap;
 
 public class StoryboardPartParser extends PartParser<PartEvents>
 {
@@ -29,9 +30,12 @@ public class StoryboardPartParser extends PartParser<PartEvents>
 	
 	private CommandTimeLineGroup timelineGroup;
 	
-	public StoryboardPartParser(){
+	private ParsingBeatmap parsingData;
+	
+	public StoryboardPartParser(ParsingBeatmap data){
 		variableDecoder=new VariablesDecoder();
 		variables=variableDecoder.getPart();
+		this.parsingData=data;
 	}
 	
 	public Storyboard getStoryboard(){
@@ -42,6 +46,7 @@ public class StoryboardPartParser extends PartParser<PartEvents>
 		String[] spl=l.split(",");
 		if(depth==0){
 			storyboardSprite=null;
+			parsedObjects++;
 			Storyboard.EventObjType eventType=Storyboard.EventObjType.parse(spl[0]);
 			if(eventType==null){
 				setErrMessage("unknow eventType: "+spl[0]);
@@ -237,9 +242,20 @@ public class StoryboardPartParser extends PartParser<PartEvents>
 	
 	private static final int BLOCK_LOOP_COUNT=20;
 
+	int parsedObjects=0;
 	@Override
 	public boolean parse(String l) throws NsoException {
 		// TODO: Implement this method
+		
+		//if(parsingData.getParsingLineIndex()==172240)parsedObjects=0;
+		
+		if(parsingData.getParsingLineIndex()<161204||parsedObjects>=2){
+			return true;
+		}
+		/*else if(parsingData.getParsingLineIndex()==172087){
+			System.out.println(l);
+			throw new RuntimeException("停!");
+		}*/
 		if(l.trim().isEmpty()||l.startsWith("//")){
 			//在Storyboard部分，支持//注释方法（仅限于以//开头的行）
 			return true;

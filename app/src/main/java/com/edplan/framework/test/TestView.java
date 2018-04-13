@@ -269,7 +269,7 @@ public class TestView extends EdView
 								// TODO: Implement this method
 								getContext().getUiLooper().addLoopableBeforeDraw(timeline);
 								audio.play();
-								audio.seekTo(100000);
+								audio.seekTo(42000);
 								//timeline.onLoop(103000*5);
 							}
 					},2000);
@@ -309,7 +309,7 @@ public class TestView extends EdView
 		GLCanvas2D newCanvas=new GLCanvas2D(newLayer);
 		newCanvas.prepare();
 		
-		newCanvas.drawColor(Color4.rgba(0,0,0,0));
+		newCanvas.drawColor(Color4.gray(0.3f));
 		newCanvas.clearDepthBuffer();
 		
 		float osuScale=PlayField.BASE_Y/canvas.getHeight();
@@ -499,7 +499,7 @@ public class TestView extends EdView
 		
 		public String dir="/storage/emulated/0/MyDisk/WorkBench/bin/testdata";
 		
-		public int testBeatmapFloder=23;
+		public int testBeatmapFloder=24;
 		
 		public boolean enableStoryboard=true;
 		

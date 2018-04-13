@@ -241,10 +241,10 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 				currentPosition.y,
 				texture.getWidth(),
 				texture.getHeight()
-			).scale(anchor,scale.x*(flipH?-1:1),scale.y*(flipV?-1:1))
+			).scale(anchor,scale.x,scale.y)
 			.toQuad();
 		quad.rotate(anchor,rotation);
-		
+		quad.flip(flipH,flipV);
 		//默认只按次流程绘制且只绘制StoryboardSprite，这里省去save/restore节省时间
 		GLWrapped.blend.setBlendType(blendType);
 		canvas.drawTexture(texture,quad,varyingColor,alpha);

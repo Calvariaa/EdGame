@@ -30,8 +30,10 @@ public class StoryboardDecoder extends BaseDecoder
 		initialParsers();
 	}
 	
+	
+	
 	private void initialParsers(){
-		parser=new StoryboardPartParser();
+		parser=new StoryboardPartParser(parsingBeatmap);
 		addParser(PartEvents.TAG,parser);
 		addParser(PartVariables.TAG,parser.variableDecoder);
 	}

@@ -71,7 +71,7 @@ public class StoryboardSprite implements IStoryboardElements
 		double v2=Double.MIN_VALUE;
 		for(CommandLoop l:loops){
 			if(l.hasCommands()){
-				v2=Math.max(v2,l.getCommandsEndTime());
+				v2=Math.max(v2,l.getEndTime());
 			}
 		}
 		return Math.max(v1,v2);

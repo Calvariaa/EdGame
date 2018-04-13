@@ -146,7 +146,7 @@ public class StdBeatmapDecoder extends BaseDecoder implements StringMakeable
 		editorParser       =  new EditorParser();
 		metadataParser     =  new MetadataParser();
 		difficultyParser   =  new DifficultyParser();
-		storyboardDecoder  =  new StoryboardPartParser();
+		storyboardDecoder  =  new StoryboardPartParser(parsingBeatmap);
 		timingPointsParser =  new TimingPointsParser();
 		coloursParser      =  new ColoursParser();
 		hitObjectsParser   =  new HitObjectsParser(parsingBeatmap);
