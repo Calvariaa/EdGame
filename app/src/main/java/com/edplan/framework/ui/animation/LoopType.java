@@ -5,7 +5,7 @@ public enum LoopType
 {
 	None(new Reflection<Integer,Boolean>(){
 			@Override
-			public Boolean reflect(Integer t)
+			public Boolean invoke(Integer t)
 			{
 				// TODO: Implement this method
 				return false;
@@ -13,7 +13,7 @@ public enum LoopType
 		}),
 	Loop(new Reflection<Integer,Boolean>(){
 			@Override
-			public Boolean reflect(Integer t)
+			public Boolean invoke(Integer t)
 			{
 				// TODO: Implement this method
 				return false;
@@ -21,7 +21,7 @@ public enum LoopType
 		}),
 	LoopAndReverse(new Reflection<Integer,Boolean>(){
 			@Override
-			public Boolean reflect(Integer t)
+			public Boolean invoke(Integer t)
 			{
 				// TODO: Implement this method
 				return t%2==1;
@@ -29,7 +29,7 @@ public enum LoopType
 		}),
 	Endless(new Reflection<Integer,Boolean>(){
 		@Override
-		public Boolean reflect(Integer t)
+		public Boolean invoke(Integer t)
 		{
 			// TODO: Implement this method
 			return false;
@@ -43,6 +43,6 @@ public enum LoopType
 	}
 	
 	public boolean isReverse(int loopCount){
-		return reverseRef.reflect(loopCount);
+		return reverseRef.invoke(loopCount);
 	}
 }

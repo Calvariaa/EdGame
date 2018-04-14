@@ -21,6 +21,7 @@ import com.edplan.framework.MContext;
 import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.graphics.opengl.GLPaint;
 import com.edplan.framework.math.RectF;
+import android.graphics.Color;
 
 public class GLTexture extends AbstractTexture
 {
@@ -29,6 +30,7 @@ public class GLTexture extends AbstractTexture
 	public static GLTexture White;
 	public static GLTexture Alpha;
 	public static GLTexture Black;
+	public static GLTexture ErrorTexture;
 	
 	static{
 		initial();
@@ -267,5 +269,16 @@ public class GLTexture extends AbstractTexture
 		White=create1pxTexture(Color4.White);
 		Alpha=create1pxTexture(Color4.Alpha);
 		Black=create1pxTexture(Color4.Black);
+		Bitmap bmp=Bitmap.createBitmap(4,4,Bitmap.Config.ARGB_8888);
+		for(int x=0;x<bmp.getWidth();x++){
+			for(int y=0;y<bmp.getHeight();y++){
+				if(x+y%2==0){
+					bmp.setPixel(x,y,Color.argb(255,10,5,5));
+				}else{
+					bmp.setPixel(x,y,Color.argb(255,110,40,50));
+				}
+			}
+		}
+		ErrorTexture=create(bmp,true);
 	}
 }

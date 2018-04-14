@@ -20,6 +20,7 @@ public class BaseColorBatch<T extends Vertex3D> extends BaseBatch implements IHa
 		return vertexs.get(idx);
 	}
 
+	@Override
 	public int getVertexCount(){
 		return vertexs.size();
 	}

@@ -34,6 +34,10 @@ public class TBVOutputStream
 		out.write(bytes,offset,len);
 	}
 	
+	public void writeByteArray(byte[] ary) throws IOException{
+		out.write(ary);
+	}
+	
 	public void writeString(String s) throws IOException{
 		try {
 			byte[] bytes=s.getBytes("UTF-8");

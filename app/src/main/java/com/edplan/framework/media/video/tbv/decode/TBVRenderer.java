@@ -5,16 +5,28 @@ import com.edplan.framework.media.video.tbv.TextureBasedVideo;
 import java.io.IOException;
 import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 import com.edplan.framework.media.video.tbv.element.DataDrawBaseTexture;
+import com.edplan.framework.graphics.opengl.BlendType;
+import com.edplan.framework.graphics.opengl.GLWrapped;
+import com.edplan.framework.graphics.opengl.objs.GLTexture;
+import com.edplan.framework.graphics.layer.BufferedLayer;
+import java.io.InputStream;
+import java.io.DataInputStream;
+import org.json.JSONException;
+import com.edplan.framework.media.video.tbv.TBVException;
+import com.edplan.framework.MContext;
+import com.edplan.framework.media.video.tbv.TBVJson;
+import com.edplan.framework.graphics.opengl.CanvasUtil;
+import com.edplan.framework.resource.AResource;
+import com.edplan.framework.interfaces.Reflection;
+import com.edplan.framework.media.video.tbv.TextureNode;
 
 public class TBVRenderer
 {
-	private TextureBasedVideo video;
-	
 	private boolean hasReacheEndFrame=false;
 	
 	private TBVInputStream in;
 	
-	private AbstractTexture[] textures;
+	private GLTexture[] textures;
 	
 	private TBV.Header header;
 	
@@ -24,12 +36,51 @@ public class TBVRenderer
 	
 	private float currentPlayTime=0;
 	
+	private BufferedLayer layer;
+	
 	private GLCanvas2D canvas;
 	
 	private boolean frameIsRead=false;
 	
-	public TBVRenderer(){
+	private MContext context;
+	
+	public TBVRenderer(InputStream in){
+		this.in=new TBVInputStream(new DataInputStream(in));
 		
+	}
+	
+	public void initial(MContext context,final AResource res) throws JSONException, TBVException, IOException{
+		initial(context, new Reflection<String,GLTexture>(){
+				@Override
+				public GLTexture invoke(String t) {
+					// TODO: Implement this method
+					try {
+						return res.loadTexture(t);
+					} catch (IOException e) {
+						e.printStackTrace();
+						return GLTexture.ErrorTexture;
+					}
+				}
+			});
+	}
+	
+	public void initial(MContext context,Reflection<String,GLTexture> loader) throws JSONException, TBVException, IOException{
+		this.context=context;
+		header=TBV.Header.read(in,header);
+		textures=new GLTexture[header.textures.length];
+		for(TextureNode msg:header.textures){
+			textures[msg.id]=loader.invoke(msg.texture);
+		}
+		layer=new BufferedLayer(context,header.width,header.height,true);
+		canvas=new GLCanvas2D(layer);
+		String canvasOperation=header.jsonData.optString(TBVJson.OperatCanvas);
+		if(canvasOperation!=null&&!canvasOperation.isEmpty()){
+			CanvasUtil.operateCanvas(canvas,canvasOperation);
+		}
+	}
+	
+	public AbstractTexture getResult(){
+		return layer.getTexture();
 	}
 	
 	public void postFrame(float currentPlayTime){
@@ -118,14 +169,26 @@ public class TBVRenderer
 		
 	}
 	
-	protected void changeSetting(){
-		
+	TBV.SettingEvent settingEvent;
+	protected void changeSetting() throws IOException{
+		settingEvent=TBV.SettingEvent.read(in,settingEvent);
+		switch(settingEvent.type){
+			case TBV.SettingEvent.CHANGE_BLEND_TYPE:{
+				changeBlend(settingEvent.data);
+			}break;
+		}
+	}
+	
+	public void changeBlend(byte[] data){
+		boolean enable=data[0]!=0;
+		BlendType type=BlendType.values()[data[1]];
+		GLWrapped.blend.set(enable,type);
 	}
 	
 	DataDrawBaseTexture dataDrawBaseTexture;
 	protected void drawBaseTexture() throws IOException{
 		dataDrawBaseTexture=DataDrawBaseTexture.read(in,dataDrawBaseTexture);
-		
+		canvas.drawTexture3DBatch(dataDrawBaseTexture,textures[dataDrawBaseTexture.textureId]);
 	}
 	
 	protected void drawColorVertex(){

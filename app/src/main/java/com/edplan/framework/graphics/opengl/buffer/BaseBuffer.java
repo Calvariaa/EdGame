@@ -11,9 +11,20 @@ public abstract class BaseBuffer<T>
 	public ArrayList<T> bufferList;
 
 	public FloatBuffer buffer;
+	
+	private int offset;
+	private int length;
+	private boolean hasLimit=false;
 
 	public BaseBuffer(int size){
 		initial(size);
+	}
+	
+	public BaseBuffer(T[] arry){
+		initial(arry.length);
+		for(T t:arry){
+			bufferList.add(t);
+		}
 	}
 
 	public void initial(int size){
@@ -23,6 +34,20 @@ public abstract class BaseBuffer<T>
 	
 	public abstract int getFloatSize();
 	protected abstract void addToBuffer(FloatBuffer fb,T t);
+
+	public void limit(boolean enable,int offset,int len){
+		this.hasLimit=enable;
+		this.offset=offset;
+		this.length=len;
+	}
+	
+	public int listLength(){
+		return hasLimit?length:bufferList.size();
+	}
+	
+	public int listOffset(){
+		return hasLimit?offset:0;
+	}
 
 	public void clear(){
 		bufferList.clear();
@@ -57,14 +82,14 @@ public abstract class BaseBuffer<T>
 	}
 
 	public FloatBuffer makeBuffer(){
-		if(bufferList.size()<=latestListSize&&buffer!=null){
-			return makeBuffer(0,bufferList.size());
+		if(listLength()<=latestListSize&&buffer!=null){
+			return makeBuffer(listOffset(),listLength());
 		}
 
 		if(buffer!=null)buffer.clear();
 		buffer=createFloatBuffer(bufferList.size()*getFloatSize());
 		latestListSize=bufferList.size();
-		return makeBuffer(0,bufferList.size());
+		return makeBuffer(listOffset(),listLength());
 	}
 
 	/*

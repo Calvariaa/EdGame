@@ -2,5 +2,5 @@ package com.edplan.framework.interfaces;
 
 public interface Reflection<T,K>
 {
-	public K reflect(T t);
+	public K invoke(T t);
 }

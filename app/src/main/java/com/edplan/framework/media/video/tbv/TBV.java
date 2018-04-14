@@ -5,6 +5,7 @@ import com.edplan.framework.media.video.tbv.encode.TBVOutputStream;
 import java.io.IOException;
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.edplan.framework.graphics.opengl.BlendType;
 
 /**
  *一种渲染材质组成的视频，将所有信息存在文件里然后播放
@@ -53,7 +54,7 @@ import org.json.JSONObject;
  *  详细：
  *    绘制材质：跟一个BaseTexture数据，并绘制
  *    绘制色块：无材质的绘制
- *    切换设置：设置种类(short)+具体数据(长为64byte，可能有没有使用的位)
+ *    切换设置：设置种类(short)+具体数据
  *    帧结束：无对应数据
  *
  */
@@ -67,6 +68,8 @@ public class TBV
 
 	public static class Header{
 		public String type;
+		public int width;
+		public int height;
 		public JSONObject jsonData;
 		public TextureNode[] textures;
 
@@ -76,6 +79,8 @@ public class TBV
 			if(!HEADER_TYPE.equals(h.type)){
 				throw new TBVException("err type: "+h.type);
 			}
+			h.width=in.readInt();
+			h.height=in.readInt();
 			h.jsonData=in.readJSONObject();
 			int textureCount=in.readInt();
 			h.textures=new TextureNode[textureCount];
@@ -164,5 +169,34 @@ public class TBV
 	public static class SettingEvent{
 		public static final short CHANGE_BLEND_TYPE=1;
 		public static final short CHANGE_DEPTH_TEST=2;
+		
+		public static final int DATA_SIZE=32;
+		
+		public short type;
+		
+		public byte[] data;
+		
+		public SettingEvent(){
+			data=new byte[32];
+		}
+		
+		public void setBlend(boolean enable,BlendType btype){
+			type=CHANGE_BLEND_TYPE;
+			data[0]=(byte)(enable?1:0);
+			data[1]=(byte)(btype.ordinal());
+		}
+		
+		public static SettingEvent read(TBVInputStream in,SettingEvent e) throws IOException{
+			if(e==null)e=new SettingEvent();
+			e.type=in.readShort();
+			in.readByteArray(e.data);
+			return e;
+		}
+		
+		public static void write(TBVOutputStream out,SettingEvent e) throws IOException{
+			out.writeShort(e.type);
+			out.writeByteArray(e.data);
+		}
+		
 	}
 }

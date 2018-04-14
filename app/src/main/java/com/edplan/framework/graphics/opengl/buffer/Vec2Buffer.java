@@ -15,6 +15,10 @@ public class Vec2Buffer extends BaseBuffer<Vec2>
 		super(size);
 	}
 	
+	public Vec2Buffer(Vec2[] ary){
+		super(ary);
+	}
+	
 	public Vec2Buffer(){
 		super(6);
 	}

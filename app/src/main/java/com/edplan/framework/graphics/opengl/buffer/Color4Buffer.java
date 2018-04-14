@@ -16,6 +16,10 @@ public class Color4Buffer extends BaseBuffer<Color4>
 	public Color4Buffer(){
 		super(6);
 	}
+	
+	public Color4Buffer(Color4[] ary){
+		super(ary);
+	}
 
 	public Color4Buffer(int size){
 		super(size);

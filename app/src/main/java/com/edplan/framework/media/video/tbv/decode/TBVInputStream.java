@@ -11,6 +11,10 @@ public class TBVInputStream
 {
 	private DataInputStream in;
 	
+	public TBVInputStream(DataInputStream in){
+		this.in=in;
+	}
+	
 	public int readInt() throws IOException{
 		return in.readInt();
 	}
@@ -27,6 +31,10 @@ public class TBVInputStream
 		byte[] buffer=new byte[length];
 		in.readFully(buffer);
 		return buffer;
+	}
+	
+	public void readByteArray(byte[] ary) throws IOException{
+		in.readFully(ary);
 	}
 	
 	public boolean readBoolean() throws IOException{

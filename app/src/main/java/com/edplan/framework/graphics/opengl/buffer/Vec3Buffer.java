@@ -14,6 +14,10 @@ public class Vec3Buffer extends BaseBuffer<Vec3> {
 		super(6);
 	}
 	
+	public Vec3Buffer(Vec3[] ary){
+		super(ary);
+	}
+	
 	public Vec3Buffer(int size){
 		super(size);
 	}

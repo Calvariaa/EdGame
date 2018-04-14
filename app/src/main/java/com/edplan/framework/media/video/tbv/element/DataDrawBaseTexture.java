@@ -10,6 +10,9 @@ import com.edplan.framework.graphics.opengl.batch.BaseBatch;
 import com.edplan.framework.graphics.opengl.batch.base.IHasPosition;
 import com.edplan.framework.graphics.opengl.batch.base.IHasColor;
 import com.edplan.framework.graphics.opengl.batch.base.IHasTexturePosition;
+import com.edplan.framework.math.Vec2;
+import com.edplan.framework.math.Vec3;
+import com.edplan.framework.graphics.opengl.objs.Color4;
 
 public class DataDrawBaseTexture extends BaseBatch implements IHasPosition,IHasColor,IHasTexturePosition
 {
@@ -21,28 +24,49 @@ public class DataDrawBaseTexture extends BaseBatch implements IHasPosition,IHasC
 	public Vec3Buffer positionBuffer;
 	public Color4Buffer colorBuffer;
 	
+	
 	private DataDrawBaseTexture(int buffersize){
 		vertexs=new TextureVertex3D[buffersize];
+		Vec2[] tl=new Vec2[vertexs.length];
+		Vec3[] pl=new Vec3[vertexs.length];
+		Color4[] cl=new Color4[vertexs.length];
+		TextureVertex3D v;
 		for(int i=0;i<vertexs.length;i++){
-			vertexs[i]=new TextureVertex3D();
+			v=new TextureVertex3D();
+			vertexs[i]=v;
+			tl[i]=v.texturePoint;
+			pl[i]=v.position;
+			cl[i]=v.color;
 		}
+		texturePositionBuffer=new Vec2Buffer(tl);
+		positionBuffer=new Vec3Buffer(pl);
+		colorBuffer=new Color4Buffer(cl);
+	}
+
+	@Override
+	public int getVertexCount() {
+		// TODO: Implement this method
+		return length;
 	}
 	
 	@Override
 	public Vec3Buffer makePositionBuffer() {
 		// TODO: Implement this method
+		positionBuffer.limit(true,0,length);
 		return positionBuffer;
 	}
 
 	@Override
 	public Color4Buffer makeColorBuffer() {
 		// TODO: Implement this method
+		colorBuffer.limit(true,0,length);
 		return colorBuffer;
 	}
 
 	@Override
 	public Vec2Buffer makeTexturePositionBuffer() {
 		// TODO: Implement this method
+		texturePositionBuffer.limit(true,0,length);
 		return texturePositionBuffer;
 	}
 

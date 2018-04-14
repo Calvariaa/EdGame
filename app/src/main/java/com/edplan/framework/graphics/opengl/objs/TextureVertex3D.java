@@ -29,7 +29,7 @@ public class TextureVertex3D extends Vertex3D
 
 	@Override
 	public TextureVertex3D setColor(Color4 color) {
-		this.color=color;
+		this.color.set(color);
 		return this;
 	}
 
@@ -38,7 +38,7 @@ public class TextureVertex3D extends Vertex3D
 	}
 
 	public TextureVertex3D setTexturePoint(Vec2 texturePoint) {
-		this.texturePoint=texturePoint;
+		this.texturePoint.set(texturePoint);
 		return this;
 	}
 
@@ -49,7 +49,7 @@ public class TextureVertex3D extends Vertex3D
 	@Override
 	public Vertex3D setPosition(Vec3 position) {
 		// TODO: Implement this method
-		this.position=position;
+		this.position.set(position);
 		return this;
 	}
 	

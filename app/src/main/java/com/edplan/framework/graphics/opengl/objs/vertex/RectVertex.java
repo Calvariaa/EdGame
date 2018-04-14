@@ -6,10 +6,10 @@ import com.edplan.framework.math.IQuad;
 
 public class RectVertex extends TextureVertex3D
 {
-	public Vec2 rectPosition;
+	public Vec2 rectPosition=new Vec2();
 
 	public RectVertex setRectPosition(Vec2 rectPosition) {
-		this.rectPosition=rectPosition;
+		this.rectPosition.set(rectPosition);
 		return this;
 	}
 
