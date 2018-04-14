@@ -8,6 +8,9 @@ import java.util.List;
 
 public class Vec3Buffer
 {
+	public static final int RAW_SIZE=3;
+	public static final int RAW_BYTE_SIZE=4;
+	
 	public List<Vec3> bufferList;
 
 	public FloatBuffer buffer;
@@ -27,9 +30,31 @@ public class Vec3Buffer
 	
 	public void clear(){
 		bufferList.clear();
-		if(buffer!=null)buffer.clear();
 	}
 	
+	int latestListSize;
+	public FloatBuffer makeBuffer(){
+		if(bufferList.size()<=latestListSize&&buffer!=null){
+			int position=(latestListSize-bufferList.size())*RAW_SIZE;
+			buffer.position(position);
+			for(Vec3 t:bufferList){
+				buffer.put(t.x).put(t.y).put(t.z);
+			}
+			buffer.position(position);
+			return buffer;
+		}
+
+		if(buffer!=null)buffer.clear();
+		buffer=createFloatBuffer(bufferList.size()*RAW_SIZE);
+		for(Vec3 t:bufferList){
+			buffer.put(t.x).put(t.y).put(t.z);
+		}
+		buffer.position(0);
+		latestListSize=bufferList.size();
+		return buffer;
+	}
+	
+	/*
 	public FloatBuffer makeBuffer(){
 		if(buffer!=null)buffer.clear();
 		buffer=createFloatBuffer(bufferList.size()*3);
@@ -39,9 +64,10 @@ public class Vec3Buffer
 		buffer.position(0);
 		return buffer;
 	}
+	*/
 	
 	public static FloatBuffer createFloatBuffer(int floatCount){
-		ByteBuffer bb=ByteBuffer.allocateDirect(floatCount*4);
+		ByteBuffer bb=ByteBuffer.allocateDirect(floatCount*RAW_BYTE_SIZE);
 		bb.order(ByteOrder.nativeOrder());
 		return bb.asFloatBuffer();
 	}

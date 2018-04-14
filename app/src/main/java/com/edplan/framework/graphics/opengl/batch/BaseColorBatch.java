@@ -43,22 +43,20 @@ public class BaseColorBatch<T extends Vertex3D> extends BaseBatch implements IHa
 		vertexs.clear();
 	}
 
-	private Color4Buffer colorBuffer;
+	private Color4Buffer colorBuffer=new Color4Buffer();
 	@Override
 	public Color4Buffer makeColorBuffer(){
-		if(colorBuffer!=null)colorBuffer.clear();
-		colorBuffer=new Color4Buffer();
+		colorBuffer.clear();
 		for(T t:vertexs){
 			colorBuffer.add(t.getColor());
 		}
 		return colorBuffer;
 	}
 
-	private Vec3Buffer positionBuffer;
+	private Vec3Buffer positionBuffer=new Vec3Buffer();
 	@Override
 	public Vec3Buffer makePositionBuffer(){
-		if(positionBuffer!=null)positionBuffer.clear();
-		positionBuffer=new Vec3Buffer();
+		positionBuffer.clear();
 		for(T t:vertexs){
 			positionBuffer.add(t.getPosition());
 		}

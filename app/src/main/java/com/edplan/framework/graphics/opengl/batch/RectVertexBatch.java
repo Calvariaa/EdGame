@@ -7,11 +7,10 @@ import com.edplan.framework.graphics.opengl.batch.base.IHasRectPosition;
 
 public class RectVertexBatch<T extends RectVertex> extends Texture3DBatch<T> implements IHasRectPosition
 {
-	private Vec2Buffer rectPositionBuffer;
+	private Vec2Buffer rectPositionBuffer=new Vec2Buffer();
 	@Override
 	public Vec2Buffer makeRectPositionBuffer(){
-		if(rectPositionBuffer!=null)rectPositionBuffer.clear();
-		rectPositionBuffer=new Vec2Buffer();
+		rectPositionBuffer.clear();
 		for(T t:vertexs){
 			rectPositionBuffer.add(t.getRectPosition());
 		}

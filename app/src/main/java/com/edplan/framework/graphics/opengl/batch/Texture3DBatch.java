@@ -16,11 +16,10 @@ public class Texture3DBatch<T extends TextureVertex3D> extends BaseColorBatch<T>
 		
 	}
 
-	private Vec2Buffer texturePointBuffer;
+	private Vec2Buffer texturePointBuffer=new Vec2Buffer();
 	@Override
 	public Vec2Buffer makeTexturePositionBuffer(){
-		if(texturePointBuffer!=null)texturePointBuffer.clear();
-		texturePointBuffer=new Vec2Buffer();
+		texturePointBuffer.clear();
 		for(T t:vertexs){
 			texturePointBuffer.add(t.getTexturePoint());
 		}

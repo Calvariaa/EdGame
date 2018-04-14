@@ -10,7 +10,10 @@ import android.util.Log;
 
 public class Color4Buffer 
 {
-	public List<Color4> bufferList;
+	public static final int RAW_SIZE=4;
+	public static final int RAW_BYTE_SIZE=4;
+	
+	public ArrayList<Color4> bufferList;
 	
 	public FloatBuffer buffer;
 
@@ -24,14 +27,37 @@ public class Color4Buffer
 	
 	public void clear(){
 		bufferList.clear();
-		if(buffer!=null)buffer.clear();
+		//if(buffer!=null)buffer.clear();
 	}
 
 	public Color4Buffer add(Color4 t){
 		bufferList.add(t);
 		return this;
 	}
+	
+	int latestListSize;
+	public FloatBuffer makeBuffer(){
+		if(bufferList.size()<=latestListSize&&buffer!=null){
+			int position=(latestListSize-bufferList.size())*RAW_SIZE;
+			buffer.position(position);
+			for(Color4 t:bufferList){
+				buffer.put(t.r).put(t.g).put(t.b).put(t.a);
+			}
+			buffer.position(position);
+			return buffer;
+		}
 
+		if(buffer!=null)buffer.clear();
+		buffer=createFloatBuffer(bufferList.size()*RAW_SIZE);
+		for(Color4 t:bufferList){
+			buffer.put(t.r).put(t.g).put(t.b).put(t.a);
+		}
+		buffer.position(0);
+		latestListSize=bufferList.size();
+		return buffer;
+	}
+	
+	/*
 	public FloatBuffer makeBuffer(){
 		if(buffer!=null)buffer.clear();
 		buffer=createFloatBuffer(bufferList.size()*4);
@@ -42,9 +68,10 @@ public class Color4Buffer
 		buffer.position(0);
 		return buffer;
 	}
+	*/
 
 	public static FloatBuffer createFloatBuffer(int floatCount){
-		ByteBuffer bb=ByteBuffer.allocateDirect(floatCount*4);
+		ByteBuffer bb=ByteBuffer.allocateDirect(floatCount*RAW_BYTE_SIZE);
 		bb.order(ByteOrder.nativeOrder());
 		return bb.asFloatBuffer();
 	}
