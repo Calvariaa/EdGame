@@ -6,8 +6,8 @@ public class BufferedByteOutputStream extends OutputStream
 {
 	public static final int MAX_BUFFER=1024*1024*5;
 	
-	byte[] ary;
-	int idx;
+	public byte[] ary;
+	public int idx;
 	
 	public BufferedByteOutputStream(int size){
 		ary=new byte[size];
@@ -37,7 +37,12 @@ public class BufferedByteOutputStream extends OutputStream
 			expandBuffer(ary.length*2);
 			write(p1);
 		}else{
-			
+			ary[idx]=(byte)p1;
+			idx++;
 		}
+	}
+	
+	public int size(){
+		return idx;
 	}
 }
