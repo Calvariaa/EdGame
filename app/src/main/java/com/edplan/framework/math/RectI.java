@@ -2,8 +2,11 @@ package com.edplan.framework.math;
 
 import com.edplan.framework.interfaces.Copyable;
 
-public class RectI implements Copyable 
+public class RectI implements Copyable,IQuad
 {
+
+	
+
 	private Vec2Int basePoint=new Vec2Int();
 
 	private int width;
@@ -109,6 +112,36 @@ public class RectI implements Copyable
 		width-=pl+pr;
 		height-=pt+pb;
 		return this;
+	}
+	
+	@Override
+	public Vec2 getTopRight() {
+		// TODO: Implement this method
+		return new Vec2(basePoint.x+width,basePoint.y);
+	}
+
+	@Override
+	public Vec2 getTopLeft() {
+		// TODO: Implement this method
+		return new Vec2(basePoint.x,basePoint.y);
+	}
+
+	@Override
+	public Vec2 getBottomRight() {
+		// TODO: Implement this method
+		return new Vec2(basePoint.x+width,basePoint.y+height);
+	}
+
+	@Override
+	public Vec2 getBottomLeft() {
+		// TODO: Implement this method
+		return new Vec2(basePoint.x,basePoint.y+height);
+	}
+
+	@Override
+	public Vec2 getPoint(float x,float y) {
+		// TODO: Implement this method
+		return new Vec2(basePoint.x+x*width,basePoint.y+height*y);
 	}
 
 	public static RectI xywh(int x,int y,int width,int height){

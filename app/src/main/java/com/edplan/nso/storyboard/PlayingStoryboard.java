@@ -32,6 +32,27 @@ public class PlayingStoryboard extends EdDrawable
 		//new BufferedListResource(resource.subResource("SB/Font")).printDetails();
 		//this.resource.printDetails();
 		this.timeline=timeline;
+		TexturePool rawPool=new TexturePool(new TexturePool.TextureLoader(){
+				@Override
+				public AbstractTexture load(String msg) {
+					// TODO: Implement this method
+					try {
+						System.out.println("on load texture: "+msg);
+						return PlayingStoryboard.this.resource.loadTexture(msg);
+					} catch (IOException e) {
+						e.printStackTrace();
+						//return null;
+						throw new RuntimeException(e.getMessage());
+					}
+				}
+		});
+		for(Map.Entry<String,StoryboardLayer> l:storyboard.getLayers().entrySet()){
+			for(IStoryboardElements ele:l.getValue().getElements()){
+				for(String res:ele.getTexturePaths()){
+					rawPool.getTexture(res);
+				}
+			}
+		}
 		pool=new AutoPackTexturePool(new TexturePool.TextureLoader(){
 				@Override
 				public AbstractTexture load(String msg) {
@@ -46,13 +67,7 @@ public class PlayingStoryboard extends EdDrawable
 					}
 				}
 		},context);
-		for(Map.Entry<String,StoryboardLayer> l:storyboard.getLayers().entrySet()){
-			for(IStoryboardElements ele:l.getValue().getElements()){
-				for(String res:ele.getTexturePaths()){
-					pool.getTexture(res);
-				}
-			}
-		}
+		pool.addAll(rawPool.getAll());
 		pool.writeToDir(new File("/storage/emulated/0/MyDisk/bin/pool/1"),"pool");
 		for(Map.Entry<String,StoryboardLayer> l:storyboard.getLayers().entrySet()){
 			layers.put(l.getKey(),new PlayingStoryboardLayer(l.getValue(),this));

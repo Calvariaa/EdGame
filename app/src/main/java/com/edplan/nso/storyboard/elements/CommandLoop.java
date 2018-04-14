@@ -35,9 +35,15 @@ public class CommandLoop extends CommandTimeLineGroup
 	}
 
 	@Override
+	public double getCommandsDuration() {
+		// TODO: Implement this method
+		return super.getCommandsEndTime();
+	}
+
+	@Override
 	public double getStartTime() {
 		// TODO: Implement this method
-		return loopStartTime+getCommandsStartTime();
+		return loopStartTime;
 	}
 
 	@Override

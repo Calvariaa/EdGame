@@ -455,6 +455,21 @@ public class GLCanvas2D extends AbstractSRable<CanvasData>
 	}
 	*/
 	
+	public void drawLines(Vec2[] lines,GLPaint paint){
+		tmpColorBatch.clear();
+		for(int i=0;i<lines.length;i+=2){
+			addToColorBatch(
+				createLineRectVertexTriangles(
+					lines[i],lines[i+1],
+					paint.getStrokeWidth(),
+					paint.getVaryingColor()
+				),
+				paint
+			);
+		}
+		postColorBatch(paint);
+	}
+	
 	public void drawLines(float[] lines,GLPaint paint){
 		tmpColorBatch.clear();
 		for(int i=0;i<lines.length;i+=4){

@@ -35,6 +35,8 @@ import java.io.IOException;
 import com.edplan.framework.timing.AdjustableTimeline;
 import java.util.Arrays;
 import org.json.JSONObject;
+import com.edplan.framework.graphics.opengl.objs.texture.AutoPackTexturePool;
+import com.edplan.framework.math.IQuad;
 
 public class TestView extends EdView
 {
@@ -272,7 +274,7 @@ public class TestView extends EdView
 								// TODO: Implement this method
 								getContext().getUiLooper().addLoopableBeforeDraw(timeline);
 								audio.play();
-								audio.seekTo(42000);
+								//audio.seekTo(42000);
 								//timeline.onLoop(103000*5);
 							}
 					},2000);
@@ -312,17 +314,47 @@ public class TestView extends EdView
 		GLCanvas2D newCanvas=new GLCanvas2D(newLayer);
 		newCanvas.prepare();
 		
-		newCanvas.drawColor(Color4.gray(0.3f));
+		newCanvas.drawColor(Color4.gray(0f));
 		newCanvas.clearDepthBuffer();
 		
-		/*
-		GLPaint rp=new GLPaint();
-		AbstractTexture pack=playingStoryboard.pool.getPacks().get(0).getTexture();
-		newCanvas.drawTexture(pack,new RectF(0,0,1000,1000),rp);
-		int idx=(int)(renderTime/1000);
-		AbstractTexture part=playingStoryboard.pool.getPackedTextures().get(idx);
-		newCanvas.drawTexture(part,new RectF(1100,100,part.getWidth()*1.5f,part.getHeight()*1.5f),rp);
-		*/
+		if(test.watchPool){
+			GLPaint rp=new GLPaint();
+			GLPaint linePaint=new GLPaint();
+			linePaint.setStrokeWidth(2);
+			linePaint.setVaryingColor(Color4.Red);
+			int idx=(int)((Math.max(renderTime-10000,0)/500));
+			if(idx>=playingStoryboard.pool.packedCount()){
+				idx=playingStoryboard.pool.packedCount()-1;
+			}
+			AutoPackTexturePool.PackNode n=playingStoryboard.pool.getPackByIndex(idx);
+			AbstractTexture part=playingStoryboard.pool.getPackedTextures().get(idx);
+			AbstractTexture pack=n.layer.getTexture();
+			IQuad area=playingStoryboard.pool.packedPosition.get(idx);
+			float zipRate=1000/playingStoryboard.pool.getPackWidth();
+			newCanvas.drawTexture(pack,new RectF(0,0,1000,1000),rp);
+			newCanvas.drawLines(new Vec2[]{
+				area.getTopLeft().copy().zoom(zipRate),
+				area.getTopRight().copy().zoom(zipRate),
+				area.getTopRight().copy().zoom(zipRate),
+				area.getBottomRight().copy().zoom(zipRate),
+				area.getBottomRight().copy().zoom(zipRate),
+				area.getBottomLeft().copy().zoom(zipRate),
+				area.getBottomLeft().copy().zoom(zipRate),
+				area.getTopLeft().copy().zoom(zipRate),
+			},linePaint);
+			area=new RectF(1100,100,part.getWidth()*1.5f,part.getHeight()*1.5f);
+			newCanvas.drawLines(new Vec2[]{
+									area.getTopLeft().copy(),
+									area.getTopRight().copy(),
+									area.getTopRight().copy(),
+									area.getBottomRight().copy(),
+									area.getBottomRight().copy(),
+									area.getBottomLeft().copy(),
+									area.getBottomLeft().copy(),
+									area.getTopLeft().copy(),
+								},linePaint);
+			newCanvas.drawTexture(part,area,rp);
+		}
 		
 		
 		float osuScale=PlayField.BASE_Y/canvas.getHeight();
@@ -342,8 +374,6 @@ public class TestView extends EdView
 		newCanvas.drawLine(0,newCanvas.getHeight(),newCanvas.getWidth(),newCanvas.getHeight(),testLine);
 		*/
 		
-		//paint.setMixColor(Color4.rgb(1,0.5f,0.5f));
-		
 		GLPaint tp=new GLPaint();
 		tp.setVaryingColor(Color4.rgb(1,1,1));
 		//tp.setColorMixRate(1);
@@ -356,11 +386,11 @@ public class TestView extends EdView
 		newCanvas.translate(-PlayField.PADDING_X,-PlayField.PADDING_Y);
 		//newCanvas.translate(-(PlayField.BASE_Y*16/9f-PlayField.BASE_X)/2,0);
 		newCanvas.setCanvasAlpha(1f);
-		if(test.enableStoryboard)playingStoryboard.draw(newCanvas);
+		if(test.enableStoryboard&&!test.watchPool)playingStoryboard.draw(newCanvas);
 		newCanvas.setCanvasAlpha(1);
 		newCanvas.restore();
 		
-		if(test.enablePlayField)playField.draw(newCanvas);
+		if(test.enablePlayField&&!test.watchPool)playField.draw(newCanvas);
 		//firstObj.draw(newCanvas);
 		newCanvas.unprepare();
 
@@ -517,6 +547,8 @@ public class TestView extends EdView
 		public boolean enableStoryboard=true;
 		
 		public boolean enablePlayField=false;
+		
+		public boolean watchPool=false;
 		
 		public AResource res=new DirResource("/storage/emulated/0/MyDisk/WorkBench/bin/testdata");
 		
