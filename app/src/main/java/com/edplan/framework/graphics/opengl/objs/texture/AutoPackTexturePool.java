@@ -19,6 +19,7 @@ import java.util.Map;
 import com.edplan.framework.graphics.opengl.objs.texture.TexturePool.MsgTexture;
 import java.util.Collections;
 import java.util.Comparator;
+import java.io.IOException;
 
 public class AutoPackTexturePool extends TexturePool
 {
@@ -37,12 +38,22 @@ public class AutoPackTexturePool extends TexturePool
 	private int currentY;
 	private int lineMaxY;
 	
+	//public GLTexture textureTest;
+	
+	
 	private MContext context;
 	
 	public AutoPackTexturePool(TextureLoader loader,MContext context){
 		super(loader);
 		this.context=context;
 		toNewPack();
+		/*
+		try {
+			textureTest=GLTexture.decodeFile(new File("/storage/emulated/0/MyDisk/bin/pool/1/pool0.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		*/
 	}
 
 	@Override
@@ -110,7 +121,7 @@ public class AutoPackTexturePool extends TexturePool
 			try {
 				File f=new File(dir,s+i+".png");
 				f.createNewFile();
-				t.layer.getTexture().getTexture().toBitmap().compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(f));
+				t.layer.getTexture().getTexture().toBitmap(context).compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(f));
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.out.println("err compress "+i);
@@ -144,7 +155,10 @@ public class AutoPackTexturePool extends TexturePool
 			packCanvas.drawTexture(raw,RectF.xywh(currentX,currentY,raw.getWidth(),raw.getHeight()),rawPaint);
 			packCanvas.unprepare();
 			RectI area=RectI.xywh(currentX,currentY,raw.getWidth(),raw.getHeight());
-			AbstractTexture t=new TextureRegion(currentPack.layer.getTexture().getTexture(),area);
+			AbstractTexture t=new TextureRegion(
+											currentPack.layer.getTexture().getTexture(),
+											//textureTest,
+											area);
 			currentPack.inPacks.put(msg,t);
 			packedPosition.add(area);
 			packedTextures.add(t);

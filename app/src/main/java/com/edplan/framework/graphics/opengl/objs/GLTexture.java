@@ -5,16 +5,22 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.opengl.GLES20;
-import android.opengl.GLES30;
 import android.opengl.GLUtils;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.resource.AResource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.IntBuffer;
+import com.edplan.framework.graphics.opengl.bufferObjects.FrameBufferObject;
+import com.edplan.framework.graphics.layer.BufferedLayer;
+import com.edplan.framework.MContext;
+import com.edplan.framework.graphics.opengl.GLCanvas2D;
+import com.edplan.framework.graphics.opengl.GLPaint;
+import com.edplan.framework.math.RectF;
 
 public class GLTexture extends AbstractTexture
 {
@@ -120,15 +126,26 @@ public class GLTexture extends AbstractTexture
 		recycled=true;
 	}
 	
-	public Bitmap toBitmap(){
+	public Bitmap toBitmap(MContext context){
 		int[] b=new int[getWidth()*getHeight()];
 		IntBuffer buffer=IntBuffer.wrap(b);
 		buffer.position(0);
+		BufferedLayer layer=new BufferedLayer(context,getWidth(),getHeight(),true);
+		GLCanvas2D canvas=new GLCanvas2D(layer);
+		canvas.prepare();
+		GLPaint rawPaint=new GLPaint();
+		canvas.drawTexture(this,RectF.xywh(0,0,getWidth(),getHeight()),rawPaint);
 		GLES20.glReadPixels(0,0,getWidth(),getHeight(),GLES20.GL_RGBA,GLES20.GL_UNSIGNED_BYTE,buffer);
+		canvas.unprepare();
 		Bitmap bmp=Bitmap.createBitmap(getWidth(),getHeight(),Bitmap.Config.ARGB_8888);
 		bmp.copyPixelsFromBuffer(buffer);
 		buffer.clear();
 		return bmp;
+	}
+	
+	public void compress(File f,MContext context) throws FileNotFoundException, IOException{
+		if(!f.exists())f.createNewFile();
+		toBitmap(context).compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(f));
 	}
 
 	@Override

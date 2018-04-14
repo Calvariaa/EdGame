@@ -1,15 +1,19 @@
 package com.edplan.framework.test;
+import android.graphics.Bitmap;
+import android.opengl.GLES20;
 import android.util.Log;
 import com.edplan.framework.MContext;
-import com.edplan.framework.media.bass.BassChannel;
 import com.edplan.framework.graphics.layer.BufferedLayer;
 import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.graphics.opengl.GLPaint;
 import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
+import com.edplan.framework.graphics.opengl.objs.texture.AutoPackTexturePool;
+import com.edplan.framework.math.IQuad;
 import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.Vec2;
+import com.edplan.framework.media.bass.BassChannel;
 import com.edplan.framework.resource.AResource;
 import com.edplan.framework.resource.DirResource;
 import com.edplan.framework.timing.AudioTimeline;
@@ -29,14 +33,12 @@ import com.edplan.nso.ruleset.std.playing.StdPlayingBeatmap;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdHitCircle;
 import com.edplan.nso.storyboard.PlayingStoryboard;
 import com.edplan.nso.storyboard.Storyboard;
-import com.edplan.nso.storyboard.elements.drawable.BaseDrawableSprite;
 import java.io.File;
 import java.io.IOException;
-import com.edplan.framework.timing.AdjustableTimeline;
-import java.util.Arrays;
+import java.nio.IntBuffer;
 import org.json.JSONObject;
-import com.edplan.framework.graphics.opengl.objs.texture.AutoPackTexturePool;
-import com.edplan.framework.math.IQuad;
+import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
 
 public class TestView extends EdView
 {
@@ -532,6 +534,34 @@ public class TestView extends EdView
 		canvas.drawLine(0,baseLine,1000,baseLine,baseLinePaint);
 		baseLinePaint.setMixColor(Color4.rgba(0,1,0,0.6f));
 		canvas.drawLine(0,baseLine+font.getCommon().base*printer.getScale(),1000,baseLine+font.getCommon().base*printer.getScale(),baseLinePaint);
+		
+		/*
+		if(renderTime>15000){
+			final BufferedLayer layer=canvas.getLayer();
+			MLog.test.runOnce("compress", new Runnable(){
+					@Override
+					public void run() {
+						// TODO: Implement this method
+						int[] b=new int[layer.getWidth()*layer.getHeight()];
+						IntBuffer buffer=IntBuffer.wrap(b);
+						buffer.position(0);
+						GLES20.glReadPixels(0,0,layer.getWidth(),layer.getHeight(),GLES20.GL_RGBA,GLES20.GL_UNSIGNED_BYTE,buffer);
+						Bitmap bmp=Bitmap.createBitmap(layer.getWidth(),layer.getHeight(),Bitmap.Config.ARGB_8888);
+						bmp.copyPixelsFromBuffer(buffer);
+						buffer.clear();
+						try {
+							bmp.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream("/storage/emulated/0/MyDisk/bin/pool/1/cut.png"));
+						} catch (FileNotFoundException e) {
+							e.printStackTrace();
+						}
+					}
+				});
+		}
+		*/
+		
+		
+		
+		
 	}
 	
 	public float[] timelist=new float[40];
@@ -542,7 +572,7 @@ public class TestView extends EdView
 		
 		public String dir="/storage/emulated/0/MyDisk/WorkBench/bin/testdata";
 		
-		public int testBeatmapFloder=24;
+		public int testBeatmapFloder=11;
 		
 		public boolean enableStoryboard=true;
 		
