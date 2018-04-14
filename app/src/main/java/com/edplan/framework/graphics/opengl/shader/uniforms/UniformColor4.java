@@ -1,10 +1,11 @@
 package com.edplan.framework.graphics.opengl.shader.uniforms;
 
 import android.opengl.GLES20;
-import com.edplan.framework.graphics.opengl.GLException;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.shader.DataUniform;
 import com.edplan.framework.graphics.opengl.shader.GLProgram;
+import com.edplan.framework.math.RectF;
+import com.edplan.framework.math.Vec4;
 
 public class UniformColor4  implements DataUniform<Color4>
 {
@@ -17,11 +18,27 @@ public class UniformColor4  implements DataUniform<Color4>
 	public UniformColor4(){
 
 	}
+	
+	public void loadRect(RectF rect){
+		GLES20.glUniform4f(getHandle(),rect.getX1(),rect.getY1(),rect.getX2(),rect.getY2());
+	}
+	
+	public void loadRect(RectF rect,float padding){
+		GLES20.glUniform4f(getHandle(),rect.getX1()+padding,rect.getY1()+padding,rect.getX2()-padding,rect.getY2()-padding);
+	}
+	
+	public void loadRect(RectF rect,Vec4 padding){
+		loadRect(rect.copy().padding(padding));
+	}
 
 	@Override
 	public void loadData(Color4 t) {
 		// TODO: Implement this method
-		GLES20.glUniform4f(getHandle(),t.r,t.g,t.b,t.a);
+		if(!t.premultiple){
+			GLES20.glUniform4f(getHandle(),t.r*t.a,t.g*t.a,t.b*t.a,t.a);
+		}else{
+			GLES20.glUniform4f(getHandle(),t.r,t.g,t.b,t.a);
+		}
 	}
 
 	@Override
@@ -41,7 +58,7 @@ public class UniformColor4  implements DataUniform<Color4>
 		um.handle=GLES20.glGetUniformLocation(program.getProgramId(),name);
 		um.program=program;
 		um.name=name;
-		if(um.handle==-1)throw new GLException("handle "+name+" NOT found");
+		//if(um.handle==-1)throw new GLException("handle "+name+" NOT found");
 		return um;
 	}
 }

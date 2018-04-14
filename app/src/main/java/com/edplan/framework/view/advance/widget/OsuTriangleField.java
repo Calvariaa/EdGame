@@ -1,10 +1,10 @@
 package com.edplan.framework.view.advance.widget;
 import android.graphics.Bitmap;
-import com.edplan.framework.view.BaseWidget;
+import com.edplan.framework.view.BaseView;
 import android.graphics.Canvas;
 import com.edplan.framework.MContext;
 
-public class OsuTriangleField extends BaseWidget
+public class OsuTriangleField extends BaseView
 {
 	public OsuTriangleManager triangleManager;
 	
@@ -25,7 +25,7 @@ public class OsuTriangleField extends BaseWidget
 	public void draw(Canvas canvas){
 		// TODO: Implement this method
 		super.draw(canvas);
-		triangleManager.measure(canvas,getContext().getFrameDeltaTime());
+		triangleManager.measure(canvas,(int)getContext().getFrameDeltaTime());
 		for(OsuTriangle t:triangleManager.getTriangles()){
 			t.drawOnCanvas(canvas);
 		}

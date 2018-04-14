@@ -5,6 +5,10 @@ import com.edplan.superutils.interfaces.Loopable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *黑历史，以后别用了
+ *_(:з」∠)_
+ */
 public class MLooper implements AbstractLooper
 {
 	private List<Loopable> loopables;
@@ -50,8 +54,8 @@ public class MLooper implements AbstractLooper
 	}
 	
 	@Override
-	public void loop(int deltaTime){
-		timer.refresh(deltaTime);
+	public void loop(double deltaTime){
+		timer.refresh((int)deltaTime);
 		for(Loopable l:addList){
 			loopables.add(l);
 		}
@@ -75,7 +79,7 @@ public class MLooper implements AbstractLooper
 		isIterating=false;
 		
 		for(Loopable l:removeList){
-			l.onRecycle();
+			l.onRemove();
 			loopables.remove(l);
 		}
 		removeList.clear();

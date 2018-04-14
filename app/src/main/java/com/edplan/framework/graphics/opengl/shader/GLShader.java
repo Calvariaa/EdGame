@@ -50,7 +50,7 @@ public class GLShader
 		Vertex(GLES20.GL_VERTEX_SHADER),
 		Fragment(GLES20.GL_FRAGMENT_SHADER);
 		private final int flag;
-		public Type(int flag){
+		Type(int flag){
 			this.flag=flag;
 		}
 		

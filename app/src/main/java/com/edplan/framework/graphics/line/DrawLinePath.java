@@ -1,6 +1,5 @@
 package com.edplan.framework.graphics.line;
 import com.edplan.framework.graphics.opengl.drawui.DrawInfo;
-import com.edplan.framework.graphics.opengl.drawui.GLDrawable;
 import com.edplan.framework.graphics.opengl.buffer.Vec3Buffer;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
@@ -10,8 +9,10 @@ import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
 import com.edplan.framework.graphics.opengl.objs.TextureVertex3D;
 import com.edplan.framework.math.Vec3;
 import com.edplan.framework.utils.MLog;
+import com.edplan.framework.graphics.opengl.batch.BaseColorBatch;
+import java.util.ArrayList;
 
-public class DrawLinePath
+public class DrawLinePath<T extends BaseColorBatch>
 {
 	public static final int MAXRES=24;
 	
@@ -19,9 +20,9 @@ public class DrawLinePath
 	
 	public static final float Z_SIDE=0.0f;
 	
-	private Texture3DBatch batch;
+	private BaseColorBatch batch;
 	
-	private LinePath path;
+	private AbstractPath path;
 	
 	private Vec2 textureStart=new Vec2(0,0);
 	
@@ -29,24 +30,29 @@ public class DrawLinePath
 	
 	private DrawInfo info;
 	
-	public DrawLinePath(LinePath p){
+	private ArrayList<TextureVertex3D[]> bufferedLineQuad=new ArrayList<TextureVertex3D[]>();
+	
+	private ArrayList<TextureVertex3D[]> bufferedLineCap=new ArrayList<TextureVertex3D[]>();
+	
+	public DrawLinePath(AbstractPath p){
 		path=p;
+		info=new DrawInfo(){
+			@Override
+			public Vec2 toLayerPosition(Vec2 v) {
+				// TODO: Implement this method
+				return v;
+			}
+
+			@Override
+			public Color4 getVaryingColor(Vec2 position) {
+				// TODO: Implement this method
+				return Color4.White;
+			}
+		};
 	}
-	
-	public void setWidth(float f){
-		path.setWidth(f);
-	}
-	
+
 	public void setDrawInfo(DrawInfo i){
 		info=i;
-	}
-
-	public void setBatch(Texture3DBatch batch) {
-		this.batch=batch;
-	}
-
-	public Texture3DBatch getBatch() {
-		return batch;
 	}
 	
 	private void addLineCap(Vec2 org,float theta,float thetaDiff){
@@ -61,12 +67,12 @@ public class DrawLinePath
 			theta+=FMath.Pi;
 		
 		/* current = org + atCircle(...)*width */
-		Vec2 current=Vec2.atCircle(theta).zoom(path.getHWidth()).add(org);
+		Vec2 current=Vec2.atCircle(theta).zoom(path.getWidth()).add(org);
 		current=info.toLayerPosition(current);
-		Color4 currentColor=info.getMaskColor(current);
+		Color4 currentColor=info.getVaryingColor(current);
 		
 		Vec2 orgAtLayer=info.toLayerPosition(org);
-		Color4 orgColor=info.getMaskColor(orgAtLayer);
+		Color4 orgColor=info.getVaryingColor(orgAtLayer);
 		
 		Vec3 orgAtLayer3D=new Vec3(orgAtLayer,Z_MIDDLE);
 		for(int i=1;i<=amountPoints;i++){
@@ -85,8 +91,8 @@ public class DrawLinePath
 			/* current = org+atCircle(...)*width*/
 			current=
 			info.toLayerPosition(
-				Vec2.atCircle(theta+dir*angularOffset).zoom(path.getHWidth()).add(org));
-			currentColor=info.getMaskColor(current);
+				Vec2.atCircle(theta+dir*angularOffset).zoom(path.getWidth()).add(org));
+			currentColor=info.getVaryingColor(current);
 			
 			batch.add(
 				TextureVertex3D
@@ -97,7 +103,7 @@ public class DrawLinePath
 	}
 	
 	private void addLineQuads(Vec2 ps,Vec2 pe){
-		Vec2 oth_expand=Vec2.lineOthNormal(ps,pe).zoom(path.getHWidth());
+		Vec2 oth_expand=Vec2.lineOthNormal(ps,pe).zoom(path.getWidth());
 		
 		Vec2 startL=info.toLayerPosition(ps.copy().add(oth_expand));
 		Vec2 startR=info.toLayerPosition(ps.copy().minus(oth_expand));
@@ -108,8 +114,8 @@ public class DrawLinePath
 		
 		Vec3 start3D=new Vec3(start,Z_MIDDLE);
 		Vec3 end3D=new Vec3(end,Z_MIDDLE);
-		Color4 startColor=info.getMaskColor(start);
-		Color4 endColor=info.getMaskColor(end);
+		Color4 startColor=info.getVaryingColor(start);
+		Color4 endColor=info.getVaryingColor(end);
 		
 		//tr 1
 		batch.add(
@@ -128,7 +134,7 @@ public class DrawLinePath
 			TextureVertex3D
 			 .atPosition(new Vec3(endL,Z_SIDE))
 			 .setTexturePoint(textureEnd)
-			 .setColor(info.getMaskColor(endL)));
+			 .setColor(info.getVaryingColor(endL)));
 
 		//tr 2
 		batch.add(
@@ -141,13 +147,13 @@ public class DrawLinePath
 			TextureVertex3D
 			 .atPosition(new Vec3(endL,Z_SIDE))
 			 .setTexturePoint(textureEnd)
-			 .setColor(info.getMaskColor(endL)));
+			 .setColor(info.getVaryingColor(endL)));
 
 		batch.add(
 			TextureVertex3D
 			 .atPosition(new Vec3(startL,Z_SIDE))
 			 .setTexturePoint(textureEnd)
-			 .setColor(info.getMaskColor(startL)));
+			 .setColor(info.getVaryingColor(startL)));
 
 		//tr 3
 		batch.add(
@@ -166,7 +172,7 @@ public class DrawLinePath
 			TextureVertex3D
 			 .atPosition(new Vec3(endR,Z_SIDE))
 			 .setTexturePoint(textureEnd)
-			 .setColor(info.getMaskColor(endR)));
+			 .setColor(info.getVaryingColor(endR)));
 
 		//tr 4
 		batch.add(
@@ -179,24 +185,25 @@ public class DrawLinePath
 			TextureVertex3D
 			 .atPosition(new Vec3(endR,Z_SIDE))
 			 .setTexturePoint(textureEnd)
-			 .setColor(info.getMaskColor(endR)));
+			 .setColor(info.getVaryingColor(endR)));
 
 		batch.add(
 			TextureVertex3D
 			 .atPosition(new Vec3(startR,Z_SIDE))
 			 .setTexturePoint(textureEnd)
-			 .setColor(info.getMaskColor(startR)));
+			 .setColor(info.getVaryingColor(startR)));
 	}
 	
-	public void updateBuffers(){
-		batch.clear();
+	public void addToBatch(BaseColorBatch<?> batch){
+		this.batch=batch;
 		if(path.size()<2){
 			if(path.size()==1){
 				addLineCap(path.get(0),FMath.Pi,FMath.Pi);
 				addLineCap(path.get(0),0,FMath.Pi);
 				return;
 			}else{
-				throw new RuntimeException("Path must has at least 1 point");
+				return;
+				//throw new RuntimeException("Path must has at least 1 point");
 			}
 		}
 		

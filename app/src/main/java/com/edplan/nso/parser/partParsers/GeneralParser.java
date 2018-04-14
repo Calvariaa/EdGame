@@ -5,7 +5,7 @@ import com.edplan.superutils.U;
 import com.edplan.nso.beatmapComponent.SampleSet;
 import com.edplan.nso.OsuFilePart;
 
-public class GeneralParser implements PartParser
+public class GeneralParser extends PartParser<PartGeneral>
 {
 	public PartGeneral part;
 	
@@ -14,14 +14,9 @@ public class GeneralParser implements PartParser
 	}
 
 	@Override
-	public OsuFilePart getPart(){
+	public PartGeneral getPart(){
 		// TODO: Implement this method
 		return part;
-	}
-
-	@Override
-	public void applyDefault(){
-		// TODO: Implement this method
 	}
 
 	@Override

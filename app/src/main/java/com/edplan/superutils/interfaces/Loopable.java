@@ -1,17 +1,35 @@
 package com.edplan.superutils.interfaces;
 import com.edplan.superutils.classes.MLooper;
 
-public interface Loopable
+public abstract class Loopable
 {
+
+	public void setFlag(Flag flag) {
+		this.flag=flag;
+	}
+
+	public Flag getFlag() {
+		return flag;
+	}
 	public enum Flag{
 		Run,Skip,Stop
 	}
 	
-	public void setLooper(MLooper lp);
+	private Flag flag=Flag.Run;
 	
-	public void onRecycle();
+	private AbstractLooper looper;
 	
-	public void onLoop(int deltaTime);
+	public void setLooper(AbstractLooper lp){
+		this.looper=lp;
+	}
 	
-	public Flag getFlag();
+	public AbstractLooper getLooper(){
+		return looper;
+	}
+	
+	public void onRemove(){
+		
+	}
+	
+	public abstract void onLoop(double deltaTime);
 }

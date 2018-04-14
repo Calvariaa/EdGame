@@ -10,7 +10,7 @@ package com.edplan.framework.main;
  *		   
  */
 import com.edplan.framework.graphics.opengl.GLLooper;
-import com.edplan.framework.graphics.ui.BufferedLayer;
+import com.edplan.framework.graphics.layer.BufferedLayer;
 
 public class GameContext 
 {

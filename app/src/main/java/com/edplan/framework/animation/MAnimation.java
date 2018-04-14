@@ -1,24 +1,20 @@
 package com.edplan.framework.animation;
-import com.edplan.superutils.interfaces.Function;
 import com.edplan.superutils.interfaces.Loopable;
 import com.edplan.superutils.MTimer;
 import com.edplan.superutils.interfaces.Loopable.Flag;
 import com.edplan.framework.animation.interpolator.LinearInterpolator;
 import com.edplan.superutils.classes.MLooperThread;
-import com.edplan.superutils.interfaces.Setter;
 import com.edplan.superutils.classes.MLooper;
+import com.edplan.framework.interfaces.Setter;
+import com.edplan.superutils.interfaces.AbstractLooper;
 
-public class MAnimation implements Loopable
+public class MAnimation extends Loopable
 {
 	private AnimaInterpolator interpolator;
 	
 	private Setter<Float> setter;
 	
 	private Callback callback;
-	
-	private MLooper looper;
-	
-	private Flag flag;
 	
 	private boolean hasFinished=false;
 	
@@ -30,9 +26,9 @@ public class MAnimation implements Loopable
 	
 	private float progress;
 	
-	private int timepassed;
+	private double timepassed;
 
-	private int duration;
+	private double duration;
 	
 	public MAnimation(){
 		initial();
@@ -81,25 +77,20 @@ public class MAnimation implements Loopable
 		runOnLoopThread(t);
 	}
 	
-	public MAnimation setFlag(Flag f){
-		flag=f;
-		return this;
-	}
-	
 	public void stop(){
 		setFlag(Flag.Stop);
 	}
 	
-	public int getTimepassed(){
+	public double getTimepassed(){
 		return timepassed;
 	}
 
-	public MAnimation setDuration(int duration){
+	public MAnimation setDuration(double duration){
 		this.duration=duration;
 		return this;
 	}
 
-	public int getDuration(){
+	public double getDuration(){
 		return duration;
 	}
 
@@ -122,14 +113,13 @@ public class MAnimation implements Loopable
 	}
 
 	private void initial(){
-		flag=Flag.Skip;
-		
+		setFlag(Flag.Skip);
 	}
 
 	public void checkProperty(){
 		if(setter==null){
 			throw new NullPointerException("MAnimation.setter shouldn't be null");
-		}else if(looper==null){
+		}else if(getLooper()==null){
 			throw new NullPointerException("MAnimation.looper shouldn't be null");
 		}else if(duration<=0){
 			throw new IllegalArgumentException("MAnimation.duration should >0");
@@ -151,7 +141,7 @@ public class MAnimation implements Loopable
 
 	public void start(){
 		checkProperty();
-		flag=Flag.Run;
+		setFlag(Flag.Run);
 	}
 	
 	protected void onProgress(){
@@ -178,18 +168,8 @@ public class MAnimation implements Loopable
 		}
 	}
 	
-	public MLooper getLooper(){
-		return looper;
-	}
-
 	@Override
-	public void setLooper(MLooper lp){
-		// TODO: Implement this method
-		looper=lp;
-	}
-	
-	@Override
-	public void onLoop(int deltaTime){
+	public void onLoop(double deltaTime){
 		// TODO: Implement this method
 		if(!ifHasStart()){
 			hasStart=true;
@@ -199,7 +179,7 @@ public class MAnimation implements Loopable
 		if(timepassed>=duration){
 			timepassed=duration;
 		}
-		setProgress(((float)timepassed)/duration);
+		setProgress((float)(timepassed/duration));
 		
 		if(callbackRate==0){
 			onProgress();
@@ -223,15 +203,9 @@ public class MAnimation implements Loopable
 		}
 	}
 
-	
-	@Override
-	public Flag getFlag(){
-		// TODO: Implement this method
-		return flag;
-	}
 
 	@Override
-	public void onRecycle(){
+	public void onRemove(){
 		// TODO: Implement this method
 		if(!hasFinished){
 			onEnd();

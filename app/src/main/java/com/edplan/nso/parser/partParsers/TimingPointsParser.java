@@ -1,12 +1,12 @@
 package com.edplan.nso.parser.partParsers;
 import com.edplan.nso.OsuFilePart;
 import com.edplan.nso.filepart.PartTimingPoints;
-import com.edplan.nso.Timing.TimingPoint;
+import com.edplan.nso.timing.TimingPoint;
 import com.edplan.superutils.classes.strings.StringSpliter;
 import com.edplan.superutils.U;
 import com.edplan.nso.beatmapComponent.SampleSet;
 
-public class TimingPointsParser implements PartParser
+public class TimingPointsParser extends PartParser<PartTimingPoints>
 {
 	private PartTimingPoints part;
 
@@ -17,8 +17,8 @@ public class TimingPointsParser implements PartParser
 	public TimingPoint parseTimingPoint(String l){
 		TimingPoint t=new TimingPoint();
 		StringSpliter sp=new StringSpliter(l,",");
-		t.setOffset(U.toInt(sp.next()));
-		t.setMillionsecondsPerBeat(U.toDouble(sp.next()));
+		t.setTime((int)U.toDouble(sp.next()));
+		t.setBeatLength(U.toDouble(sp.next()));
 		t.setMeter(U.toInt(sp.next()));
 		t.setSampleType(U.toInt(sp.next()));
 		t.setSampleSet(SampleSet.parse(sp.next()));
@@ -31,7 +31,7 @@ public class TimingPointsParser implements PartParser
 	}
 	
 	@Override
-	public OsuFilePart getPart(){
+	public PartTimingPoints getPart(){
 		// TODO: Implement this method
 		return part;
 	}
@@ -46,10 +46,5 @@ public class TimingPointsParser implements PartParser
 			part.addTimingPoint(parseTimingPoint(l));
 			return true;
 		}
-	}
-
-	@Override
-	public void applyDefault(){
-		// TODO: Implement this method
 	}
 }

@@ -1,20 +1,34 @@
 package com.edplan.framework.graphics.opengl.bufferObjects;
 import android.opengl.GLES20;
 import com.edplan.framework.graphics.opengl.GLException;
+import com.edplan.framework.graphics.opengl.GLWrapped;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
+import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
+import com.edplan.framework.graphics.opengl.objs.texture.TextureRegion;
+import com.edplan.framework.math.RectF;
+import com.edplan.framework.math.RectI;
+import android.util.Log;
 
 public class FrameBufferObject
 {
-	
 	private DepthBufferObject depthAttachment;
 	
+	private boolean permissionToDeleteTexture=true;
 	private GLTexture colorAttachment;
 	
+	private TextureRegion region;
+	
 	private int frameBufferId;
+	
+	private int createdWidth;
+	
+	private int createdHeight;
 	
 	private int width;
 	
 	private int height;
+	
+	private boolean deleted=false;
 	
 	FrameBufferObject(){
 		
@@ -23,6 +37,24 @@ public class FrameBufferObject
 	FrameBufferObject(int width,int height){
 		this.width=width;
 		this.height=height;
+		this.createdHeight=height;
+		this.createdWidth=width;
+	}
+
+	protected void setCreatedWidth(int createdWidth) {
+		this.createdWidth=createdWidth;
+	}
+
+	public int getCreatedWidth() {
+		return createdWidth;
+	}
+
+	protected void setCreatedHeight(int createdHeight) {
+		this.createdHeight=createdHeight;
+	}
+
+	public int getCreatedHeight() {
+		return createdHeight;
 	}
 
 	public int getWidth(){
@@ -33,12 +65,14 @@ public class FrameBufferObject
 		return height;
 	}
 	
-	private void setWidth(int w){
+	public void setWidth(int w){
 		width=w;
+		if(region!=null)region.getArea().setWidth(w);
 	}
 	
-	private void setHeight(int h){
+	public void setHeight(int h){
 		height=h;
+		if(region!=null)region.getArea().setHeight(h);
 	}
 	
 	public void clearDepthBuffer(){
@@ -63,8 +97,13 @@ public class FrameBufferObject
 	private void setColorAttachment(GLTexture colorAttachment) {
 		this.colorAttachment=colorAttachment;
 	}
+	
+	public AbstractTexture getTexture(){
+		if(region==null)Log.w("err-gl","region is null : "+hasLinkRegion);
+		return region;
+	}
 
-	public GLTexture getColorAttachment() {
+	private GLTexture getColorAttachment() {
 		return colorAttachment;
 	}
 	
@@ -76,12 +115,15 @@ public class FrameBufferObject
 		return frameBufferId;
 	}
 	
+	boolean hasLinkRegion=false;
 	private void linkColorAttachment(GLTexture texture){
 		checkCurrent();
 		if(colorAttachment!=null){
 			throw new GLException("A FrameBufferObject can't attach two Texture...Maybe support future:(");
 		}else{
 			setColorAttachment(texture);
+			region=new TextureRegion(texture,new RectI(0,0,texture.getWidth(),texture.getHeight()));
+			hasLinkRegion=true;
 			GLES20.glFramebufferTexture2D(
 				GLES20.GL_FRAMEBUFFER,
 				GLES20.GL_COLOR_ATTACHMENT0,
@@ -98,18 +140,24 @@ public class FrameBufferObject
 			throw new GLException("A FrameBufferObject can't attach two DepthBuffer");
 		}else{
 			setDepthAttachment(dbo);
-			GLES20.glBindRenderbuffer(
+			GLES20.glFramebufferRenderbuffer(
+				GLES20.GL_FRAMEBUFFER,
+				GLES20.GL_DEPTH_ATTACHMENT,
 				GLES20.GL_RENDERBUFFER,
-				depthAttachment.getBufferId());
+				dbo.getBufferId()
+			);
 		}
 	}
 	
 	public void delete(){
-		GLES20.glDeleteFramebuffers(1,new int[]{getFBOId()},0);
+		if(!deleted){
+			deleted=true;
+			GLES20.glDeleteFramebuffers(1,new int[]{getFBOId()},0);
+		}
 	}
 	
 	public void deleteWithAttachment(){
-		if(hasColorAttachment()){
+		if(hasColorAttachment()&&permissionToDeleteTexture){
 			getColorAttachment().delete();
 		}
 		if(hasDepthAttachment()){
@@ -117,16 +165,41 @@ public class FrameBufferObject
 		}
 		this.delete();
 	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		// TODO: Implement this method
+		super.finalize();
+		delete();
+	}
+	
+	public static FrameBufferObject create(GLTexture texture){
+		FrameBufferObject fbo=createFBO();
+		fbo.permissionToDeleteTexture=false;
+		fbo.width=texture.getWidth();
+		fbo.height=texture.getHeight();
+		fbo.setCreatedHeight(texture.getWidth());
+		fbo.setCreatedWidth(texture.getHeight());
+		fbo.bind();
+		//if(useDepth){
+			fbo.linkDepthBuffer(DepthBufferObject.create(texture.getHeight(),texture.getWidth()));
+		//}
+		fbo.linkColorAttachment(GLTexture.createGPUTexture(texture.getWidth(),texture.getHeight()));
+		fbo.unBind();
+		return fbo;
+	}
 	
 	public static FrameBufferObject create(int width,int height,boolean useDepth){
 		FrameBufferObject fbo=createFBO();
-		fbo.setWidth(width);
-		fbo.setHeight(height);
+		fbo.width=width;
+		fbo.height=height;
+		fbo.setCreatedHeight(height);
+		fbo.setCreatedWidth(width);
 		fbo.bind();
-			fbo.linkColorAttachment(GLTexture.createGPUTexture(width,height));
 			if(useDepth){
 				fbo.linkDepthBuffer(DepthBufferObject.create(width,height));
 			}
+			fbo.linkColorAttachment(GLTexture.createGPUTexture(width,height));
 		fbo.unBind();
 		return fbo;
 	}
@@ -168,9 +241,10 @@ public class FrameBufferObject
 				setBind(true);
 				previousFBO=currentFBO();
 				setCurrentFBO(this);
-				if(hasDepthAttachment()){
-					getDepthAttachment().bind();
-				}
+				//if(hasDepthAttachment()&&!getDepthAttachment().isBind()){
+				//	getDepthAttachment().bind();
+				//}
+				//默认bind后自动将viewport设置为当前的
 			}
 		}
 	}
@@ -181,7 +255,7 @@ public class FrameBufferObject
 			checkCurrent();
 			setCurrentFBO(previousFBO);
 			previousFBO=null;
-			if(hasDepthAttachment()){
+			if(hasDepthAttachment()&&getDepthAttachment().isBind()){
 				getDepthAttachment().unBind();
 			}
 		}else{
@@ -199,6 +273,7 @@ public class FrameBufferObject
 	
 	public static void bindInitial(SystemFrameBuffer sysFrameBuffer){
 		CURRENT_FRAMEBUFFER=sysFrameBuffer;
+		GLWrapped.setViewport(0,0,sysFrameBuffer.getWidth(),sysFrameBuffer.getHeight());
 	}
 	
 	public static FrameBufferObject CURRENT_FRAMEBUFFER;
@@ -209,6 +284,7 @@ public class FrameBufferObject
 	
 	private static void setCurrentFBO(FrameBufferObject fbo){
 		CURRENT_FRAMEBUFFER=fbo;
+		GLWrapped.setViewport(0,0,fbo.getWidth(),fbo.getHeight());
 		bind(fbo.getFBOId());
 	}
 	
@@ -222,6 +298,14 @@ public class FrameBufferObject
 		
 		public SystemFrameBuffer(int width,int height){
 			super(width,height);
+		}
+
+		@Override
+		public AbstractTexture getTexture() {
+			// TODO: Implement this method
+			Log.w("err-gl","you called getTexture on SystemBuffer");
+			throw new RuntimeException("you called getTexture on SystemBuffer");
+			//return super.getTexture();
 		}
 		
 		@Override

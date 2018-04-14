@@ -1,25 +1,33 @@
 package com.edplan.framework.graphics.opengl.objs;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.opengl.GLES20;
+import android.opengl.GLES30;
 import android.opengl.GLUtils;
-import android.util.Log;
 import com.edplan.framework.math.Vec2;
-import java.nio.IntBuffer;
-import java.io.InputStream;
-import android.graphics.BitmapFactory;
+import com.edplan.framework.resource.AResource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import com.edplan.framework.resource.IResource;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.IntBuffer;
 
-public class GLTexture
+public class GLTexture extends AbstractTexture
 {
+	public static BitmapFactory.Options DEF_CREATE_OPTIONS;
+
+	public static GLTexture White;
+	public static GLTexture Alpha;
+	public static GLTexture Black;
+	
+	static{
+		initial();
+	}
+	
 	public static final int[] glTexIndex=new int[]{
 		GLES20.GL_TEXTURE0,
 		GLES20.GL_TEXTURE1,
@@ -50,14 +58,24 @@ public class GLTexture
 
 	private int textureId;
 	
-	GLTexture(){
+	private boolean recycled=false;
+	
+	public GLTexture(){
 		
 	}
 
+	@Override
+	public GLTexture getTexture() {
+		// TODO: Implement this method
+		return this;
+	}
+
+	@Override
 	public int getWidth() {
 		return width;
 	}
 	
+	@Override
 	public int getHeight() {
 		return height;
 	}
@@ -78,6 +96,7 @@ public class GLTexture
 		return glHeight;
 	}
 
+	@Override
 	public int getTextureId() {
 		return textureId;
 	}
@@ -91,12 +110,14 @@ public class GLTexture
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,textureId);
 	}
 
+	@Override
 	public Vec2 toTexturePosition(float x,float y){
 		return new Vec2(glWidth*x/width,glHeight*y/height);
 	}
 	
 	public void delete(){
 		GLES20.glDeleteTextures(1,new int[]{textureId},0);
+		recycled=true;
 	}
 	
 	public Bitmap toBitmap(){
@@ -108,6 +129,13 @@ public class GLTexture
 		bmp.copyPixelsFromBuffer(buffer);
 		buffer.clear();
 		return bmp;
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		// TODO: Implement this method
+		if(!recycled)delete();
+		super.finalize();
 	}
 	
 	public static GLTexture createGPUTexture(int w,int h){
@@ -139,14 +167,14 @@ public class GLTexture
 		tex.width=w;
 		tex.height=h;
 
-		tex.glHeight=tex.height/(float)bmp.getWidth();
-		tex.glWidth=tex.width/(float)bmp.getHeight();
+		tex.glHeight=tex.height/(float)bmp.getHeight();
+		tex.glWidth=tex.width/(float)bmp.getWidth();
 		GLUtils.texImage2D(GLES20.GL_TEXTURE_2D,0,bmp,0);
 		return tex;
 	}
 	
 	public static GLTexture decodeStream(InputStream in){
-		return create(BitmapFactory.decodeStream(in),true);
+		return create(BitmapFactory.decodeStream(in,null,DEF_CREATE_OPTIONS),true);
 	}
 	
 	public static GLTexture decodeStream(InputStream in,boolean ifClose) throws IOException{
@@ -159,8 +187,15 @@ public class GLTexture
 		return decodeStream(new FileInputStream(f),true);
 	}
 	
-	public static GLTexture decodeResource(IResource res,String name) throws IOException{
-		return decodeStream(res.openInput(name),true);
+	public static GLTexture decodeResource(AResource res,String name) throws IOException{
+		InputStream in=res.openInput(name);
+		if(in==null)return null;
+		return decodeStream(in,true);
+	}
+	
+	public static GLTexture create1pxTexture(Color4 color){
+		Bitmap bmp=Bitmap.createBitmap(new int[]{color.toIntBit()},1,1,Bitmap.Config.ARGB_8888);
+		return create(bmp,true);
 	}
 	
 	public static GLTexture create(Bitmap bmp,boolean ifDispos){
@@ -175,22 +210,26 @@ public class GLTexture
 		int h=1;
 		while(w<bmp.getWidth())w*=2;
 		while(h<bmp.getHeight())h*=2;
-		if(w!=bmp.getWidth()||h!=bmp.getHeight()){
-			Bitmap nb=Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888);
-			Canvas c=new Canvas(nb);
-			c.drawColor(0x00000000);
-			Paint p=new Paint();
-			p.setAntiAlias(false);
-			c.drawBitmap(bmp,0,0,p);
-			tex=createNotChecked(nb,bmp.getWidth(),bmp.getHeight());
-			nb.recycle();
+		if(DEF_CREATE_OPTIONS.inPremultiplied){
+			if(w!=bmp.getWidth()||h!=bmp.getHeight()){
+				Bitmap nb=Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888);
+				Canvas c=new Canvas(nb);
+				c.drawColor(0x00000000);
+				Paint p=new Paint();
+				p.setAntiAlias(false);
+				c.drawBitmap(bmp,0,0,p);
+				tex=createNotChecked(nb,bmp.getWidth(),bmp.getHeight());
+				nb.recycle();
+			}else{
+				tex=createNotChecked(bmp,bmp.getWidth(),bmp.getHeight());
+			}
 		}else{
 			tex=createNotChecked(bmp,bmp.getWidth(),bmp.getHeight());
 		}
 		return tex;
 	}
 
-	private static int createTexture(){
+	private static synchronized int createTexture(){
 		int[] t=new int[1];
 		GLES20.glGenTextures(1,t,0);
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,t[0]);
@@ -199,9 +238,17 @@ public class GLTexture
 		GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
 							   GLES20.GL_TEXTURE_MAG_FILTER,GLES20.GL_LINEAR);
 		GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
-							   GLES20.GL_TEXTURE_WRAP_S,GLES20.GL_CLAMP_TO_EDGE);
+							   GLES20.GL_TEXTURE_WRAP_S,GLES20.GL_REPEAT);
 		GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
-							   GLES20.GL_TEXTURE_WRAP_T,GLES20.GL_CLAMP_TO_EDGE);
+							   GLES20.GL_TEXTURE_WRAP_T,GLES20.GL_REPEAT);
 		return t[0];
+	}
+	
+	public static void initial(){
+		DEF_CREATE_OPTIONS=new BitmapFactory.Options();
+		DEF_CREATE_OPTIONS.inPremultiplied=true;
+		White=create1pxTexture(Color4.White);
+		Alpha=create1pxTexture(Color4.Alpha);
+		Black=create1pxTexture(Color4.Black);
 	}
 }

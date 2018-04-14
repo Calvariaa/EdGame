@@ -1,8 +1,9 @@
 package com.edplan.nso.parser.partParsers;
 import com.edplan.nso.OsuFilePart;
 import com.edplan.nso.filepart.PartEvents;
+import com.edplan.superutils.U;
 
-public class EventsParser implements PartParser
+public class EventsParser extends PartParser<PartEvents>
 {
 	private PartEvents events;
 	
@@ -17,13 +18,9 @@ public class EventsParser implements PartParser
 	}
 
 	@Override
-	public OsuFilePart getPart(){
+	public PartEvents getPart(){
 		// TODO: Implement this method
 		return events;
 	}
 
-	@Override
-	public void applyDefault(){
-		// TODO: Implement this method
-	}
 }

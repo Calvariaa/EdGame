@@ -1,7 +1,9 @@
 package com.edplan.framework.animation;
-import com.edplan.superutils.interfaces.Setter;
 
-public class LinkableAnimation extends MAnimation
+
+import com.edplan.framework.interfaces.Setter;
+
+public class LinkableAnimation extends MAnimation 
 {
 	public MAnimation nextAnimation;
 	

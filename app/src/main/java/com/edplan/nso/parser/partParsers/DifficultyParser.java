@@ -4,7 +4,7 @@ import com.edplan.nso.filepart.PartDifficulty;
 import com.edplan.superutils.U;
 import com.edplan.nso.OsuFilePart;
 
-public class DifficultyParser implements PartParser
+public class DifficultyParser extends PartParser<PartDifficulty>
 {
 	private PartDifficulty part;
 	
@@ -13,14 +13,9 @@ public class DifficultyParser implements PartParser
 	}
 
 	@Override
-	public OsuFilePart getPart(){
+	public PartDifficulty getPart(){
 		// TODO: Implement this method
 		return part;
-	}
-
-	@Override
-	public void applyDefault(){
-		// TODO: Implement this method
 	}
 
 	@Override
@@ -44,10 +39,10 @@ public class DifficultyParser implements PartParser
 					part.setOverallDifficulty(U.toFloat(entry[1]));
 					return true;
 				case PartDifficulty.SliderMultiplier:
-					part.setSliderMultiplier(U.toFloat(entry[1]));
+					part.setSliderMultiplier(Double.parseDouble(entry[1]));
 					return true;
 				case PartDifficulty.SliderTickRate:
-					part.setSliderTickRate(U.toFloat(entry[1]));
+					part.setSliderTickRate(Double.parseDouble(entry[1]));
 					return true;
 				default:
 					//key not find

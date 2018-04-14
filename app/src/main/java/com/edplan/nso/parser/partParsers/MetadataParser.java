@@ -4,7 +4,7 @@ import com.edplan.superutils.U;
 import com.edplan.nso.beatmapComponent.Tags;
 import com.edplan.nso.OsuFilePart;
 
-public class MetadataParser implements PartParser
+public class MetadataParser extends PartParser<PartMetadata>
 {
 	private PartMetadata part;
 	
@@ -13,17 +13,9 @@ public class MetadataParser implements PartParser
 	}
 
 	@Override
-	public OsuFilePart getPart(){
+	public PartMetadata getPart(){
 		// TODO: Implement this method
 		return part;
-	}
-
-	
-	
-
-	@Override
-	public void applyDefault(){
-		// TODO: Implement this method
 	}
 
 	@Override

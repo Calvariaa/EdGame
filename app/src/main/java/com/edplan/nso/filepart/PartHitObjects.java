@@ -1,17 +1,18 @@
 package com.edplan.nso.filepart;
 import com.edplan.nso.OsuFilePart;
-import com.edplan.nso.Ruleset.amodel.parser.HitObjectParser;
-import com.edplan.nso.Ruleset.amodel.object.HitObjects;
-import com.edplan.nso.Ruleset.ModeManager;
+import com.edplan.nso.ruleset.amodel.parser.HitObjectParser;
+import com.edplan.nso.ruleset.amodel.object.HitObjects;
+import com.edplan.nso.ruleset.ModeManager;
 import com.edplan.nso.NsoException;
-import com.edplan.nso.Ruleset.std.objects.StdHitObjects;
-import com.edplan.nso.Ruleset.amodel.object.HitObject;
-import com.edplan.nso.Ruleset.amodel.parser.HitObjectReparser;
-import com.edplan.nso.Ruleset.std.parser.StdHitObjectReparser;
+import com.edplan.nso.ruleset.std.objects.StdHitObjects;
+import com.edplan.nso.ruleset.amodel.object.HitObject;
+import com.edplan.nso.ruleset.amodel.parser.HitObjectReparser;
+import com.edplan.nso.ruleset.std.parser.StdHitObjectReparser;
 import android.util.Log;
 import com.edplan.superutils.U;
-import com.edplan.nso.Ruleset.mania.objects.ManiaHitObjects;
+import com.edplan.nso.ruleset.mania.objects.ManiaHitObjects;
 import java.util.List;
+import com.edplan.nso.ruleset.std.objects.StdHitObject;
 
 public class PartHitObjects implements OsuFilePart
 {
@@ -19,13 +20,13 @@ public class PartHitObjects implements OsuFilePart
 	
 	public int mode;
 	
-	public HitObjects hitObjects;
+	public HitObjects<?> hitObjects;
 	
 	public void initial(int mode) throws NsoException{
 		this.mode=mode;
 		switch(mode){
 			case ModeManager.MODE_STD:
-				hitObjects=new StdHitObjects();
+				hitObjects=new StdHitObjects<StdHitObject>();
 				break;
 			case ModeManager.MODE_MANIA:
 				hitObjects=new ManiaHitObjects();
@@ -39,10 +40,17 @@ public class PartHitObjects implements OsuFilePart
 		hitObjects.addHitObject(obj);
 	}
 	
-	public List<HitObject> getHitObjectList(){
-		return hitObjects.getHitObjectList();
+	public HitObjects getHitObjects(){
+		return hitObjects;
 	}
 	
+	public <T extends HitObjects> T getHitObjects(Class<T> klass){
+		return (T)getHitObjects();
+	}
+	
+	public StdHitObjects<StdHitObject> getStdHitObjects(){
+		return (StdHitObjects<StdHitObject>)getHitObjects();
+	}
 	
 	@Override
 	public String getTag(){

@@ -27,5 +27,12 @@ public class MLog
 				Log.v(head,msg);
 			}
 		}
+		
+		public static void runOnce(String tag,Runnable r){
+			if(!getBoolean(tag,false)){
+				putBoolean(tag,true);
+				r.run();
+			}
+		}
 	}
 }

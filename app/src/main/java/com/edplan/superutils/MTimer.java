@@ -8,9 +8,9 @@ public class MTimer
 	
 	public long nowTime;
 	
-	public int deltaTime;
+	public double deltaTime;
 	
-	public int runnedTime;
+	public double runnedTime;
 	
 	public MTimer(){
 		hasInitial=false;
@@ -36,11 +36,11 @@ public class MTimer
 		return nowTime;
 	}
 	
-	public int getDeltaTime(){
+	public double getDeltaTime(){
 		return deltaTime;
 	}
 	
-	public void refresh(int _deltaTime){
+	public void refresh(double _deltaTime){
 		deltaTime=_deltaTime;
 		nowTime+=_deltaTime;
 		runnedTime+=_deltaTime;

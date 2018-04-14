@@ -2,21 +2,26 @@ package com.edplan.framework.resource;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class SubResource extends IResource
+public class SubResource extends AResource
 {
 	private String rPath;
 	
-	private IResource res;
+	private AResource rootRes;
 	
-	public SubResource(IResource res,String path){
-		this.res=res;
+	public SubResource(AResource res,String path){
 		if(res instanceof SubResource){
+			this.rootRes=((SubResource)res).getRootRes();
 			this.rPath=((SubResource)res).getRPath()+"/"+path;
 		}else{
+			this.rootRes=res;
 			this.rPath=path;
 		}
 	}
 
+	public AResource getRootRes(){
+		return rootRes;
+	}
+	
 	public void setRPath(String rPath) {
 		this.rPath=rPath;
 	}
@@ -24,10 +29,27 @@ public class SubResource extends IResource
 	public String getRPath() {
 		return rPath;
 	}
+	
+	public String toRealPath(String path){
+		return getRPath()+((path!=null&&path.length()!=0)?("/"+path):"");
+	}
 
 	@Override
 	public InputStream openInput(String path) throws IOException {
 		// TODO: Implement this method
-		return res.openInput(getRPath()+"/"+path);
+		return rootRes.openInput(toRealPath(path));
+	}
+
+	@Override
+	public String[] list(String dir) throws IOException
+	{
+		// TODO: Implement this method
+		return rootRes.list(toRealPath(dir));
+	}
+
+	@Override
+	public boolean contain(String file) {
+		// TODO: Implement this method
+		return rootRes.contain(toRealPath(file));
 	}
 }

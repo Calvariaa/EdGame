@@ -6,6 +6,8 @@ import com.edplan.framework.graphics.opengl.buffer.Color4Buffer;
 import com.edplan.framework.graphics.opengl.buffer.Vec2Buffer;
 import com.edplan.framework.graphics.opengl.buffer.Vec3Buffer;
 import java.nio.Buffer;
+import com.edplan.framework.utils.MLog;
+import android.util.Log;
 
 public class VertexAttrib 
 {
@@ -20,7 +22,7 @@ public class VertexAttrib
 		
 		private final int dataType;
 		
-		public Type(int dc,int st,int dt){
+		Type(int dc,int st,int dt){
 			dataCount=dc;
 			step=st;
 			dataType=dt;
@@ -56,6 +58,7 @@ public class VertexAttrib
 	}
 	
 	public void loadData(Buffer datas){
+		if(getHandle()==-1)return;
 		GLES20.glVertexAttribPointer(
 			getHandle(),   
 			getType().dataCount, 

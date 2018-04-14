@@ -1,18 +1,18 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.0"
-
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
+	
+	useLibrary 'org.apache.http.legacy'
+	
     defaultConfig {
         applicationId "com.edplan.mygame"
-        minSdkVersion 14
-        targetSdkVersion 21
+        minSdkVersion 19
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
-		
-		renderscriptTargetApi 18
-		renderscriptSupportModeEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -24,4 +24,8 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+	
+	//compile 'cn.bmob.android:bmob-sdk:3.5.5'
+	
+	//compile 'cn.bmob.android:http-legacy:1.0'
 }

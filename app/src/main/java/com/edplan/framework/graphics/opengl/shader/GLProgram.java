@@ -3,8 +3,9 @@ import android.opengl.GLES20;
 import android.util.Log;
 import com.edplan.framework.graphics.opengl.GLWrapped;
 import com.edplan.framework.graphics.opengl.GLException;
+import com.edplan.framework.interfaces.Recycleable;
 
-public class GLProgram 
+public class GLProgram implements Recycleable
 {
 	private GLShader vertexShader;
 	
@@ -12,10 +13,17 @@ public class GLProgram
 	
 	private int id;
 	
+	private int noPreMultipleId;
+	
 	protected GLProgram(GLShader vs,GLShader fs,int id){
 		this.vertexShader=vs;
 		this.fragmentShader=fs;
 		this.id=id;
+	}
+	
+	public void linkNoPreMultipleShader(GLShader nmpfs){
+		GLProgram p=linkShader(vertexShader,nmpfs);
+		this.noPreMultipleId=p.getProgramId();
 	}
 
 	public GLShader getVertexShader() {
@@ -32,6 +40,12 @@ public class GLProgram
 	
 	public void useThis(){
 		GLES20.glUseProgram(getProgramId());
+	}
+
+	@Override
+	public void recycle() {
+		// TODO: Implement this method
+		GLES20.glDeleteProgram(getProgramId());
 	}
 	
 	public static GLProgram linkShader(GLShader vs,GLShader fs){

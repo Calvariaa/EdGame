@@ -16,7 +16,7 @@ public enum Origin
 	
 	public final float y;
 	
-	public Origin(float x,float y){
+	Origin(float x,float y){
 		this.x=x;
 		this.y=y;
 	}

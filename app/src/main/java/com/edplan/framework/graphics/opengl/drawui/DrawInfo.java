@@ -9,7 +9,7 @@ public abstract class DrawInfo
 	//according to current GLCanvas
 	public abstract Vec2 toLayerPosition(Vec2 v);
 	
-	public abstract Color4 getMaskColor(Vec2 position);
+	public abstract Color4 getVaryingColor(Vec2 position);
 	
 	
 }

@@ -1,6 +1,9 @@
 package com.edplan.framework.math;
+import com.edplan.framework.interfaces.Copyable;
+import com.edplan.framework.ui.uiobjs.Area2D;
+import com.edplan.framework.ui.Anchor;
 
-public class RectF
+public class RectF implements Copyable,Area2D,IQuad
 {
 	private Vec2 basePoint=new Vec2();
 	
@@ -12,10 +15,30 @@ public class RectF
 		
 	}
 	
+	public RectF(RectF r){
+		basePoint=r.basePoint.copy();
+		this.width=r.width;
+		this.height=r.height;
+	}
+	
 	public RectF(float l,float t,float w,float h){
 		setBasePoint(l,t);
-		setWidth(w);
-		setHeight(h);
+		this.width=w;
+		this.height=h;
+	}
+	
+	public RectF set(RectF rect){
+		setBasePoint(rect.getX1(),rect.getY1());
+		width=rect.getWidth();
+		height=rect.getHeight();
+		return this;
+	}
+	
+	public RectF setLTRB(float l,float t,float r,float b){
+		basePoint.set(l,t);
+		height=b-t;
+		width=r-l;
+		return this;
 	}
 	
 	public Vec2 getBasePoint(){
@@ -25,7 +48,28 @@ public class RectF
 	public void setBasePoint(float x,float y){
 		getBasePoint().set(x,y);
 	}
+	
+	@Override
+	public Vec2 getTopLeft(){
+		return new Vec2(getLeft(),getTop());
+	}
+	
+	@Override
+	public Vec2 getTopRight(){
+		return new Vec2(getRight(),getTop());
+	}
+	
+	@Override
+	public Vec2 getBottomLeft(){
+		return new Vec2(getLeft(),getBottom());
+	}
+	
+	@Override
+	public Vec2 getBottomRight(){
+		return new Vec2(getRight(),getBottom());
+	}
 
+	@Override
 	public Vec2 getPoint(float x,float y){
 		return basePoint.copy().add(x*width,y*height);
 	}
@@ -43,7 +87,7 @@ public class RectF
 	}
 	
 	public float getY2(){
-		return basePoint.y+width;
+		return basePoint.y+height;
 	}
 	
 	public float getTop(){
@@ -55,23 +99,25 @@ public class RectF
 	}
 	
 	public float getBottom(){
-		return getTop()+getWidth();
+		return basePoint.y+height;
 	}
 	
 	public float getRight(){
-		return getLeft()+getWidth();
+		return basePoint.x+width;
 	}
 	
-	public void setWidth(float width) {
+	public RectF setWidth(float width) {
 		this.width=width;
+		return this;
 	}
 
 	public float getWidth() {
 		return width;
 	}
 
-	public void setHeight(float height) {
+	public RectF setHeight(float height) {
 		this.height=height;
+		return this;
 	}
 
 	public float getHeight() {
@@ -80,5 +126,81 @@ public class RectF
 	
 	public void move(float dx,float dy){
 		getBasePoint().add(dx,dy);
+	}
+	
+	public RectF padding(float padding){
+		move(padding,padding);
+		width-=2*padding;
+		height-=2*padding;
+		return this;
+	}
+	
+	public RectF padding(float pl,float pt,float pr,float pb){
+		move(pl,pt);
+		width-=pl+pr;
+		height-=pt+pb;
+		return this;
+	}
+	
+	public RectF padding(Vec4 p){
+		return padding(p.r,p.g,p.b,p.a);
+	}
+	
+	public RectF scale(Anchor anchor,float sx,float sy){
+		Vec2 o=getPoint(anchor.x(),anchor.y());
+		basePoint.zoom(o,sx,sy);
+		width*=sx;
+		height*=sy;
+		return this;
+	}
+	
+	public RectF scale(Anchor anchor,Vec2 s){
+		return scale(anchor,s.x,s.y);
+	}
+	
+	public Quad toQuad(){
+		return new Quad(this);
+	}
+	
+	@Override
+	public RectF copy(){
+		return new RectF(this);
+	}
+	
+	@Override
+	public boolean inArea(Vec2 v) {
+		// TODO: Implement this method
+		Vec2 tmp=v.copy().minus(basePoint);
+		return tmp.x>=0&&tmp.x<=width&&tmp.y>=0&&tmp.y<=height;
+	}
+
+	@Override
+	public void fixRect(float l,float t,float r,float b) {
+		// TODO: Implement this method
+		this.setLTRB(l,t,r,b);
+	}
+
+	@Override
+	public RectF boundRect() {
+		// TODO: Implement this method
+		return this.copy();
+	}
+
+	@Override
+	public String toString() {
+		// TODO: Implement this method
+		return "(("+getX1()+","+getY1()+"),("+getX2()+","+getY2()+"))";
+	}
+	
+	public static RectF ltrb(float l,float t,float r,float b){
+		return (new RectF()).setLTRB(l,t,r,b);
+	}
+	
+	public static RectF xywh(float x,float y,float w,float h){
+		return new RectF(x,y,w,h);
+	}
+	
+	public static RectF anchorOWH(Anchor anchor,float ox,float oy,float width,float height){
+		return xywh(ox-anchor.x()*width,oy-anchor.y()*height,width,height);
 	}
 }

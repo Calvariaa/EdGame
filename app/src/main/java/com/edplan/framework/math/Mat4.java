@@ -1,9 +1,13 @@
 package com.edplan.framework.math;
 import android.opengl.Matrix;
+import com.edplan.framework.interfaces.Recycleable;
+import java.util.Arrays;
 
-public class Mat4
+public class Mat4 implements Recycleable
 {
 	public static final int WIDTH=4;
+	
+	public static final Mat4 IDENTITY_MAT4=(new Mat4()).setIden();
 	
 	public float[] data;
 	
@@ -16,11 +20,11 @@ public class Mat4
 		data=new float[16];
 	}
 	
-	public void setIden(){
-		setDiag(1,1,1,1);
+	public Mat4 setIden(){
+		return setDiag(1,1,1,1);
 	}
 	
-	public void set(float... datas){
+	public Mat4 set(float... datas){
 		if(datas.length!=16){
 			throw new IllegalArgumentException("Mat4.set(float...) should put 16 var");
 		}else{
@@ -28,13 +32,14 @@ public class Mat4
 				data[i]=datas[i];
 			}
 		}
+		return this;
 	}
 	
-	public void set(Mat4 mat){
-		set(mat.data);
+	public Mat4 set(Mat4 mat){
+		return set(mat.data);
 	}
 	
-	public void setDiag(float v11,float v22,float v33,float v44){
+	public Mat4 setDiag(float v11,float v22,float v33,float v44){
 		float[] tmp={v11,v22,v33,v44};
 		for(int i=0;i<WIDTH;i++){
 			for(int j=0;j<WIDTH;j++){
@@ -45,10 +50,12 @@ public class Mat4
 				}
 			}
 		}
+		return this;
 	}
 	
-	public void set(int x,int y,float d){
+	public Mat4 set(int x,int y,float d){
 		data[x+WIDTH*y]=d;
+		return this;
 	}
 	
 	public float get(int x,int y){
@@ -64,6 +71,19 @@ public class Mat4
     	Matrix.rotateM(data,0,angle,x,y,z);
 		return this;
     }
+	
+	//默认以(0,0,1)旋转
+	public Mat4 rotate2D(float ox,float oy,float angel,boolean isClockwise){
+		return this
+				 .translate(ox,oy,0)
+				 .rotate(angel,0,0,(isClockwise)?1:-1)
+				 .translate(-ox,-oy,0);
+	}
+	
+	public Mat4 scale(float sx,float sy,float sz){
+		Matrix.scaleM(data,0,sx,sy,sz);
+		return this;
+	}
 	
 	public Mat4 setCamera
     (
@@ -114,16 +134,67 @@ public class Mat4
     }
 	
 	public Mat4 pre(Mat4 mat){
-		Matrix.multiplyMM(data,0,data,0,mat.data,0);
+		Mat4 c=copy();
+		muitpMat(data,c.data,mat.data);
 		return this;
 	}
 	
 	public Mat4 post(Mat4 mat){
-		Matrix.multiplyMM(data,0,mat.data,0,data,0);
+		Mat4 c=copy();
+		muitpMat(data,mat.data,c.data);
 		return this;
 	}
 	
 	public Mat4 copy(){
 		return new Mat4(this.data);
 	}
+	
+	public static Mat4 rotation(float a,float x,float y,float z){
+		Mat4 m=createIdentity();
+		Matrix.rotateM(m.data,0,a,x,y,z);
+		return m;
+	}
+	
+	public static Mat4 translation(float tx,float ty,float tz){
+		return createIdentity().translate(tx,ty,tx);
+	}
+	
+	public static Mat4 createIdentity(){
+		return IDENTITY_MAT4.copy();
+	}
+
+	@Override
+	public void recycle() {
+		// TODO: Implement this method
+		this.data=null;
+	}
+
+	@Override
+	public String toString()
+	{
+		// TODO: Implement this method
+		StringBuilder sb=new StringBuilder();
+		for(int y=0;y<4;y++){
+			for(int x=0;x<4;x++){
+				sb.append(get(data,x,y)).append(",");
+			}
+			sb.append("\n");
+		}
+		
+		return "{Mat4}:\n"+sb.toString();
+	}
+	
+	private static void muitpMat(float[] out,float[] m1,float[] m2){
+		Matrix.multiplyMM(out,0,m1,0,m2,0);
+	}
+	
+	private static float get(float[] a,int x,int y){
+		return a[x+y*4];
+	}
 }
+		
+
+
+
+	
+

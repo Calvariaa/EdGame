@@ -23,6 +23,13 @@ public class CircleApproximator
 	}
 	
 	public List<Vec2> createArc(){
+		if(Vec2.shareLine(p1,p2,p3,tolerance)){
+			List<Vec2> l=new ArrayList<Vec2>();
+			l.add(p1);
+			l.add(p2);
+			l.add(p3);
+			return l;
+		}
 		float aSp=p2.copy().minus(p3).lengthSquared();
 		float bSp=p1.copy().minus(p3).lengthSquared();
 		float cSp=p1.copy().minus(p2).lengthSquared();

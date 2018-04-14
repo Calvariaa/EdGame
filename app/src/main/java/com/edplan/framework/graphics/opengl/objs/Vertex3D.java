@@ -3,7 +3,7 @@ import com.edplan.framework.math.Vec3;
 
 public class Vertex3D
 {
-	public static final Color4 DEF_COLOR=new Color4(1.0f,1.0f,1.0f,1.0f);
+	public static final Color4 DEF_COLOR=Color4.rgba(1.0f,1.0f,1.0f,1.0f);
 	
 	public static final Vec3 DEF_POSITION=new Vec3(0,0,0);
 	
@@ -12,13 +12,18 @@ public class Vertex3D
 	public Color4 color;
 	
 	public Vertex3D(){
-		position=DEF_POSITION;
-		color=DEF_COLOR;
+		position=DEF_POSITION.copy();
+		color=DEF_COLOR.copyNew();
+	}
+	
+	public Vertex3D(float x,float y,float z,Color4 color){
+		this.position=new Vec3(x,y,z);
+		this.color=color.copyNew();
 	}
 	
 	public Vertex3D(Vec3 p){
-		this.position=p;
-		color=DEF_COLOR;
+		this.position=p.copy();
+		color=DEF_COLOR.copyNew();
 	}
 	
 	public Vertex3D(float x,float y,float z){
@@ -26,7 +31,7 @@ public class Vertex3D
 	}
 
 	public Vertex3D setColor(Color4 color) {
-		this.color=color;
+		this.color.set(color.toPremultipled());
 		return this;
 	}
 
@@ -35,7 +40,7 @@ public class Vertex3D
 	}
 
 	public Vertex3D setPosition(Vec3 position) {
-		this.position=position;
+		this.position.set(position);
 		return this;
 	}
 
@@ -43,6 +48,14 @@ public class Vertex3D
 		return position;
 	}
 
+	public static Vertex3D atPosition(float x,float y,float z){
+		return new Vertex3D(x,y,z);
+	}
+	
+	public static Vertex3D atPosition(Vec3 v){
+		return new Vertex3D(v);
+	}
+	
 	@Override
 	public String toString() {
 		// TODO: Implement this method

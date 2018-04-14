@@ -11,11 +11,11 @@ import com.edplan.framework.MContext;
 public class MListView extends MViewGroup
 {
 	ChildMeasurer measurer;
-	List<BaseWidget> children;
+	List<BaseView> children;
 
 	public MListView(MContext con){
 		super(con);
-		children=new ArrayList<BaseWidget>();
+		children=new ArrayList<BaseView>();
 		measurer=new BaseChildMeasurer(this);
 	}
 
@@ -30,7 +30,7 @@ public class MListView extends MViewGroup
 	
 	//添加的child的basepoint约等于无效
 	@Override
-	public MListView add(BaseWidget w)
+	public MListView add(BaseView w)
 	{
 		// TODO: Implement this method
 		super.add(w);
@@ -47,7 +47,7 @@ public class MListView extends MViewGroup
 		//canvas.clipRect(basePoint.x,basePoint.y,basePoint.x+getWidth(),basePoint.y+getHeight());
 		//canvas.translate(basePoint.x,basePoint.y);
 		measurer.measure();
-		for(BaseWidget w:children){
+		for(BaseView w:children){
 			if(w.getTop()>getHeight()){
 				continue;
 			}else if(w.getBottom()<0){
@@ -191,7 +191,7 @@ public class MListView extends MViewGroup
 		}
 
 		@Override
-		public void toView(BaseWidget viewTo){
+		public void toView(BaseView viewTo){
 			// TODO: Implement this method
 			baseMeasure();
 			if(viewTo.getBottom()>view.getHeight()){
@@ -202,8 +202,8 @@ public class MListView extends MViewGroup
 		long latestMeasure;
 		
 		public void baseMeasure(){
-			BaseWidget w;
-			BaseWidget pre;
+			BaseView w;
+			BaseView pre;
 			for(int i=0;i<view.children.size();i++){
 				w=view.children.get(i);
 				if(i==0){
@@ -272,7 +272,7 @@ public class MListView extends MViewGroup
 				}
 			}
 			
-			for(BaseWidget bw:view.children){
+			for(BaseView bw:view.children){
 				bw.setBasePoint(bw.getLeft(),bw.getTop()-position);
 			}
 		}
@@ -284,7 +284,7 @@ public class MListView extends MViewGroup
 		
 		public abstract void measure();
 		
-		public abstract void toView(BaseWidget view);
+		public abstract void toView(BaseView view);
 	}
 	
 }

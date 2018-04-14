@@ -20,15 +20,15 @@ import com.edplan.framework.view.advance.widget.OsuTriangleManager;
 import com.edplan.mygame.GameSurfaceView;
 import com.edplan.mygame.test.TestCursorField;
 import com.edplan.nso.ParsingBeatmap;
-import com.edplan.nso.Ruleset.amodel.object.HitObject;
-import com.edplan.nso.Ruleset.std.objects.StdHitObject;
-import com.edplan.nso.Ruleset.std.objects.StdPath;
-import com.edplan.nso.Ruleset.std.objects.StdSlider;
-import com.edplan.nso.Ruleset.std.objects.drawables.DrawableStdSlider;
-import com.edplan.nso.Ruleset.std.parser.StdHitObjectParser;
+import com.edplan.nso.ruleset.amodel.object.HitObject;
+import com.edplan.nso.ruleset.std.objects.StdHitObject;
+import com.edplan.nso.ruleset.std.objects.StdPath;
+import com.edplan.nso.ruleset.std.objects.StdSlider;
+import com.edplan.nso.ruleset.std.objects.drawables.StdSliderPathMaker;
+import com.edplan.nso.ruleset.std.parser.StdHitObjectParser;
 import com.edplan.nso.filepart.PartGeneral;
 import com.edplan.nso.filepart.PartHitObjects;
-import com.edplan.nso.parser.StdBeatmapParser;
+import com.edplan.nso.parser.StdBeatmapDecoder;
 import com.edplan.superutils.TestClock;
 import com.edplan.superutils.U;
 import java.io.File;
@@ -70,18 +70,18 @@ public class MainGamePage extends MStaticViewGroup
 			StdHitObject h=ps.parse("326,175,974,2,0,P|329:239|392:290,1,128,2|2,0:0|0:0,0:0:0:0:");
 			cf.addText(h.getClass().getCanonicalName());
 			cf.addText(h.getStartX()+","+h.getStartY());
-			cf.addText(StdBeatmapParser.parseFormatLine("jsjsjsnz")+"");
+			cf.addText(StdBeatmapDecoder.parseFormatLine("jsjsjsnz")+"");
 			
 			
 			
-			cf.addText(StdBeatmapParser.parseFormatLine("osu file format v14")+"");
+			cf.addText(StdBeatmapDecoder.parseFormatLine("osu file format v14")+"");
 			
-			cf.addText(StdBeatmapParser.parseTag("[wwwbb]")+"|");
-			cf.addText(StdBeatmapParser.parseTag("[wwwbb ] ")+"|");
+			cf.addText(StdBeatmapDecoder.parseTag("[wwwbb]")+"|");
+			cf.addText(StdBeatmapDecoder.parseTag("[wwwbb ] ")+"|");
 			
 			cf.addText("------------------------------------------------------------------------------------------------");
 			
-			StdBeatmapParser p=new StdBeatmapParser(new File("/storage/emulated/0/MyDisk/WorkBench/data/test beatmaps/std/Halozy - Kikoku Doukoku Jigokuraku (Hollow Wings) [Notch Hell].osu"));
+			StdBeatmapDecoder p=new StdBeatmapDecoder(new File("/storage/emulated/0/MyDisk/WorkBench/data/test beatmaps/std/Halozy - Kikoku Doukoku Jigokuraku (Hollow Wings) [Notch Hell].osu"));
 			//"/storage/emulated/0/MyDisk/WorkBench/data/test beatmaps/std/Petit Rabbit's - No Poi! (walaowey) [[ -Scarlet- ]'s Extra].osu"));
 			//"/storage/emulated/0/MyDisk/WorkBench/data/test beatmaps/mania/Primary - in the Garden (Mat) [Julie's 4K Hard].osu"));
 			//"/storage/emulated/0/MyDisk/WorkBench/data/test beatmaps/std/Petit Rabbit's - No Poi! (walaowey) [Insane].osu"));
@@ -111,6 +111,7 @@ public class MainGamePage extends MStaticViewGroup
 			paint.setAntiAlias(true);
 			paint.setStyle(Paint.Style.STROKE);
 			int cx=0;
+			/*
 			if(false)
 			for(HitObject o:((PartHitObjects)(p.getHitObjectsParser().getPart())).getHitObjectList()){
 				if(o instanceof StdSlider){
@@ -167,7 +168,7 @@ public class MainGamePage extends MStaticViewGroup
 					pbp.compress(Bitmap.CompressFormat.PNG,100,new FileOutputStream(npng));
 					
 				}
-			}
+			}*/
 			clock.end();
 			cf.addText("------");
 			cf.addText("Total time : "+clock.getTime());
