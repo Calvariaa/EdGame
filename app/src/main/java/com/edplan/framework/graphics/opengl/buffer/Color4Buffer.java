@@ -8,6 +8,33 @@ import java.util.List;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import android.util.Log;
 
+public class Color4Buffer extends BaseBuffer<Color4>
+{
+
+	public static final int FLOAT_SIZE=4;
+
+	public Color4Buffer(){
+		super(6);
+	}
+
+	public Color4Buffer(int size){
+		super(size);
+	}
+
+	@Override
+	public int getFloatSize() {
+		// TODO: Implement this method
+		return FLOAT_SIZE;
+	}
+
+	@Override
+	protected void addToBuffer(FloatBuffer fb,Color4 t) {
+		// TODO: Implement this method
+		fb.put(t.r).put(t.g).put(t.b).put(t.a);
+	}
+}
+
+/*
 public class Color4Buffer 
 {
 	public static final int RAW_SIZE=4;
@@ -36,15 +63,31 @@ public class Color4Buffer
 	}
 	
 	int latestListSize;
+	
+	public void ensureBufferSize(int size){
+		if(latestListSize<size){
+			latestListSize=size;
+			if(buffer!=null)buffer.clear();
+			buffer=createFloatBuffer(size*RAW_SIZE);
+		}
+	}
+
+	public FloatBuffer makeBuffer(int offset,int length){
+		int position=(latestListSize-length)*RAW_SIZE;
+		buffer.position(position);
+		Color4 t;
+		int end=offset+length;
+		for(int i=offset;i<end;i++){
+			t=bufferList.get(i);
+			buffer.put(t.r).put(t.g).put(t.b).put(t.a);
+		}
+		buffer.position(position);
+		return buffer;
+	}
+	
 	public FloatBuffer makeBuffer(){
 		if(bufferList.size()<=latestListSize&&buffer!=null){
-			int position=(latestListSize-bufferList.size())*RAW_SIZE;
-			buffer.position(position);
-			for(Color4 t:bufferList){
-				buffer.put(t.r).put(t.g).put(t.b).put(t.a);
-			}
-			buffer.position(position);
-			return buffer;
+			return makeBuffer(0,bufferList.size());
 		}
 
 		if(buffer!=null)buffer.clear();
@@ -56,19 +99,6 @@ public class Color4Buffer
 		latestListSize=bufferList.size();
 		return buffer;
 	}
-	
-	/*
-	public FloatBuffer makeBuffer(){
-		if(buffer!=null)buffer.clear();
-		buffer=createFloatBuffer(bufferList.size()*4);
-		//Log.v("gl_test","color count: "+bufferList.size());
-		for(Color4 t:bufferList){
-			buffer.put(t.r).put(t.g).put(t.b).put(t.a);
-		}
-		buffer.position(0);
-		return buffer;
-	}
-	*/
 
 	public static FloatBuffer createFloatBuffer(int floatCount){
 		ByteBuffer bb=ByteBuffer.allocateDirect(floatCount*RAW_BYTE_SIZE);
@@ -76,3 +106,4 @@ public class Color4Buffer
 		return bb.asFloatBuffer();
 	}
 }
+*/

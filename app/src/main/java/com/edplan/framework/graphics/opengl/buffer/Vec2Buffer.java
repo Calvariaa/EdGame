@@ -6,6 +6,34 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+public class Vec2Buffer extends BaseBuffer<Vec2>
+{
+
+	public static final int FLOAT_SIZE=8;
+	
+	public Vec2Buffer(int size){
+		super(size);
+	}
+	
+	public Vec2Buffer(){
+		super(6);
+	}
+	
+	@Override
+	public int getFloatSize() {
+		// TODO: Implement this method
+		return FLOAT_SIZE;
+	}
+
+	@Override
+	protected void addToBuffer(FloatBuffer fb,Vec2 t) {
+		// TODO: Implement this method
+		fb.put(t.x).put(t.y);
+	}
+}
+
+
+/*
 public class Vec2Buffer
 {
 	public static final int RAW_SIZE=2;
@@ -36,17 +64,32 @@ public class Vec2Buffer
 		bufferList.clear();
 	}
 	
-
 	int latestListSize;
+	
+	public void ensureBufferSize(int size){
+		if(latestListSize<size){
+			latestListSize=size;
+			if(buffer!=null)buffer.clear();
+			buffer=createFloatBuffer(size*RAW_SIZE);
+		}
+	}
+	
+	public FloatBuffer makeBuffer(int offset,int length){
+		int position=(latestListSize-length)*RAW_SIZE;
+		buffer.position(position);
+		Vec2 t;
+		int end=offset+length;
+		for(int i=offset;i<end;i++){
+			t=bufferList.get(i);
+			buffer.put(t.x).put(t.y);
+		}
+		buffer.position(position);
+		return buffer;
+	}
+
 	public FloatBuffer makeBuffer(){
 		if(bufferList.size()<=latestListSize&&buffer!=null){
-			int position=(latestListSize-bufferList.size())*RAW_SIZE;
-			buffer.position(position);
-			for(Vec2 t:bufferList){
-				buffer.put(t.x).put(t.y);
-			}
-			buffer.position(position);
-			return buffer;
+			return makeBuffer(0,bufferList.size());
 		}
 		
 		if(buffer!=null)buffer.clear();
@@ -65,3 +108,4 @@ public class Vec2Buffer
 		return bb.asFloatBuffer();
 	}
 }
+*/
