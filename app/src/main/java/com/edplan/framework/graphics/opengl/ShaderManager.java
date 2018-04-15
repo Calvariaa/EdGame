@@ -63,7 +63,7 @@ public class ShaderManager
 	
 	private void loadShader(){
 		if(GLWrapped.GL_VERSION>=2)
-			try {
+		try {
 			texture3DShader=
 				Texture3DShader.createT3S(
 					res.loadText(PATH.PATH_Texture3DShader + ".vs"),

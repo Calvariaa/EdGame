@@ -50,8 +50,8 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 	public void onSurfaceCreated(GL10 p1,EGLConfig p2) {
 		// TODO: Implement this method
 		try {
-			context.initial();
 			GLWrapped.initial(glVersion);
+			context.initial();
 			GLWrapped.depthTest.set(false);
 			GLWrapped.blend.setEnable(true);
 			uiLooper=new UILooper();
