@@ -10,6 +10,10 @@ public class TBVOutputStream
 {
 	private DataOutputStream out;
 	
+	public TBVOutputStream(DataOutputStream out){
+		this.out=out;
+	}
+	
 	public void writeBoolean(boolean b) throws IOException{
 		out.writeBoolean(b);
 	}
