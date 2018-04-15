@@ -39,6 +39,7 @@ import java.nio.IntBuffer;
 import org.json.JSONObject;
 import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
+import com.edplan.framework.ui.Anchor;
 
 public class TestView extends EdView
 {
@@ -81,6 +82,8 @@ public class TestView extends EdView
 	
 	TestData test;
 	
+	GLTexture cursor;
+	
 	public TestView(MContext context){
 		super(context);
 		
@@ -102,6 +105,9 @@ public class TestView extends EdView
 			font.addFont(res,"Noto-Basic.fnt");
 			font.setErrCharacter('⊙');
 			TextPrinter.addFont(font,"default");
+			
+			cursor=getContext().getAssetResource().subResource("osu/skins/default").loadTexture("cursor.png");
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -519,8 +525,12 @@ public class TestView extends EdView
 		printer.toNextLine();
 		printer.printString(audioOffset+"");
 		printer.toNextLine();
-		if(test.enableStoryboard)printer.printString(playingStoryboard.objectsInField()+"");
-		//printer.toNextLine();
+		if(test.enableStoryboard){
+			printer.printString(playingStoryboard.objectsInField()+"\n");
+			printer.printString("new: "+playingStoryboard.newApply()+"");
+		}
+		printer.toNextLine();
+		printer.printString(timeline.animationCount()+"");
 		//printer.setTextSize(50);
 		//printer.printString("osu!lab");
 		//printer.toNextLine();
@@ -558,8 +568,9 @@ public class TestView extends EdView
 				});
 		}
 		*/
-		
-		
+		Vec2 v=TestStaticData.touchPosition.copy();
+		v.zoom(canvas.getWidth(),canvas.getHeight(),2,2);
+		canvas.drawTexture(cursor,RectF.anchorOWH(Anchor.Center,v.x,v.y,100,100),new GLPaint());
 		
 		
 	}

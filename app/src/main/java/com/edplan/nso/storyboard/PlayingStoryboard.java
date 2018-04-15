@@ -14,6 +14,8 @@ import com.edplan.framework.resource.BufferedListResource;
 import com.edplan.framework.graphics.opengl.objs.texture.AutoPackTexturePool;
 import com.edplan.nso.storyboard.elements.IStoryboardElements;
 import java.io.File;
+import com.edplan.framework.graphics.opengl.shader.advance.ColorShader;
+import com.edplan.framework.graphics.opengl.shader.advance.Texture3DShader;
 
 public class PlayingStoryboard extends EdDrawable
 {
@@ -86,6 +88,14 @@ public class PlayingStoryboard extends EdDrawable
 		return c;
 	}
 	
+	public int newApply(){
+		int c=0;
+		for(PlayingStoryboardLayer l:layers.values()){
+			c+=l.getNewApply();
+		}
+		return c;
+	}
+	
 	public TexturePool getTexturePool(){
 		return pool;
 	}
@@ -101,8 +111,12 @@ public class PlayingStoryboard extends EdDrawable
 	@Override
 	public void draw(GLCanvas2D canvas) {
 		// TODO: Implement this method
+		int i=canvas.save();
+		//canvas.getData().getShaders().setColorShader(ColorShader.Invalid);
+		//canvas.getData().getShaders().setTexture3DShader(Texture3DShader.Invalid);
 		for(Map.Entry<String,PlayingStoryboardLayer> e:layers.entrySet()){
 			e.getValue().draw(canvas);
 		}
+		canvas.restoreToCount(i);
 	}
 }

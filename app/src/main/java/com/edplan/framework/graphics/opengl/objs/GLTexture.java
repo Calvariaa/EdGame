@@ -3,9 +3,16 @@ package com.edplan.framework.graphics.opengl.objs;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.opengl.GLES10;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
+import com.edplan.framework.MContext;
+import com.edplan.framework.graphics.layer.BufferedLayer;
+import com.edplan.framework.graphics.opengl.GLCanvas2D;
+import com.edplan.framework.graphics.opengl.GLPaint;
+import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.resource.AResource;
 import java.io.File;
@@ -15,13 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.IntBuffer;
-import com.edplan.framework.graphics.opengl.bufferObjects.FrameBufferObject;
-import com.edplan.framework.graphics.layer.BufferedLayer;
-import com.edplan.framework.MContext;
-import com.edplan.framework.graphics.opengl.GLCanvas2D;
-import com.edplan.framework.graphics.opengl.GLPaint;
-import com.edplan.framework.math.RectF;
-import android.graphics.Color;
+import com.edplan.framework.graphics.opengl.GLWrapped;
 
 public class GLTexture extends AbstractTexture
 {
@@ -137,7 +138,11 @@ public class GLTexture extends AbstractTexture
 		canvas.prepare();
 		GLPaint rawPaint=new GLPaint();
 		canvas.drawTexture(this,RectF.xywh(0,0,getWidth(),getHeight()),rawPaint);
-		GLES20.glReadPixels(0,0,getWidth(),getHeight(),GLES20.GL_RGBA,GLES20.GL_UNSIGNED_BYTE,buffer);
+		if(GLWrapped.GL_VERSION==1){
+			GLES10.glReadPixels(0,0,getWidth(),getHeight(),GLES20.GL_RGBA,GLES20.GL_UNSIGNED_BYTE,buffer);
+		}else{
+			GLES20.glReadPixels(0,0,getWidth(),getHeight(),GLES20.GL_RGBA,GLES20.GL_UNSIGNED_BYTE,buffer);
+		}
 		canvas.unprepare();
 		Bitmap bmp=Bitmap.createBitmap(getWidth(),getHeight(),Bitmap.Config.ARGB_8888);
 		bmp.copyPixelsFromBuffer(buffer);

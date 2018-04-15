@@ -145,6 +145,14 @@ public class QueryAnimation<T,V> extends BasePreciseAnimation
 	private AnimNode getEndNode(){
 		return nodes.size()>0?nodes.get(nodes.size()-1):null;
 	}
+
+	@Override
+	public void dispos() {
+		// TODO: Implement this method
+		super.dispos();
+		for(AnimNode n:nodes)n.dispos();
+		nodes.clear();
+	}
 	
 	public class AnimNode{
 		//这些时间均为ProgressTime
@@ -176,6 +184,11 @@ public class QueryAnimation<T,V> extends BasePreciseAnimation
 		public void apply(double progressTime){
 			double p=Math.min(1,Math.max(0,(duration==0)?1:((progressTime-startTime)/duration)));
 			setter.invoke(target,interplate(p));
+		}
+		
+		public void dispos(){
+			pre=null;
+			next=null;
 		}
 	}
 

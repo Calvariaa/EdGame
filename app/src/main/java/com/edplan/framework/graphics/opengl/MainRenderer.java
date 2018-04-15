@@ -10,6 +10,7 @@ import com.edplan.framework.graphics.layer.BufferedLayer;
 import com.edplan.framework.graphics.layer.DefBufferedLayer;
 import com.edplan.framework.graphics.opengl.bufferObjects.FrameBufferObject;
 import com.edplan.framework.graphics.opengl.objs.Color4;
+import com.edplan.framework.test.TestStaticData;
 import com.edplan.framework.test.TestView;
 import com.edplan.framework.ui.looper.UILooper;
 import com.edplan.framework.utils.MLog;
@@ -25,8 +26,11 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 
 	private UILooper uiLooper;
 	
-	public MainRenderer(Context con){
+	private int glVersion;
+	
+	public MainRenderer(Context con,int glVersion){
 		context=new MContext(con);
+		this.glVersion=glVersion;
 	}
 
 	public DefBufferedLayer getRootLayer() {
@@ -37,6 +41,7 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 	public boolean onTouch(View p1,MotionEvent e) {
 		// TODO: Implement this method
 		//Log.v("thread","touch-thread: "+Thread.currentThread());
+		TestStaticData.touchPosition.set(e.getX(),e.getY());
 		return true;
 	}
 
@@ -46,7 +51,7 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 		// TODO: Implement this method
 		try {
 			context.initial();
-			GLWrapped.initial();
+			GLWrapped.initial(glVersion);
 			GLWrapped.depthTest.set(false);
 			GLWrapped.blend.setEnable(true);
 			uiLooper=new UILooper();

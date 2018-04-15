@@ -122,6 +122,7 @@ public class PreciseTimeline extends Loopable
 
 	private void finishAnimation(AbstractPreciseAnimation anim){
 		anim.onFinish();
+		anim.dispos();
 	}
 
 	private void skipAnimation(AbstractPreciseAnimation anim){

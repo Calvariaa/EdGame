@@ -26,6 +26,12 @@ public class TextureVertex3D extends Vertex3D
 		super(p);
 		this.texturePoint=tp;
 	}
+	
+	public void set(TextureVertex3D v){
+		color.set(v.color);
+		position.set(v.position);
+		texturePoint.set(v.texturePoint);
+	}
 
 	@Override
 	public TextureVertex3D setColor(Color4 color) {

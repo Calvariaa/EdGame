@@ -20,9 +20,12 @@ import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.graphics.opengl.batch.base.IHasColor;
 import com.edplan.framework.graphics.opengl.batch.base.IHasPosition;
 import com.edplan.framework.graphics.opengl.batch.BaseBatch;
+import android.opengl.GLES20;
 
 public class ColorShader extends GLProgram 
 {
+	public static ColorShader Invalid=new InvalidColorShader();
+	
 	private UniformMat4 uMVPMatrix;
 	
 	private UniformMat4 uMaskMatrix;
@@ -39,6 +42,9 @@ public class ColorShader extends GLProgram
 	
 	protected ColorShader(GLProgram program){
 		super(program.getVertexShader(),program.getFragmentShader(),program.getProgramId());
+	}
+	
+	public void setUp(){
 		uMVPMatrix=UniformMat4.findUniform(this,Unif.MVPMatrix);
 		uMaskMatrix=UniformMat4.findUniform(this,Unif.MaskMatrix);
 		//uColorMixRate=UniformFloat.findUniform(this,Unif.ColorMixRate);
@@ -51,7 +57,6 @@ public class ColorShader extends GLProgram
 	public void loadPaint(GLPaint paint,float alphaAdjust){
 		loadMixColor(paint.getMixColor());
 		loadAlpha(paint.getFinalAlpha()*alphaAdjust);
-		//loadColorMixRate(paint.getColorMixRate());
 	}
 
 	public boolean loadBatch(BaseBatch batch){
@@ -88,16 +93,96 @@ public class ColorShader extends GLProgram
 	public void loadColor(Color4Buffer buffer){
 		vColor.loadData(buffer);
 	}
-	/*
-	public void loadColorMixRate(float f){
-		uColorMixRate.loadData(f);
-	}
-	*/
+
 	public void loadAlpha(float a){
 		uFinalAlpha.loadData(a);
 	}
 	
+	public void applyToGL(int mode,int offset,int count){
+		GLES20.glDrawArrays(mode,offset,count);
+	}
+	
 	public static final ColorShader createCS(String vs,String fs){
-		return new ColorShader(GLProgram.createProgram(vs,fs));
+		ColorShader s=new ColorShader(GLProgram.createProgram(vs,fs));
+		s.setUp();
+		return s;
+	}
+	
+	public static class GL10ColorShader extends ColorShader{
+		public GL10ColorShader(){
+			super(GLProgram.invalidProgram());
+		}
+	}
+	
+	public static class InvalidColorShader extends ColorShader{
+		public InvalidColorShader(){
+			super(GLProgram.invalidProgram());
+		}
+
+		@Override
+		public void setUp() {
+			// TODO: Implement this method
+			//super.setUp();
+		}
+
+		@Override
+		public void loadColor(Color4Buffer buffer) {
+			// TODO: Implement this method
+			//super.loadColor(buffer);
+		}
+
+		@Override
+		public void loadPaint(GLPaint paint,float alphaAdjust) {
+			// TODO: Implement this method
+			//super.loadPaint(paint, alphaAdjust);
+		}
+
+		@Override
+		public void loadMVPMatrix(Mat4 mvp) {
+			// TODO: Implement this method
+			//super.loadMVPMatrix(mvp);
+		}
+
+		@Override
+		public void loadMaskMatrix(Mat4 mpm) {
+			// TODO: Implement this method
+			//super.loadMaskMatrix(mpm);
+		}
+
+		@Override
+		public boolean loadBatch(BaseBatch batch) {
+			// TODO: Implement this method
+			return true;//super.loadBatch(batch);
+		}
+
+		@Override
+		public void loadPosition(Vec3Buffer buffer) {
+			// TODO: Implement this method
+			//super.loadPosition(buffer);
+		}
+
+		@Override
+		public void loadMixColor(Color4 c) {
+			// TODO: Implement this method
+			//super.loadMixColor(c);
+		}
+
+		@Override
+		public void loadMatrix(Mat4 mvp,Mat4 mask) {
+			// TODO: Implement this method
+			//super.loadMatrix(mvp, mask);
+		}
+
+		@Override
+		public void loadAlpha(float a) {
+			// TODO: Implement this method
+			//super.loadAlpha(a);
+		}
+
+		@Override
+		public void applyToGL(int mode,int offset,int count) {
+			// TODO: Implement this method
+			//super.applyToGL(mode, offset, count);
+		}
 	}
 }

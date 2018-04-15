@@ -11,18 +11,31 @@ import com.edplan.framework.interfaces.Setter;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.interfaces.Copyable;
 import com.edplan.framework.graphics.opengl.bufferObjects.FBOPool;
+import android.opengl.GLES10;
 
 public class GLWrapped
 {
+	public static int GL_VERSION;
+	
+	public static int GL_TRIANGLES=GLES20.GL_TRIANGLES;
+	
 	public static final
 	BooleanSetting depthTest=new BooleanSetting(new Setter<Boolean>(){
 			@Override
 			public void set(Boolean t) {
 				// TODO: Implement this method
 				if(t){
-					GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+					if(GL_VERSION==2){
+						GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+					}else{
+						GLES10.glEnable(GLES10.GL_DEPTH_TEST);
+					}
 				}else{
-					GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+					if(GL_VERSION==2){
+						GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+					}else{
+						GLES10.glDisable(GLES10.GL_DEPTH_TEST);
+					}
 				}
 			}
 		},
@@ -49,9 +62,10 @@ public class GLWrapped
 	
 	public static BlendSetting blend=new BlendSetting().setUp();
 	
-	public static void initial(){
+	public static void initial(int version){
 		//depthTest=false;
 		//GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+		GL_VERSION=version;
 		GLTexture.initial();
 		FBOPool.initialGL();
 	}
@@ -59,7 +73,11 @@ public class GLWrapped
 	private static int px1,px2,py1,py2;
 	public static void setViewport(int x1,int y1,int x2,int y2){
 		//if(!(px1==x1&&px2==x2&&py1==y1&&py2==y2)){
-			GLES20.glViewport(x1,y1,x2-x1,y2-y1);
+			if(GL_VERSION==2){
+				GLES20.glViewport(x1,y1,x2-x1,y2-y1);
+			}else{
+				GLES10.glViewport(x1,y1,x2-x1,y2-y1);
+			}
 			px1=x1;
 			px2=x2;
 			py1=y1;
@@ -68,7 +86,11 @@ public class GLWrapped
 	}
 	
 	public static void setClearColor(float r,float g,float b,float a){
-		GLES20.glClearColor(r,g,b,a);
+		if(GL_VERSION==2){
+			GLES20.glClearColor(r,g,b,a);
+		}else{
+			GLES10.glClearColor(r,g,b,a);
+		}
 	}
 	
 	public static void clearColorBuffer(){
@@ -95,8 +117,8 @@ public class GLWrapped
 		}
 	}*/
 	
-	public static void clearColor(Color4 c){
-		GLES20.glClearColor(c.r,c.g,c.b,c.a);
+	public static void setClearColor(Color4 c){
+		setClearColor(c.r,c.g,c.b,c.a);
 	}
 		
 	public static void checkGlError(String op) {
@@ -105,114 +127,5 @@ public class GLWrapped
             Log.e("ES20_ERROR", op + ": glError " + error);
             throw new GLException(op + ": glError " + error);
         }
-	}
-	
-	public static class BlendSetting extends AbstractSRable<BlendPropert> {
-		
-		public BlendSetting(){
-			
-		}
-
-		public BlendSetting setUp(){
-			initial();
-			getData().applyToGL();
-			return this;
-		}
-		
-		public boolean isEnable(){
-			return getData().enable;
-		}
-		
-		public BlendType getBlendType(){
-			return getData().blendType;
-		}
-		
-		public void set(boolean enable,BlendType blendType){
-			if(!getData().equals(enable,blendType)){
-				BlendPropert prop=new BlendPropert(enable,blendType);
-				setCurrentData(prop);
-				prop.applyToGL();
-			}
-		}
-		
-		public void setEnable(boolean enable){
-			set(enable,getBlendType());
-		}
-		
-		public void setBlendType(BlendType type){
-			set(isEnable(),type);
-		}
-		
-		@Override
-		public void onSave(BlendPropert t) {
-			// TODO: Implement this method
-		}
-
-		@Override
-		public void onRestore(BlendPropert now,BlendPropert pre) {
-			// TODO: Implement this method
-			if(!now.equals(pre)){
-				now.applyToGL();
-			}
-		}
-
-		@Override
-		public GLWrapped.BlendPropert getDefData() {
-			// TODO: Implement this method
-			return new BlendPropert();
-		}
-	}
-	
-	public static class BlendPropert implements Copyable {
-		
-		public boolean enable=true;
-		
-		public BlendType blendType=BlendType.Normal;
-		
-		public BlendPropert(){
-			
-		}
-		
-		public BlendPropert(BlendPropert b){
-			set(b);
-		}
-		
-		public BlendPropert(boolean e,BlendType t){
-			this.enable=e;
-			this.blendType=t;
-		}
-		
-		public void set(BlendPropert b){
-			this.enable=b.enable;
-			this.blendType=b.blendType;
-		}
-		
-		public void applyToGL(){
-			if(enable){
-				GLES20.glEnable(GLES20.GL_BLEND);
-				GLES20.glBlendFunc(blendType.srcType,blendType.dstType);
-			}else{
-				GLES20.glDisable(GLES20.GL_BLEND);
-			}
-		}
-		
-		public boolean equals(boolean _enable,BlendType _blendType){
-			return this.enable==_enable&&this.blendType==_blendType;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			// TODO: Implement this method
-			if(obj instanceof BlendPropert){
-				BlendPropert b=(GLWrapped.BlendPropert) obj;
-				return (enable==b.enable)&&(blendType==b.blendType);
-			}else return false;
-		}
-		
-		@Override
-		public Copyable copy() {
-			// TODO: Implement this method
-			return new BlendPropert(this);
-		}
 	}
 }

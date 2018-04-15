@@ -21,15 +21,24 @@ import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
 import com.edplan.framework.graphics.opengl.objs.texture.TextureRegion;
 import com.edplan.framework.graphics.opengl.batch.BaseBatch;
 import com.edplan.framework.graphics.opengl.batch.base.IHasTexturePosition;
+import com.edplan.framework.graphics.opengl.GLPaint;
 
 public class Texture3DShader extends ColorShader
-{	
+{
+	public static Texture3DShader Invalid=new InvalidTexture3DShader();
+	
 	private UniformSample2D uTexture;
 	
 	private VertexAttrib vTexturePosition;
 	
 	protected Texture3DShader(GLProgram program){
 		super(program);
+	}
+
+	@Override
+	public void setUp() {
+		// TODO: Implement this method
+		super.setUp();
 		uTexture=UniformSample2D.findUniform(this,Unif.Texture,0);
 		vTexturePosition=VertexAttrib.findAttrib(this,Attr.Texturesition,VertexAttrib.Type.VEC2);
 	}
@@ -61,8 +70,101 @@ public class Texture3DShader extends ColorShader
 		vTexturePosition.loadData(buffer);
 	}
 
-	
 	public static final Texture3DShader createT3S(String vs,String fs){
-		return new Texture3DShader(GLProgram.createProgram(vs,fs));
+		Texture3DShader s=new Texture3DShader(GLProgram.createProgram(vs,fs));
+		s.setUp();
+		return s;
+	}
+	
+	public static class InvalidTexture3DShader extends Texture3DShader{
+		public InvalidTexture3DShader(){
+			super(GLProgram.invalidProgram());
+		}
+
+		@Override
+		public void setUp() {
+			// TODO: Implement this method
+			//super.setUp();
+		}
+
+		@Override
+		public void loadPosition(Vec3Buffer buffer) {
+			// TODO: Implement this method
+			//super.loadPosition(buffer);
+		}
+
+		@Override
+		public void loadTexture(GLTexture texture) {
+			// TODO: Implement this method
+			//super.loadTexture(texture);
+		}
+
+		@Override
+		public void loadTexture(TextureRegion texture) {
+			// TODO: Implement this method
+			//super.loadTexture(texture);
+		}
+
+		@Override
+		public void loadColor(Color4Buffer buffer) {
+			// TODO: Implement this method
+			//super.loadColor(buffer);
+		}
+
+		@Override
+		public void loadMVPMatrix(Mat4 mvp) {
+			// TODO: Implement this method
+			//super.loadMVPMatrix(mvp);
+		}
+
+		@Override
+		public void loadPaint(GLPaint paint,float alphaAdjust) {
+			// TODO: Implement this method
+			//super.loadPaint(paint, alphaAdjust);
+		}
+
+		@Override
+		public void loadMatrix(Mat4 mvp,Mat4 mask) {
+			// TODO: Implement this method
+			//super.loadMatrix(mvp, mask);
+		}
+
+		@Override
+		public void loadTexturePosition(Vec2Buffer buffer) {
+			// TODO: Implement this method
+			//super.loadTexturePosition(buffer);
+		}
+
+		@Override
+		public boolean loadBatch(BaseBatch batch) {
+			// TODO: Implement this method
+			return true;//super.loadBatch(batch);
+		}
+
+		@Override
+		public void loadMixColor(Color4 c) {
+			// TODO: Implement this method
+			//super.loadMixColor(c);
+		}
+
+		@Override
+		public void loadAlpha(float a) {
+			// TODO: Implement this method
+			//super.loadAlpha(a);
+		}
+
+		@Override
+		public void loadMaskMatrix(Mat4 mpm) {
+			// TODO: Implement this method
+			//super.loadMaskMatrix(mpm);
+		}
+
+		@Override
+		public void applyToGL(int mode,int offset,int count) {
+			// TODO: Implement this method
+			//super.applyToGL(mode, offset, count);
+		}
+		
+		
 	}
 }

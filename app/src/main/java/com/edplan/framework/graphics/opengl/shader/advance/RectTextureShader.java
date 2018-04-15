@@ -27,6 +27,12 @@ public class RectTextureShader extends Texture3DShader
 	
 	protected RectTextureShader(GLProgram p){
 		super(p);
+	}
+
+	@Override
+	public void setUp() {
+		// TODO: Implement this method
+		super.setUp();
 		uPadding=UniformColor4.findUniform(this,Unif.Padding);
 		uInnerRect=UniformColor4.findUniform(this,Unif.InnerRect);
 		uDrawingRect=UniformColor4.findUniform(this,Unif.DrawingRect);
@@ -59,6 +65,8 @@ public class RectTextureShader extends Texture3DShader
 	}
 	
 	public static final RectTextureShader createRTS(String vs,String fs){
-		return new RectTextureShader(GLProgram.createProgram(vs,fs));
+		RectTextureShader s=new RectTextureShader(GLProgram.createProgram(vs,fs));
+		s.setUp();
+		return s;
 	}
 }

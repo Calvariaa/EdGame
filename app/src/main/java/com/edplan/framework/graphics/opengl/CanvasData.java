@@ -22,22 +22,30 @@ public class CanvasData implements Recycleable,Copyable {
 	
 	private float canvasAlpha=1;
 	
-	private Texture3DShader texture3DShader;
-
+	private ShaderManager shaders=new ShaderManager();
+	
 	public CanvasData(CanvasData c){
 		this.currentMaskMatrix=c.getCurrentMaskMatrix().copy();
-		this.texture3DShader=c.texture3DShader;
 		this.currentProjMatrix=c.currentProjMatrix.copy();
 		this.finalMatrix=(c.finalMatrix!=null)?c.finalMatrix.copy():null;
 		this.width=c.width;
 		this.height=c.height;
 		this.pixelDensity=c.pixelDensity;
 		this.canvasAlpha=c.canvasAlpha;
+		this.shaders.set(c.shaders);
 	}
 
 	public CanvasData(){
 		currentProjMatrix=new Mat4();
 		currentMaskMatrix=new Mat4();
+	}
+
+	public void setShaders(ShaderManager shaders) {
+		this.shaders.set(shaders);
+	}
+
+	public ShaderManager getShaders() {
+		return shaders;
 	}
 
 	public void setCanvasAlpha(float canvasAlpha) {
@@ -85,11 +93,11 @@ public class CanvasData implements Recycleable,Copyable {
 	}
 
 	public void setTexture3DShader(Texture3DShader texture3DShader) {
-		this.texture3DShader=texture3DShader;
+		this.shaders.setTexture3DShader(texture3DShader);
 	}
 
 	public Texture3DShader getTexture3DShader() {
-		return texture3DShader;
+		return shaders.getTexture3DShader();
 	}
 
 	public void setCurrentMaskMatrix(Mat4 matrix) {

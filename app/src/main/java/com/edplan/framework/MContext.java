@@ -97,7 +97,8 @@ public class MContext
 	public void initial(){
 		mainThread=Thread.currentThread();
 		assetResource=new ApplicationAssetResource(getNativeContext().getAssets());
-		shaderManager=new ShaderManager(getAssetResource().getShaderResource());
+		ShaderManager.initStatic(this);
+		shaderManager=ShaderManager.get();
 	}
 	
 	public ShaderManager getShaderManager() {

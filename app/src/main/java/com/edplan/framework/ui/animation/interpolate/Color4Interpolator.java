@@ -7,10 +7,16 @@ public class Color4Interpolator implements ValueInterpolator<Color4>
 {
 	public static Color4Interpolator Instance=new Color4Interpolator();
 	
+	private Color4 buffer=Color4.ONE.copyNew();
 	@Override
-	public Color4 applyInterplate(Color4 startValue,Color4 endValue,double time,Easing easing) {
+	public Color4 applyInterplate(Color4 s,Color4 e,double time,Easing easing) {
 		// TODO: Implement this method
 		float inp=(float)EasingManager.apply(easing,time);
-		return Color4.mix(startValue,endValue,inp);
+		float minp=1-inp;
+		float a=s.a*minp+e.a*inp;
+		inp*=a;
+		minp*=a;
+		buffer.set(s.r*minp+e.r*inp,s.g*minp+e.g*inp,s.b*minp+e.b*inp,a,true);
+		return buffer;
 	}
 }

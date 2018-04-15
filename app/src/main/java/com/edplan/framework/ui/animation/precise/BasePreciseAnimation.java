@@ -104,4 +104,8 @@ public class BasePreciseAnimation extends AbstractPreciseAnimation
 		return startTime;
 	}
 
+	@Override
+	public void dispos() {
+		// TODO: Implement this method
+	}
 }

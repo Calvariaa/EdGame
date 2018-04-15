@@ -21,6 +21,10 @@ public class GLProgram implements Recycleable
 		this.id=id;
 	}
 	
+	protected GLProgram(){
+		
+	}
+	
 	public void linkNoPreMultipleShader(GLShader nmpfs){
 		GLProgram p=linkShader(vertexShader,nmpfs);
 		this.noPreMultipleId=p.getProgramId();
@@ -91,5 +95,9 @@ public class GLProgram implements Recycleable
 		return linkShader(
 			GLShader.loadShader(GLShader.Type.Vertex,vs),
 			GLShader.loadShader(GLShader.Type.Fragment,fs));
+	}
+	
+	public static GLProgram invalidProgram(){
+		return new GLProgram();
 	}
 }

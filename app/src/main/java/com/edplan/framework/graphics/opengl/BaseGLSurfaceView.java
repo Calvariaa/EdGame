@@ -4,9 +4,9 @@ import android.content.Context;
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLDisplay;
-import android.opengl.GLES20;
 import android.view.MotionEvent;
 import android.util.Log;
+import com.edplan.framework.test.TestStaticData;
 
 public class BaseGLSurfaceView extends GLSurfaceView
 {
@@ -14,9 +14,9 @@ public class BaseGLSurfaceView extends GLSurfaceView
 	
 	public BaseGLSurfaceView(Context con){
 		super(con);
-		this.setEGLContextClientVersion(2);
+		this.setEGLContextClientVersion(1);
 		this.setEGLConfigChooser(new MSAAConfig());
-		mRenderer=new MainRenderer(getContext());
+		mRenderer=new MainRenderer(getContext(),1);
 		this.setRenderer(mRenderer);
 		this.setOnTouchListener(mRenderer);
 		this.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
@@ -40,7 +40,8 @@ public class BaseGLSurfaceView extends GLSurfaceView
 	public boolean onTouchEvent(MotionEvent event) {
 		// TODO: Implement this method
 		//Log.v("thread","touch-thread: "+Thread.currentThread());
-		return super.onTouchEvent(event);
+		TestStaticData.touchPosition.set(event.getX(),event.getY());
+		return true;
 	}
 	
 	

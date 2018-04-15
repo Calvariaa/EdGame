@@ -24,6 +24,12 @@ public class RoundedRectTextureShader extends RectTextureShader
 	
 	protected RoundedRectTextureShader(GLProgram p){
 		super(p);
+	}
+
+	@Override
+	public void setUp() {
+		// TODO: Implement this method
+		super.setUp();
 		uRoundedRidaus=UniformFloat.findUniform(this,Unif.RoundedRidaus);
 		uRoundedInner=UniformColor4.findUniform(this,Unif.RoundedInner);
 		uGlowFactor=UniformFloat.findUniform(this,Unif.GlowFactor);
@@ -49,6 +55,8 @@ public class RoundedRectTextureShader extends RectTextureShader
 	}
 	
 	public static final RoundedRectTextureShader createRRTS(String vs,String fs){
-		return new RoundedRectTextureShader(GLProgram.createProgram(vs,fs));
+		RoundedRectTextureShader s=new RoundedRectTextureShader(GLProgram.createProgram(vs,fs));
+		s.setUp();
+		return s;
 	}
 }

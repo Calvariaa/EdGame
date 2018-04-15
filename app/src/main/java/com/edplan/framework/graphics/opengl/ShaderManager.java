@@ -24,6 +24,8 @@ public class ShaderManager
 	
 	private static ShaderManager shaderManager;
 	
+	private static ShaderManager gl10ShaderFaker;
+	
 	private Texture3DShader texture3DShader;
 	
 	private RectTextureShader rectShader;
@@ -34,6 +36,14 @@ public class ShaderManager
 	
 	private AResource res;
 	
+	public ShaderManager(){
+		
+	}
+	
+	public ShaderManager(ShaderManager s){
+		set(s);
+	}
+	
 	public ShaderManager(AResource _res){
 		init(_res);
 	}
@@ -43,8 +53,17 @@ public class ShaderManager
 		loadShader();
 	}
 	
+	public void set(ShaderManager s){
+		texture3DShader=s.texture3DShader;
+		rectShader=s.rectShader;
+		roundedRectShader=s.roundedRectShader;
+		colorShader=s.colorShader;
+		res=s.res;
+	}
+	
 	private void loadShader(){
-		try {
+		if(GLWrapped.GL_VERSION>=2)
+			try {
 			texture3DShader=
 				Texture3DShader.createT3S(
 					res.loadText(PATH.PATH_Texture3DShader + ".vs"),
@@ -95,6 +114,10 @@ public class ShaderManager
 		return roundedRectShader;
 	}
 	
+	public void setTexture3DShader(Texture3DShader texture3DShader) {
+		this.texture3DShader=texture3DShader;
+	}
+	
 	public Texture3DShader getTexture3DShader(){
 		return texture3DShader;
 	}
@@ -105,5 +128,9 @@ public class ShaderManager
 	
 	public static ShaderManager get(){
 		return shaderManager;
+	}
+	
+	public static ShaderManager getGL10FakerShader(){
+		return gl10ShaderFaker;
 	}
 }

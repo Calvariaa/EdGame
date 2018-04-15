@@ -25,6 +25,8 @@ public class PlayingStoryboardLayer extends EdDrawable
 	
 	private boolean preApplyMode=false;
 	
+	private int newApply=0;
+	
 	public PlayingStoryboardLayer(StoryboardLayer layer,PlayingStoryboard storyboard){
 		super(storyboard.getContext());
 		this.storyboard=storyboard;
@@ -72,6 +74,10 @@ public class PlayingStoryboardLayer extends EdDrawable
 		*/
 	}
 
+	public int getNewApply() {
+		return newApply;
+	}
+
 	/*
 	public List<ADrawableStoryboardElement> getSprites() {
 		return sprites;
@@ -115,6 +121,7 @@ public class PlayingStoryboardLayer extends EdDrawable
 	@Override
 	public void draw(GLCanvas2D canvas) {
 		// TODO: Implement this method
+		newApply=0;
 		refreshObjects();
 		int c=GLWrapped.blend.save();
 		canvas.setEnablePost(true);
@@ -141,6 +148,7 @@ public class PlayingStoryboardLayer extends EdDrawable
 		}
 		
 		public void apply(){
+			newApply++;
 			added=true;
 			if(!preApplyMode)rawElement.onApply(element,storyboard);
 			element.onAdd();
