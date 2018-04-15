@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BaseBuffer<T>
 {
@@ -90,6 +91,14 @@ public abstract class BaseBuffer<T>
 		buffer=createFloatBuffer(bufferList.size()*getFloatSize());
 		latestListSize=bufferList.size();
 		return makeBuffer(listOffset(),listLength());
+	}
+	
+	public List<T> makeList(){
+		if(hasLimit){
+			return bufferList.subList(offset,offset+length);
+		}else{
+			return bufferList;
+		}
 	}
 
 	/*
