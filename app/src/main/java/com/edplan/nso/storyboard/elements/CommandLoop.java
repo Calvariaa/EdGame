@@ -6,7 +6,7 @@ public class CommandLoop extends CommandTimeLineGroup
 {
 	private double loopStartTime;
 	private int loopCount;
-	
+
 	public CommandLoop(double startTime,int loopCount){
 		this.loopStartTime=startTime;
 		this.loopCount=loopCount;
@@ -34,16 +34,18 @@ public class CommandLoop extends CommandTimeLineGroup
 		return list;
 	}
 
-	@Override
-	public double getCommandsDuration() {
-		// TODO: Implement this method
-		return super.getCommandsEndTime();
-	}
+	/*
+	 @Override
+	 public double getCommandsDuration() {
+	 // TODO: Implement this method
+	 return super.getCommandsEndTime();
+	 }
+	 */
 
 	@Override
 	public double getStartTime() {
 		// TODO: Implement this method
-		return loopStartTime;
+		return loopStartTime+getCommandsStartTime();
 	}
 
 	@Override
