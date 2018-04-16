@@ -23,13 +23,18 @@ public class TexturePool
 			mt.msg=t.getKey();
 			mt.texture=t.getValue();
 			l.add(mt);
+			mt=null;
 		}
 		return l;
 	}
 	
+	protected void directPut(String msg,AbstractTexture t){
+		pool.put(new String(msg),t);
+	}
+	
 	public void addAll(List<MsgTexture> list){
 		for(MsgTexture t:list){
-			pool.put(t.msg,t.texture);
+			directPut(t.msg,t.texture);
 		}
 	}
 	
@@ -38,14 +43,14 @@ public class TexturePool
 			return pool.get(msg);
 		}else{
 			AbstractTexture t=loadTexture(msg);
-			pool.put(msg,t);
+			directPut(msg,t);
 			return t;
 		}
 	}
 	
 	public AbstractTexture addTexture(String msg){
 		AbstractTexture t=loadTexture(msg);
-		pool.put(msg,t);
+		directPut(msg,t);
 		return t;
 	}
 	

@@ -58,7 +58,7 @@ public class GLCanvas2D extends BaseCanvas // extends AbstractSRable<CanvasData>
 		d.setCurrentMaskMatrix(Mat4.createIdentity());
 		d.setHeight(getLayer().getHeight());
 		d.setWidth(getLayer().getWidth());
-		d.setShaders(ShaderManager.get());
+		d.setShaders(ShaderManager.getNewDefault());
 		return d;
 	}
 

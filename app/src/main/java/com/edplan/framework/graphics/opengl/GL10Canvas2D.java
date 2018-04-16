@@ -10,6 +10,7 @@ public class GL10Canvas2D extends BaseCanvas
 	public GL10Canvas2D(int width,int height){
 		this.width=width;
 		this.height=height;
+		initial();
 	}
 	
 	@Override

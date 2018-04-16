@@ -19,6 +19,8 @@ public class GLWrapped
 	
 	public static int GL_TRIANGLES=GLES20.GL_TRIANGLES;
 	
+	public static int GL_MAX_TEXTURE_SIZE;
+	
 	public static final
 	BooleanSetting depthTest=new BooleanSetting(new Setter<Boolean>(){
 			@Override
@@ -40,32 +42,12 @@ public class GLWrapped
 			}
 		},
 		false).initial();
-
-	/*
-	public static final
-	BooleanSetting blend=new BooleanSetting(new Setter<Boolean>(){
-			@Override
-			public void set(Boolean t) {
-				// TODO: Implement this method
-				if(t){
-					GLES20.glEnable(GLES20.GL_BLEND);
-					//GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA,GLES20.GL_ONE_MINUS_SRC_ALPHA);
-					GLES20.glBlendFunc(GLES20.GL_ONE,GLES20.GL_ONE_MINUS_SRC_ALPHA);
-					//GLES20.glBlendFunc(GLES20.GL_ONE,GLES20.GL_ONE);
-				}else{
-					GLES20.glDisable(GLES20.GL_BLEND);
-				}
-			}
-		},
-		false).initial();
-	*/
 	
 	public static BlendSetting blend=new BlendSetting().setUp();
 	
 	public static void initial(int version){
-		//depthTest=false;
-		//GLES20.glDisable(GLES20.GL_DEPTH_TEST);
 		GL_VERSION=version;
+		GL_MAX_TEXTURE_SIZE=getIntegerValue(GLES20.GL_MAX_TEXTURE_SIZE);
 		GLTexture.initial();
 		FBOPool.initialGL();
 	}
@@ -119,6 +101,18 @@ public class GLWrapped
 	
 	public static void setClearColor(Color4 c){
 		setClearColor(c.r,c.g,c.b,c.a);
+	}
+	
+	public static int getIntegerValue(int key){
+		if(GL_VERSION>=2){
+			int[] b=new int[1];
+			GLES20.glGetIntegerv(key,b,0);
+			return b[0];
+		}else{
+			int[] b=new int[1];
+			GLES10.glGetIntegerv(key,b,0);
+			return b[0];
+		}
 	}
 		
 	public static void checkGlError(String op) {

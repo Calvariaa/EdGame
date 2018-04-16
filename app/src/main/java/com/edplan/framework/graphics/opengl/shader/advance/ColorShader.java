@@ -21,6 +21,7 @@ import com.edplan.framework.graphics.opengl.batch.base.IHasColor;
 import com.edplan.framework.graphics.opengl.batch.base.IHasPosition;
 import com.edplan.framework.graphics.opengl.batch.BaseBatch;
 import android.opengl.GLES20;
+import com.edplan.framework.graphics.opengl.Camera;
 
 public class ColorShader extends GLProgram 
 {
@@ -69,20 +70,20 @@ public class ColorShader extends GLProgram
 		}
 	}
 	
-	public void loadMatrix(Mat4 mvp,Mat4 mask){
-		loadMVPMatrix(mvp);
-		loadMaskMatrix(mask);
+	public void loadMatrix(Camera c){
+		loadMVPMatrix(c.getFinalMatrix());
+		loadMaskMatrix(c.getMaskMatrix());
 	}
 	
 	public void loadMixColor(Color4 c){
 		uMixColor.loadData(c);
 	}
-	
-	public void loadMVPMatrix(Mat4 mvp){
+
+	protected void loadMVPMatrix(Mat4 mvp){
 		uMVPMatrix.loadData(mvp);
 	}
 	
-	public void loadMaskMatrix(Mat4 mpm){
+	protected void loadMaskMatrix(Mat4 mpm){
 		uMaskMatrix.loadData(mpm);
 	}
 	
@@ -138,13 +139,13 @@ public class ColorShader extends GLProgram
 		}
 
 		@Override
-		public void loadMVPMatrix(Mat4 mvp) {
+		protected void loadMVPMatrix(Mat4 mvp) {
 			// TODO: Implement this method
 			//super.loadMVPMatrix(mvp);
 		}
 
 		@Override
-		public void loadMaskMatrix(Mat4 mpm) {
+		protected void loadMaskMatrix(Mat4 mpm) {
 			// TODO: Implement this method
 			//super.loadMaskMatrix(mpm);
 		}
@@ -168,7 +169,7 @@ public class ColorShader extends GLProgram
 		}
 
 		@Override
-		public void loadMatrix(Mat4 mvp,Mat4 mask) {
+		public void loadMatrix(Camera c) {
 			// TODO: Implement this method
 			//super.loadMatrix(mvp, mask);
 		}

@@ -52,7 +52,7 @@ public abstract class BaseBuffer<T>
 
 	public void clear(){
 		bufferList.clear();
-		//if(buffer!=null)buffer.clear();
+		if(buffer!=null)buffer.clear();
 	}
 
 	public void add(T t){
@@ -118,5 +118,19 @@ public abstract class BaseBuffer<T>
 		ByteBuffer bb=ByteBuffer.allocateDirect(floatCount*5);
 		bb.order(ByteOrder.nativeOrder());
 		return bb.asFloatBuffer();
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		// TODO: Implement this method
+		super.finalize();
+		if(buffer!=null){
+			buffer.clear();
+			buffer=null;
+		}
+		if(bufferList!=null){
+			bufferList.clear();
+			bufferList=null;
+		}
 	}
 }

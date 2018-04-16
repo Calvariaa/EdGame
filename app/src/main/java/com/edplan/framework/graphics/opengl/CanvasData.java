@@ -12,11 +12,7 @@ public class CanvasData implements Recycleable,Copyable {
 
 	private float height;
 	
-	private Mat4 currentMaskMatrix;
-
-	private Mat4 currentProjMatrix;
-
-	private Mat4 finalMatrix;
+	private Camera camera;
 
 	private float pixelDensity=1;
 	
@@ -25,9 +21,7 @@ public class CanvasData implements Recycleable,Copyable {
 	private ShaderManager shaders=new ShaderManager();
 	
 	public CanvasData(CanvasData c){
-		this.currentMaskMatrix=c.getCurrentMaskMatrix().copy();
-		this.currentProjMatrix=c.currentProjMatrix.copy();
-		this.finalMatrix=(c.finalMatrix!=null)?c.finalMatrix.copy():null;
+		this.camera=c.camera.copy();
 		this.width=c.width;
 		this.height=c.height;
 		this.pixelDensity=c.pixelDensity;
@@ -36,8 +30,7 @@ public class CanvasData implements Recycleable,Copyable {
 	}
 
 	public CanvasData(){
-		currentProjMatrix=new Mat4();
-		currentMaskMatrix=new Mat4();
+		camera=new Camera();
 	}
 
 	public void setShaders(ShaderManager shaders) {
@@ -84,12 +77,12 @@ public class CanvasData implements Recycleable,Copyable {
 	}
 
 	public void setCurrentProjMatrix(Mat4 projMatrix) {
-		this.currentProjMatrix.set(projMatrix);
+		this.camera.setProjectionMatrix(projMatrix);
 		freshMatrix();
 	}
 
 	public Mat4 getCurrentProjMatrix() {
-		return currentProjMatrix;
+		return camera.getProjectionMatrix();
 	}
 
 	public void setTexture3DShader(Texture3DShader texture3DShader) {
@@ -101,14 +94,14 @@ public class CanvasData implements Recycleable,Copyable {
 	}
 
 	public void setCurrentMaskMatrix(Mat4 matrix) {
-		this.currentMaskMatrix.set(matrix);
+		this.camera.setMaskMatrix(matrix);
 	}
 
 	/**
 	 *每次直接操作之后要freshMatrix，否则效果不会显示
 	 */
 	public Mat4 getCurrentMaskMatrix() {
-		return currentMaskMatrix;
+		return camera.getMaskMatrix();
 	}
 	
 	public CanvasData translate(float tx,float ty){
@@ -130,11 +123,17 @@ public class CanvasData implements Recycleable,Copyable {
 	}
 	
 	public void freshMatrix(){
-		finalMatrix=null;
+		camera.refresh();
 	}
 	
+	/*
 	public Mat4 getFinalMatrix(){
-		return (finalMatrix==null)?(finalMatrix=currentMaskMatrix.copy().post(currentProjMatrix)):finalMatrix;
+		return camera.getFinalMatrix();
+	}
+	*/
+	
+	public Camera getCamera(){
+		return camera;
 	}
 	
 	public CanvasData clip(Vec2 wh){
@@ -146,8 +145,7 @@ public class CanvasData implements Recycleable,Copyable {
 	@Override
 	public void recycle() {
 		// TODO: Implement this method
-		this.currentMaskMatrix.recycle();
-		this.currentProjMatrix.recycle();
+		this.camera=null;
 	}
 
 	@Override

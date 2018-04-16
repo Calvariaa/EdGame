@@ -22,6 +22,8 @@ import com.edplan.framework.graphics.opengl.objs.texture.TextureRegion;
 import com.edplan.framework.graphics.opengl.batch.BaseBatch;
 import com.edplan.framework.graphics.opengl.batch.base.IHasTexturePosition;
 import com.edplan.framework.graphics.opengl.GLPaint;
+import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
+import com.edplan.framework.graphics.opengl.Camera;
 
 public class Texture3DShader extends ColorShader
 {
@@ -58,13 +60,15 @@ public class Texture3DShader extends ColorShader
 		}
 	}
 	
-	public void loadTexture(GLTexture texture){
-		uTexture.loadData(texture);
+	public void loadTexture(AbstractTexture texture){
+		uTexture.loadData(texture.getTexture());
 	}
 	
+	/*
 	public void loadTexture(TextureRegion texture){
 		uTexture.loadData(texture.getTexture());
 	}
+	*/
 	
 	public void loadTexturePosition(Vec2Buffer buffer){
 		vTexturePosition.loadData(buffer);
@@ -94,13 +98,7 @@ public class Texture3DShader extends ColorShader
 		}
 
 		@Override
-		public void loadTexture(GLTexture texture) {
-			// TODO: Implement this method
-			//super.loadTexture(texture);
-		}
-
-		@Override
-		public void loadTexture(TextureRegion texture) {
+		public void loadTexture(AbstractTexture texture) {
 			// TODO: Implement this method
 			//super.loadTexture(texture);
 		}
@@ -112,7 +110,7 @@ public class Texture3DShader extends ColorShader
 		}
 
 		@Override
-		public void loadMVPMatrix(Mat4 mvp) {
+		protected void loadMVPMatrix(Mat4 mvp) {
 			// TODO: Implement this method
 			//super.loadMVPMatrix(mvp);
 		}
@@ -124,7 +122,7 @@ public class Texture3DShader extends ColorShader
 		}
 
 		@Override
-		public void loadMatrix(Mat4 mvp,Mat4 mask) {
+		public void loadMatrix(Camera c) {
 			// TODO: Implement this method
 			//super.loadMatrix(mvp, mask);
 		}
@@ -154,7 +152,7 @@ public class Texture3DShader extends ColorShader
 		}
 
 		@Override
-		public void loadMaskMatrix(Mat4 mpm) {
+		protected void loadMaskMatrix(Mat4 mpm) {
 			// TODO: Implement this method
 			//super.loadMaskMatrix(mpm);
 		}

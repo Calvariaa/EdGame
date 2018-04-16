@@ -99,6 +99,10 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 	public Mat4 getMaskMatrix(){
 		return getData().getCurrentMaskMatrix();
 	}
+	
+	public Camera getCamera(){
+		return getData().getCamera();
+	}
 
 	public float getCanvasAlpha(){
 		return getData().getCanvasAlpha();
@@ -119,62 +123,21 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 		pre.recycle();
 	}
 
-	/*
-	public BufferedLayer getLayer() {
-		return layer;
-	}
-
-	public boolean isPrepared(){
-		return getLayer().isBind();
-	}
-	*/
-
-
-
-	/**
-	 *@param p:当前应该是的状态
-	 */
-	/*
-	public void checkPrepared(String msg,boolean p){
-		if(p!=isPrepared()){
-			throw new GLException("prepare err [n,c]=["+p+","+isPrepared()+"] msg: "+msg);
-		}
-	}
-
-	public void prepare(){
-		checkPrepared(
-			"you can't call prepare when GLCanvas is prepared",
-			false);
-		getLayer().bind();
-	}
-
-	public void unprepare(){
-		checkPrepared(
-			"you can't call unprepare when GLCanvas isn't prepared",
-			true);
-		getLayer().unbind();
-	}
-
-	public void post(){
-		checkPrepared("when post canvas, canvas should be prepared",true);
-		unprepare();
-	}
-	*/
-
 	public void delete(){
 		recycle();
 	}
 
+	/*
 	public Mat4 getFinalMatrix(){
 		return getData().getFinalMatrix();
 	}
+	*/
 
 	private void injectData(BaseBatch batch,AbstractTexture texture,float alpha,Color4 mixColor,Texture3DShader shader){
 		shader.useThis();
 		shader.loadMixColor(mixColor);
 		shader.loadAlpha(alpha*getCanvasAlpha());
-		shader.loadMVPMatrix(getFinalMatrix());
-		shader.loadMaskMatrix(getMaskMatrix());
+		shader.loadMatrix(getCamera());
 		shader.loadTexture(texture.getTexture());
 		shader.loadBatch(batch);
 	}
@@ -410,7 +373,7 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 		ColorShader shader=getData().getShaders().getColorShader();
 		shader.useThis();
 		shader.loadPaint(paint,getCanvasAlpha());
-		shader.loadMatrix(getFinalMatrix(),getMaskMatrix());
+		shader.loadMatrix(getCamera());
 		shader.loadBatch(cbatch);
 		shader.applyToGL(GLWrapped.GL_TRIANGLES,0,cbatch.getVertexCount());
 	}

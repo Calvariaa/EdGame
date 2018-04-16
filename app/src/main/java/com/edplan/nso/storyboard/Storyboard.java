@@ -2,6 +2,8 @@ package com.edplan.nso.storyboard;
 import com.edplan.framework.math.Vec2;
 import java.util.HashMap;
 import com.edplan.framework.ui.Anchor;
+import java.util.Map;
+import com.edplan.nso.OsuBeatmap;
 
 public class Storyboard
 {
@@ -12,6 +14,23 @@ public class Storyboard
 		layers.put(Layer.Fail.name(),Layer.Fail.createLayer());
 		layers.put(Layer.Pass.name(),Layer.Pass.createLayer());
 		layers.put(Layer.Foreground.name(),Layer.Foreground.createLayer());
+	}
+	
+	public void applyBeatmap(OsuBeatmap beatmap){
+		if(beatmap.getStoryboard()!=null){
+			append(beatmap.getStoryboard());
+		}
+	}
+	
+	public void append(Storyboard sb){
+		for(Map.Entry<String,StoryboardLayer> l:sb.layers.entrySet()){
+			if(layers.containsKey(l.getKey())){
+				layers.get(l.getKey()).add(l.getValue());
+			}else{
+				layers.put(l.getKey(),Layer.valueOf(l.getKey()).createLayer());
+				layers.get(l.getKey()).add(l.getValue());
+			}
+		}
 	}
 
 	public HashMap<String, StoryboardLayer> getLayers() {

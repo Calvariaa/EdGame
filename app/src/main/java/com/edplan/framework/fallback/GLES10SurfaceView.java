@@ -1,29 +1,29 @@
-package com.edplan.framework.graphics.opengl;
-import android.opengl.GLSurfaceView;
+package com.edplan.framework.fallback;
+
 import android.content.Context;
+import android.opengl.GLSurfaceView;
+import com.edplan.framework.graphics.opengl.MainRenderer;
+import com.edplan.framework.input.MotionEvent;
+import com.edplan.framework.test.TestStaticData;
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLDisplay;
-import android.view.MotionEvent;
-import android.util.Log;
-import com.edplan.framework.test.TestStaticData;
-import android.view.View;
 
-public class BaseGLSurfaceView extends GLSurfaceView
+public class GLES10SurfaceView extends GLSurfaceView 
 {
 	Renderer mRenderer;
-	
-	public BaseGLSurfaceView(Context con){
+
+	public GLES10SurfaceView(Context con){
 		super(con);
-		this.setEGLContextClientVersion(2);
+		this.setEGLContextClientVersion(1);
 		this.setEGLConfigChooser(new MSAAConfig());
-		mRenderer=new MainRenderer(getContext(),2);
+		mRenderer=new GLES10MainRenderer(getContext(),1);
 		this.setRenderer(mRenderer);
 		if(mRenderer instanceof OnTouchListener)this.setOnTouchListener((OnTouchListener)mRenderer);
 		this.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
 	}
-	
-	public BaseGLSurfaceView(Context con,MainRenderer r){
+
+	public GLES10SurfaceView(Context con,MainRenderer r){
 		super(con);
 		this.setEGLContextClientVersion(2);
 		this.setEGLConfigChooser(new MSAAConfig());
@@ -33,15 +33,6 @@ public class BaseGLSurfaceView extends GLSurfaceView
 		this.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
 	}
 
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		// TODO: Implement this method
-		//Log.v("thread","touch-thread: "+Thread.currentThread());
-		TestStaticData.touchPosition.set(event.getX(),event.getY());
-		return true;
-	}
-	
-	
 	public class MSAAConfig implements EGLConfigChooser {
 		@Override
 		public EGLConfig chooseConfig(EGL10 egl,EGLDisplay display) {
@@ -70,7 +61,7 @@ public class BaseGLSurfaceView extends GLSurfaceView
 				return configs[0];
 			}
 		}
-		
-		
+
+
 	}
 }

@@ -32,6 +32,8 @@ public class StoryboardPartParser extends PartParser<PartEvents>
 	
 	private ParsingBeatmap parsingData;
 	
+	private boolean enableRawData=false;
+	
 	public StoryboardPartParser(ParsingBeatmap data){
 		variableDecoder=new VariablesDecoder();
 		variables=variableDecoder.getPart();
@@ -63,7 +65,7 @@ public class StoryboardPartParser extends PartParser<PartEvents>
 					storyboardSprite=new StoryboardSprite(path,origin.getAnchor(),new Vec2(x,y));
 					storyboard.getLayer(layer.name()).add(storyboardSprite);
 					
-					storyboardSprite.rawData.append(l).append("\n");
+					if(enableRawData)storyboardSprite.rawData.append(l).append("\n");
 				}
 					break;
 				case Animation:
@@ -79,7 +81,7 @@ public class StoryboardPartParser extends PartParser<PartEvents>
 					storyboardSprite=new StoryboardAnimation(path,origin.getAnchor(),new Vec2(x,y),frameCount,frameDelay,loopType);
 					storyboard.getLayer(layer.name()).add(storyboardSprite);
 					
-					storyboardSprite.rawData.append(l).append("\n");
+					if(enableRawData)storyboardSprite.rawData.append(l).append("\n");
 				}
 					break;
 				case Sample:

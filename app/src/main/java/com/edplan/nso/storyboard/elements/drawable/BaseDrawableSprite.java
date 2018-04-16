@@ -17,6 +17,7 @@ import com.edplan.framework.interfaces.InvokeSetter;
 import com.edplan.framework.utils.MLog;
 import com.edplan.framework.graphics.opengl.GLPaint;
 import java.util.HashMap;
+import com.edplan.framework.graphics.opengl.GL10Canvas2D;
 
 public class BaseDrawableSprite extends ADrawableStoryboardElement
 {
@@ -248,28 +249,27 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		//默认只按次流程绘制且只绘制StoryboardSprite，这里省去save/restore节省时间
 		GLWrapped.blend.setBlendType(blendType);
 		canvas.drawTexture(texture,quad,varyingColor,alpha);
-		
-		/*
-		GLWrapped.blend.setBlendType(BlendType.Normal);
-		GLPaint p=new GLPaint();
-		p.setStrokeWidth(0.5f);
-		p.setMixColor(Color4.rgba(1,1,1,1));
-		if(blendType==BlendType.Additive){
-			p.setMixColor(Color4.rgba(1,1,1,1));
-		}
-		//canvas.drawLine(quad.getPoint(anchor.x()-1f,anchor.y()-1f),quad.getPoint(anchor.x()+1f,anchor.y()+1f),p);
-		//canvas.drawLine(quad.getTopRight(),quad.getBottomLeft(),p);
-		canvas.drawLine(quad.getTopLeft(),quad.getPoint(1f,1f),p);
-		*/
 	}
-	
-	/*
-	private static final HashMap<String,Boolean> enableTextures=new HashMap<String,Boolean>();
-	static{
-		enableTextures.put("sb/xgreen.png",true);
-		//enableTextures.put("sb/blue.png",true);
-		enableTextures.put("sb/burst.png",true);
-		enableTextures.put("sb/highlight.png",true);
-	}*/
+
+	@Override
+	public void drawGL10(GL10Canvas2D canvas) {
+		// TODO: Implement this method
+		if(alpha<0.002)return;
+
+		Quad quad=
+			RectF.anchorOWH(
+			anchor,
+			currentPosition.x,
+			currentPosition.y,
+			texture.getWidth(),
+			texture.getHeight()
+		).scale(anchor,scale.x,scale.y)
+			.toQuad();
+		quad.rotate(anchor,rotation);
+		quad.flip(flipH,flipV);
+		//默认只按次流程绘制且只绘制StoryboardSprite，这里省去save/restore节省时间
+		GLWrapped.blend.setBlendType(blendType);
+		canvas.drawTexture(texture,quad,varyingColor,alpha);
+	}
 	
 }

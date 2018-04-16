@@ -35,4 +35,10 @@ public class StoryboardLayer
 		elements.add(e);
 	}
 	
+	public void add(StoryboardLayer l){
+		for(IStoryboardElements e:l.elements){
+			add(e);
+		}
+	}
+	
 }

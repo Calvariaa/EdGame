@@ -43,7 +43,6 @@ import com.edplan.framework.ui.Anchor;
 
 public class TestView extends EdView
 {
-	
 	private StdPlayField playField;
 	
 	private StdBeatmap beatmap;
@@ -205,6 +204,9 @@ public class TestView extends EdView
 						long s=System.currentTimeMillis();
 						decoder.parse();
 						storyboard=decoder.getStoryboard();
+						if(beatmap!=null&&test.applyBeatmap){
+							storyboard.applyBeatmap(beatmap);
+						}
 						System.out.println("end edcode osb: "+storyboard.getObjectCount());
 						playingStoryboard=new PlayingStoryboard(getContext(),timeline,storyboard,
 																//new DirResource(osb.getParentFile()));
@@ -325,6 +327,7 @@ public class TestView extends EdView
 		newCanvas.drawColor(Color4.gray(0f));
 		newCanvas.clearDepthBuffer();
 		
+		/*
 		if(test.watchPool){
 			GLPaint rp=new GLPaint();
 			GLPaint linePaint=new GLPaint();
@@ -363,6 +366,7 @@ public class TestView extends EdView
 								},linePaint);
 			newCanvas.drawTexture(part,area,rp);
 		}
+		*/
 		
 		
 		float osuScale=PlayField.BASE_Y/canvas.getHeight();
@@ -583,13 +587,15 @@ public class TestView extends EdView
 		
 		public String dir="/storage/emulated/0/MyDisk/WorkBench/bin/testdata";
 		
-		public int testBeatmapFloder=11;
+		public int testBeatmapFloder=25;
 		
 		public boolean enableStoryboard=true;
 		
-		public boolean enablePlayField=false;
+		public boolean enablePlayField=true;
 		
 		public boolean watchPool=false;
+		
+		public boolean applyBeatmap=true;
 		
 		public AResource res=new DirResource("/storage/emulated/0/MyDisk/WorkBench/bin/testdata");
 		

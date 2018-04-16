@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.IntBuffer;
 import com.edplan.framework.graphics.opengl.GLWrapped;
+import com.edplan.framework.graphics.opengl.ShaderManager;
+import android.util.Log;
 
 public class GLTexture extends AbstractTexture
 {
@@ -31,6 +33,8 @@ public class GLTexture extends AbstractTexture
 	public static GLTexture White;
 	public static GLTexture Alpha;
 	public static GLTexture Black;
+	public static GLTexture Red;
+	public static GLTexture Blue;
 	public static GLTexture ErrorTexture;
 	
 	static{
@@ -58,6 +62,8 @@ public class GLTexture extends AbstractTexture
 		GLES20.GL_TEXTURE17,
 		GLES20.GL_TEXTURE18
 	};
+	
+	public static boolean SCALE_22=false;
 
 	private int width,height;
 
@@ -136,13 +142,18 @@ public class GLTexture extends AbstractTexture
 		BufferedLayer layer=new BufferedLayer(context,getWidth(),getHeight(),true);
 		GLCanvas2D canvas=new GLCanvas2D(layer);
 		canvas.prepare();
+		canvas.drawColor(Color4.Alpha);
+		canvas.clearBuffer();
+		canvas.save();
+		//canvas.getData().getShaders().setTexture3DShader(ShaderManager.getRawTextureShader());
 		GLPaint rawPaint=new GLPaint();
 		canvas.drawTexture(this,RectF.xywh(0,0,getWidth(),getHeight()),rawPaint);
-		if(GLWrapped.GL_VERSION==1){
-			GLES10.glReadPixels(0,0,getWidth(),getHeight(),GLES20.GL_RGBA,GLES20.GL_UNSIGNED_BYTE,buffer);
-		}else{
+		if(GLWrapped.GL_VERSION>=2){
 			GLES20.glReadPixels(0,0,getWidth(),getHeight(),GLES20.GL_RGBA,GLES20.GL_UNSIGNED_BYTE,buffer);
+		}else{
+			GLES10.glReadPixels(0,0,getWidth(),getHeight(),GLES20.GL_RGBA,GLES20.GL_UNSIGNED_BYTE,buffer);
 		}
+		canvas.restore();
 		canvas.unprepare();
 		Bitmap bmp=Bitmap.createBitmap(getWidth(),getHeight(),Bitmap.Config.ARGB_8888);
 		bmp.copyPixelsFromBuffer(buffer);
@@ -166,7 +177,7 @@ public class GLTexture extends AbstractTexture
 		int[] t=new int[1];
 		GLES20.glGenTextures(1,t,0);
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,t[0]);
-		GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D,0,GLES20.GL_RGBA,w,h,0,GLES20.GL_RGBA,GLES20.GL_UNSIGNED_SHORT_4_4_4_4,null);
+		GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D,0,GLES20.GL_RGBA,w,h,0,GLES20.GL_RGBA,GLES20.GL_UNSIGNED_BYTE,null);
 		GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
 							   GLES20.GL_TEXTURE_MIN_FILTER,GLES20.GL_NEAREST);
 		GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
@@ -188,12 +199,14 @@ public class GLTexture extends AbstractTexture
 	public static GLTexture createNotChecked(Bitmap bmp,int w,int h){
 		GLTexture tex=new GLTexture();
 		tex.textureId=createTexture();
+		//Log.v("texture","create Texture: "+tex.textureId);
+		GLWrapped.checkGlError("create Texture: "+tex.textureId);
 		tex.width=w;
 		tex.height=h;
-
 		tex.glHeight=tex.height/(float)bmp.getHeight();
 		tex.glWidth=tex.width/(float)bmp.getWidth();
 		GLUtils.texImage2D(GLES20.GL_TEXTURE_2D,0,bmp,0);
+		GLWrapped.checkGlError("load Texture");
 		return tex;
 	}
 	
@@ -234,7 +247,7 @@ public class GLTexture extends AbstractTexture
 		int h=1;
 		while(w<bmp.getWidth())w*=2;
 		while(h<bmp.getHeight())h*=2;
-		if(DEF_CREATE_OPTIONS.inPremultiplied){
+		if(SCALE_22){
 			if(w!=bmp.getWidth()||h!=bmp.getHeight()){
 				Bitmap nb=Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888);
 				Canvas c=new Canvas(nb);
@@ -274,6 +287,8 @@ public class GLTexture extends AbstractTexture
 		White=create1pxTexture(Color4.White);
 		Alpha=create1pxTexture(Color4.Alpha);
 		Black=create1pxTexture(Color4.Black);
+		Red=create1pxTexture(Color4.Red);
+		Blue=create1pxTexture(Color4.Blue);
 		Bitmap bmp=Bitmap.createBitmap(4,4,Bitmap.Config.ARGB_8888);
 		for(int x=0;x<bmp.getWidth();x++){
 			for(int y=0;y<bmp.getHeight();y++){

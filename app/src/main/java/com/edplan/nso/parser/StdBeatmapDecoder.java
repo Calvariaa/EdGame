@@ -208,6 +208,7 @@ public class StdBeatmapDecoder extends BaseDecoder implements StringMakeable
 				stdbeatmap.setTimingPoints(timingPointsParser.getPart());
 				stdbeatmap.setColours(coloursParser.getPart());
 				stdbeatmap.setHitObjects(hitObjectsParser.getPart().getStdHitObjects());
+				stdbeatmap.setStoryboard(storyboardDecoder.getStoryboard());
 				return stdbeatmap;
 			default:return null;
 		}

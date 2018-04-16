@@ -12,8 +12,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import com.edplan.framework.graphics.opengl.GLWrapped;
 import com.edplan.nso.storyboard.elements.StoryboardSprite;
+import com.edplan.framework.fallback.GLES10Drawable;
+import com.edplan.framework.graphics.opengl.GL10Canvas2D;
 
-public class PlayingStoryboardLayer extends EdDrawable
+public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 {
 	private List<ElementNode> sprites=new ArrayList<ElementNode>();
 	
@@ -132,7 +134,21 @@ public class PlayingStoryboardLayer extends EdDrawable
 		canvas.setEnablePost(false);
 		GLWrapped.blend.restoreToCount(c);
 	}
-	
+
+	@Override
+	public void drawGL10(GL10Canvas2D canvas) {
+		// TODO: Implement this method
+		newApply=0;
+		refreshObjects();
+		int c=GLWrapped.blend.save();
+		//canvas.setEnablePost(true);
+		for(ADrawableStoryboardElement ele:spriteInField){
+			ele.drawGL10(canvas);
+		}
+		canvas.postDraw();
+		//canvas.setEnablePost(false);
+		GLWrapped.blend.restoreToCount(c);
+	}
 	
 	public class ElementNode{
 		public int depth;

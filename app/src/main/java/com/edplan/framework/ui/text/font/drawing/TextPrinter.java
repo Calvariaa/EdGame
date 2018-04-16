@@ -14,6 +14,7 @@ import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 import android.util.Log;
 import java.util.HashMap;
+import com.edplan.framework.graphics.opengl.GL10Canvas2D;
 
 public class TextPrinter
 {
@@ -167,6 +168,17 @@ public class TextPrinter
 	}
 	
 	public void draw(GLCanvas2D canvas){
+		for(int i=0;i<font.getPageCount();i++){
+			Texture3DBatch<TextureVertex3D> batch=batchs.get(i);
+			AbstractTexture texture=font.getPage(i).texture;
+			if(batch.getVertexCount()>0){
+				canvas.drawTexture3DBatch(batch,texture,paint.getFinalAlpha(),paint.getMixColor());
+				//Log.v("text-test","post "+batch.getVertexCount()+" vertex to canvas");
+			}
+		}
+	}
+	
+	public void drawGL10(GL10Canvas2D canvas){
 		for(int i=0;i<font.getPageCount();i++){
 			Texture3DBatch<TextureVertex3D> batch=batchs.get(i);
 			AbstractTexture texture=font.getPage(i).texture;

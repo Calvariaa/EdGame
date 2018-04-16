@@ -11,11 +11,13 @@ import com.edplan.framework.graphics.opengl.objs.Vertex3D;
 import com.edplan.framework.graphics.opengl.batch.BaseColorBatch;
 import com.edplan.framework.graphics.opengl.batch.RectVertexBatch;
 import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
+import com.edplan.framework.graphics.opengl.shader.advance.GLES10Texture3DShader;
 
 public class ShaderManager
 {
 	public static class PATH{
 		private static final String PATH_Texture3DShader="StdTexture3DShader";
+		private static final String PATH_RawTextureShader="StdRawTextureShader.fs";
 		private static final String PATH_RectShader_VS="StdRectShader.vs";
 		private static final String PATH_RectShader_FS="StdRectShader.fs";
 		private static final String PATH_RoundedRectShader_FS="StdRoundedRectShader.fs";
@@ -25,6 +27,8 @@ public class ShaderManager
 	private static ShaderManager shaderManager;
 	
 	private static ShaderManager gl10ShaderFaker;
+	
+	private static Texture3DShader rawTextureShader;
 	
 	private Texture3DShader texture3DShader;
 	
@@ -123,11 +127,27 @@ public class ShaderManager
 	}
 	
 	public static void initStatic(MContext context){
-		shaderManager=new ShaderManager(context.getAssetResource().subResource("shaders"));
+		if(GLWrapped.GL_VERSION>=2){
+			shaderManager=new ShaderManager(context.getAssetResource().subResource("shaders"));
+			try {
+				rawTextureShader=Texture3DShader.createT3S(
+					shaderManager.res.loadText(PATH.PATH_Texture3DShader + ".vs"),
+					shaderManager.res.loadText(PATH.PATH_RawTextureShader));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}else{
+			gl10ShaderFaker=new ShaderManager();
+			gl10ShaderFaker.setTexture3DShader(new GLES10Texture3DShader());
+		}
 	}
 	
-	public static ShaderManager get(){
-		return shaderManager;
+	public static ShaderManager getNewDefault(){
+		if(GLWrapped.GL_VERSION>=2){
+			return new ShaderManager(shaderManager);
+		}else{
+			return new ShaderManager(getGL10FakerShader());
+		}
 	}
 	
 	public static ShaderManager getGL10FakerShader(){

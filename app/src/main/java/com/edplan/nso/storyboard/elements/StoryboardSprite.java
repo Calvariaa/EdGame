@@ -34,9 +34,13 @@ public class StoryboardSprite implements IStoryboardElements
 	private List<QueryAnimation> animations=new ArrayList<QueryAnimation>();
 
 	public StoryboardSprite(String path,Anchor anchor,Vec2 initialPosition){
-		this.path=path;
+		this.path=new String(path);
 		this.initialPosition=initialPosition;
 		this.anchor=anchor;
+	}
+	
+	public void getScale(){
+		
 	}
 
 	public void setInitialPosition(Vec2 initialPosition) {

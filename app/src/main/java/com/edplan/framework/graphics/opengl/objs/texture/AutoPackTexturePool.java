@@ -20,6 +20,8 @@ import com.edplan.framework.graphics.opengl.objs.texture.TexturePool.MsgTexture;
 import java.util.Collections;
 import java.util.Comparator;
 import java.io.IOException;
+import com.edplan.framework.graphics.opengl.GLWrapped;
+import com.edplan.framework.graphics.opengl.ShaderManager;
 
 public class AutoPackTexturePool extends TexturePool
 {
@@ -46,14 +48,17 @@ public class AutoPackTexturePool extends TexturePool
 	public AutoPackTexturePool(TextureLoader loader,MContext context){
 		super(loader);
 		this.context=context;
+		packWidth=Math.min(GLWrapped.GL_MAX_TEXTURE_SIZE,2000);
+		packHeight=packWidth;
+		maxWidth=packWidth*3/4;
+		maxHeight=packHeight/2;
 		toNewPack();
-		/*
-		try {
-			textureTest=GLTexture.decodeFile(new File("/storage/emulated/0/MyDisk/bin/pool/1/pool0.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		*/
+	}
+
+	@Override
+	public void directPut(String msg,AbstractTexture t) {
+		// TODO: Implement this method
+		super.directPut(msg, t);
 	}
 
 	@Override
@@ -72,7 +77,7 @@ public class AutoPackTexturePool extends TexturePool
 			});
 		for(MsgTexture t:list){
 			t.texture=testAddRaw(t.texture,t.msg);
-			pool.put(t.msg,t.texture);
+			directPut(t.msg,t.texture);
 		}
 	}
 	
@@ -137,7 +142,7 @@ public class AutoPackTexturePool extends TexturePool
 		packCanvas=new GLCanvas2D(currentPack.layer);
 		packCanvas.prepare();
 		packCanvas.drawColor(Color4.Alpha);
-		packCanvas.clearDepthBuffer();
+		packCanvas.clearBuffer();
 		packCanvas.unprepare();
 		currentX=0;
 		currentY=0;
@@ -152,7 +157,10 @@ public class AutoPackTexturePool extends TexturePool
 	private AbstractTexture tryAddInLine(AbstractTexture raw,String msg){
 		if(currentY+raw.getHeight()<currentPack.layer.getWidth()){
 			packCanvas.prepare();
+			packCanvas.save();
+			//packCanvas.getData().getShaders().setTexture3DShader(ShaderManager.getRawTextureShader());
 			packCanvas.drawTexture(raw,RectF.xywh(currentX,currentY,raw.getWidth(),raw.getHeight()),rawPaint);
+			packCanvas.restore();
 			packCanvas.unprepare();
 			RectI area=RectI.xywh(currentX,currentY,raw.getWidth(),raw.getHeight());
 			AbstractTexture t=new TextureRegion(
