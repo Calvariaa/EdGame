@@ -1,6 +1,7 @@
 package com.edplan.framework.graphics.opengl.objs;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.math.Vec3;
+import com.edplan.framework.interfaces.Setable;
 
 public class TextureVertex3D extends Vertex3D
 {
@@ -27,10 +28,10 @@ public class TextureVertex3D extends Vertex3D
 		this.texturePoint=tp;
 	}
 	
-	public void set(TextureVertex3D v){
-		color.set(v.color);
-		position.set(v.position);
-		texturePoint.set(v.texturePoint);
+	@Override
+	public void set(Vertex3D v){
+		super.set(v);
+		texturePoint.set(((TextureVertex3D)v).texturePoint);
 	}
 
 	@Override

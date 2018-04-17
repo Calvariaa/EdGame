@@ -524,7 +524,7 @@ public class TestView extends EdView
 		GLPaint textPaint=new GLPaint();
 		textPaint.setMixColor(Color4.rgba(1,0,0,1));
 		TextPrinter printer=new TextPrinter(font,100,baseLine,textPaint);
-		printer.setTextSize(70);
+		printer.setTextSize(60);
 		printer.printString("DEVELOPMENT BUILD\nosu!lab 2018.4.9");
 		printer.toNextLine();
 		printer.printString("fps: "+(int)(1000/avg));
@@ -532,6 +532,8 @@ public class TestView extends EdView
 		printer.printString(timeline.frameTime()+"");
 		printer.toNextLine();
 		printer.printString("draws:"+drawCalls+"/"+drawCalls2);
+		printer.toNextLine();
+		printer.printString("memory:"+Runtime.getRuntime().freeMemory()/1024/1024+"/"+Runtime.getRuntime().totalMemory()/1024/1024+"/"+Runtime.getRuntime().maxMemory()/1024/1024);
 		printer.toNextLine();
 		if(test.enableStoryboard){
 			printer.printString(playingStoryboard.objectsInField()+"\n");
@@ -595,7 +597,7 @@ public class TestView extends EdView
 		
 		public boolean enableStoryboard=true;
 		
-		public boolean enablePlayField=false;
+		public boolean enablePlayField=true;
 		
 		public boolean watchPool=false;
 		

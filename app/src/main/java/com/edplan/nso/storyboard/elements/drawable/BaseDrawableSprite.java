@@ -112,6 +112,8 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 	
 	private List<QueryAnimation> animations=new ArrayList<QueryAnimation>();
 	
+	private QueryAnimation alphaAnimation;
+	
 	public BaseDrawableSprite(PlayingStoryboard storyboard,StoryboardSprite sprite){
 		super(storyboard);
 		path=sprite.getPath();
@@ -127,8 +129,12 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		return animations;
 	}
 	
-	public void addAnimation(QueryAnimation anim){
-		animations.add(anim);
+	public void addAnimation(QueryAnimation anim,InvokeSetter setter){
+		if(setter!=Alpha){
+			animations.add(anim);
+		}else{
+			alphaAnimation=anim;
+		}
 	}
 
 	@Override
@@ -207,16 +213,19 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		return scale;
 	}
 
+	protected void refreshAnimation(QueryAnimation anim,double time){
+		if(anim!=null)anim.postProgressTime(time-anim.currentTime());
+	}
 	
 	boolean hasAdd=false;
 	@Override
 	public void onAdd() {
 		// TODO: Implement this method
 		hasAdd=true;
+		if(alphaAnimation!=null)alphaAnimation.onStart();
 		for(QueryAnimation anim:animations){
-			anim.post(getTimeline());
+			anim.onStart();
 		}
-		animations.clear();
 	}
 
 	@Override
@@ -228,13 +237,28 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 	@Override
 	public void onRemove() {
 		// TODO: Implement this method
+		for(QueryAnimation anim:animations){
+			anim.onFinish();
+			anim.onEnd();
+			anim.dispos();
+		}
+		animations.clear();
+		if(alphaAnimation!=null){
+			alphaAnimation.onFinish();
+			alphaAnimation.onEnd();
+			alphaAnimation.dispos();
+		}
 	}
 
 	@Override
 	public void draw(GLCanvas2D canvas) {
 		// TODO: Implement this method
+		double time=getTimeline().frameTime();
+		refreshAnimation(alphaAnimation,time);
 		if(alpha<0.002)return;
-		
+		for(QueryAnimation anim:animations){
+			refreshAnimation(anim,time);
+		}
 		Quad quad=
 			RectF.anchorOWH(
 				anchor,
@@ -254,8 +278,12 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 	@Override
 	public void drawGL10(GL10Canvas2D canvas) {
 		// TODO: Implement this method
+		double time=getTimeline().frameTime();
+		refreshAnimation(alphaAnimation,time);
 		if(alpha<0.002)return;
-
+		for(QueryAnimation anim:animations){
+			refreshAnimation(anim,time);
+		}
 		Quad quad=
 			RectF.anchorOWH(
 			anchor,

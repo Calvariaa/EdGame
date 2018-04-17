@@ -30,8 +30,6 @@ public class StoryboardSprite implements IStoryboardElements
 	private Anchor anchor;
 	
 	public StringBuilder rawData=new StringBuilder();
-	
-	private List<QueryAnimation> animations=new ArrayList<QueryAnimation>();
 
 	public StoryboardSprite(String path,Anchor anchor,Vec2 initialPosition){
 		this.path=new String(path);
@@ -132,7 +130,7 @@ public class StoryboardSprite implements IStoryboardElements
 			anim.transform(c.getStartValue(),c.getStartTime(),0,c.getEasing());
 			anim.transform(c.getEndValue(),c.getStartTime(),c.getDuration(),c.getEasing());
 		}
-		animations.add(anim);
+		sprite.addAnimation(anim,setter);
 	}
 	
 	public static int tmpI=0;
@@ -170,10 +168,6 @@ public class StoryboardSprite implements IStoryboardElements
 		applyCommands(sprite,getCommands(Selecters.SBlendType),InvalidInterpolator.ForBlendType,BaseDrawableSprite.Blend);
 		applyCommands(sprite,getCommands(Selecters.SFlipH),InvalidInterpolator.ForBoolean,BaseDrawableSprite.FlipH);
 		applyCommands(sprite,getCommands(Selecters.SFlipV),InvalidInterpolator.ForBoolean,BaseDrawableSprite.FlipV);
-		for(QueryAnimation a:animations){
-			sprite.addAnimation(a);
-		}
-		animations.clear();
 	}
 
 	@Override

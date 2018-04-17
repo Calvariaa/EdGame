@@ -73,7 +73,7 @@ public class StdPlayField extends PlayField
 
 	protected void drawContentLayer(GLCanvas2D canvas){
 		DrawableStdHitObject obj;
-		canvas.setEnablePost(true);
+		//canvas.setEnablePost(true);
 		for(int i=drawableHitObjects.getObjectsInField().size()-1;i>=0;i--){
 			obj=drawableHitObjects.getObjectsInField().get(i);
 			obj.draw(canvas);
@@ -81,32 +81,32 @@ public class StdPlayField extends PlayField
 			//	((IHasApproachCircle)obj).getApproachCircle().draw(canvas);
 			//}
 		}
-		canvas.postDraw();
-		canvas.setEnablePost(false);
+		//canvas.postDraw();
+		//canvas.setEnablePost(false);
 	}
 	
 	protected void drawConnectionLayer(GLCanvas2D canvas){
 		DrawableStdHitObject obj;
-		canvas.setEnablePost(true);
+		//canvas.setEnablePost(true);
 		for(int i=connectionDrawables.getObjectsInField().size()-1;i>=0;i--){
 			obj=connectionDrawables.getObjectsInField().get(i);
 			obj.draw(canvas);
 		}
-		canvas.postDraw();
-		canvas.setEnablePost(false);
+		//canvas.postDraw();
+		//canvas.setEnablePost(false);
 	}
 	
 	protected void drawApproachCircleLayer(GLCanvas2D canvas){
 		DrawableStdHitObject obj;
-		canvas.setEnablePost(true);
+		//canvas.setEnablePost(true);
 		for(int i=drawableHitObjects.getObjectsInField().size()-1;i>=0;i--){
 			obj=drawableHitObjects.getObjectsInField().get(i);
 			if(obj instanceof IHasApproachCircle){
 				((IHasApproachCircle)obj).getApproachCircle().draw(canvas);
 			}
 		}
-		canvas.postDraw();
-		canvas.setEnablePost(false);
+		//canvas.postDraw();
+		//canvas.setEnablePost(false);
 	}
 	
 	private void drawTestLayer(GLCanvas2D canvas){
