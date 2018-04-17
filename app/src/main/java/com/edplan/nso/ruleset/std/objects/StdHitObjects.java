@@ -11,6 +11,14 @@ public class StdHitObjects<T extends StdHitObject> extends HitObjects<T>
 	public StdHitObjects(){
 		hitObjects=new ArrayList<T>();
 	}
+	
+	public int size(){
+		return hitObjects.size();
+	}
+	
+	public StdHitObject get(int i){
+		return hitObjects.get(i);
+	}
 
 	@Override
 	public void addHitObject(HitObject t){

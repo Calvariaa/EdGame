@@ -19,6 +19,8 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 {
 	private List<ElementNode> sprites=new ArrayList<ElementNode>();
 	
+	private List<ElementNode> spritesNotAdded=new ArrayList<ElementNode>();
+	
 	private int index=0;
 	
 	private List<ADrawableStoryboardElement> spriteInField=new ArrayList<ADrawableStoryboardElement>();
@@ -37,11 +39,6 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 		for(IStoryboardElements ele:layer.getElements()){
 			if(ele.isDrawable()){
 				depth++;
-				/*
-				if(depth>=31593||depth<31592)continue;
-				*/
-				//if(depth>maxDepth)break;
-				
 				ADrawableStoryboardElement drawable=ele.createDrawable(storyboard);
 				ElementNode node=new ElementNode();
 				node.startTime=drawable.getStartTime();
@@ -49,8 +46,6 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 				node.element=drawable;
 				node.rawElement=ele;
 				node.depth=sprites.size();
-				//System.out.println("to "+node.depth);
-				//if(node.depth%2000==0||node.depth>76500)System.out.println(node.depth);
 				sprites.add(node);
 				
 				
@@ -65,26 +60,13 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 				ele.onApply(null,storyboard);
 			}
 		}
+		spritesNotAdded.addAll(sprites);
 		System.out.println(sprites.size());
-		/*
-		if(false){
-			return;
-		}
-		System.out.println(sprites.get(0).getStartTime());
-		*/
-		/*
-		*/
 	}
 
 	public int getNewApply() {
 		return newApply;
 	}
-
-	/*
-	public List<ADrawableStoryboardElement> getSprites() {
-		return sprites;
-	}
-	*/
 	
 	public int objectInField(){
 		return spriteInField.size();
@@ -102,22 +84,6 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 				}
 			}
 		}
-		
-		/*
-		while(index<sprites.size()&&sprites.get(index).getStartTime()<=time){
-			ADrawableStoryboardElement ele=sprites.get(index);
-			spriteInField.add(ele);
-			ele.onAdd();
-			index++;
-		}
-		Iterator<ADrawableStoryboardElement> iter=spriteInField.iterator();
-		while(iter.hasNext()){
-			ADrawableStoryboardElement ele=iter.next();
-			if(ele.getEndTime()<time){
-				iter.remove();
-				ele.onRemove();
-			}
-		}*/
 	}
 	
 	@Override

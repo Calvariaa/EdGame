@@ -39,19 +39,14 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 	 *对于开启了post的应该手动post
 	 */
 	private boolean enablePost=false;
-
-	/*
-	public BaseCanvas(BufferedLayer layer){
-		this.layer=layer;
-		initial();
-		getData().setWidth(layer.getWidth());
-		getData().setHeight(layer.getHeight());
+	
+	private int maxBatchSize=400;
+	
+	private int drawCalls=0;
+	
+	public int getDrawCalls() {
+		return drawCalls;
 	}
-
-	public BaseCanvas(GLTexture texture,MContext context){
-		this(new BufferedLayer(context,texture));
-	}
-	*/
 	
 	public void setEnablePost(boolean enablePost) {
 		this.enablePost=enablePost;
@@ -231,11 +226,14 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 			}
 			preTexture=texture.getTexture();
 			preBlend=getBlendSetting().getBlendType();
+		}else if(tmpBatch!=null&&tmpBatch.getVertexCount()>maxBatchSize){
+			postDraw();
 		}
 	}
 
 	public void drawTexture(AbstractTexture texture,IQuad res,IQuad dst,Color4 mixColor,Color4 varyColor,float z,float alpha){
 		checkCanDraw();
+		drawCalls++;
 		if(enablePost){
 			checkPost(texture);
 			varyColor=varyColor.copyNew().multiple(mixColor).multiple(alpha);
@@ -252,6 +250,7 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 
 	public void drawTexture(AbstractTexture texture,Vec2[] resV,Vec2[] dstV,Color4 varyColor,float finalAlpha,Color4 mixColor){
 		checkCanDraw();
+		drawCalls++;
 		if(enablePost){
 			checkPost(texture);
 			varyColor=varyColor.copyNew().multiple(mixColor).multiple(finalAlpha);

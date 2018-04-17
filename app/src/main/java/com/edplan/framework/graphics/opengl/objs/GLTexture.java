@@ -63,7 +63,7 @@ public class GLTexture extends AbstractTexture
 		GLES20.GL_TEXTURE18
 	};
 	
-	public static boolean SCALE_22=false;
+	public static boolean SCALE_22=true;
 
 	private int width,height;
 

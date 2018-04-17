@@ -91,6 +91,7 @@ public class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 		MLog.test.vOnce("thread","thread","draw-thread: "+Thread.currentThread());
 		tmer.refresh();
 		uiLooper.loop(tmer.getDeltaTime());
+		GLWrapped.onFrame();
 		GLCanvas2D canvas=new GLCanvas2D(rootLayer);
 		canvas.prepare();
 		canvas.getMProjMatrix().setOrtho(0,canvas.getWidth(),canvas.getHeight(),0,-100,100);

@@ -15,8 +15,8 @@ public class TestGLActivity extends Activity
 		super.onCreate(savedInstanceState);
 		//setContentView(R.layout.mains);
 		setContentView((sv==null)?(sv=
-		//new BaseGLSurfaceView(this)
-		new GLES10SurfaceView(this)
+		new BaseGLSurfaceView(this)
+		//new GLES10SurfaceView(this)
 		 ):sv);
 	}
 }

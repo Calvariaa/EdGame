@@ -52,6 +52,20 @@ public class GLWrapped
 		FBOPool.initialGL();
 	}
 	
+	public static void onFrame(){
+		drawCalls=0;
+	}
+	
+	private static int drawCalls=0;
+	public static void drawArrays(int mode,int offset,int count){
+		GLES20.glDrawArrays(mode,offset,count);
+		drawCalls++;
+	}
+	
+	public static int frameDrawCalls(){
+		return drawCalls;
+	}
+	
 	private static int px1,px2,py1,py2;
 	public static void setViewport(int x1,int y1,int x2,int y2){
 		//if(!(px1==x1&&px2==x2&&py1==y1&&py2==y2)){

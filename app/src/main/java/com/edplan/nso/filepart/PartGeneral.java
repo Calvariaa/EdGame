@@ -27,7 +27,7 @@ public class PartGeneral implements OsuFilePart
 	private boolean countdown=false;
 	private SampleSet sampleSet=null;
 	private int sampleVolume=100;
-	private float stackLeniency=0;
+	private float stackLeniency=0.7f;
 	private int mode=-1;
 	private boolean letterboxInBreaks=false;
 	private boolean widescreenStoryboard=false;

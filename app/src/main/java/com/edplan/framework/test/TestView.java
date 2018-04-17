@@ -40,6 +40,7 @@ import org.json.JSONObject;
 import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
 import com.edplan.framework.ui.Anchor;
+import com.edplan.framework.graphics.opengl.GLWrapped;
 
 public class TestView extends EdView
 {
@@ -402,6 +403,9 @@ public class TestView extends EdView
 		newCanvas.setCanvasAlpha(1);
 		newCanvas.restore();
 		
+		int drawCalls=GLWrapped.frameDrawCalls();
+		int drawCalls2=newCanvas.getDrawCalls();
+		
 		if(test.enablePlayField&&!test.watchPool)playField.draw(newCanvas);
 		//firstObj.draw(newCanvas);
 		newCanvas.unprepare();
@@ -527,7 +531,7 @@ public class TestView extends EdView
 		printer.toNextLine();
 		printer.printString(timeline.frameTime()+"");
 		printer.toNextLine();
-		printer.printString(audioOffset+"");
+		printer.printString("draws:"+drawCalls+"/"+drawCalls2);
 		printer.toNextLine();
 		if(test.enableStoryboard){
 			printer.printString(playingStoryboard.objectsInField()+"\n");
@@ -587,11 +591,11 @@ public class TestView extends EdView
 		
 		public String dir="/storage/emulated/0/MyDisk/WorkBench/bin/testdata";
 		
-		public int testBeatmapFloder=25;
+		public int testBeatmapFloder=11;
 		
 		public boolean enableStoryboard=true;
 		
-		public boolean enablePlayField=true;
+		public boolean enablePlayField=false;
 		
 		public boolean watchPool=false;
 		

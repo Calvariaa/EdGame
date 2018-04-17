@@ -22,6 +22,7 @@ import com.edplan.framework.graphics.opengl.batch.base.IHasPosition;
 import com.edplan.framework.graphics.opengl.batch.BaseBatch;
 import android.opengl.GLES20;
 import com.edplan.framework.graphics.opengl.Camera;
+import com.edplan.framework.graphics.opengl.GLWrapped;
 
 public class ColorShader extends GLProgram 
 {
@@ -100,7 +101,7 @@ public class ColorShader extends GLProgram
 	}
 	
 	public void applyToGL(int mode,int offset,int count){
-		GLES20.glDrawArrays(mode,offset,count);
+		GLWrapped.drawArrays(mode,offset,count);
 	}
 	
 	public static final ColorShader createCS(String vs,String fs){
