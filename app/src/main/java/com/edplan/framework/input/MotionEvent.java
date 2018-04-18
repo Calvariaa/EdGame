@@ -28,12 +28,22 @@ public class MotionEvent
 	 */
 	private int keyCode;
 	
+	private int pointCount;
+	
 	public MotionEvent(){
 		
 	}
 	
 	public MotionEvent(MotionEvent event){
 		set(event);
+	}
+
+	public void setPointCount(int pointCount) {
+		this.pointCount=pointCount;
+	}
+
+	public int getPointCount() {
+		return pointCount;
 	}
 
 	public void set(MotionEvent e){
@@ -43,8 +53,9 @@ public class MotionEvent
 		this.pointerId=e.pointerId;
 		this.eventTime=e.eventTime;
 		this.keyCode=e.keyCode;
+		this.pointCount=e.pointCount;
 	}
-
+	
 	public void setRawType(RawType rawType) {
 		this.rawType=rawType;
 	}

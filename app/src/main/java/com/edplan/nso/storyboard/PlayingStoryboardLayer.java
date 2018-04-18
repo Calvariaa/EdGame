@@ -101,7 +101,7 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 			ele=iter.next();
 			if(ele.startTime<=time){
 				spriteInField.add(ele);
-				ele.apply();
+				if(!ele.hasAdded())ele.apply();
 				iter.remove();
 			}else{
 				break;
@@ -161,7 +161,7 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 			return added;
 		}
 		
-		public void apply(){
+		public synchronized void apply(){
 			if(added)return;
 			newApply++;
 			added=true;
@@ -190,12 +190,12 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 			ElementNode node;
 			while(iter.hasNext()){
 				node=iter.next();
-				while(node.startTime>currentTime-preApplyTime){
+				while(node.startTime>currentTime+preApplyTime){
 					try {
 						sleep(10);
 					} catch (InterruptedException e) {}
 				}
-				node.apply();
+				if(!node.hasAdded())node.apply();
 				iter.remove();
 			}
 		}

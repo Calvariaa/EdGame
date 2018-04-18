@@ -174,6 +174,10 @@ public class GLTexture extends AbstractTexture
 	}
 	
 	public static GLTexture createGPUTexture(int w,int h){
+		/*if(w>GLWrapped.GL_MAX_TEXTURE_SIZE||h>GLWrapped.GL_MAX_TEXTURE_SIZE){
+			GLTexture t=createErrTexture();
+			return t;
+		}*/
 		int[] t=new int[1];
 		GLES20.glGenTextures(1,t,0);
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,t[0]);
@@ -281,6 +285,20 @@ public class GLTexture extends AbstractTexture
 		return t[0];
 	}
 	
+	public static GLTexture createErrTexture(){
+		Bitmap bmp=Bitmap.createBitmap(128,128,Bitmap.Config.ARGB_8888);
+		for(int x=0;x<bmp.getWidth();x++){
+			for(int y=0;y<bmp.getHeight();y++){
+				if((x/32+y/32)%2==0){
+					bmp.setPixel(x,y,Color.argb(255,10,5,5));
+				}else{
+					bmp.setPixel(x,y,Color.argb(255,110,40,50));
+				}
+			}
+		}
+		return create(bmp,true);
+	}
+	
 	public static void initial(){
 		DEF_CREATE_OPTIONS=new BitmapFactory.Options();
 		DEF_CREATE_OPTIONS.inPremultiplied=true;
@@ -289,16 +307,6 @@ public class GLTexture extends AbstractTexture
 		Black=create1pxTexture(Color4.Black);
 		Red=create1pxTexture(Color4.Red);
 		Blue=create1pxTexture(Color4.Blue);
-		Bitmap bmp=Bitmap.createBitmap(4,4,Bitmap.Config.ARGB_8888);
-		for(int x=0;x<bmp.getWidth();x++){
-			for(int y=0;y<bmp.getHeight();y++){
-				if(x+y%2==0){
-					bmp.setPixel(x,y,Color.argb(255,10,5,5));
-				}else{
-					bmp.setPixel(x,y,Color.argb(255,110,40,50));
-				}
-			}
-		}
-		ErrorTexture=create(bmp,true);
+		ErrorTexture=createErrTexture();
 	}
 }

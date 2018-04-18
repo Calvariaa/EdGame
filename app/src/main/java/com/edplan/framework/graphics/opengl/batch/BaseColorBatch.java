@@ -8,7 +8,7 @@ import com.edplan.framework.graphics.opengl.objs.VertexList;
 import com.edplan.framework.graphics.opengl.batch.base.IHasColor;
 import com.edplan.framework.graphics.opengl.batch.base.IHasPosition;
 
-public class BaseColorBatch<T extends Vertex3D> extends BaseBatch implements IHasColor,IHasPosition
+public class BaseColorBatch<T extends Vertex3D> implements BaseBatch,IHasColor,IHasPosition
 {
 	protected List<T> vertexs;
 	

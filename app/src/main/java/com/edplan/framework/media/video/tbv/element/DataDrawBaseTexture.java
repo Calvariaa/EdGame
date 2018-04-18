@@ -14,8 +14,9 @@ import com.edplan.framework.math.Vec2;
 import com.edplan.framework.math.Vec3;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import java.util.List;
+import com.edplan.framework.graphics.opengl.batch.interfaces.ITexture3DBatch;
 
-public class DataDrawBaseTexture extends BaseBatch implements IHasPosition,IHasColor,IHasTexturePosition
+public class DataDrawBaseTexture implements ITexture3DBatch
 {
 	public int textureId;
 	public TextureVertex3D[] vertexs;
@@ -42,6 +43,13 @@ public class DataDrawBaseTexture extends BaseBatch implements IHasPosition,IHasC
 		texturePositionBuffer=new Vec2Buffer(tl);
 		positionBuffer=new Vec3Buffer(pl);
 		colorBuffer=new Color4Buffer(cl);
+	}
+
+	@Override
+	public void add(TextureVertex3D t) {
+		// TODO: Implement this method
+		vertexs[length].set(t);
+		length++;
 	}
 
 	@Override
@@ -97,6 +105,25 @@ public class DataDrawBaseTexture extends BaseBatch implements IHasPosition,IHasC
 		d.length=l.size();
 		for(int i=0;i<d.length;i++){
 			d.vertexs[i].set(l.get(i));
+		}
+		return d;
+	}
+	
+	public static DataDrawBaseTexture load(int id,BaseBatch batch,DataDrawBaseTexture d){
+		if(d==null){
+			d=new DataDrawBaseTexture(batch.getVertexCount()+20);
+		}else if(d.vertexs.length<batch.getVertexCount()){
+			d=new DataDrawBaseTexture((int)((batch.getVertexCount()+1)*1.5));
+		}
+		d.textureId=id;
+		d.length=batch.getVertexCount();
+		Vec2Buffer tp=((IHasTexturePosition)batch).makeTexturePositionBuffer();
+		Vec3Buffer pp=((IHasPosition)batch).makePositionBuffer();
+		Color4Buffer cp=((IHasColor)batch).makeColorBuffer();
+		for(int i=0;i<d.length;i++){
+			d.vertexs[i].texturePoint.set(tp.get(i));
+			d.vertexs[i].position.set(pp.get(i));
+			d.vertexs[i].color.set(cp.get(i));
 		}
 		return d;
 	}

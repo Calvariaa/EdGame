@@ -1,6 +1,6 @@
 package com.edplan.framework.graphics.opengl.batch;
 
-public abstract class BaseBatch
+public interface BaseBatch
 {
-	public abstract int getVertexCount();
+	public int getVertexCount();
 }

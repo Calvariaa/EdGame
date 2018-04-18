@@ -35,7 +35,15 @@ public abstract class BaseBuffer<T>
 	
 	public abstract int getFloatSize();
 	protected abstract void addToBuffer(FloatBuffer fb,T t);
-
+	
+	public T get(int i){
+		if(hasLimit){
+			return bufferList.get(i+offset);
+		}else{
+			return bufferList.get(i);
+		}
+	}
+	
 	public void limit(boolean enable,int offset,int len){
 		this.hasLimit=enable;
 		this.offset=offset;

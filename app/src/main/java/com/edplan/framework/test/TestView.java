@@ -1,16 +1,13 @@
 package com.edplan.framework.test;
-import android.graphics.Bitmap;
-import android.opengl.GLES20;
 import android.util.Log;
 import com.edplan.framework.MContext;
 import com.edplan.framework.graphics.layer.BufferedLayer;
 import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.graphics.opengl.GLPaint;
+import com.edplan.framework.graphics.opengl.GLWrapped;
 import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
-import com.edplan.framework.graphics.opengl.objs.texture.AutoPackTexturePool;
-import com.edplan.framework.math.IQuad;
 import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.media.bass.BassChannel;
@@ -18,6 +15,7 @@ import com.edplan.framework.resource.AResource;
 import com.edplan.framework.resource.DirResource;
 import com.edplan.framework.timing.AudioTimeline;
 import com.edplan.framework.timing.PreciseTimeline;
+import com.edplan.framework.ui.Anchor;
 import com.edplan.framework.ui.EdView;
 import com.edplan.framework.ui.text.font.bmfont.BMFont;
 import com.edplan.framework.ui.text.font.drawing.TextPrinter;
@@ -35,12 +33,7 @@ import com.edplan.nso.storyboard.PlayingStoryboard;
 import com.edplan.nso.storyboard.Storyboard;
 import java.io.File;
 import java.io.IOException;
-import java.nio.IntBuffer;
 import org.json.JSONObject;
-import java.io.FileOutputStream;
-import java.io.FileNotFoundException;
-import com.edplan.framework.ui.Anchor;
-import com.edplan.framework.graphics.opengl.GLWrapped;
 
 public class TestView extends EdView
 {
@@ -66,6 +59,8 @@ public class TestView extends EdView
 	
 	private BufferedLayer newLayer;
 	
+	private GLCanvas2D newCanvas;
+	
 	
 	private GLTexture testPng;
 	private GLTexture cardPng;
@@ -88,8 +83,6 @@ public class TestView extends EdView
 		super(context);
 		
 	}
-	
-	
 	
 	@Override
 	public void onCreate(){
@@ -321,10 +314,12 @@ public class TestView extends EdView
 		canvas.save();
 		
 		
-		if(newLayer==null)newLayer=new BufferedLayer(getContext(),canvas.getLayer().getWidth(),canvas.getLayer().getHeight(),true);
-		GLCanvas2D newCanvas=new GLCanvas2D(newLayer);
+		if(newLayer==null){
+			newLayer=new BufferedLayer(getContext(),canvas.getLayer().getWidth(),canvas.getLayer().getHeight(),true);
+			newCanvas=new GLCanvas2D(newLayer);
+		}
 		newCanvas.prepare();
-		
+		int state=newCanvas.save();
 		newCanvas.drawColor(Color4.gray(0f));
 		newCanvas.clearDepthBuffer();
 		
@@ -409,7 +404,7 @@ public class TestView extends EdView
 		if(test.enablePlayField&&!test.watchPool)playField.draw(newCanvas);
 		//firstObj.draw(newCanvas);
 		newCanvas.unprepare();
-
+		newCanvas.restoreToCount(state);
 		//paint.setColorMixRate(0);
 		
 		GLPaint newPaint=new GLPaint();
@@ -593,7 +588,7 @@ public class TestView extends EdView
 		
 		public String dir="/storage/emulated/0/MyDisk/WorkBench/bin/testdata";
 		
-		public int testBeatmapFloder=11;
+		public int testBeatmapFloder=23;
 		
 		public boolean enableStoryboard=true;
 		

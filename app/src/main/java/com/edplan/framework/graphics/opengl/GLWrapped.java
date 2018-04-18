@@ -12,6 +12,9 @@ import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.interfaces.Copyable;
 import com.edplan.framework.graphics.opengl.bufferObjects.FBOPool;
 import android.opengl.GLES10;
+import android.opengl.GLES30;
+import android.opengl.GLES31Ext;
+import android.opengl.GLES11Ext;
 
 public class GLWrapped
 {

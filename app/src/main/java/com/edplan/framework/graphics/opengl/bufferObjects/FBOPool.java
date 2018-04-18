@@ -45,6 +45,7 @@ public class FBOPool
 	 */
 	public boolean saveFBO(FrameBufferObject fbo){
 		//Log.v("fbo-pool","onSaveFbo "+fbo.getFBOId());
+		if(fbo==null)return false;
 		if(fbo instanceof FrameBufferObject.SystemFrameBuffer){
 			throw new RuntimeException("you can't save SystemBuffer to pool");
 		}
