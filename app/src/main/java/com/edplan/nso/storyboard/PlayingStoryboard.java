@@ -20,6 +20,7 @@ import com.edplan.nso.storyboard.elements.StoryboardSprite;
 import com.edplan.framework.fallback.GLES10Drawable;
 import com.edplan.framework.graphics.opengl.GL10Canvas2D;
 import com.edplan.framework.graphics.opengl.GLWrapped;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public class PlayingStoryboard extends EdDrawable implements GLES10Drawable
 {
@@ -125,7 +126,7 @@ public class PlayingStoryboard extends EdDrawable implements GLES10Drawable
 	}
 
 	@Override
-	public void draw(GLCanvas2D canvas) {
+	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		int i=canvas.save();
 		//canvas.getData().getShaders().setColorShader(ColorShader.Invalid);

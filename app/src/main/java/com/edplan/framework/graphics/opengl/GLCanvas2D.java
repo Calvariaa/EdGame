@@ -91,19 +91,12 @@ public class GLCanvas2D extends BaseCanvas // extends AbstractSRable<CanvasData>
 		return layer;
 	}
 	
+	@Override
 	public boolean isPrepared(){
 		return getLayer().isBind();
 	}
 	
-	/**
-	 *@param p:当前应该是的状态
-	 */
-	public void checkPrepared(String msg,boolean p){
-		if(p!=isPrepared()){
-			throw new GLException("prepare err [n,c]=["+p+","+isPrepared()+"] msg: "+msg);
-		}
-	}
-	
+	@Override
 	public void prepare(){
 		checkPrepared(
 			"you can't call prepare when GLCanvas is prepared",
@@ -111,16 +104,12 @@ public class GLCanvas2D extends BaseCanvas // extends AbstractSRable<CanvasData>
 		getLayer().bind();
 	}
 	
+	@Override
 	public void unprepare(){
 		checkPrepared(
 			"you can't call unprepare when GLCanvas isn't prepared",
 			true);
 		getLayer().unbind();
-	}
-
-	public void post(){
-		checkPrepared("when post canvas, canvas should be prepared",true);
-		unprepare();
 	}
 	
 	@Override

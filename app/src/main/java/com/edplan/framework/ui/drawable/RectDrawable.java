@@ -3,8 +3,9 @@ import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.MContext;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.GLPaint;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
-public class RectDrawable extends EdDrawable
+public class RectDrawable<T extends BaseCanvas> extends EdDrawable<T>
 {
 	private GLPaint paint=new GLPaint();
 	
@@ -17,7 +18,7 @@ public class RectDrawable extends EdDrawable
 	}
 
 	@Override
-	public void draw(GLCanvas2D canvas) {
+	public void draw(T canvas) {
 		// TODO: Implement this method
 		
 	}

@@ -15,6 +15,7 @@ import com.edplan.nso.storyboard.elements.StoryboardSprite;
 import com.edplan.framework.fallback.GLES10Drawable;
 import com.edplan.framework.graphics.opengl.GL10Canvas2D;
 import java.util.LinkedList;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 {
@@ -119,17 +120,17 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 	}
 	
 	@Override
-	public void draw(GLCanvas2D canvas) {
+	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		newApply=0;
 		refreshObjects();
-		int c=GLWrapped.blend.save();
+		int c=canvas.getBlendSetting().save();
 		canvas.enablePost();
 		for(ElementNode ele:spriteInField){
 			ele.element.draw(canvas);
 		}
 		canvas.disablePost();
-		GLWrapped.blend.restoreToCount(c);
+		canvas.getBlendSetting().restoreToCount(c);
 	}
 
 	@Override

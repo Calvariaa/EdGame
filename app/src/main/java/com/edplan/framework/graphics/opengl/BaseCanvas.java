@@ -103,6 +103,19 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 	public void setCanvasAlpha(float a){
 		getData().setCanvasAlpha(a);
 	}
+	
+	/**
+	 *@param p:当前应该是的状态
+	 */
+	public void checkPrepared(String msg,boolean p){
+		if(p!=isPrepared()){
+			throw new GLException("prepare err [n,c]=["+p+","+isPrepared()+"] msg: "+msg);
+		}
+	}
+	
+	public abstract boolean isPrepared();
+	public abstract void prepare();
+	public abstract void unprepare();
 
 	@Override
 	public void onSave(CanvasData t) {

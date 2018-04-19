@@ -3,6 +3,7 @@ import com.edplan.framework.MContext;
 import com.edplan.framework.timing.PreciseTimeline;
 import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.ui.drawable.interfaces.IRotateable2D;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public class SliderBall extends BasePiece implements IRotateable2D
 {
@@ -25,7 +26,7 @@ public class SliderBall extends BasePiece implements IRotateable2D
 	}
 
 	@Override
-	public void draw(GLCanvas2D canvas) {
+	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		if(isFinished())return;
 	}

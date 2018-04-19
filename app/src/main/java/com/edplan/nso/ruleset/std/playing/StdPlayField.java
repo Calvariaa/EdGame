@@ -19,6 +19,7 @@ import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdSlider;
 import com.edplan.framework.graphics.line.LinePath;
 import com.edplan.framework.utils.stream.IEnum;
 import com.edplan.nso.ruleset.std.playing.drawable.interfaces.IHasBackgroundDrawable;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public class StdPlayField extends PlayField
 {
@@ -61,7 +62,7 @@ public class StdPlayField extends PlayField
 		}
 	}
 	
-	protected void drawBackgroundLayer(GLCanvas2D canvas){
+	protected void drawBackgroundLayer(BaseCanvas canvas){
 		DrawableStdHitObject obj;
 		for(int i=drawableHitObjects.getObjectsInField().size()-1;i>=0;i--){
 			obj=drawableHitObjects.getObjectsInField().get(i);
@@ -71,7 +72,7 @@ public class StdPlayField extends PlayField
 		}
 	}
 
-	protected void drawContentLayer(GLCanvas2D canvas){
+	protected void drawContentLayer(BaseCanvas canvas){
 		DrawableStdHitObject obj;
 		canvas.enablePost();
 		for(int i=drawableHitObjects.getObjectsInField().size()-1;i>=0;i--){
@@ -84,7 +85,7 @@ public class StdPlayField extends PlayField
 		canvas.disablePost();
 	}
 	
-	protected void drawConnectionLayer(GLCanvas2D canvas){
+	protected void drawConnectionLayer(BaseCanvas canvas){
 		DrawableStdHitObject obj;
 		//canvas.enablePost();
 		for(int i=connectionDrawables.getObjectsInField().size()-1;i>=0;i--){
@@ -94,7 +95,7 @@ public class StdPlayField extends PlayField
 		//canvas.disablePost();
 	}
 	
-	protected void drawApproachCircleLayer(GLCanvas2D canvas){
+	protected void drawApproachCircleLayer(BaseCanvas canvas){
 		DrawableStdHitObject obj;
 		canvas.enablePost();
 		for(int i=drawableHitObjects.getObjectsInField().size()-1;i>=0;i--){
@@ -106,7 +107,7 @@ public class StdPlayField extends PlayField
 		canvas.disablePost();
 	}
 	
-	private void drawTestLayer(GLCanvas2D canvas){
+	private void drawTestLayer(BaseCanvas canvas){
 		
 		List<DrawableStdHitObject> l=drawableHitObjects.getObjectsInField();
 		GLPaint paint=new GLPaint();
@@ -128,7 +129,7 @@ public class StdPlayField extends PlayField
 	}
 	
 	@Override
-	public void draw(GLCanvas2D canvas) {
+	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		int curTime=(int)timeline.frameTime();
 		//添加新的物件

@@ -10,6 +10,7 @@ import com.edplan.framework.ui.uiobjs.Visibility;
 import com.edplan.superutils.classes.advance.IRunnableHandler;
 import com.edplan.framework.ui.layout.MeasureCore;
 import com.edplan.framework.ui.layout.LayoutParam;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public class EdView implements IRunnableHandler
 {
@@ -128,7 +129,7 @@ public class EdView implements IRunnableHandler
 	 *发生在measure之后
 	 *@param canvas: parent's canvas, where 
 	 */
-	public void onDraw(GLCanvas2D canvas){
+	public void onDraw(BaseCanvas canvas){
 		
 	}
 	
@@ -136,7 +137,7 @@ public class EdView implements IRunnableHandler
 	 *@param canvas: The canvas to draw this voew's content.
 	 *This canvas maybe based on a FBO or parent's canvas.
 	 */
-	public void draw(GLCanvas2D canvas){
+	public void draw(BaseCanvas canvas){
 		if(background!=null){
 			int s=canvas.save();
 			//canvas.getMaskMatrix().post(background.getTranslationMatrix());

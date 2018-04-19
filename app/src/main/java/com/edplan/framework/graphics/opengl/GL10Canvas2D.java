@@ -14,6 +14,22 @@ public class GL10Canvas2D extends BaseCanvas
 	}
 	
 	@Override
+	public boolean isPrepared() {
+		// TODO: Implement this method
+		return true;
+	}
+
+	@Override
+	public void prepare() {
+		// TODO: Implement this method
+	}
+
+	@Override
+	public void unprepare() {
+		// TODO: Implement this method
+	}
+	
+	@Override
 	public int getDefWidth() {
 		// TODO: Implement this method
 		return width;

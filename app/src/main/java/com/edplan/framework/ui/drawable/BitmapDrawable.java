@@ -11,6 +11,7 @@ import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.ui.drawable.operation.ITexturePoster;
 import com.edplan.framework.ui.drawable.operation.TestPoster;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public class BitmapDrawable extends EdDrawable
 {
@@ -88,7 +89,7 @@ public class BitmapDrawable extends EdDrawable
 	}
 
 	@Override
-	public void draw(GLCanvas2D canvas) {
+	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		drawBitmap(new Canvas(content));
 		loadToGLTexture();

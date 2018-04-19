@@ -11,6 +11,7 @@ import com.edplan.framework.ui.drawable.interfaces.IFadeable;
 import com.edplan.framework.ui.drawable.interfaces.IScaleable2D;
 import com.edplan.nso.resource.OsuSkin;
 import com.edplan.framework.utils.MLog;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public abstract class BasePiece extends EdDrawable implements IScaleable2D,IFadeable
 {
@@ -109,11 +110,11 @@ public abstract class BasePiece extends EdDrawable implements IScaleable2D,IFade
 		return scale;
 	}
 	
-	protected void simpleDraw(GLTexture t,GLCanvas2D c){
+	protected void simpleDraw(GLTexture t,BaseCanvas c){
 		c.drawTextureAnchorCenter(t,getOrigin(),(new Vec2(getBaseSize(),getBaseSize())).multiple(getScale()),paint);
 	}
 	
-	protected void simpleDrawWithAccentColor(GLTexture t,GLCanvas2D c){
+	protected void simpleDrawWithAccentColor(GLTexture t,BaseCanvas c){
 		if(tmpPaint==null)tmpPaint=new GLPaint();
 		tmpPaint.set(paint);
 		tmpPaint.setMixColor(tmpPaint.getMixColor().copyNew().multiple(getAccentColor()));

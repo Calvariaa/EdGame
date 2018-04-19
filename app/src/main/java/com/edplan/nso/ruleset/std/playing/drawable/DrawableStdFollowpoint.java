@@ -7,6 +7,7 @@ import com.edplan.framework.ui.animation.precise.BasePreciseAnimation;
 import com.edplan.nso.ruleset.amodel.playing.PlayingBeatmap;
 import com.edplan.nso.ruleset.std.playing.drawable.piece.FollowpointPiece;
 import com.edplan.framework.ui.animation.AnimationHelper;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public class DrawableStdFollowpoint extends DrawableStdHitObject
 {
@@ -73,7 +74,7 @@ public class DrawableStdFollowpoint extends DrawableStdHitObject
 	}
 
 	@Override
-	public void draw(GLCanvas2D canvas) {
+	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		super.draw(canvas);
 		followpointPiece.draw(canvas);

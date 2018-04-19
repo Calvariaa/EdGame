@@ -15,6 +15,7 @@ import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 import android.util.Log;
 import java.util.HashMap;
 import com.edplan.framework.graphics.opengl.GL10Canvas2D;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public class TextPrinter
 {
@@ -167,7 +168,7 @@ public class TextPrinter
 		currentX+=xadvance;
 	}
 	
-	public void draw(GLCanvas2D canvas){
+	public void draw(BaseCanvas canvas){
 		for(int i=0;i<font.getPageCount();i++){
 			Texture3DBatch<TextureVertex3D> batch=batchs.get(i);
 			AbstractTexture texture=font.getPage(i).texture;

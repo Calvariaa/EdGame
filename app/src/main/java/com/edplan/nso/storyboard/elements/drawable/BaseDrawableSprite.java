@@ -18,6 +18,7 @@ import com.edplan.framework.utils.MLog;
 import com.edplan.framework.graphics.opengl.GLPaint;
 import java.util.HashMap;
 import com.edplan.framework.graphics.opengl.GL10Canvas2D;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public class BaseDrawableSprite extends ADrawableStoryboardElement
 {
@@ -251,7 +252,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 	}
 
 	@Override
-	public void draw(GLCanvas2D canvas) {
+	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		double time=getTimeline().frameTime();
 		refreshAnimation(alphaAnimation,time);
@@ -271,7 +272,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		quad.rotate(anchor,rotation);
 		quad.flip(flipH,flipV);
 		//默认只按次流程绘制且只绘制StoryboardSprite，这里省去save/restore节省时间
-		GLWrapped.blend.setBlendType(blendType);
+		canvas.getBlendSetting().setBlendType(blendType);
 		canvas.drawTexture(texture,quad,varyingColor,alpha);
 	}
 

@@ -11,6 +11,7 @@ import com.edplan.framework.ui.drawable.interfaces.IFadeable;
 import com.edplan.framework.utils.MLog;
 import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 import com.edplan.framework.graphics.opengl.bufferObjects.FBOPool;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 /**
  *将Canvas上的一块用BufferedLayer包装，再绘制到canvas上去
@@ -60,7 +61,7 @@ public abstract class BufferedDrawable extends EdDrawable implements IFadeable
 		needUpdate=true;
 	}
 	
-	private Vec2 calBufferSize(GLCanvas2D canvas){
+	private Vec2 calBufferSize(BaseCanvas canvas){
 		float x=area.getWidth()/canvas.getPixelDensity();
 		float y=area.getHeight()/canvas.getPixelDensity();
 		return new Vec2(x,y);
@@ -69,7 +70,7 @@ public abstract class BufferedDrawable extends EdDrawable implements IFadeable
 	/**
 	 *默认操作只同步pixelDensity
 	 */
-	protected void transformCanvas(GLCanvas2D nowCanvas,GLCanvas2D parentCanvas){
+	protected void transformCanvas(BaseCanvas nowCanvas,BaseCanvas parentCanvas){
 		nowCanvas.scaleContent(parentCanvas.getPixelDensity());
 		//MLog.test.vOnce("dest","dest",parentCanvas.getPixelDensity()+"");
 		nowCanvas.translate(-area.getLeft(),-area.getTop());
@@ -79,7 +80,7 @@ public abstract class BufferedDrawable extends EdDrawable implements IFadeable
 	/**
 	 *如何将内容绘制到父Canvas上去
 	 */
-	protected void postToParent(AbstractTexture texture,GLCanvas2D canvas){
+	protected void postToParent(AbstractTexture texture,BaseCanvas canvas){
 		//canvas.drawTexture(GLTexture.White,new RectF(0,0,texture.getWidth(),texture.getHeight()),
 		//				   RectF.ltrb(area.getX1(),area.getY1(),area.getX2(),area.getY2()),paint);
 		canvas.drawTexture(texture,new RectF(0,0,texture.getWidth(),texture.getHeight()),
@@ -93,7 +94,7 @@ public abstract class BufferedDrawable extends EdDrawable implements IFadeable
 	protected abstract void drawContent(GLCanvas2D canvas);
 
 	@Override
-	public void draw(GLCanvas2D canvas) {
+	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		Vec2 size=calBufferSize(canvas);
 		if(bufferedLayer==null){

@@ -10,6 +10,7 @@ import com.edplan.nso.ruleset.amodel.playing.PlayingBeatmap;
 import com.edplan.nso.ruleset.amodel.playing.drawable.DrawableHitObject;
 import com.edplan.nso.ruleset.std.objects.StdHitObject;
 import com.edplan.nso.ruleset.std.playing.drawable.piece.BasePiece;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public class DrawableStdHitObject extends DrawableHitObject
 {
@@ -146,7 +147,7 @@ public class DrawableStdHitObject extends DrawableHitObject
 	}
 	
 	@Override
-	public void draw(GLCanvas2D canvas) {
+	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 	}
 

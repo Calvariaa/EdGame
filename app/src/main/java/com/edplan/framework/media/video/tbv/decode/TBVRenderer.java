@@ -182,7 +182,7 @@ public class TBVRenderer
 	public void changeBlend(byte[] data){
 		boolean enable=data[0]!=0;
 		BlendType type=BlendType.values()[data[1]];
-		GLWrapped.blend.set(enable,type);
+		canvas.getBlendSetting().set(enable,type);
 	}
 	
 	DataDrawBaseTexture dataDrawBaseTexture;

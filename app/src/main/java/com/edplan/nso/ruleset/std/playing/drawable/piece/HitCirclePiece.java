@@ -9,6 +9,7 @@ import com.edplan.framework.ui.drawable.interfaces.IFadeable;
 import com.edplan.framework.ui.drawable.interfaces.IScaleable2D;
 import com.edplan.nso.resource.OsuSkin;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdHitObject;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public class HitCirclePiece extends BasePiece implements IScaleable2D,IFadeable
 {
@@ -28,7 +29,7 @@ public class HitCirclePiece extends BasePiece implements IScaleable2D,IFadeable
 	}
 
 	@Override
-	public void draw(GLCanvas2D canvas) {
+	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		//将note绘制上去
 		if(isFinished())return;

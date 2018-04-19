@@ -9,6 +9,7 @@ import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdHitObject;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.math.FMath;
 import com.edplan.framework.ui.animation.AnimationHelper;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public class ApproachCircle extends BasePiece
 {
@@ -26,7 +27,7 @@ public class ApproachCircle extends BasePiece
 	}
 	
 	@Override
-	public void draw(GLCanvas2D canvas) {
+	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		if(isFinished())return;
 		simpleDrawWithAccentColor(approachCircle,canvas);

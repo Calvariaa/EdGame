@@ -9,11 +9,12 @@ import com.edplan.framework.ui.drawable.interfaces.IRotateable2D;
 import com.edplan.framework.ui.drawable.interfaces.IScaleable2D;
 import java.util.ArrayList;
 import java.util.List;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 /**
  *用来封装将材质绘制到canvas上的Drawable，有类似canvas.drawTexture的方法
  */
-public class TextureDrawable extends EdDrawable implements IFadeable,IScaleable2D,IRotateable2D
+public class TextureDrawable<T extends BaseCanvas> extends EdDrawable<T> implements IFadeable,IScaleable2D,IRotateable2D
 {
 	private float rotation;
 	
@@ -106,7 +107,7 @@ public class TextureDrawable extends EdDrawable implements IFadeable,IScaleable2
 			  .multiple(t.getScale()));
 	}
 	
-	private void drawBindTexture(BindTexture texture,GLCanvas2D canvas){
+	private void drawBindTexture(BindTexture texture,BaseCanvas canvas){
 		Vec2 d0=makeupVec(texture,-baseSize.x,-baseSize.y);
 		Vec2 d1=makeupVec(texture,baseSize.x,-baseSize.y);
 		Vec2 d2=makeupVec(texture,baseSize.x,baseSize.y);
@@ -126,7 +127,7 @@ public class TextureDrawable extends EdDrawable implements IFadeable,IScaleable2
 	}
 
 	@Override
-	public void draw(GLCanvas2D canvas) {
+	public void draw(T canvas) {
 		// TODO: Implement this method
 		for(BindTexture t:textures){
 			drawBindTexture(t,canvas);

@@ -4,6 +4,7 @@ import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.graphics.opengl.GLPaint;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.math.RectF;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public class DrawString
 {
@@ -137,14 +138,14 @@ public class DrawString
 	/**
 	 *暂时只做绘制一行的
 	 */
-	public void drawToCanvas(GLCanvas2D canvas,GLPaint paint,Vec2 basePoint){
+	public void drawToCanvas(BaseCanvas canvas,GLPaint paint,Vec2 basePoint){
 		checkForDraw();
 		for(DrawStringNode n:mesuredNode){
 			canvas.drawTexture(n.getInfo().getTexture(),makeNodeArea(n,basePoint),paint);
 		}
 	}
 	
-	public void drawToCanvas(GLCanvas2D canvas,GLPaint paint,Vec2 basePoint,Alignment alig){
+	public void drawToCanvas(BaseCanvas canvas,GLPaint paint,Vec2 basePoint,Alignment alig){
 		checkForDraw();
 		float xoffset=0;
 		float yoffset=0;

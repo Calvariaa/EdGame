@@ -7,6 +7,7 @@ import com.edplan.framework.ui.animation.precise.BasePreciseAnimation;
 import com.edplan.framework.ui.text.font.DrawString;
 import com.edplan.nso.resource.OsuSkin;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdHitObject;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public class ComboIndexPiece extends BasePiece
 {
@@ -48,7 +49,7 @@ public class ComboIndexPiece extends BasePiece
 	}
 
 	@Override
-	public void draw(GLCanvas2D canvas) {
+	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		if(!isFinished()){
 			drawString.setHeight(textSize);

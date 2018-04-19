@@ -34,6 +34,7 @@ import com.edplan.nso.storyboard.Storyboard;
 import java.io.File;
 import java.io.IOException;
 import org.json.JSONObject;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public class TestView extends EdView
 {
@@ -257,7 +258,7 @@ public class TestView extends EdView
 	boolean ifend=false;
 	double renderTime=0;
 	@Override
-	public void draw(GLCanvas2D canvas) {
+	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		super.draw(canvas);
 		renderTime+=getContext().getFrameDeltaTime();
@@ -289,7 +290,7 @@ public class TestView extends EdView
 		
 		canvas.drawColor(Color4.gray(0.0f));
 		//new Color4(c,c,c,1.0f));
-		canvas.clearDepthBuffer();
+		canvas.clearBuffer();
 		 
 		float dh=50;
 		GLPaint paint=new GLPaint();
@@ -315,7 +316,7 @@ public class TestView extends EdView
 		
 		
 		if(newLayer==null){
-			newLayer=new BufferedLayer(getContext(),canvas.getLayer().getWidth(),canvas.getLayer().getHeight(),true);
+			newLayer=new BufferedLayer(getContext(),canvas.getDefWidth(),canvas.getDefHeight(),true);
 			newCanvas=new GLCanvas2D(newLayer);
 		}
 		newCanvas.prepare();
@@ -594,7 +595,7 @@ public class TestView extends EdView
 		
 		public String dir="/storage/emulated/0/MyDisk/WorkBench/bin/testdata";
 		
-		public int testBeatmapFloder=23;
+		public int testBeatmapFloder=21;
 		
 		public boolean enableStoryboard=true;
 		

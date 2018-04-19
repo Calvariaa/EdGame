@@ -9,6 +9,7 @@ import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.GLPaint;
 import com.edplan.framework.utils.MLog;
 import com.edplan.framework.graphics.opengl.objs.Vertex3D;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public class FollowpointPiece extends BasePiece
 {
@@ -97,7 +98,7 @@ public class FollowpointPiece extends BasePiece
 	}
 	
 	@Override
-	public void draw(GLCanvas2D canvas) {
+	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		if(needDraw){
 			Vertex3D[] v=canvas.createLineRectVertex(offCircleP1,Vec2.onLine(offCircleP1,offCircleP2,progress),paint.getStrokeWidth(),color1);

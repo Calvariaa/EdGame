@@ -16,6 +16,7 @@ import com.edplan.framework.ui.drawable.BufferedDrawable;
 import com.edplan.nso.resource.OsuSkin;
 import com.edplan.nso.ruleset.std.objects.StdSlider;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdSlider;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public class SliderBody extends BasePiece
 {
@@ -96,7 +97,7 @@ public class SliderBody extends BasePiece
 	}
 	
 	@Override
-	public void draw(GLCanvas2D canvas) {
+	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		if(!isFinished())sliderBuffered.draw(canvas);
 	}
@@ -193,11 +194,11 @@ public class SliderBody extends BasePiece
 			batch.clear();
 			d.addToBatch(batch);
 			GLWrapped.depthTest.save();
-			GLWrapped.blend.save();
 			GLWrapped.depthTest.set(true);
-			GLWrapped.blend.setEnable(false);
+			canvas.getBlendSetting().save();
+			canvas.getBlendSetting().setEnable(false);
 			canvas.drawTexture3DBatch(batch,sliderPathTexture,1,Color4.White);
-			GLWrapped.blend.restore();
+			canvas.getBlendSetting().restore();
 			GLWrapped.depthTest.restore();
 		}
 	}

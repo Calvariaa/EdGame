@@ -15,6 +15,7 @@ import com.edplan.nso.ruleset.std.playing.drawable.piece.ApproachCircle;
 import com.edplan.nso.timing.TimingPoint;
 import com.edplan.nso.ruleset.std.playing.controlpoint.TimingControlPoint;
 import com.edplan.nso.ruleset.std.playing.drawable.piece.ComboIndexPiece;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public class DrawableStdSlider extends DrawableStdHitObject implements IHasApproachCircle
 {
@@ -106,7 +107,7 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 	}
 
 	@Override
-	public void draw(GLCanvas2D canvas) {
+	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		super.draw(canvas);
 		body.draw(canvas);

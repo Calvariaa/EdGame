@@ -16,6 +16,7 @@ import com.edplan.nso.ruleset.std.playing.drawable.piece.HitCirclePiece;
 import com.edplan.nso.ruleset.std.playing.judgment.StdJudgment;
 import com.edplan.framework.utils.MLog;
 import com.edplan.nso.ruleset.std.playing.drawable.piece.ComboIndexPiece;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public class DrawableStdHitCircle extends DrawableStdHitObject implements IHasApproachCircle
 {
@@ -55,7 +56,7 @@ public class DrawableStdHitCircle extends DrawableStdHitObject implements IHasAp
 	}
 
 	@Override
-	public void draw(GLCanvas2D canvas) {
+	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		super.draw(canvas);
 		circlePiece.draw(canvas);
