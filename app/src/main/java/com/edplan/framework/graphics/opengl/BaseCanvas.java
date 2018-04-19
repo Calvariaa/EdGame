@@ -47,13 +47,10 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 	public int getDrawCalls() {
 		return drawCalls;
 	}
-	
-	public void setEnablePost(boolean enablePost) {
-		this.enablePost=enablePost;
-	}
 
 	public boolean isEnablePost() {
 		return enablePost;
+		//return false;
 	}
 
 	public BaseCanvas translate(float tx,float ty){
@@ -202,22 +199,33 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 	private GLTexture preTexture;
 	private BlendType preBlend;
 
+	public void enablePost() {
+		this.enablePost=true;
+	}
+	
+	public void disablePost(){
+		postDraw();
+		this.enablePost=false;
+	}
+	
+	
 	public void postDraw(){
-		if(!enablePost)return;
+		if(!isEnablePost())return;
 		/*
 		 GLPaint paint=new GLPaint();
 		 drawColorBatch(paint,tmpColorBatch);
 		 tmpColorBatch.clear();
 		 */
-		if(preTexture==null)return;
+		if(preTexture==null&&preBlend==null)return;
 		drawTexture3DBatch(tmpBatch,preTexture,1,Color4.ONE);
 		tmpBatch.clear();
 		preTexture=null;
 		preBlend=null;
 	}
 
-	public void checkPost(AbstractTexture texture){
-		if(texture.getTexture()!=preTexture||getBlendSetting().getBlendType()!=preBlend){
+	protected void checkPost(AbstractTexture texture){
+		if(texture.getTexture()!=preTexture||getBlendSetting().getBlendType()!=preBlend
+		   ||(tmpBatch!=null&&tmpBatch.getVertexCount()>maxBatchSize)){
 			if(preTexture!=null&&preBlend!=null){
 				BlendType nowBlend=getBlendSetting().getBlendType();
 				getBlendSetting().setBlendType(preBlend);
@@ -226,24 +234,22 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 			}
 			preTexture=texture.getTexture();
 			preBlend=getBlendSetting().getBlendType();
-		}else if(tmpBatch!=null&&tmpBatch.getVertexCount()>maxBatchSize){
-			postDraw();
 		}
 	}
 
 	public void drawTexture(AbstractTexture texture,IQuad res,IQuad dst,Color4 mixColor,Color4 varyColor,float z,float alpha){
 		checkCanDraw();
 		drawCalls++;
-		if(enablePost){
+		if(isEnablePost()){
 			checkPost(texture);
 			varyColor=varyColor.copyNew().multiple(mixColor).multiple(alpha);
 			RectVertex[] v=createRectVertexs(texture,res,dst,varyColor,z);
 			tmpBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
 		}else{
-			tmpBatch.clear();
 			RectVertex[] v=createRectVertexs(texture,res,dst,varyColor,z);
 			tmpBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
 			drawTexture3DBatch(tmpBatch,texture,alpha,mixColor);
+			tmpBatch.clear();
 		}
 	}
 
@@ -251,14 +257,14 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 	public void drawTexture(AbstractTexture texture,Vec2[] resV,Vec2[] dstV,Color4 varyColor,float finalAlpha,Color4 mixColor){
 		checkCanDraw();
 		drawCalls++;
-		if(enablePost){
+		if(isEnablePost()){
 			checkPost(texture);
 			varyColor=varyColor.copyNew().multiple(mixColor).multiple(finalAlpha);
 			tmpBatch.add(makeupVertex(texture,resV,dstV,varyColor));
 		}else{
-			tmpBatch.clear();
 			tmpBatch.add(makeupVertex(texture,resV,dstV,varyColor));
 			drawTexture3DBatch(tmpBatch,texture,finalAlpha,mixColor);
+			tmpBatch.clear();
 		}
 	}
 

@@ -78,7 +78,7 @@ public abstract class EdAbstractViewGroup extends EdView
 				public void run() {
 					// TODO: Implement this method
 					for(EdView v:views){
-						addUnsyn(v);
+						removeUnsyn(v);
 					}
 				}
 			});

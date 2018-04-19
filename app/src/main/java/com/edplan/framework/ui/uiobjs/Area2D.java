@@ -6,7 +6,8 @@ public interface Area2D
 {
 	public boolean inArea(Vec2 v);
 	
-	public void fixRect(float l,float t,float r,float b);
-	
-	public RectF boundRect();
+	public float maxX();
+	public float maxY();
+	public float minX();
+	public float minY();
 }

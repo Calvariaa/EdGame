@@ -124,12 +124,11 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 		newApply=0;
 		refreshObjects();
 		int c=GLWrapped.blend.save();
-		canvas.setEnablePost(true);
+		canvas.enablePost();
 		for(ElementNode ele:spriteInField){
 			ele.element.draw(canvas);
 		}
-		canvas.postDraw();
-		canvas.setEnablePost(false);
+		canvas.disablePost();
 		GLWrapped.blend.restoreToCount(c);
 	}
 

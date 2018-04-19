@@ -1,19 +1,23 @@
 package com.edplan.framework.ui;
 import com.edplan.framework.MContext;
 import com.edplan.framework.graphics.opengl.GLCanvas2D;
-import com.edplan.framework.input.MotionEvent;
+import com.edplan.framework.input.EdMotionEvent;
 import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.ui.drawable.EdDrawable;
 import com.edplan.framework.ui.uiobjs.DrawRequestParam;
 import com.edplan.framework.ui.uiobjs.Visibility;
 import com.edplan.superutils.classes.advance.IRunnableHandler;
+import com.edplan.framework.ui.layout.MeasureCore;
+import com.edplan.framework.ui.layout.LayoutParam;
 
 public class EdView implements IRunnableHandler
 {
 	protected static int CUSTOM_INDEX=0;
 	
 	private EdAbstractViewGroup parent;
+	
+	private LayoutParam layoutParam;
 
 	private String name;
 
@@ -35,6 +39,14 @@ public class EdView implements IRunnableHandler
 			throw new RuntimeException("you can only create a view in main thread!");
 		}
 		initialName();
+	}
+
+	public void setLayoutParam(LayoutParam layoutParam) {
+		this.layoutParam=layoutParam;
+	}
+
+	public LayoutParam getLayoutParam() {
+		return layoutParam;
 	}
 	
 	public boolean checkCurrentThread(){
@@ -98,16 +110,6 @@ public class EdView implements IRunnableHandler
 		return drawRequestParam;
 	}
 
-	/*
-	public void setTouchArea(Area2D touchArea) {
-		this.touchArea=touchArea;
-	}
-
-	public Area2D getTouchArea() {
-		return touchArea;
-	}
-	*/
-
 	public void setVisiblility(Visibility visiblility) {
 		this.visiblility=visiblility;
 	}
@@ -142,24 +144,12 @@ public class EdView implements IRunnableHandler
 			canvas.restoreToCount(s);
 		}
 	}
-	
-	
-	/**
-	 *在measure子view前被调用，此时parent的大小应该已被确定
-	 */
-	protected void onMeasure(){
 
-	}
-
-	/**
-	 *onMeasure后调用，实际测量所有子view位置,
-	 *测量后应保证本View的大小位置已被确定
-	 */
-	protected void measure(){
+	public void measure(long width,long height){
 
 	}
 	
-	public boolean onMotionEvent(MotionEvent e){
+	public boolean onMotionEvent(EdMotionEvent e){
 		return false;
 	}
 	
@@ -172,4 +162,8 @@ public class EdView implements IRunnableHandler
 		// TODO: Implement this method
 		return area.inArea(v);
 	}
+	
+	
+	
+	
 }

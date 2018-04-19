@@ -3,7 +3,7 @@ package com.edplan.framework.fallback;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import com.edplan.framework.graphics.opengl.MainRenderer;
-import com.edplan.framework.input.MotionEvent;
+import com.edplan.framework.input.EdMotionEvent;
 import com.edplan.framework.test.TestStaticData;
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;

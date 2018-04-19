@@ -3,9 +3,11 @@ import com.edplan.framework.ui.uiobjs.Area2D;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.FMath;
+import com.edplan.framework.ui.Anchor;
 
 public class Circle2D implements Area2D,IHasAreaSize
 {
+
 	private Vec2 origin;
 	
 	private float radius;
@@ -64,14 +66,29 @@ public class Circle2D implements Area2D,IHasAreaSize
 		return v.copy().minus(origin).lengthSquared()<=radiusSquared;
 	}
 
+
 	@Override
-	public void fixRect(float l,float t,float r,float b) {
+	public float maxX() {
 		// TODO: Implement this method
+		return origin.x+radius;
 	}
 
 	@Override
-	public RectF boundRect() {
+	public float maxY() {
 		// TODO: Implement this method
-		return null;
+		return origin.y+radius;
 	}
+
+	@Override
+	public float minX() {
+		// TODO: Implement this method
+		return origin.x-radius;
+	}
+
+	@Override
+	public float minY() {
+		// TODO: Implement this method
+		return origin.y-radius;
+	}
+	
 }

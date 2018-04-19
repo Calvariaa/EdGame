@@ -12,7 +12,7 @@ import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.graphics.opengl.GLWrapped;
 import com.edplan.framework.graphics.opengl.bufferObjects.FrameBufferObject;
 import com.edplan.framework.graphics.opengl.objs.Color4;
-import com.edplan.framework.input.MotionEvent;
+import com.edplan.framework.input.EdMotionEvent;
 import com.edplan.framework.test.TestStaticData;
 import com.edplan.framework.test.TestView;
 import com.edplan.framework.ui.looper.UILooper;
@@ -88,10 +88,10 @@ public class GLES10MainRenderer implements GLSurfaceView.Renderer
 		canvas.getMProjMatrix().setOrtho(0,canvas.getWidth(),canvas.getHeight(),0,-100,100);
 		if(debugUi){
 			if(context.getContent()!=null){
-				canvas.setEnablePost(true);
+				canvas.enablePost();
 				canvas.drawColor(Color4.gray(0.3f));
 				((GLES10Drawable)context.getContent()).drawGL10(canvas);
-				canvas.postDraw();
+				canvas.disablePost();
 			}
 		}
 	}

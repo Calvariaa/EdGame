@@ -396,6 +396,7 @@ public class TestView extends EdView
 		newCanvas.setCanvasAlpha(1f);
 		if(test.enableStoryboard&&!test.watchPool)playingStoryboard.draw(newCanvas);
 		newCanvas.setCanvasAlpha(1);
+		//newCanvas.drawTexture(GLTexture.ErrorTexture,RectF.xywh(200,200,100,100),Color4.ONE,1);
 		newCanvas.restore();
 		
 		int drawCalls=GLWrapped.frameDrawCalls();
@@ -403,6 +404,8 @@ public class TestView extends EdView
 		
 		if(test.enablePlayField&&!test.watchPool)playField.draw(newCanvas);
 		//firstObj.draw(newCanvas);
+		//newCanvas.drawTexture(GLTexture.ErrorTexture,RectF.xywh(100,100,100,100),Color4.ONE,1);
+		//newCanvas.drawTexture(GLTexture.ErrorTexture,RectF.xywh(200,200,100,100),Color4.ONE,0.5f);
 		newCanvas.unprepare();
 		newCanvas.restoreToCount(state);
 		//paint.setColorMixRate(0);
@@ -413,6 +416,9 @@ public class TestView extends EdView
 		AbstractTexture texture=newLayer.getTexture();
 		//canvas.drawTexture(texture,new RectF(0,0,texture.getWidth(),texture.getHeight()),new RectF(0,0,canvas.getWidth(),canvas.getHeight()),newPaint);
 		//canvas.drawTextureAnchorCenter(testPng,new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),newPaint);
+		
+		
+		//canvas.drawTexture(GLTexture.ErrorTexture,RectF.xywh(200,200,100,100),Color4.ONE,1);
 		canvas.drawTextureAnchorCenter(texture,new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),newPaint);
 		//canvas.drawTexture(GLTexture.Black,RectF.xywh(0,0,canvas.getWidth(),canvas.getHeight()),newPaint);
 		//newLayer.recycle();

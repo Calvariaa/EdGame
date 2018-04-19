@@ -5,6 +5,7 @@ import com.edplan.framework.ui.Anchor;
 
 public class RectF implements Copyable,Area2D,IQuad
 {
+
 	private Vec2 basePoint=new Vec2();
 	
 	private float width;
@@ -173,17 +174,29 @@ public class RectF implements Copyable,Area2D,IQuad
 		Vec2 tmp=v.copy().minus(basePoint);
 		return tmp.x>=0&&tmp.x<=width&&tmp.y>=0&&tmp.y<=height;
 	}
-
+	
 	@Override
-	public void fixRect(float l,float t,float r,float b) {
+	public float maxX() {
 		// TODO: Implement this method
-		this.setLTRB(l,t,r,b);
+		return getRight();
 	}
 
 	@Override
-	public RectF boundRect() {
+	public float maxY() {
 		// TODO: Implement this method
-		return this.copy();
+		return getBottom();
+	}
+
+	@Override
+	public float minX() {
+		// TODO: Implement this method
+		return getLeft();
+	}
+
+	@Override
+	public float minY() {
+		// TODO: Implement this method
+		return getTop();
 	}
 
 	@Override
