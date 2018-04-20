@@ -23,7 +23,8 @@ android {
 }
 
 dependencies {
-	compile project(':EdGameFramework:app')
+	compile project(':EdNsoCore')
+	compile project(':EdGameFramework')
     compile fileTree(dir: 'libs', include: ['*.jar'])
 	
 	//compile 'cn.bmob.android:bmob-sdk:3.5.5'
