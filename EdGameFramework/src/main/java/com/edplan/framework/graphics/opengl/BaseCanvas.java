@@ -40,7 +40,7 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 	 */
 	private boolean enablePost=false;
 	
-	private int maxBatchSize=1000;
+	private int maxBatchSize=10000000;
 	
 	private int drawCalls=0;
 	

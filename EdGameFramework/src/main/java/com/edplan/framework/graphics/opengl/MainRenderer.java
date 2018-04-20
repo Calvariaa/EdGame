@@ -28,9 +28,16 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 	
 	private int glVersion;
 	
-	public MainRenderer(Context con,int glVersion){
+	public MainRenderer(Context con){
 		context=new MContext(con);
+	}
+
+	public void setGlVersion(int glVersion) {
 		this.glVersion=glVersion;
+	}
+
+	public int getGlVersion() {
+		return glVersion;
 	}
 	
 	public abstract EdView createContentView(MContext c);

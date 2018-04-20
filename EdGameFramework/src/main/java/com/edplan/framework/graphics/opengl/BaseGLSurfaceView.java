@@ -11,7 +11,7 @@ import android.view.View;
 
 public class BaseGLSurfaceView extends GLSurfaceView
 {
-	Renderer mRenderer;
+	MainRenderer mRenderer;
 	
 	
 	/*
@@ -31,6 +31,7 @@ public class BaseGLSurfaceView extends GLSurfaceView
 		this.setEGLContextClientVersion(2);
 		this.setEGLConfigChooser(new MSAAConfig());
 		mRenderer=r;
+		mRenderer.setGlVersion(2);
 		this.setRenderer(mRenderer);
 		if(mRenderer instanceof OnTouchListener)this.setOnTouchListener((OnTouchListener)mRenderer);
 		this.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
