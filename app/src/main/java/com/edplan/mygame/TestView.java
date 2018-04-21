@@ -36,6 +36,8 @@ import java.io.File;
 import java.io.IOException;
 import org.json.JSONObject;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
+import com.edplan.framework.test.Test;
+import com.edplan.framework.graphics.opengl.CanvasUtil;
 
 public class TestView extends EdView
 {
@@ -50,6 +52,10 @@ public class TestView extends EdView
 	private PlayingStoryboard playingStoryboard;
 
 	private PreciseTimeline timeline;
+	
+	private PreciseTimeline renderLine;
+	
+	private OutputStoryboard outputSb;
 
 	private BassChannel audio;
 
@@ -88,6 +94,7 @@ public class TestView extends EdView
 
 	@Override
 	public void onCreate(){
+		Test.get().setBoolean(Test.IS_RELEASE,false);
 		test=new TestData();
 		try {
 			AResource res=getContext().getAssetResource().subResource("font");
@@ -204,9 +211,17 @@ public class TestView extends EdView
 							storyboard.applyBeatmap(beatmap);
 						}
 						System.out.println("end edcode osb: "+storyboard.getObjectCount());
-						playingStoryboard=new PlayingStoryboard(getContext(),timeline,storyboard,
-																//new DirResource(osb.getParentFile()));
-																test.testFloder().subResource(test.testBeatmapFloder+""));
+						if(test.outputTBV){
+							renderLine=new PreciseTimeline();
+							playingStoryboard=new PlayingStoryboard(getContext(),renderLine,storyboard,
+																	//new DirResource(osb.getParentFile()));
+																	test.testFloder().subResource(test.testBeatmapFloder+""));
+							outputSb=new OutputStoryboard(playingStoryboard);
+						}else{
+							playingStoryboard=new PlayingStoryboard(getContext(),timeline,storyboard,
+																	//new DirResource(osb.getParentFile()));
+																	test.testFloder().subResource(test.testBeatmapFloder+""));
+						}
 						//new DirResource(osb.getParentFile()));
 						System.out.println("end transform to playing state");
 						System.out.println("storyboard parse done in: "+(System.currentTimeMillis()-s)+"ms");
@@ -313,176 +328,35 @@ public class TestView extends EdView
 
 
 		//转换到osu field
-
-		canvas.save();
-
-
-		if(newLayer==null){
-			newLayer=new BufferedLayer(getContext(),canvas.getDefWidth(),canvas.getDefHeight(),true);
-			newCanvas=new GLCanvas2D(newLayer);
+		if(test.outputTBV){
+			float startX=700;
+			float startY=500;
+			float width=500;
+			float str=25;
+			float padding=5;
+			GLPaint tp=new GLPaint();
+			tp.setVaryingColor(Color4.Red);
+			TextPrinter tpt=new TextPrinter(font,startX,startY+str+padding+5,tp);
+			tpt.setTextSize(70);
+			tpt.printString((int)(outputSb.progress()*100)+"% "+outputSb.finished());
+			GLPaint pbp=new GLPaint();
+			pbp.setStrokeWidth(str+padding);
+			pbp.setVaryingColor(Color4.White);
+			canvas.drawLine(startX-padding,startY,startX+padding+width,startY,pbp);
+			pbp.setStrokeWidth(str);
+			pbp.setVaryingColor(Color4.rgba(0,1,1,1));
+			canvas.drawLine(startX,startY,startX+width*(float)outputSb.progress(),startY,pbp);
+			tpt.draw(canvas);
+		}else{
+			drawOsu(canvas);
 		}
-		newCanvas.prepare();
-		int state=newCanvas.save();
-		newCanvas.drawColor(Color4.gray(0f));
-		newCanvas.clearDepthBuffer();
 
-		/*
-		 if(test.watchPool){
-		 GLPaint rp=new GLPaint();
-		 GLPaint linePaint=new GLPaint();
-		 linePaint.setStrokeWidth(2);
-		 linePaint.setVaryingColor(Color4.Red);
-		 int idx=(int)((Math.max(renderTime-10000,0)/500));
-		 if(idx>=playingStoryboard.pool.packedCount()){
-		 idx=playingStoryboard.pool.packedCount()-1;
-		 }
-		 AutoPackTexturePool.PackNode n=playingStoryboard.pool.getPackByIndex(idx);
-		 AbstractTexture part=playingStoryboard.pool.getPackedTextures().get(idx);
-		 AbstractTexture pack=n.layer.getTexture();
-		 IQuad area=playingStoryboard.pool.packedPosition.get(idx);
-		 float zipRate=1000/playingStoryboard.pool.getPackWidth();
-		 newCanvas.drawTexture(pack,new RectF(0,0,1000,1000),rp);
-		 newCanvas.drawLines(new Vec2[]{
-		 area.getTopLeft().copy().zoom(zipRate),
-		 area.getTopRight().copy().zoom(zipRate),
-		 area.getTopRight().copy().zoom(zipRate),
-		 area.getBottomRight().copy().zoom(zipRate),
-		 area.getBottomRight().copy().zoom(zipRate),
-		 area.getBottomLeft().copy().zoom(zipRate),
-		 area.getBottomLeft().copy().zoom(zipRate),
-		 area.getTopLeft().copy().zoom(zipRate),
-		 },linePaint);
-		 area=new RectF(1100,100,part.getWidth()*1.5f,part.getHeight()*1.5f);
-		 newCanvas.drawLines(new Vec2[]{
-		 area.getTopLeft().copy(),
-		 area.getTopRight().copy(),
-		 area.getTopRight().copy(),
-		 area.getBottomRight().copy(),
-		 area.getBottomRight().copy(),
-		 area.getBottomLeft().copy(),
-		 area.getBottomLeft().copy(),
-		 area.getTopLeft().copy(),
-		 },linePaint);
-		 newCanvas.drawTexture(part,area,rp);
-		 }
-		 */
-
-
-		float osuScale=PlayField.BASE_Y/canvas.getHeight();
-		newCanvas.translate(newCanvas.getWidth()/2-PlayField.BASE_X/2/osuScale,0);
-		newCanvas.scaleContent(osuScale);
-		newCanvas.translate(PlayField.PADDING_X,PlayField.PADDING_Y);
-		newCanvas.clip(new Vec2(PlayField.CANVAS_SIZE_X,PlayField.CANVAS_SIZE_Y));
-		/*
-		 GLPaint testLine=new GLPaint();
-		 testLine.setVaryingColor(Color4.rgba(0,0,1,0.5f));
-		 testLine.setStrokeWidth(2);
-		 newCanvas.drawLine(0,0,newCanvas.getWidth(),newCanvas.getHeight(),testLine);
-		 newCanvas.drawLine(newCanvas.getWidth(),0,0,newCanvas.getHeight(),testLine);
-		 newCanvas.drawLine(0,0,newCanvas.getWidth(),0,testLine);
-		 newCanvas.drawLine(newCanvas.getWidth(),0,newCanvas.getWidth(),newCanvas.getHeight(),testLine);
-		 newCanvas.drawLine(0,0,0,newCanvas.getHeight(),testLine);
-		 newCanvas.drawLine(0,newCanvas.getHeight(),newCanvas.getWidth(),newCanvas.getHeight(),testLine);
-		 */
-
-		GLPaint tp=new GLPaint();
-		tp.setVaryingColor(Color4.rgb(1,1,1));
-		//tp.setColorMixRate(1);
-		tp.setStrokeWidth(5);
-		tp.setFinalAlpha(1);
-		//newCanvas.drawLines(new float[]{0,0,PlayField.CANVAS_SIZE_X,PlayField.CANVAS_SIZE_Y},tp);
-
-
-		newCanvas.save();
-		newCanvas.translate(-PlayField.PADDING_X,-PlayField.PADDING_Y);
-		//newCanvas.translate(-(PlayField.BASE_Y*16/9f-PlayField.BASE_X)/2,0);
-		newCanvas.setCanvasAlpha(1f);
-		if(test.enableStoryboard&&!test.watchPool)playingStoryboard.draw(newCanvas);
-		newCanvas.setCanvasAlpha(1);
-		//newCanvas.drawTexture(GLTexture.ErrorTexture,RectF.xywh(200,200,100,100),Color4.ONE,1);
-		newCanvas.restore();
-
-		int drawCalls=GLWrapped.frameDrawCalls();
-		int drawCalls2=newCanvas.getDrawCalls();
-
-		if(test.enablePlayField&&!test.watchPool)playField.draw(newCanvas);
-		//firstObj.draw(newCanvas);
-		//newCanvas.drawTexture(GLTexture.ErrorTexture,RectF.xywh(100,100,100,100),Color4.ONE,1);
-		//newCanvas.drawTexture(GLTexture.ErrorTexture,RectF.xywh(200,200,100,100),Color4.ONE,0.5f);
-		newCanvas.unprepare();
-		newCanvas.restoreToCount(state);
-		//paint.setColorMixRate(0);
-
-		GLPaint newPaint=new GLPaint();
-		//newPaint.setFinalAlpha(postAlpha);
-		//newPaint.setMixColor(new Color4(1,0.5f,0.5f,1));
-		AbstractTexture texture=newLayer.getTexture();
-		//canvas.drawTexture(texture,new RectF(0,0,texture.getWidth(),texture.getHeight()),new RectF(0,0,canvas.getWidth(),canvas.getHeight()),newPaint);
-		//canvas.drawTextureAnchorCenter(testPng,new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),newPaint);
-
-
-		//canvas.drawTexture(GLTexture.ErrorTexture,RectF.xywh(200,200,100,100),Color4.ONE,1);
-		canvas.drawTextureAnchorCenter(texture,new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),newPaint);
-		//canvas.drawTexture(GLTexture.Black,RectF.xywh(0,0,canvas.getWidth(),canvas.getHeight()),newPaint);
-		//newLayer.recycle();
-
-		canvas.restore();
-
-		paint.setFinalAlpha(0.5f);
-		canvas.drawRoundedRectTexture(
-			cardPng,
-			new RectF(0,0,80,80),
-			new RectF(point.x-40,point.y-40,80,80),
-			paint);
-		canvas.save();
-		canvas.translate(500+testPng.getWidth()/2,500+testPng.getHeight()/2);
-		//.post((new Mat4()).translate(10,10,0));
-
-		//canvas.drawColor(Color4.gray(0.5f));
-		/*
-		 canvas.drawTexture(
-		 testPng,
-		 new RectF(0,0,testPng.getWidth(),testPng.getHeight()),
-		 new RectF(-testPng.getWidth()/2,-testPng.getHeight()/2,testPng.getWidth(),testPng.getHeight()),
-		 new Color4(1,1,1,1),
-		 new Color4(1,1,1,1),
-		 0f,
-		 1,
-		 1f);*/
-
-		canvas.restore();
-
-		/*
-		 GLPaint fp=new GLPaint();
-		 fp.setMixColor(Color4.gray(1));
-		 fp.setStrokeWidth(50);
-		 canvas.drawLines(new float[]{0,0,500,500},fp);*/
-
-		/*
-		 GLPaint fp=new GLPaint();
-		 fp.setColorMixRate(1);
-		 fp.setMixColor(Color4.gray(1));
-		 fp.setStrokeWidth(50);
-		 canvas.drawLines(new float[]{0,0,500,500},fp);*/
-		/*
-		 long ct=System.currentTimeMillis();
-		 for(BitmapDrawable bmd:bmds){
-		 //bmd.text="fps: "+1000f/getContext().getFrameDeltaTime();
-		 bmd.deltaTime=delt;
-		 bmd.draw(canvas);
-		 //break;
-		 }
-		 delt=(int)(System.currentTimeMillis()-ct);*/
 		float deltaTime=(float)getContext().getFrameDeltaTime();
 		GLPaint ntp=new GLPaint();
 		ntp.setStrokeWidth(1.2f);
 		//ntp.setColorMixRate(1);
 		ntp.setMixColor(Color4.White);
 		canvas.save();
-		//canvas.clipRect(c.getWidth()-200,c.getHeight()-600,c.getWidth(),c.getHeight());
-		//canvas.translate();
-		//canvas.getWidth()-200,canvas.getHeight()-600);
-		//c.drawText("DeltaTime: "+deltaTime,10,30,tp);
 		float lengthScale=5;
 		ntp.setMixColor(Color4.rgba(0,1,0,1));
 		canvas.drawLine(10,50,10+18*6,50,ntp);
@@ -499,6 +373,8 @@ public class TestView extends EdView
 		float avg=0;
 		float max=0;
 		float min=99999;
+		float avg_nogc=0;
+		int count_nogc=0;
 		for(float t:timelist){
 			avg+=t;
 			if(t<min){
@@ -507,7 +383,12 @@ public class TestView extends EdView
 			if(t>max){
 				max=t;
 			}
+			if(t<400){
+				avg_nogc+=t;
+				count_nogc++;
+			}
 		}
+		avg_nogc/=count_nogc;
 		avg/=timelist.length;
 		ntp.setStrokeWidth(3);
 		ntp.setMixColor(Color4.rgba(1,0,0,1));
@@ -518,6 +399,9 @@ public class TestView extends EdView
 		ntp.setStrokeWidth(2);
 		ntp.setMixColor(Color4.rgba(0,0,1,1));
 		canvas.drawLine(10+min*lengthScale,40,10+min*lengthScale,60+6*timelist.length,ntp);
+		ntp.setStrokeWidth(3);
+		ntp.setMixColor(Color4.rgba(0.5f,0.5f,1,1));
+		canvas.drawLine(10+avg_nogc*lengthScale,40,10+avg_nogc*lengthScale,60+6*timelist.length,ntp);
 		canvas.restore();
 
 		//canvas.drawTexture(cardPng,RectF.xywh(0,0,canvas.getWidth(),canvas.getHeight()),newPaint);
@@ -531,7 +415,7 @@ public class TestView extends EdView
 		printer.setTextSize(60);
 		printer.printString("DEVELOPMENT BUILD\nosu!lab 2018.4.9");
 		printer.toNextLine();
-		printer.printString("fps: "+(int)(1000/avg));
+		printer.printString("fps: "+(int)(1000/avg)+"/"+(int)(1000/avg_nogc));
 		printer.toNextLine();
 		printer.printString(timeline.frameTime()+"");
 		printer.toNextLine();
@@ -560,36 +444,82 @@ public class TestView extends EdView
 		canvas.drawLine(0,baseLine+font.getCommon().base*printer.getScale(),1000,baseLine+font.getCommon().base*printer.getScale(),baseLinePaint);
 
 		/*
-		 if(renderTime>15000){
-		 final BufferedLayer layer=canvas.getLayer();
-		 MLog.test.runOnce("compress", new Runnable(){
-		 @Override
-		 public void run() {
-		 // TODO: Implement this method
-		 int[] b=new int[layer.getWidth()*layer.getHeight()];
-		 IntBuffer buffer=IntBuffer.wrap(b);
-		 buffer.position(0);
-		 GLES20.glReadPixels(0,0,layer.getWidth(),layer.getHeight(),GLES20.GL_RGBA,GLES20.GL_UNSIGNED_BYTE,buffer);
-		 Bitmap bmp=Bitmap.createBitmap(layer.getWidth(),layer.getHeight(),Bitmap.Config.ARGB_8888);
-		 bmp.copyPixelsFromBuffer(buffer);
-		 buffer.clear();
-		 try {
-		 bmp.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream("/storage/emulated/0/MyDisk/bin/pool/1/cut.png"));
-		 } catch (FileNotFoundException e) {
-		 e.printStackTrace();
-		 }
-		 }
-		 });
-		 }
-		 */
-		/*
 		Vec2 v=TestStaticData.touchPosition.copy();
 		v.zoom(canvas.getWidth(),canvas.getHeight(),2,2);
 		canvas.drawTexture(cursor,RectF.anchorOWH(Anchor.Center,v.x,v.y,100,100),new GLPaint());
 		*/
 
 	}
+	
+	public void drawOsu(BaseCanvas canvas){
+		canvas.save();
+		
+		if(newLayer==null){
+			newLayer=new BufferedLayer(getContext(),canvas.getDefWidth(),canvas.getDefHeight(),true);
+			newCanvas=new GLCanvas2D(newLayer);
+		}
+		newCanvas.prepare();
+		int state=newCanvas.save();
+		newCanvas.drawColor(Color4.gray(0f));
+		newCanvas.clearDepthBuffer();
 
+
+		float osuScale=PlayField.BASE_Y/canvas.getHeight();
+		newCanvas.translate(newCanvas.getWidth()/2-PlayField.BASE_X/2/osuScale,0);
+		newCanvas.scaleContent(osuScale);
+		newCanvas.translate(PlayField.PADDING_X,PlayField.PADDING_Y);
+		newCanvas.clip(new Vec2(PlayField.CANVAS_SIZE_X,PlayField.CANVAS_SIZE_Y));
+
+		GLPaint tp=new GLPaint();
+		tp.setVaryingColor(Color4.rgb(1,1,1));
+		//tp.setColorMixRate(1);
+		tp.setStrokeWidth(5);
+		tp.setFinalAlpha(1);
+		//newCanvas.drawLines(new float[]{0,0,PlayField.CANVAS_SIZE_X,PlayField.CANVAS_SIZE_Y},tp);
+
+
+		newCanvas.save();
+		String toStoryboardLayer=
+			CanvasUtil.buildOperation()
+			.translate(-PlayField.PADDING_X,-PlayField.PADDING_Y).toString();
+		CanvasUtil.operateCanvas(newCanvas,toStoryboardLayer);
+		//newCanvas.translate(-PlayField.PADDING_X,-PlayField.PADDING_Y);
+		//newCanvas.translate(-(PlayField.BASE_Y*16/9f-PlayField.BASE_X)/2,0);
+		newCanvas.setCanvasAlpha(1f);
+		if(test.enableStoryboard&&!test.watchPool)playingStoryboard.draw(newCanvas);
+		newCanvas.setCanvasAlpha(1);
+		//newCanvas.drawTexture(GLTexture.ErrorTexture,RectF.xywh(200,200,100,100),Color4.ONE,1);
+		newCanvas.restore();
+
+		drawCalls=GLWrapped.frameDrawCalls();
+		drawCalls2=newCanvas.getDrawCalls();
+
+		if(test.enablePlayField&&!test.watchPool)playField.draw(newCanvas);
+		//firstObj.draw(newCanvas);
+		//newCanvas.drawTexture(GLTexture.ErrorTexture,RectF.xywh(100,100,100,100),Color4.ONE,1);
+		//newCanvas.drawTexture(GLTexture.ErrorTexture,RectF.xywh(200,200,100,100),Color4.ONE,0.5f);
+		newCanvas.unprepare();
+		newCanvas.restoreToCount(state);
+		//paint.setColorMixRate(0);
+
+		GLPaint newPaint=new GLPaint();
+		//newPaint.setFinalAlpha(postAlpha);
+		//newPaint.setMixColor(new Color4(1,0.5f,0.5f,1));
+		AbstractTexture texture=newLayer.getTexture();
+		//canvas.drawTexture(texture,new RectF(0,0,texture.getWidth(),texture.getHeight()),new RectF(0,0,canvas.getWidth(),canvas.getHeight()),newPaint);
+		//canvas.drawTextureAnchorCenter(testPng,new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),newPaint);
+
+
+		//canvas.drawTexture(GLTexture.ErrorTexture,RectF.xywh(200,200,100,100),Color4.ONE,1);
+		canvas.drawTextureAnchorCenter(texture,new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),new Vec2(canvas.getWidth()/2,canvas.getHeight()/2),newPaint);
+		//canvas.drawTexture(GLTexture.Black,RectF.xywh(0,0,canvas.getWidth(),canvas.getHeight()),newPaint);
+		//newLayer.recycle();
+
+		canvas.restore();
+		
+	}
+
+	int drawCalls,drawCalls2;
 	public float[] timelist=new float[40];
 
 
@@ -598,11 +528,13 @@ public class TestView extends EdView
 
 		public String dir="/storage/emulated/0/MyDisk/WorkBench/bin/testdata";
 
-		public int testBeatmapFloder=21;
+		public int testBeatmapFloder=11;
 
 		public boolean enableStoryboard=true;
 
 		public boolean enablePlayField=true;
+		
+		public boolean outputTBV=true;
 
 		public boolean watchPool=false;
 

@@ -21,6 +21,7 @@ import com.edplan.framework.fallback.GLES10Drawable;
 import com.edplan.framework.graphics.opengl.GL10Canvas2D;
 import com.edplan.framework.graphics.opengl.GLWrapped;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
+import com.edplan.framework.test.Test;
 
 public class PlayingStoryboard extends EdDrawable implements GLES10Drawable
 {
@@ -86,7 +87,7 @@ public class PlayingStoryboard extends EdDrawable implements GLES10Drawable
 					}
 				},getContext());
 			pool.addAll(rawPool.getAll());
-			((AutoPackTexturePool)pool).writeToDir(new File("/storage/emulated/0/MyDisk/bin/pool/1"),"pool");
+			if(!Test.get().getBoolean(Test.IS_RELEASE,true))((AutoPackTexturePool)pool).writeToDir(new File("/storage/emulated/0/MyDisk/bin/pool/1"),"pool",null);
 		}else{
 			pool=rawPool;
 		}

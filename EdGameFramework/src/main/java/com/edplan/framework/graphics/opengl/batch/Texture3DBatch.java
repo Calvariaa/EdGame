@@ -11,7 +11,7 @@ import com.edplan.framework.graphics.opengl.shader.advance.Texture3DShader;
 import com.edplan.framework.graphics.opengl.batch.base.IHasTexturePosition;
 import com.edplan.framework.graphics.opengl.batch.interfaces.ITexture3DBatch;
 
-public class Texture3DBatch<T extends TextureVertex3D> extends BaseColorBatch<T> implements ITexture3DBatch
+public class Texture3DBatch<T extends TextureVertex3D> extends BaseColorBatch<T> implements ITexture3DBatch<T>
 {
 	public Texture3DBatch(){
 		

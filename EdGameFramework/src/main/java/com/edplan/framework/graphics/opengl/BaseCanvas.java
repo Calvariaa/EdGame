@@ -1,11 +1,10 @@
 package com.edplan.framework.graphics.opengl;
 
-//import android.opengl.GLES20;
-import com.edplan.framework.MContext;
 import com.edplan.framework.graphics.opengl.batch.BaseBatch;
 import com.edplan.framework.graphics.opengl.batch.BaseColorBatch;
 import com.edplan.framework.graphics.opengl.batch.RectVertexBatch;
 import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
+import com.edplan.framework.graphics.opengl.batch.interfaces.ITexture3DBatch;
 import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
@@ -23,17 +22,17 @@ import com.edplan.framework.math.Vec2;
 import com.edplan.framework.math.Vec3;
 import com.edplan.framework.math.Vec4;
 import com.edplan.framework.utils.AbstractSRable;
-import com.edplan.framework.utils.MLog;
+import java.util.Arrays;
 
 public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 {
 	private float defZ=0;
 
-	private Texture3DBatch<TextureVertex3D> tmpBatch=new Texture3DBatch<TextureVertex3D>();
+	private ITexture3DBatch<TextureVertex3D> tmpBatch;
 
-	private RectVertexBatch<RectVertex> tmpRectBatch=new RectVertexBatch<RectVertex>();
+	private RectVertexBatch<RectVertex> tmpRectBatch;
 
-	private BaseColorBatch<Vertex3D> tmpColorBatch=new BaseColorBatch<Vertex3D>();
+	private BaseColorBatch<Vertex3D> tmpColorBatch;
 
 	/**
 	 *对于开启了post的应该手动post
@@ -43,6 +42,40 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 	private int maxBatchSize=10000000;
 	
 	private int drawCalls=0;
+	
+	public BaseCanvas(){
+		initialBatch();
+	}
+	
+	public BaseCanvas(boolean initial){
+		if(initial)initialBatch();
+	}
+	
+	protected void initialBatch(){
+		tmpBatch=createTexture3DBatch();
+		tmpRectBatch=createRectVertexBatch();
+		tmpColorBatch=createColorBatch();
+	}
+
+	public void setMaxBatchSize(int maxBatchSize) {
+		this.maxBatchSize=maxBatchSize;
+	}
+
+	public int getMaxBatchSize() {
+		return maxBatchSize;
+	}
+	
+	protected ITexture3DBatch<TextureVertex3D> createTexture3DBatch(){
+		return new Texture3DBatch<TextureVertex3D>();
+	}
+	
+	protected RectVertexBatch<RectVertex> createRectVertexBatch(){
+		return new RectVertexBatch<RectVertex>();
+	}
+	
+	protected BaseColorBatch<Vertex3D> createColorBatch(){
+		return new BaseColorBatch<Vertex3D>();
+	}
 	
 	public int getDrawCalls() {
 		return drawCalls;
@@ -172,19 +205,19 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 		//   ┌────┐
 		//   └────┘
 		//  0          1
-		RectVertex v0=RectVertex.atRect(dst,0,1);
+		final RectVertex v0=RectVertex.atRect(dst,0,1);
 		v0.setPosition(new Vec3(dst.getBottomLeft(),z));
 		v0.setColor(color);
 		v0.setTexturePoint(texture.toTexturePosition(res.getBottomLeft()));
-		RectVertex v1=RectVertex.atRect(dst,1,1);
+		final RectVertex v1=RectVertex.atRect(dst,1,1);
 		v1.setPosition(new Vec3(dst.getBottomRight(),z));
 		v1.setColor(color);
 		v1.setTexturePoint(texture.toTexturePosition(res.getBottomRight()));
-		RectVertex v2=RectVertex.atRect(dst,1,0);
+		final RectVertex v2=RectVertex.atRect(dst,1,0);
 		v2.setPosition(new Vec3(dst.getTopRight(),z));
 		v2.setColor(color);
 		v2.setTexturePoint(texture.toTexturePosition(res.getTopRight()));
-		RectVertex v3=RectVertex.atRect(dst,0,0);
+		final RectVertex v3=RectVertex.atRect(dst,0,0);
 		v3.setPosition(new Vec3(dst.getTopLeft(),z));
 		v3.setColor(color);
 		v3.setTexturePoint(texture.toTexturePosition(res.getTopLeft()));
@@ -230,6 +263,7 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 		 tmpColorBatch.clear();
 		 */
 		if(preTexture==null&&preBlend==null)return;
+		onPostTextureChange(preTexture);
 		drawTexture3DBatch(tmpBatch,preTexture,1,Color4.ONE);
 		tmpBatch.clear();
 		preTexture=null;
@@ -241,28 +275,40 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 		   ||(tmpBatch!=null&&tmpBatch.getVertexCount()>maxBatchSize)){
 			if(preTexture!=null&&preBlend!=null){
 				BlendType nowBlend=getBlendSetting().getBlendType();
-				getBlendSetting().setBlendType(preBlend);
+				boolean changeBlend=(preBlend!=nowBlend);
+				if(changeBlend)getBlendSetting().setBlendType(preBlend);
 				postDraw();
-				getBlendSetting().setBlendType(nowBlend);
+				if(changeBlend)getBlendSetting().setBlendType(nowBlend);
+				if(changeBlend)onPostBlendingChange(nowBlend);
 			}
 			preTexture=texture.getTexture();
 			preBlend=getBlendSetting().getBlendType();
 		}
 	}
+	
+	protected void onPostBlendingChange(BlendType type){
+		
+	}
 
+	protected void onPostTextureChange(GLTexture texture){
+		
+	}
+	
 	public void drawTexture(AbstractTexture texture,IQuad res,IQuad dst,Color4 mixColor,Color4 varyColor,float z,float alpha){
 		checkCanDraw();
 		drawCalls++;
 		if(isEnablePost()){
 			checkPost(texture);
 			varyColor=varyColor.copyNew().multiple(mixColor).multiple(alpha);
-			RectVertex[] v=createRectVertexs(texture,res,dst,varyColor,z);
+			final RectVertex[] v=createRectVertexs(texture,res,dst,varyColor,z);
 			tmpBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
+			Arrays.fill(v,null);
 		}else{
-			RectVertex[] v=createRectVertexs(texture,res,dst,varyColor,z);
+			final RectVertex[] v=createRectVertexs(texture,res,dst,varyColor,z);
 			tmpBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
 			drawTexture3DBatch(tmpBatch,texture,alpha,mixColor);
 			tmpBatch.clear();
+			Arrays.fill(v,null);
 		}
 	}
 

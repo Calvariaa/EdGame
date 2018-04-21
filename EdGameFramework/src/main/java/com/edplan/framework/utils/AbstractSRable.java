@@ -21,6 +21,7 @@ public abstract class AbstractSRable<T extends Copyable> implements Recycleable
 		saves=new Stack<T>();
 		currentData=getDefData();
 		currentDataIndex=0;
+		saves.push(currentData);
 		//onSave(currentData);
 	}
 	
@@ -50,7 +51,7 @@ public abstract class AbstractSRable<T extends Copyable> implements Recycleable
 	}
 	
 	public void restoreToCount(int idx){
-		while(idx>=0&&idx!=currentDataIndex){
+		while(currentDataIndex>0&&idx!=currentDataIndex){
 			restore();
 		}
 	}

@@ -164,7 +164,7 @@ public class BufferedLayer
 			return;
 		}else{
 			if(permissionToTexture){
-				if(joinPool)if(!bufferedPool.saveFBO(frameBuffer))frameBuffer.deleteWithAttachment();
+				if(joinPool)if(frameBuffer!=null&&!bufferedPool.saveFBO(frameBuffer))frameBuffer.deleteWithAttachment();
 			}else{
 				frameBuffer.deleteWithAttachment();
 			}

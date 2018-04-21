@@ -16,14 +16,14 @@ public class TestGLActivity extends GameActivity
 	@Override
 	public BaseGLSurfaceView createGameSurface() {
 		// TODO: Implement this method
-		BaseGLSurfaceView glSurface=new BaseGLSurfaceView(this,new TestRenderer(this,2));
+		BaseGLSurfaceView glSurface=new BaseGLSurfaceView(this,new TestRenderer(this));
 		return glSurface;
 	}
 
 	
 	public class TestRenderer extends MainRenderer{
-		public TestRenderer(Context con,int gl){
-			super(con,gl);
+		public TestRenderer(Context con){
+			super(con);
 		}
 
 		@Override

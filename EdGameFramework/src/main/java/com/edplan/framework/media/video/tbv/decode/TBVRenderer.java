@@ -19,6 +19,8 @@ import com.edplan.framework.graphics.opengl.CanvasUtil;
 import com.edplan.framework.resource.AResource;
 import com.edplan.framework.interfaces.Reflection;
 import com.edplan.framework.media.video.tbv.TextureNode;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
+import com.edplan.framework.graphics.opengl.objs.Color4;
 
 public class TBVRenderer
 {
@@ -38,15 +40,19 @@ public class TBVRenderer
 	
 	private BufferedLayer layer;
 	
-	private GLCanvas2D canvas;
+	private BaseCanvas canvas;
 	
-	private boolean frameIsRead=false;
+	private boolean frameIsRead=true;
 	
 	private MContext context;
 	
 	public TBVRenderer(InputStream in){
 		this.in=new TBVInputStream(new DataInputStream(in));
 		
+	}
+
+	public float getCurrentPlayTime() {
+		return currentPlayTime;
 	}
 	
 	public void initial(MContext context,final AResource res) throws JSONException, TBVException, IOException{
@@ -69,7 +75,9 @@ public class TBVRenderer
 		header=TBV.Header.read(in,header);
 		textures=new GLTexture[header.textures.length];
 		for(TextureNode msg:header.textures){
-			textures[msg.id]=loader.invoke(msg.texture);
+			GLTexture t=loader.invoke(msg.texture);
+			textures[msg.id]=t;
+			header.getTextureReflections().put(t.getTextureId(),msg.id);
 		}
 		layer=new BufferedLayer(context,header.width,header.height,true);
 		canvas=new GLCanvas2D(layer);
@@ -102,6 +110,7 @@ public class TBVRenderer
 	}
 	
 	protected void handlerNewFrame(boolean forceClear) throws IOException{
+		if(hasReacheEndFrame)return;
 		frameHeader=frameIsRead?TBV.FrameHeader.read(in, frameHeader):frameHeader;
 		frameIsRead=false;
 		switch(frameHeader.flag){
@@ -110,6 +119,7 @@ public class TBVRenderer
 				if(currentPlayTime>frameHeader.endTime){
 					skipCurrentFrame();
 					handlerNewFrame(forceClear||frameHeader.clearCanvas);
+					return;
 				}
 				renderNewFrame(forceClear);
 			}break;
@@ -130,28 +140,36 @@ public class TBVRenderer
 	
 	protected void renderNewFrame(boolean forceClear) throws IOException{
 		frameIsRead=true;
-		if(frameHeader.clearCanvas||forceClear){
+		if(!canvas.isPrepared())canvas.prepare();
+		if(frameHeader.clearCanvas||forceClear||true){
+			canvas.drawColor(Color4.Alpha);
 			canvas.clearBuffer();
 		}
 		if(frameHeader.blockSize==0)return;
+		//in.mark(frameHeader.blockSize);
 		
-		in.mark(frameHeader.blockSize);
-		
+		int canvasState=canvas.save();
+		int blendState=canvas.getBlendSetting().save();
 		try{
-			eventHeader=TBV.EventHeader.read(in,eventHeader);
-			switch(eventHeader.eventType){
-				case TBV.FrameEvent.CANVAS_OPERATION:{
-					operateCanvas();
-				}break;
-				case TBV.FrameEvent.CHANGE_SETTING:{
-					changeSetting();
-				}break;
-				case TBV.FrameEvent.DRAW_BASE_TEXTURE:{
-					drawBaseTexture();
-				}break;
-				case TBV.FrameEvent.DRAW_COLOR_VERTEX:{
-					drawColorVertex();
-				}break;
+			L:while(true){
+				eventHeader=TBV.EventHeader.read(in,eventHeader);
+				switch(eventHeader.eventType){
+					case TBV.FrameEvent.CANVAS_OPERATION:{
+							operateCanvas();
+						}break;
+					case TBV.FrameEvent.CHANGE_SETTING:{
+							changeSetting();
+						}break;
+					case TBV.FrameEvent.DRAW_BASE_TEXTURE:{
+							drawBaseTexture();
+						}break;
+					case TBV.FrameEvent.DRAW_COLOR_VERTEX:{
+							drawColorVertex();
+						}break;
+					case TBV.FrameEvent.FRAME_END:
+					default:
+						break L;
+				}
 			}
 		}catch(IOException ie){
 			ie.printStackTrace();
@@ -160,7 +178,11 @@ public class TBVRenderer
 			e.printStackTrace();
 			onErr(e);
 			frameIsRead=false;
-			in.reset();
+			//in.reset();
+		}finally{
+			canvas.restoreToCount(canvasState);
+			canvas.getBlendSetting().restoreToCount(blendState);
+			if(canvas.isPrepared())canvas.unprepare();
 		}
 	}
 	
@@ -176,6 +198,7 @@ public class TBVRenderer
 			case TBV.SettingEvent.CHANGE_BLEND_TYPE:{
 				changeBlend(settingEvent.data);
 			}break;
+			default:break;
 		}
 	}
 	
@@ -189,6 +212,7 @@ public class TBVRenderer
 	protected void drawBaseTexture() throws IOException{
 		dataDrawBaseTexture=DataDrawBaseTexture.read(in,dataDrawBaseTexture);
 		canvas.drawTexture3DBatch(dataDrawBaseTexture,textures[dataDrawBaseTexture.textureId]);
+		dataDrawBaseTexture.clear();
 	}
 	
 	protected void drawColorVertex(){

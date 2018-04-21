@@ -251,6 +251,18 @@ public class GLTexture extends AbstractTexture
 		int h=1;
 		while(w<bmp.getWidth())w*=2;
 		while(h<bmp.getHeight())h*=2;
+		
+		w=bmp.getWidth();
+		h=bmp.getHeight();
+		Bitmap nb=Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888);
+		Canvas c=new Canvas(nb);
+		c.drawColor(0x00000000);
+		Paint p=new Paint();
+		p.setAntiAlias(false);
+		c.drawBitmap(bmp,0,0,p);
+		tex=createNotChecked(nb,bmp.getWidth(),bmp.getHeight());
+		nb.recycle();
+		/*
 		if(SCALE_22){
 			if(w!=bmp.getWidth()||h!=bmp.getHeight()){
 				Bitmap nb=Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888);
@@ -266,7 +278,7 @@ public class GLTexture extends AbstractTexture
 			}
 		}else{
 			tex=createNotChecked(bmp,bmp.getWidth(),bmp.getHeight());
-		}
+		}*/
 		return tex;
 	}
 
@@ -308,5 +320,17 @@ public class GLTexture extends AbstractTexture
 		Red=create1pxTexture(Color4.Red);
 		Blue=create1pxTexture(Color4.Blue);
 		ErrorTexture=createErrTexture();
+	}
+
+	@Override
+	public int hashCode() {
+		// TODO: Implement this method
+		return textureId;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		// TODO: Implement this method
+		return super.equals(obj);
 	}
 }

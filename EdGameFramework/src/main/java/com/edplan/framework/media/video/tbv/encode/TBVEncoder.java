@@ -1,14 +1,25 @@
 package com.edplan.framework.media.video.tbv.encode;
 
+import com.edplan.framework.graphics.opengl.BaseCanvas;
+import com.edplan.framework.graphics.opengl.BlendProperty;
+import com.edplan.framework.graphics.opengl.BlendSetting;
+import com.edplan.framework.graphics.opengl.BlendType;
+import com.edplan.framework.graphics.opengl.CanvasData;
+import com.edplan.framework.graphics.opengl.ShaderManager;
+import com.edplan.framework.graphics.opengl.batch.interfaces.ITexture3DBatch;
+import com.edplan.framework.graphics.opengl.objs.Color4;
+import com.edplan.framework.graphics.opengl.objs.TextureVertex3D;
+import com.edplan.framework.graphics.opengl.shader.advance.Texture3DShader;
+import com.edplan.framework.math.Mat4;
 import com.edplan.framework.media.video.tbv.TBV;
 import com.edplan.framework.media.video.tbv.TBVException;
-import java.io.IOException;
-import java.io.DataOutputStream;
-import com.edplan.framework.utils.Tag;
-import com.edplan.framework.graphics.opengl.BlendType;
 import com.edplan.framework.media.video.tbv.element.DataDrawBaseTexture;
-import java.util.List;
-import com.edplan.framework.graphics.opengl.objs.TextureVertex3D;
+import com.edplan.framework.utils.Tag;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import com.edplan.framework.graphics.opengl.objs.GLTexture;
+import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 
 /**
  *操作应该严格按照规范
@@ -77,33 +88,58 @@ public class TBVEncoder
 	
 	private double frameDeltaTime=1000/60d;
 	
+	private TBVCanvas canvas;
 	
-	
-	public void initial(){
-		rawBufferedOut=new BufferedByteOutputStream(1024*32);
-		bufferedOut=new TBVOutputStream(new DataOutputStream(rawBufferedOut));
+	public TBVEncoder(OutputStream out){
+		this.out=new TBVOutputStream(new DataOutputStream(out));
 	}
 	
-	public void writeTBVHeader() throws TBVException, IOException{
+	public void initial(int width,int height){
+		header.width=width;
+		header.height=height;
+		rawBufferedOut=new BufferedByteOutputStream(1024*32);
+		bufferedOut=new TBVOutputStream(new DataOutputStream(rawBufferedOut));
+		canvas=new TBVCanvas(this);
+	}
+	
+	public TBVCanvas getCanvas() {
+		return canvas;
+	}
+	
+	public TBV.Header.Builder getHeaderBuilder(){
+		mainState=EncodeMainState.WriteHeader;
+		return TBV.Header.Builder.create(header);
+	}
+	
+	public void loadBack(TBV.Header.Builder b) throws TBVException, IOException{
+		if(b.target!=header)throw new TBVException("wtf? you should loadBack the builder you got from getHeaderBuilder");
+		b.build();
+		writeTBVHeader();
+	}
+	
+	protected void writeTBVHeader() throws TBVException, IOException{
 		if(mainState!=EncodeMainState.WriteHeader){
 			throw new TBVException("错误的步骤 "+mainState);
 		}
 		TBV.Header.write(out,header);
 		mainState=EncodeMainState.FrameOutput;
+		frameState=EncodeFrameState.WriteFrameHeader;
 	}
 	
-	public void checkFrameState(EncodeFrameState s) throws TBVException{
+	protected void checkFrameState(EncodeFrameState s) throws TBVException{
 		if(frameState!=s){
 			throw new TBVException("错误的步骤 "+frameState);
 		}
 	}
 	
-	public void toNewFrame(double deltaTime,boolean clearFrame) throws TBVException{
+	public void toNewFrame(double deltaTime,boolean clearFrame,short flag) throws TBVException{
 		if(deltaTime<=0){
-			toNewFrame(frameDeltaTime,clearFrame);
+			toNewFrame(frameDeltaTime,clearFrame,flag);
+			return;
 		}
 		checkOutputFrame();
 		checkFrameState(EncodeFrameState.WriteFrameHeader);
+		frameHeader.flag=flag;
 		frameHeader.clearCanvas=clearFrame;
 		frameHeader.startTime=currentPlayTime;
 		currentPlayTime+=deltaTime;
@@ -111,7 +147,7 @@ public class TBVEncoder
 		frameState=EncodeFrameState.BufferFrameData;
 	}
 	
-	private void flushEventHeader(short type) throws IOException{
+	protected void flushEventHeader(short type) throws IOException{
 		eventHeader.eventType=type;
 		TBV.EventHeader.write(bufferedOut,eventHeader);
 	}
@@ -125,13 +161,17 @@ public class TBVEncoder
 		TBV.SettingEvent.write(bufferedOut,settingEvent);
 	}
 	
-	DataDrawBaseTexture bufferedDraw=new DataDrawBaseTexture(50);
+	DataDrawBaseTexture bufferedDraw;
 	@Tag("frameEvent::draw")
-	public void drawBaseTexture(int textureId,List<TextureVertex3D> vertexs) throws IOException{
+	public void drawBaseTexture() throws IOException{
 		flushEventHeader(TBV.FrameEvent.DRAW_BASE_TEXTURE);
-		
+		DataDrawBaseTexture.write(bufferedOut,bufferedDraw);
 	}
 	
+	public DataDrawBaseTexture getBufferedDraw(){
+		if(bufferedDraw==null)bufferedDraw=new DataDrawBaseTexture(50);
+		return bufferedDraw;
+	}
 	
 	public void currentFrameFinish() throws TBVException, IOException{
 		checkFrameState(EncodeFrameState.BufferFrameData);
@@ -140,13 +180,12 @@ public class TBVEncoder
 		outputFrame();
 	}
 	
-	
-	private void outputFrame() throws TBVException, IOException{
+	protected void outputFrame() throws TBVException, IOException{
 		checkOutputFrame();
 		checkFrameState(EncodeFrameState.EndBufferFrameData);
 		frameHeader.blockSize=rawBufferedOut.size();
 		TBV.FrameHeader.write(out,frameHeader);
-		out.writeBytes(rawBufferedOut.ary,0,rawBufferedOut.size());
+		if(rawBufferedOut.size()!=0)out.writeBytes(rawBufferedOut.ary,0,rawBufferedOut.size());
 		rawBufferedOut.reset();
 		if(frameHeader.flag==TBV.Frame.END_FRAME){
 			frameState=EncodeFrameState.EndFrameOutput;
@@ -157,9 +196,6 @@ public class TBVEncoder
 		}
 	}
 
-
-	
-	
 	public void endEncode() throws TBVException, IOException{
 		if(mainState!=EncodeMainState.EndFrameOutput){
 			throw new TBVException("错误的步骤 "+mainState);
@@ -172,11 +208,6 @@ public class TBVEncoder
 			throw new TBVException("错误的步骤 "+mainState);
 		}
 	}
-	
-	
-	
-	
-	
 
 	public void setFrameDeltaTime(double frameDeltaTime) {
 		this.frameDeltaTime=frameDeltaTime;
@@ -185,5 +216,156 @@ public class TBVEncoder
 	public double getFrameDeltaTime() {
 		return frameDeltaTime;
 	}
+	
+	private void handlerException(Exception e){
+		e.printStackTrace();
+		throw new RuntimeException(e);
+	}
+	
+	public class TBVCanvas extends BaseCanvas {
 
+		private boolean prepare=false;
+		
+		private TBVBlending tbvBlending=new TBVBlending();
+
+		private TBVEncoder e;
+		
+		public TBVCanvas(TBVEncoder e){
+			super(false);
+			this.e=e;
+			System.out.println("encoder : "+e);
+			initial();
+			initialBatch();
+		}
+		
+		@Override
+		protected ITexture3DBatch<TextureVertex3D> createTexture3DBatch() {
+			// TODO: Implement this method
+			return e.getBufferedDraw();
+		}
+		
+		@Override
+		protected void onPostBlendingChange(BlendType type) {
+			// TODO: Implement this method
+			super.onPostBlendingChange(type);
+			try {
+				setBlendType(true, type);
+			} catch (IOException e) {
+				handlerException(e);
+			}
+		}
+		
+		@Override
+		public boolean isPrepared() {
+			// TODO: Implement this method
+			return prepare;
+		}
+
+		@Override
+		public void prepare() {
+			// TODO: Implement this method
+			prepare=true;
+		}
+
+		@Override
+		public void unprepare() {
+			// TODO: Implement this method
+			prepare=false;
+		}
+
+		@Override
+		public int getDefWidth() {
+			// TODO: Implement this method
+			return e.header.width;
+		}
+
+		@Override
+		public int getDefHeight() {
+			// TODO: Implement this method
+			return e.header.height;
+		}
+
+		@Override
+		public BlendSetting getBlendSetting() {
+			// TODO: Implement this method
+			return tbvBlending;
+		}
+
+		@Override
+		protected void checkCanDraw() {
+			// TODO: Implement this method
+			try {
+				e.checkFrameState(EncodeFrameState.BufferFrameData);
+				if(!isEnablePost()){
+					handlerException(new TBVException("in TBVCanvas, you can only draw in post mode"));
+				}
+			} catch (TBVException ex) {
+				e.handlerException(ex);
+			}
+		}
+
+		@Override
+		public CanvasData getDefData() {
+			// TODO: Implement this method
+			CanvasData d=new CanvasData();
+			d.setCurrentProjMatrix(createDefProjMatrix());
+			d.setCurrentMaskMatrix(Mat4.createIdentity());
+			d.setHeight(getDefWidth());
+			d.setWidth(getDefHeight());
+			d.setShaders(ShaderManager.getNewDefault());
+			d.getShaders().setTexture3DShader(new TBVShader(e));
+			return d;
+		}
+
+		@Override
+		public void clearBuffer() {
+			// TODO: Implement this method
+			
+		}
+
+		@Override
+		public void drawColor(Color4 c) {
+			// TODO: Implement this method
+		}
+	}
+	
+	public class TBVBlending extends BlendSetting {
+		
+		public TBVBlending(){
+			initial();
+		}
+		
+		@Override
+		public void apply(BlendProperty p) {
+			// TODO: Implement this method
+			
+		}
+		
+	}
+	
+	public class TBVShader extends Texture3DShader.InvalidTexture3DShader {
+		
+		private TBVEncoder ec;
+		
+		public TBVShader(TBVEncoder ec){
+			this.ec=ec;
+		}
+		
+		
+		@Override
+		public void loadTexture(AbstractTexture texture) {
+			// TODO: Implement this method
+			ec.getBufferedDraw().textureId=ec.header.getTextureReflections().get(texture.getTextureId());
+		}
+		
+		@Override
+		public void applyToGL(int mode,int offset,int count) {
+			// TODO: Implement this method
+			try {
+				ec.drawBaseTexture();
+			} catch (IOException e) {
+				ec.handlerException(e);
+			}
+		}
+	}
 }

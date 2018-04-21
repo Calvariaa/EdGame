@@ -22,6 +22,7 @@ import java.util.Comparator;
 import java.io.IOException;
 import com.edplan.framework.graphics.opengl.GLWrapped;
 import com.edplan.framework.graphics.opengl.ShaderManager;
+import com.edplan.framework.interfaces.Function;
 
 public class AutoPackTexturePool extends TexturePool
 {
@@ -119,7 +120,7 @@ public class AutoPackTexturePool extends TexturePool
 		return getPackByIndex(idx%c);
 	}
 	
-	public void writeToDir(File dir,String s){
+	public void writeToDir(File dir,String s,Function<OutputNode> out){
 		int i=-1;
 		for(PackNode t:packs){
 			i++;
@@ -127,6 +128,7 @@ public class AutoPackTexturePool extends TexturePool
 				File f=new File(dir,s+i+".png");
 				f.createNewFile();
 				t.layer.getTexture().getTexture().toBitmap(context).compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(f));
+				if(out!=null)out.invoke(new OutputNode(f,t.layer.getTexture().getTexture()));
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.out.println("err compress "+i);
@@ -216,6 +218,15 @@ public class AutoPackTexturePool extends TexturePool
 		public BufferedLayer layer;
 		public PackNode(){
 			
+		}
+	}
+	
+	public class OutputNode{
+		public File file;
+		public GLTexture tex;
+		public OutputNode(File f,GLTexture t){
+			file=f;
+			tex=t;
 		}
 	}
 }

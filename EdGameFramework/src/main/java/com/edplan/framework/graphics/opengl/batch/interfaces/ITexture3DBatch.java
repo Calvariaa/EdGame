@@ -6,6 +6,6 @@ import com.edplan.framework.graphics.opengl.batch.base.IHasTexturePosition;
 import com.edplan.framework.graphics.opengl.objs.TextureVertex3D;
 import com.edplan.framework.interfaces.Addable;
 
-public interface ITexture3DBatch extends BaseBatch,IHasPosition,IHasTexturePosition,IHasColor,Addable<TextureVertex3D>
+public interface ITexture3DBatch<T extends TextureVertex3D> extends BaseBatch,IHasPosition,IHasTexturePosition,IHasColor,Addable<T>
 {
 }

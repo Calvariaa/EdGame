@@ -23,7 +23,7 @@ public class TBVOutputStream
 	}
 	
 	public void writeInt(int i) throws IOException{
-		out.write(i);
+		out.writeInt(i);
 	}
 	
 	public void writeFloat(float f) throws IOException{

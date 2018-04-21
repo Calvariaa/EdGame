@@ -1,11 +1,15 @@
 package com.edplan.framework.media.video.tbv;
 
+import com.edplan.framework.graphics.opengl.BlendType;
 import com.edplan.framework.media.video.tbv.decode.TBVInputStream;
 import com.edplan.framework.media.video.tbv.encode.TBVOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.edplan.framework.graphics.opengl.BlendType;
+import java.util.HashMap;
+import com.edplan.framework.utils.Tag;
+import com.edplan.framework.graphics.opengl.objs.GLTexture;
 
 /**
  *一种渲染材质组成的视频，将所有信息存在文件里然后播放
@@ -72,6 +76,13 @@ public class TBV
 		public int height;
 		public JSONObject jsonData;
 		public TextureNode[] textures;
+		//用来映射到实际的
+		@Tag("no-write-no-read") public HashMap<Integer,Integer> textureIdReflects;
+		
+		public HashMap<Integer,Integer> getTextureReflections(){
+			if(textureIdReflects==null)textureIdReflects=new HashMap<Integer,Integer>();
+			return textureIdReflects;
+		}
 
 		public static Header read(TBVInputStream in,Header h) throws IOException, TBVException, JSONException{
 			if(h==null)h=new Header();
@@ -88,6 +99,7 @@ public class TBV
 				TextureNode node=new TextureNode();
 				node.id=i;
 				node.texture=in.readString();
+				h.textures[i]=node;
 			}
 			return h;
 		}
@@ -97,10 +109,58 @@ public class TBV
 				throw new TBVException("err type: "+h.type);
 			}
 			out.writeString(h.type);
+			out.writeInt(h.width);
+			out.writeInt(h.height);
 			out.writeJSONObject(h.jsonData);
 			out.writeInt(h.textures.length);
 			for(int i=0;i<h.textures.length;i++){
 				out.writeString(h.textures[i].texture);
+			}
+		}
+		
+		public static class Builder{
+			public ArrayList<TextureNode> textures=new ArrayList<TextureNode>();
+			public Header target;
+			
+			public Builder setSize(int width,int height){
+				target.width=width;
+				target.height=height;
+				return this;
+			}
+			
+			public Builder setJson(JSONObject obj){
+				target.jsonData=obj;
+				return this;
+			}
+			
+			public Builder setJson(String json) throws JSONException{
+				return setJson(new JSONObject(json));
+			}
+			
+			public int addTexture(String path,GLTexture texture){
+				int id=textures.size();
+				final TextureNode node=new TextureNode();
+				node.texture=path;
+				node.id=id;
+				textures.add(node);
+				target.getTextureReflections().put(texture.getTextureId(),id);
+				return id;
+			}
+			
+			public Header build(){
+				target.textures=new TextureNode[textures.size()];
+				for(int i=0;i<textures.size();i++){
+					target.textures[i]=textures.get(i);
+				}
+				return target;
+			}
+			
+			public static Builder create(Header target){
+				if(target==null)target=new Header();
+				Builder b=new Builder();
+				b.target=target;
+				b.target.type=HEADER_TYPE;
+				return b;
 			}
 		}
 	}
@@ -135,7 +195,7 @@ public class TBV
 		public short eventType;
 		
 		public static EventHeader read(TBVInputStream in,EventHeader e) throws IOException{
-			if(e!=null)e=new EventHeader();
+			if(e==null)e=new EventHeader();
 			e.eventType=in.readShort();
 			return e;
 		}

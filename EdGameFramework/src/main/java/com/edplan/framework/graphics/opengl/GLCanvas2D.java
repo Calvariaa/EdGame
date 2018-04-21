@@ -23,6 +23,8 @@ import com.edplan.framework.utils.MLog;
 import com.edplan.framework.math.IQuad;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.graphics.opengl.batch.BaseBatch;
+import com.edplan.framework.graphics.opengl.batch.interfaces.ITexture3DBatch;
+import com.edplan.framework.media.video.tbv.element.DataDrawBaseTexture;
 
 public class GLCanvas2D extends BaseCanvas // extends AbstractSRable<CanvasData>
 {
@@ -37,6 +39,13 @@ public class GLCanvas2D extends BaseCanvas // extends AbstractSRable<CanvasData>
 	
 	public GLCanvas2D(GLTexture texture,MContext context){
 		this(new BufferedLayer(context,texture));
+	}
+
+	@Override
+	protected ITexture3DBatch<TextureVertex3D> createTexture3DBatch() {
+		// TODO: Implement this method
+		setMaxBatchSize(4000);
+		return new DataDrawBaseTexture(4000);
 	}
 
 	@Override

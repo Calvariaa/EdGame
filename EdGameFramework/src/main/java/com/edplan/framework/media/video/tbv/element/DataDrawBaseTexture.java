@@ -15,8 +15,9 @@ import com.edplan.framework.math.Vec3;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import java.util.List;
 import com.edplan.framework.graphics.opengl.batch.interfaces.ITexture3DBatch;
+import com.edplan.framework.utils.Tag;
 
-public class DataDrawBaseTexture implements ITexture3DBatch
+public class DataDrawBaseTexture implements ITexture3DBatch<TextureVertex3D>
 {
 	public int textureId;
 	public TextureVertex3D[] vertexs;
@@ -44,12 +45,38 @@ public class DataDrawBaseTexture implements ITexture3DBatch
 		positionBuffer=new Vec3Buffer(pl);
 		colorBuffer=new Color4Buffer(cl);
 	}
+	
+	public void expand(int targetSize){
+		if(vertexs.length>=targetSize)return;
+		final TextureVertex3D[] pre=vertexs;
+		vertexs=new TextureVertex3D[targetSize];
+		for(int i=0;i<pre.length;i++){
+			vertexs[i]=pre[i];
+			pre[i]=null;
+		}
+		for(int i=pre.length;i<targetSize;i++){
+			final TextureVertex3D v=new TextureVertex3D();
+			vertexs[i]=v;
+			texturePositionBuffer.add(v.texturePoint);
+			positionBuffer.add(v.position);
+			colorBuffer.add(v.color);
+		}
+	}
 
 	@Override
 	public void add(TextureVertex3D t) {
 		// TODO: Implement this method
+		if(length>=vertexs.length)expand(vertexs.length*3/2+5);
 		vertexs[length].set(t);
 		length++;
+	}
+
+	@Override
+	public void add(TextureVertex3D[] ts) {
+		// TODO: Implement this method
+		for(TextureVertex3D v:ts){
+			add(v);
+		}
 	}
 
 	@Override
@@ -79,13 +106,19 @@ public class DataDrawBaseTexture implements ITexture3DBatch
 		return texturePositionBuffer;
 	}
 
+	@Override
+	public void clear() {
+		// TODO: Implement this method
+		length=0;
+	}
+
 	public static DataDrawBaseTexture read(TBVInputStream in,DataDrawBaseTexture d) throws IOException{
 		int id=in.readInt();
 		int length=in.readInt();
 		if(d==null){
 			d=new DataDrawBaseTexture(length+20);
 		}else if(d.vertexs.length<length){
-			d=new DataDrawBaseTexture((int)((length+1)*1.5));
+			d.expand(Math.max(length,d.vertexs.length*3/2+5));
 		}
 		d.textureId=id;
 		d.length=length;
@@ -99,7 +132,7 @@ public class DataDrawBaseTexture implements ITexture3DBatch
 		if(d==null){
 			d=new DataDrawBaseTexture(l.size()+20);
 		}else if(d.vertexs.length<l.size()){
-			d=new DataDrawBaseTexture((int)((l.size()+1)*1.5));
+			d.expand(Math.max(l.size(),d.vertexs.length*3/2+5));
 		}
 		d.textureId=id;
 		d.length=l.size();
@@ -113,7 +146,7 @@ public class DataDrawBaseTexture implements ITexture3DBatch
 		if(d==null){
 			d=new DataDrawBaseTexture(batch.getVertexCount()+20);
 		}else if(d.vertexs.length<batch.getVertexCount()){
-			d=new DataDrawBaseTexture((int)((batch.getVertexCount()+1)*1.5));
+			d.expand(Math.max(batch.getVertexCount(),d.vertexs.length*3/2+5));
 		}
 		d.textureId=id;
 		d.length=batch.getVertexCount();

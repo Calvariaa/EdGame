@@ -75,7 +75,7 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 		
 		applyThread=new ApplyThread();
 		applyThread.start();
-		System.out.println(sprites.size());
+		//System.out.println(sprites.size());
 	}
 
 	public int getNewApply() {
@@ -95,7 +95,7 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 	};
 	protected void refreshObjects(){
 		double time=storyboard.getTimeline().frameTime(); 
-		applyThread.refreshCurrentTime(time);
+		//applyThread.refreshCurrentTime(time);
 		Iterator<ElementNode> iter=spritesNotAdded.iterator();
 		ElementNode ele;
 		while(iter.hasNext()){
@@ -180,7 +180,7 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 		
 		private double currentTime;
 		
-		private double preApplyTime=1000;
+		private double preApplyTime=2000;
 
 		@Override
 		public void run() {

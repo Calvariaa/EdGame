@@ -8,9 +8,9 @@ public class CanvasUtil
 	public static final String Translate="translate";
 	public static final String Scale="scale";
 
-	public static void operateCanvas(GLCanvas2D canvas,String op){
+	public static void operateCanvas(BaseCanvas canvas,String op){
 		String[] spl=op.split(" ");
-		for(int i=0;i<op.length();i++){
+		for(int i=0;i<spl.length;i++){
 			String key=spl[i];
 			if(Translate.equalsIgnoreCase(key)){
 				i++;
@@ -33,15 +33,17 @@ public class CanvasUtil
 	public static class Canvas2DOperationBuilder{
 		List<String> data=new ArrayList<String>();
 		
-		public void translate(float x,float y){
+		public Canvas2DOperationBuilder translate(float x,float y){
 			data.add(Translate);
 			data.add(x+"");
 			data.add(y+"");
+			return this;
 		}
 		
-		public void scale(float s){
+		public Canvas2DOperationBuilder scale(float s){
 			data.add(Scale);
 			data.add(s+"");
+			return this;
 		}
 
 		@Override

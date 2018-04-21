@@ -73,6 +73,7 @@ public class TBVInputStream
 	
 	public String readString() throws IOException{
 		int byteLength=readInt();
+		System.out.println("length:"+byteLength);
 		byte[] bytes=readByteArray(byteLength);
 		return new String(bytes,"UTF-8");
 	}

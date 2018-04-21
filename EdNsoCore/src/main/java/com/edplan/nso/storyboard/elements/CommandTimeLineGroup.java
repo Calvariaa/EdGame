@@ -22,8 +22,8 @@ public class CommandTimeLineGroup
 	
 	public <T> List<TypedCommand<T>> getCommands(CommandTimelineSelecter<T> timeline,double offset){
 		if(offset!=0){
-			List<TypedCommand<T>> res=timeline.select(this);
-			List<TypedCommand<T>> list=new ArrayList<TypedCommand<T>>(res.size());
+			final List<TypedCommand<T>> res=timeline.select(this);
+			final List<TypedCommand<T>> list=new ArrayList<TypedCommand<T>>(res.size());
 			for(TypedCommand<T> c:res){
 				list.add(
 					new TypedCommand<T>(
