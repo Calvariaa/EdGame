@@ -405,10 +405,6 @@ public class TestOsbView extends EdView
 		//ntp.setColorMixRate(1);
 		ntp.setMixColor(Color4.White);
 		canvas.save();
-		//canvas.clipRect(c.getWidth()-200,c.getHeight()-600,c.getWidth(),c.getHeight());
-		//canvas.translate();
-		//canvas.getWidth()-200,canvas.getHeight()-600);
-		//c.drawText("DeltaTime: "+deltaTime,10,30,tp);
 		float lengthScale=5;
 		ntp.setMixColor(Color4.rgba(0,1,0,1));
 		canvas.drawLine(10,50,10+18*6,50,ntp);
@@ -425,6 +421,8 @@ public class TestOsbView extends EdView
 		float avg=0;
 		float max=0;
 		float min=99999;
+		float avg_nogc=0;
+		int count_nogc=0;
 		for(float t:timelist){
 			avg+=t;
 			if(t<min){
@@ -433,7 +431,12 @@ public class TestOsbView extends EdView
 			if(t>max){
 				max=t;
 			}
+			if(t<400){
+				avg_nogc+=t;
+				count_nogc++;
+			}
 		}
+		avg_nogc/=count_nogc;
 		avg/=timelist.length;
 		ntp.setStrokeWidth(3);
 		ntp.setMixColor(Color4.rgba(1,0,0,1));
@@ -444,6 +447,9 @@ public class TestOsbView extends EdView
 		ntp.setStrokeWidth(2);
 		ntp.setMixColor(Color4.rgba(0,0,1,1));
 		canvas.drawLine(10+min*lengthScale,40,10+min*lengthScale,60+6*timelist.length,ntp);
+		ntp.setStrokeWidth(3);
+		ntp.setMixColor(Color4.rgba(0.5f,0.5f,1,1));
+		canvas.drawLine(10+avg_nogc*lengthScale,40,10+avg_nogc*lengthScale,60+6*timelist.length,ntp);
 		canvas.restore();
 
 		//canvas.drawTexture(cardPng,RectF.xywh(0,0,canvas.getWidth(),canvas.getHeight()),newPaint);
@@ -454,14 +460,16 @@ public class TestOsbView extends EdView
 		GLPaint textPaint=new GLPaint();
 		textPaint.setMixColor(Color4.rgba(1,0,0,1));
 		TextPrinter printer=new TextPrinter(font,100,baseLine,textPaint);
-		printer.setTextSize(70);
-		printer.printString("DEVELOPMENT BUILD\n");
+		printer.setTextSize(60);
+		printer.printString("DEVELOPMENT BUILD\nosu!lab 2018.4.9");
 		printer.toNextLine();
-		printer.printString("fps: "+(int)(1000/avg));
+		printer.printString("fps: "+(int)(1000/avg)+"/"+(int)(1000/avg_nogc));
 		printer.toNextLine();
 		printer.printString(timeline.frameTime()+"");
 		printer.toNextLine();
-		printer.printString(audioOffset+"");
+		//printer.printString("draws:"+drawCalls+"/"+drawCalls2);
+		printer.toNextLine();
+		printer.printString("memory:"+Runtime.getRuntime().freeMemory()/1024/1024+"/"+Runtime.getRuntime().totalMemory()/1024/1024+"/"+Runtime.getRuntime().maxMemory()/1024/1024);
 		printer.toNextLine();
 		if(test.enableStoryboard){
 			printer.printString(playingStoryboard.objectsInField()+"\n");

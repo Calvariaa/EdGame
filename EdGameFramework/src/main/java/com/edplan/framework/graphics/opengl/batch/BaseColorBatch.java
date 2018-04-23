@@ -25,19 +25,18 @@ public class BaseColorBatch<T extends Vertex3D> implements BaseBatch,IHasColor,I
 		return vertexs.size();
 	}
 	
-	public BaseColorBatch add(VertexList<T> list){
-		return add(list.listVertex());
+	public void add(VertexList<T> list){
+		add(list.listVertex());
 	}
 	
-	public BaseColorBatch add(T... vs){
+	
+	public void add(T... vs){
 		for(T v:vs)
 			add(v);
-		return this;
 	}
 
-	public BaseColorBatch add(T v){
+	public void add(T v){
 		vertexs.add(v);
-		return this;
 	}
 	
 	public void clear(){

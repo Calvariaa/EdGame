@@ -95,7 +95,7 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 	};
 	protected void refreshObjects(){
 		double time=storyboard.getTimeline().frameTime(); 
-		//applyThread.refreshCurrentTime(time);
+		applyThread.refreshCurrentTime(time);
 		Iterator<ElementNode> iter=spritesNotAdded.iterator();
 		ElementNode ele;
 		while(iter.hasNext()){
@@ -119,14 +119,39 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 		Collections.sort(spriteInField,nodeSorter);
 	}
 	
+	int asyncThreadCount=16;
+	protected void doAsyncPrepare(){
+		PrepareThread[] ts=new PrepareThread[asyncThreadCount];
+		Iterator<ElementNode> nodes=spriteInField.iterator();
+		int maxSize=spriteInField.size()/asyncThreadCount+2;
+		for(int i=0;i<asyncThreadCount;i++){
+			int count=0;
+			ts[i]=new PrepareThread();
+			while(count<maxSize&&nodes.hasNext()){
+				ts[i].add(nodes.next());
+			}
+			ts[i].start();
+		}
+		for(PrepareThread t:ts){
+			try {
+				t.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private boolean asyncPrepare=false;
 	@Override
 	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		newApply=0;
 		refreshObjects();
+		if(asyncPrepare)doAsyncPrepare();
 		int c=canvas.getBlendSetting().save();
 		canvas.enablePost();
 		for(ElementNode ele:spriteInField){
+			if(!asyncPrepare)ele.element.prepareForDraw();
 			ele.element.draw(canvas);
 		}
 		canvas.disablePost();
@@ -171,6 +196,35 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 		
 		public void onRemove(){
 			element.onRemove();
+		}
+		
+	}
+	
+	public class PrepareThread extends Thread{
+		
+		private List<ElementNode> nodes;
+		
+		public PrepareThread(){
+			nodes=new LinkedList<ElementNode>();
+		}
+		
+		public void add(ElementNode n){
+			nodes.add(n);
+		}
+
+		@Override
+		public void run() {
+			// TODO: Implement this method
+			super.run();
+			Iterator<ElementNode> iter=nodes.iterator();
+			ElementNode tmp=null;
+			while(iter.hasNext()){
+				tmp=iter.next();
+				tmp.element.prepareForDraw();
+				iter.remove();
+			}
+			tmp=null;
+			nodes.clear();
 		}
 		
 	}

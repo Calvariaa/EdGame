@@ -7,6 +7,7 @@ import org.json.JSONException;
 import android.widget.Toast;
 import com.edplan.framework.GameActivity;
 import com.edplan.framework.graphics.opengl.BaseGLSurfaceView;
+import com.squareup.leakcanary.LeakCanary;
 
 public class GLActivity extends GameActivity 
 {
@@ -17,7 +18,7 @@ public class GLActivity extends GameActivity
 		// TODO: Implement this method
 		super.onCreate(savedInstanceState);
 		//setContentView(R.layout.mains);
-		
+		//LeakCanary.install(this);
 	}
 
 	@Override

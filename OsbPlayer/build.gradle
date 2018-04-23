@@ -22,5 +22,6 @@ android {
 dependencies {
 	compile project(':EdNsoCore')
 	compile project(':EdGameFramework')
+	compile 'com.squareup.leakcanary:leakcanary-android:1.3'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

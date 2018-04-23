@@ -2,6 +2,8 @@ package com.edplan.framework.math;
 
 public class FMath
 {
+	public static final double DPi=Math.PI;
+	
 	public static final float Pi=(float)Math.PI;
 	
 	public static final float Pi2=(float)(Math.PI*2);
@@ -9,16 +11,44 @@ public class FMath
 
 	public static final float PiHalf=(float)(Math.PI*0.5);
 	
+	public static final float[] SIN;
+	public static final float[] COS;
+	public static final int SC_SIZE=3600;
+	public static final double Delta_Angle;
+	
+	static{
+		SIN=new float[SC_SIZE];
+		COS=new float[SC_SIZE];
+		Delta_Angle=Math.PI*2/360;
+		for(int i=0;i<SC_SIZE;i++){
+			SIN[i]=(float)Math.sin(Delta_Angle*i);
+			COS[i]=(float)Math.cos(Delta_Angle*i);
+		}
+	}
+	
+	
+	
 	public static boolean inInterval(float x1,float x2,float t){
 		return t>x1&&t<x2;
 	}
 	
+	private static int toBufferIndex(double ang){
+		if(ang<0){
+			return toBufferIndex(DPi-(-ang)%DPi);
+		}else{
+			ang%=DPi;
+			return (int)(ang/Delta_Angle);
+		}
+	}
+	
 	public static float sin(double v){
-		return (float)Math.sin(v);
+		//return (float)Math.sin(v);
+		return SIN[toBufferIndex(v)];
 	}
 	
 	public static float cos(double v){
-		return (float)Math.cos(v);
+		//return (float)Math.cos(v);
+		return COS[toBufferIndex(v)];
 	}
 	
 	public static float tan(double v){

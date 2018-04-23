@@ -41,12 +41,14 @@ public class GLCanvas2D extends BaseCanvas // extends AbstractSRable<CanvasData>
 		this(new BufferedLayer(context,texture));
 	}
 
+	/*
 	@Override
 	protected ITexture3DBatch<TextureVertex3D> createTexture3DBatch() {
 		// TODO: Implement this method
 		setMaxBatchSize(4000);
 		return new DataDrawBaseTexture(4000);
 	}
+	*/
 
 	@Override
 	public void onSave(CanvasData t) {

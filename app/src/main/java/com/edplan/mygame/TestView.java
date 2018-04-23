@@ -528,13 +528,13 @@ public class TestView extends EdView
 
 		public String dir="/storage/emulated/0/MyDisk/WorkBench/bin/testdata";
 
-		public int testBeatmapFloder=11;
+		public int testBeatmapFloder=26;
 
 		public boolean enableStoryboard=true;
 
 		public boolean enablePlayField=true;
 		
-		public boolean outputTBV=true;
+		public boolean outputTBV=false;
 
 		public boolean watchPool=false;
 

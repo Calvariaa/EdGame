@@ -4,5 +4,5 @@ public interface Addable<T>
 {
 	public void add(T t);
 	
-	public void add(T... ts);
+	//public void add(T[] ts);
 }

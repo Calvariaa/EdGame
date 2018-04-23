@@ -252,7 +252,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 	}
 
 	@Override
-	public void draw(BaseCanvas canvas) {
+	public void prepareForDraw() {
 		// TODO: Implement this method
 		double time=getTimeline().frameTime();
 		refreshAnimation(alphaAnimation,time);
@@ -260,6 +260,12 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		for(QueryAnimation anim:animations){
 			refreshAnimation(anim,time);
 		}
+	}
+	
+	@Override
+	public void draw(BaseCanvas canvas) {
+		// TODO: Implement this method
+		if(alpha<0.002)return;
 		Quad quad=
 			RectF.anchorOWH(
 				anchor,

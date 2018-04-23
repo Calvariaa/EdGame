@@ -71,6 +71,7 @@ public class DataDrawBaseTexture implements ITexture3DBatch<TextureVertex3D>
 		length++;
 	}
 
+	/*
 	@Override
 	public void add(TextureVertex3D[] ts) {
 		// TODO: Implement this method
@@ -78,6 +79,7 @@ public class DataDrawBaseTexture implements ITexture3DBatch<TextureVertex3D>
 			add(v);
 		}
 	}
+	*/
 
 	@Override
 	public int getVertexCount() {

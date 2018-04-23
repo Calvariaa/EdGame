@@ -25,6 +25,8 @@ public abstract class ADrawableStoryboardElement extends EdDrawable implements G
 		return storyboard;
 	}
 	
+	public abstract void prepareForDraw();
+	
 	public abstract void onAdd();
 	
 	public abstract void onRemove();

@@ -28,7 +28,7 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 {
 	private float defZ=0;
 
-	private ITexture3DBatch<TextureVertex3D> tmpBatch;
+	private Texture3DBatch<TextureVertex3D> tmpBatch;
 
 	private RectVertexBatch<RectVertex> tmpRectBatch;
 
@@ -39,7 +39,7 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 	 */
 	private boolean enablePost=false;
 	
-	private int maxBatchSize=10000000;
+	private int maxBatchSize=5000;
 	
 	private int drawCalls=0;
 	
@@ -65,7 +65,7 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 		return maxBatchSize;
 	}
 	
-	protected ITexture3DBatch<TextureVertex3D> createTexture3DBatch(){
+	protected Texture3DBatch<TextureVertex3D> createTexture3DBatch(){
 		return new Texture3DBatch<TextureVertex3D>();
 	}
 	

@@ -1,4 +1,4 @@
-precision highp float;
+precision mediump float;
 
 varying vec3 f_Position;
 varying vec2 f_TexturePosition;

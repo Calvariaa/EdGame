@@ -21,6 +21,24 @@ public class MeasureCore
 		view.measure(widthSpec,heightSpec);
 	}
 	
+	public static void measureChild(
+		EdView view,
+		float paddingHorizon,float paddingVertical,
+		long parentWidthSpec,float widthUsed,
+		long parentHeightSpec,float heightUsed
+	){
+		LayoutParam param=view.getLayoutParam();
+		long widthSpec=getChildMeasureSpec(
+			parentWidthSpec,
+			paddingHorizon+widthUsed,
+			param.width);
+		long heightSpec=getChildMeasureSpec(
+			parentHeightSpec,
+			paddingVertical+heightUsed,
+			param.height);
+		view.measure(widthSpec,heightSpec);
+	}
+	
 	public static long getChildMeasureSpec(long spec,float padding,long childDimension){
 		int mode=MeasureSpec.getMode(spec);
 		float size=Math.max(MeasureSpec.getSize(spec)-padding,0);

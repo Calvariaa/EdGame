@@ -1,12 +1,13 @@
 package com.edplan.superutils;
+import com.edplan.framework.Framework;
 
 public class MTimer
 {
 	public boolean hasInitial;
 	
-	public long startTime;
+	public double startTime;
 	
-	public long nowTime;
+	public double nowTime;
 	
 	public double deltaTime;
 	
@@ -21,10 +22,10 @@ public class MTimer
 	}
 	
 	public void initial(){
-		initial(System.currentTimeMillis());
+		initial(Framework.relativePreciseTimeMillion());
 	}
 	
-	public void initial(long s){
+	public void initial(double s){
 		hasInitial=true;
 		startTime=s;
 		nowTime=s;
@@ -32,7 +33,7 @@ public class MTimer
 		runnedTime=0;
 	}
 	
-	public long nowTime(){
+	public double nowTime(){
 		return nowTime;
 	}
 	
@@ -47,6 +48,6 @@ public class MTimer
 	}
 	
 	public void refresh(){
-		refresh((int)(System.currentTimeMillis()-nowTime));
+		refresh(Framework.relativePreciseTimeMillion()-nowTime);
 	}
 }

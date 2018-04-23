@@ -53,6 +53,8 @@ public class GLWrapped
 		GL_MAX_TEXTURE_SIZE=getIntegerValue(GLES20.GL_MAX_TEXTURE_SIZE);
 		GLTexture.initial();
 		FBOPool.initialGL();
+		//GLES20.glEnable(GLES20.gl_stencil_t
+		//GLES20.glst
 	}
 	
 	public static void onFrame(){
