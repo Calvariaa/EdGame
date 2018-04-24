@@ -19,11 +19,8 @@ public class TexturePool
 	public List<MsgTexture> getAll(){
 		List<MsgTexture> l=new ArrayList<MsgTexture>(pool.size());
 		for(Map.Entry<String,AbstractTexture> t:pool.entrySet()){
-			MsgTexture mt=new MsgTexture();
-			mt.msg=t.getKey();
-			mt.texture=t.getValue();
+			MsgTexture mt=new MsgTexture(t.getKey(),t.getValue());
 			l.add(mt);
-			mt=null;
 		}
 		return l;
 	}
@@ -72,5 +69,15 @@ public class TexturePool
 	public class MsgTexture{
 		public String msg;
 		public AbstractTexture texture;
+		public int width;
+		public int height;
+		public boolean swapXY=false;
+		
+		public MsgTexture(String msg,AbstractTexture texture){
+			this.texture=texture;
+			this.msg=msg;
+			this.width=texture.getWidth();
+			this.height=texture.getHeight();
+		}
 	}
 }

@@ -6,7 +6,7 @@ import com.edplan.framework.graphics.opengl.BlendSetting;
 import com.edplan.framework.graphics.opengl.BlendType;
 import com.edplan.framework.graphics.opengl.CanvasData;
 import com.edplan.framework.graphics.opengl.ShaderManager;
-import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
+import com.edplan.framework.graphics.opengl.batch.interfaces.ITexture3DBatch;
 import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.objs.TextureVertex3D;
@@ -238,9 +238,9 @@ public class TBVEncoder
 		}
 		
 		@Override
-		protected Texture3DBatch<TextureVertex3D> createTexture3DBatch() {
+		protected ITexture3DBatch<TextureVertex3D> createTexture3DBatch() {
 			// TODO: Implement this method
-			return null;//e.getBufferedDraw();
+			return e.getBufferedDraw();
 		}
 		
 		@Override

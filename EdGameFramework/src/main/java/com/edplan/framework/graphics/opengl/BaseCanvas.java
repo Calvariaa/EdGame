@@ -28,7 +28,7 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 {
 	private float defZ=0;
 
-	private Texture3DBatch<TextureVertex3D> tmpBatch;
+	private ITexture3DBatch<TextureVertex3D> tmpBatch;
 
 	private RectVertexBatch<RectVertex> tmpRectBatch;
 
@@ -65,7 +65,7 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 		return maxBatchSize;
 	}
 	
-	protected Texture3DBatch<TextureVertex3D> createTexture3DBatch(){
+	protected ITexture3DBatch<TextureVertex3D> createTexture3DBatch(){
 		return new Texture3DBatch<TextureVertex3D>();
 	}
 	
@@ -301,11 +301,21 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 			checkPost(texture);
 			varyColor=varyColor.copyNew().multiple(mixColor).multiple(alpha);
 			final RectVertex[] v=createRectVertexs(texture,res,dst,varyColor,z);
-			tmpBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
+			tmpBatch.add(v[0]);
+			tmpBatch.add(v[1]);
+			tmpBatch.add(v[2]);
+			tmpBatch.add(v[0]);
+			tmpBatch.add(v[2]);
+			tmpBatch.add(v[3]);
 			Arrays.fill(v,null);
 		}else{
 			final RectVertex[] v=createRectVertexs(texture,res,dst,varyColor,z);
-			tmpBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
+			tmpBatch.add(v[0]);
+			tmpBatch.add(v[1]);
+			tmpBatch.add(v[2]);
+			tmpBatch.add(v[0]);
+			tmpBatch.add(v[2]);
+			tmpBatch.add(v[3]);
 			drawTexture3DBatch(tmpBatch,texture,alpha,mixColor);
 			tmpBatch.clear();
 			Arrays.fill(v,null);
@@ -319,9 +329,13 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 		if(isEnablePost()){
 			checkPost(texture);
 			varyColor=varyColor.copyNew().multiple(mixColor).multiple(finalAlpha);
-			tmpBatch.add(makeupVertex(texture,resV,dstV,varyColor));
+			for(TextureVertex3D v:makeupVertex(texture,resV,dstV,varyColor)){
+				tmpBatch.add(v);
+			}
 		}else{
-			tmpBatch.add(makeupVertex(texture,resV,dstV,varyColor));
+			for(TextureVertex3D v:makeupVertex(texture,resV,dstV,varyColor)){
+				tmpBatch.add(v);
+			}
 			drawTexture3DBatch(tmpBatch,texture,finalAlpha,mixColor);
 			tmpBatch.clear();
 		}

@@ -15,6 +15,7 @@ import com.edplan.framework.interfaces.Function;
 import com.edplan.framework.media.video.tbv.TBVException;
 import java.io.IOException;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
+import java.io.BufferedOutputStream;
 
 public class OutputStoryboard
 {
@@ -22,9 +23,9 @@ public class OutputStoryboard
 	
 	public PlayingStoryboard storyboard;
 	
-	public double renderTime=20 * 1000;
+	public double renderTime=120 * 1000;
 	
-	public double frameDeltaTime=1000/60d;
+	public double frameDeltaTime=1000/25d;
 	
 	public TBVEncoder encoder;
 	
@@ -34,7 +35,7 @@ public class OutputStoryboard
 		storyboard=sb;
 		timeline=storyboard.getTimeline();
 		try {
-			encoder=new TBVEncoder(new FileOutputStream("/storage/emulated/0/MyDisk/bin/tbv/test1.tbv"));
+			encoder=new TBVEncoder(new BufferedOutputStream(new FileOutputStream("/storage/emulated/0/MyDisk/bin/tbv/test1.tbv")));
 			encoder.initial(1080*16/9,1080);
 			final TBV.Header.Builder b=encoder.getHeaderBuilder();
 			try {

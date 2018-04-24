@@ -18,6 +18,11 @@ public class Quad implements IQuad
 		initial();
 		set(r);
 	}
+	
+	public Quad swapXY(){
+		swap(topRight,bottomLeft);
+		return this;
+	}
 
 	public void setTopLeft(Vec2 topLeft) {
 		this.topLeft.set(topLeft);

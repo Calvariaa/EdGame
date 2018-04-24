@@ -12,6 +12,7 @@ import java.io.IOException;
 import org.json.JSONException;
 import com.edplan.framework.timing.PreciseTimeline;
 import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
+import java.io.BufferedInputStream;
 
 public class TBVPlayer
 {
@@ -22,7 +23,7 @@ public class TBVPlayer
 	AResource dir;
 	
 	public TBVPlayer(File file) throws FileNotFoundException{
-		renderer=new TBVRenderer(new FileInputStream(file));
+		renderer=new TBVRenderer(new BufferedInputStream(new FileInputStream(file),1024*100));
 		dir=new DirResource(file.getParentFile());
 	}
 	

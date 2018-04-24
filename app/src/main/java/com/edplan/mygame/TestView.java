@@ -38,6 +38,7 @@ import org.json.JSONObject;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
 import com.edplan.framework.test.Test;
 import com.edplan.framework.graphics.opengl.CanvasUtil;
+import com.edplan.nso.storyboard.TBVStoryboard;
 
 public class TestView extends EdView
 {
@@ -68,6 +69,8 @@ public class TestView extends EdView
 	private BufferedLayer newLayer;
 
 	private GLCanvas2D newCanvas;
+	
+	TBVStoryboard tbvp;
 
 
 	private GLTexture testPng;
@@ -191,8 +194,10 @@ public class TestView extends EdView
 				playField=new StdPlayField(getContext(),timeline);
 				playField.applyBeatmap(playingBeatmap);
 
-
-				//# osb test
+				
+				if(test.playTBV){
+					tbvp=new TBVStoryboard(getContext(),new File("/storage/emulated/0/MyDisk/bin/tbv/test1.tbv"),timeline);
+				}else//# osb test
 				if(test.enableStoryboard){
 					File osb=new File(//"/storage/emulated/0/ADM/470977 Mili - world.execute(me)/Mili - world.execute(me); (Exile-).osb");
 						//"/storage/emulated/0/ADM/186911 Function Phantom - Neuronecia2/Function Phantom - Neuronecia (Amamiya Yuko).osb");
@@ -328,7 +333,9 @@ public class TestView extends EdView
 
 
 		//转换到osu field
-		if(test.outputTBV){
+		if(test.playTBV){
+			tbvp.draw(canvas);
+		}else if(test.outputTBV){
 			float startX=700;
 			float startY=500;
 			float width=500;
@@ -528,13 +535,15 @@ public class TestView extends EdView
 
 		public String dir="/storage/emulated/0/MyDisk/WorkBench/bin/testdata";
 
-		public int testBeatmapFloder=26;
+		public int testBeatmapFloder=11;
 
 		public boolean enableStoryboard=true;
 
-		public boolean enablePlayField=true;
+		public boolean enablePlayField=false;
 		
 		public boolean outputTBV=false;
+		
+		public boolean playTBV=false;
 
 		public boolean watchPool=false;
 
