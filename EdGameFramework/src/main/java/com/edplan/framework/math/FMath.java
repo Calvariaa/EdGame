@@ -2,7 +2,7 @@ package com.edplan.framework.math;
 
 public class FMath
 {
-	public static final double DPi=Math.PI;
+	public static final double DPi2=Math.PI*2;
 	
 	public static final float Pi=(float)Math.PI;
 	
@@ -19,7 +19,7 @@ public class FMath
 	static{
 		SIN=new float[SC_SIZE];
 		COS=new float[SC_SIZE];
-		Delta_Angle=Math.PI*2/360;
+		Delta_Angle=Math.PI*2/SC_SIZE;
 		for(int i=0;i<SC_SIZE;i++){
 			SIN[i]=(float)Math.sin(Delta_Angle*i);
 			COS[i]=(float)Math.cos(Delta_Angle*i);
@@ -34,9 +34,9 @@ public class FMath
 	
 	private static int toBufferIndex(double ang){
 		if(ang<0){
-			return toBufferIndex(DPi-(-ang)%DPi);
+			return toBufferIndex(DPi2-(-ang)%DPi2);
 		}else{
-			ang%=DPi;
+			ang%=DPi2;
 			return (int)(ang/Delta_Angle);
 		}
 	}

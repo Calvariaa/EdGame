@@ -205,19 +205,19 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 		//   ┌────┐
 		//   └────┘
 		//  0          1
-		final RectVertex v0=RectVertex.atRect(dst,0,1);
+		RectVertex v0=RectVertex.atRect(dst,0,1);
 		v0.setPosition(new Vec3(dst.getBottomLeft(),z));
 		v0.setColor(color);
 		v0.setTexturePoint(texture.toTexturePosition(res.getBottomLeft()));
-		final RectVertex v1=RectVertex.atRect(dst,1,1);
+		RectVertex v1=RectVertex.atRect(dst,1,1);
 		v1.setPosition(new Vec3(dst.getBottomRight(),z));
 		v1.setColor(color);
 		v1.setTexturePoint(texture.toTexturePosition(res.getBottomRight()));
-		final RectVertex v2=RectVertex.atRect(dst,1,0);
+		RectVertex v2=RectVertex.atRect(dst,1,0);
 		v2.setPosition(new Vec3(dst.getTopRight(),z));
 		v2.setColor(color);
 		v2.setTexturePoint(texture.toTexturePosition(res.getTopRight()));
-		final RectVertex v3=RectVertex.atRect(dst,0,0);
+		RectVertex v3=RectVertex.atRect(dst,0,0);
 		v3.setPosition(new Vec3(dst.getTopLeft(),z));
 		v3.setColor(color);
 		v3.setTexturePoint(texture.toTexturePosition(res.getTopLeft()));
