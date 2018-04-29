@@ -5,13 +5,39 @@ import android.graphics.Color;
 import com.edplan.superutils.U;
 import java.util.TreeMap;
 import java.util.Map;
+import com.edplan.framework.graphics.opengl.objs.Color4;
 
 public class Colours implements StringMakeable
 {
+	/**
+	 *SliderBorder : 255,255,255
+	 *SliderTrackOverride : 0,0,0
+	 */
+	
 	private TreeMap<Integer,Integer> colours;
+	
+	private Color4 sliderBorder=Color4.White.copyNew();
+	
+	private Color4 sliderTrackOverride=Color4.White.copyNew();
 	
 	public Colours(){
 		colours=new TreeMap<Integer,Integer>();
+	}
+
+	public void setSliderBorder(Color4 sliderBorder) {
+		this.sliderBorder.set(sliderBorder);
+	}
+
+	public Color4 getSliderBorder() {
+		return sliderBorder;
+	}
+
+	public void setSliderTrackOverride(Color4 sliderTrackOverride) {
+		this.sliderTrackOverride.set(sliderTrackOverride);
+	}
+
+	public Color4 getSliderTrackOverride() {
+		return sliderTrackOverride;
 	}
 	
 	public void addColour(int index,int c){

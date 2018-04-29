@@ -37,6 +37,7 @@ import java.io.IOException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
+import com.edplan.framework.test.Test;
 
 public class TestOsbView extends EdView
 {
@@ -79,6 +80,8 @@ public class TestOsbView extends EdView
 	private String osuPath,osbPath;
 
 	private boolean enableOsu,enableOsb;
+	
+	private String msg="none";
 
 	public TestOsbView(MContext context,JSONObject obj){
 		super(context);
@@ -97,6 +100,7 @@ public class TestOsbView extends EdView
 
 	@Override
 	public void onCreate(){
+		Test.get().setBoolean(Test.IS_RELEASE,false);
 		test=new TestData();
 		try {
 			AResource res=getContext().getAssetResource().subResource("font");
@@ -207,6 +211,8 @@ public class TestOsbView extends EdView
 					playField=new StdPlayField(getContext(),timeline);
 					playField.applyBeatmap(playingBeatmap);
 				}catch(Exception e){
+					e.printStackTrace();
+					msg="err osu : "+e.getMessage();
 					enableOsu=false;
 				}
 
@@ -475,6 +481,8 @@ public class TestOsbView extends EdView
 			printer.printString(playingStoryboard.objectsInField()+"\n");
 			printer.printString("new: "+playingStoryboard.newApply()+"");
 		}
+		printer.toNextLine();
+		printer.printString("osu: "+enableOsu+" osb: "+enableOsb+" msg: "+msg);
 		printer.toNextLine();
 		printer.printString(timeline.animationCount()+"");
 		//printer.setTextSize(50);
