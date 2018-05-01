@@ -38,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
 import com.edplan.framework.test.Test;
+import com.edplan.framework.test.performance.Tracker;
 
 public class TestOsbView extends EdView
 {
@@ -462,11 +463,11 @@ public class TestOsbView extends EdView
 
 
 		canvas.setCanvasAlpha(1f);
-		float baseLine=300;
+		float baseLine=150;
 		GLPaint textPaint=new GLPaint();
 		textPaint.setMixColor(Color4.rgba(1,0,0,1));
 		TextPrinter printer=new TextPrinter(font,100,baseLine,textPaint);
-		printer.setTextSize(60);
+		printer.setTextSize(40);
 		printer.printString("DEVELOPMENT BUILD\nosu!lab 2018.4.9");
 		printer.toNextLine();
 		printer.printString("fps: "+(int)(1000/avg)+"/"+(int)(1000/avg_nogc));
@@ -474,17 +475,21 @@ public class TestOsbView extends EdView
 		printer.printString(timeline.frameTime()+"");
 		printer.toNextLine();
 		//printer.printString("draws:"+drawCalls+"/"+drawCalls2);
-		printer.toNextLine();
+		//printer.toNextLine();
 		printer.printString("memory:"+Runtime.getRuntime().freeMemory()/1024/1024+"/"+Runtime.getRuntime().totalMemory()/1024/1024+"/"+Runtime.getRuntime().maxMemory()/1024/1024);
-		printer.toNextLine();
 		if(test.enableStoryboard){
+			printer.toNextLine();
 			printer.printString(playingStoryboard.objectsInField()+"\n");
 			printer.printString("new: "+playingStoryboard.newApply()+"");
 		}
 		printer.toNextLine();
 		printer.printString("osu: "+enableOsu+" osb: "+enableOsb+" msg: "+msg);
 		printer.toNextLine();
-		printer.printString(timeline.animationCount()+"");
+		printer.printString(Tracker.DrawArray.toString());
+		printer.toNextLine();
+		printer.printString(Tracker.InjectData.toString());
+		printer.toNextLine();
+		printer.printString(Tracker.PrepareVertexData.toString());
 		//printer.setTextSize(50);
 		//printer.printString("osu!lab");
 		//printer.toNextLine();

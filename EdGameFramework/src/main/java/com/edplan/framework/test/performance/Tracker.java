@@ -7,9 +7,45 @@ public class Tracker
 {
 	private static boolean enable=true;
 	
+	public static final String DRAW_ARRAY="DRAW_ARRAY";
+	public static final String PREPARE_VERTEX_DATA="PREPARE_VERTEX_DATA";
+	public static final String INJECT_DATA="INJECT_DATA";
+	public static final String MAIN_LOOPER="MAIN_LOOPER";
+	
+	
+	public static final TrackNode DrawArray;
+	public static final TrackNode PrepareVertexData;
+	public static final TrackNode InjectData;
+	public static final TrackNode MainLooper;
+	
 	private static ArrayList<TrackNode> nodes;
 	private static HashMap<String,TrackNode> namemap;
 	
+	
+	static{
+		nodes=new ArrayList<TrackNode>();
+		namemap=new HashMap<String,TrackNode>();
+		DrawArray=register(DRAW_ARRAY);
+		PrepareVertexData=register(PREPARE_VERTEX_DATA);
+		InjectData=register(INJECT_DATA);
+		MainLooper=register(MAIN_LOOPER);
+	}
+	
+	public static TrackNode register(String name){
+		TrackNode node=new TrackNode(nodes.size(),name);
+		nodes.add(node);
+		namemap.put(name,node);
+		return node;
+	}
+	
+	public static void reset(){
+		for(TrackNode n:nodes){
+			n.totalTimeMS=0;
+			n.trackedTimes=0;
+			n.latestRecordTime=0;
+			n.stack=0;
+		}
+	}
 	
 	public static class TrackNode{
 		public double totalTimeMS;
@@ -56,7 +92,7 @@ public class Tracker
 			sb.append("name         : "+name+" ("+id+")\n");
 			sb.append("totalTime    : "+totalTimeMS+"ms\n");
 			sb.append("trackedTimes : "+trackedTimes+"\n");
-			sb.append("------------------------------------\n");
+			sb.append("------------------------------------");
 			return sb.toString();
 		}
 	}

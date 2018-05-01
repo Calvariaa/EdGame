@@ -6,14 +6,17 @@ import com.edplan.framework.ui.animation.interpolate.IInterpolator;
 import com.edplan.framework.ui.animation.interpolate.ValueInterpolator;
 import com.edplan.framework.interfaces.Setter;
 import com.edplan.framework.interfaces.InvokeSetter;
+import com.edplan.framework.ui.animation.adapter.BaseAnimationAdapter;
 
 public class QueryAnimation<T,V> extends BasePreciseAnimation
 {
 	private List<AnimNode> nodes=new ArrayList<AnimNode>();
 	
-	private ValueInterpolator<V> interpolator;
+	//private ValueInterpolator<V> interpolator;
 	
-	private InvokeSetter<T,V> setter;
+	//private InvokeSetter<T,V> setter;
+	
+	private IAnimationAdapter<T,V> adapter;
 	
 	private boolean alwaysInitial=true;
 	
@@ -25,8 +28,9 @@ public class QueryAnimation<T,V> extends BasePreciseAnimation
 	
 	public QueryAnimation(T target,double initialOffset,ValueInterpolator<V> interpolator,InvokeSetter<T,V> setter,boolean alwaysInitial){
 		this.target=target;
-		this.interpolator=interpolator;
-		this.setter=setter;
+		//this.interpolator=interpolator;
+		//this.setter=setter;
+		this.adapter=new BaseAnimationAdapter(setter,interpolator);
 		this.alwaysInitial=alwaysInitial;
 		this.initialOffset=initialOffset;
 		setStartTime(initialOffset);
@@ -173,6 +177,7 @@ public class QueryAnimation<T,V> extends BasePreciseAnimation
 			this.easing=easing;
 		}
 		
+		/*
 		public V interplate(double time){
 			if(pre==null){
 				return value;
@@ -180,10 +185,12 @@ public class QueryAnimation<T,V> extends BasePreciseAnimation
 				return interpolator.applyInterplate(pre.value,value,time,easing);
 			}
 		}
+		*/
 		
 		public void apply(double progressTime){
 			double p=Math.min(1,Math.max(0,(duration==0)?1:((progressTime-startTime)/duration)));
-			setter.invoke(target,interplate(p));
+			//setter.invoke(target,interplate(p));
+			adapter.apply(target,(pre==null)?value:pre.value,value,p,easing);
 		}
 		
 		public void dispos(){

@@ -8,6 +8,7 @@ import com.edplan.framework.graphics.opengl.buffer.Vec3Buffer;
 import java.nio.Buffer;
 import com.edplan.framework.utils.MLog;
 import android.util.Log;
+import com.edplan.framework.test.performance.Tracker;
 
 public class VertexAttrib 
 {
@@ -59,6 +60,7 @@ public class VertexAttrib
 	
 	public void loadData(Buffer datas){
 		if(getHandle()==-1)return;
+		//Tracker.InjectData.watch();
 		GLES20.glVertexAttribPointer(
 			getHandle(),   
 			getType().dataCount, 
@@ -68,6 +70,7 @@ public class VertexAttrib
 			datas
 		);
 		GLES20.glEnableVertexAttribArray(getHandle());
+		//Tracker.InjectData.end();
 	}
 	
 	public void loadData(Vec2Buffer buffer){

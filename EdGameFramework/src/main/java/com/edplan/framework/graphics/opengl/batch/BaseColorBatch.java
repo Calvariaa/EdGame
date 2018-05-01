@@ -38,7 +38,7 @@ public class BaseColorBatch<T extends Vertex3D> implements BaseBatch,IHasColor,I
 
 	@Override
 	public void add(T v){
-		vertexs.add(v);
+		vertexs.add((T)v.copy());
 	}
 	
 	public void clear(){
