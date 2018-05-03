@@ -37,22 +37,9 @@ public class MContext
 	
 	private UILooper uiLooper;
 	
-	private float uiUnit=1;
-	
 	public MContext(Context androidContext){
 		this.androidContext=androidContext;
 		//initial();
-	}
-
-	/**
-	 *描述ui绘制时的基础大小
-	 */
-	public void setUiUnit(float uiUnit) {
-		this.uiUnit=uiUnit;
-	}
-
-	public float getUiUnit() {
-		return uiUnit;
 	}
 
 	public Thread getMainThread() {

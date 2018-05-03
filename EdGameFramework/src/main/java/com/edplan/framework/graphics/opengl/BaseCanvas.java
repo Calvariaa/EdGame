@@ -23,14 +23,12 @@ import com.edplan.framework.math.Vec3;
 import com.edplan.framework.math.Vec4;
 import com.edplan.framework.utils.AbstractSRable;
 import java.util.Arrays;
-import com.edplan.framework.test.performance.Tracker;
-import com.edplan.framework.media.video.tbv.element.DataDrawBaseTexture;
 
 public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 {
 	private float defZ=0;
 
-	private ITexture3DBatch<TextureVertex3D> tmpBatch;
+	private Texture3DBatch<TextureVertex3D> tmpBatch;
 
 	private RectVertexBatch<RectVertex> tmpRectBatch;
 
@@ -67,9 +65,8 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 		return maxBatchSize;
 	}
 	
-	protected ITexture3DBatch<TextureVertex3D> createTexture3DBatch(){
-		//return new Texture3DBatch<TextureVertex3D>();
-		return new DataDrawBaseTexture(32);
+	protected Texture3DBatch<TextureVertex3D> createTexture3DBatch(){
+		return new Texture3DBatch<TextureVertex3D>();
 	}
 	
 	protected RectVertexBatch<RectVertex> createRectVertexBatch(){
@@ -175,16 +172,12 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 	*/
 
 	private void injectData(BaseBatch batch,AbstractTexture texture,float alpha,Color4 mixColor,Texture3DShader shader){
-		//Tracker.InjectData.watch();
 		shader.useThis();
 		shader.loadMixColor(mixColor);
 		shader.loadAlpha(alpha*getCanvasAlpha());
 		shader.loadMatrix(getCamera());
 		shader.loadTexture(texture.getTexture());
-		//Tracker.InjectData.end();
-		Tracker.InjectData.watch();
 		shader.loadBatch(batch);
-		Tracker.InjectData.end();
 	}
 
 	public void injectRectData(RectF drawingRect,Vec4 padding,RectTextureShader shader){
@@ -206,57 +199,26 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 	public void drawTexture3DBatch(BaseBatch batch,AbstractTexture t){
 		drawTexture3DBatch(batch,t,1,Color4.ONE);
 	}
-	
-	TextureVertex3D[] bv=new TextureVertex3D[]{
-		new TextureVertex3D(),
-		new TextureVertex3D(),
-		new TextureVertex3D(),
-		new TextureVertex3D()
-	};
-	private TextureVertex3D[] createBaseTextureVertexs(AbstractTexture texture,IQuad res,IQuad dst,Color4 color,float z){
-		//  3          2
-		//   ┌────┐
-		//   └────┘
-		//  0          1
-		TextureVertex3D v0=bv[0];
-		v0.setPosition(dst.getBottomLeft(),z);
-		v0.setColor(color);
-		v0.setTexturePoint(texture.toTexturePosition(res.getBottomLeft()));
-		TextureVertex3D v1=bv[1];
-		v1.setPosition(dst.getBottomRight(),z);
-		v1.setColor(color);
-		v1.setTexturePoint(texture.toTexturePosition(res.getBottomRight()));
-		TextureVertex3D v2=bv[2];
-		v2.setPosition(dst.getTopRight(),z);
-		v2.setColor(color);
-		v2.setTexturePoint(texture.toTexturePosition(res.getTopRight()));
-		TextureVertex3D v3=bv[3];
-		v3.setPosition(dst.getTopLeft(),z);
-		v3.setColor(color);
-		v3.setTexturePoint(texture.toTexturePosition(res.getTopLeft()));
-		//return new TextureVertex3D[]{v0,v1,v2,v3};
-		return bv;
-	}
 
 	private RectVertex[] createRectVertexs(AbstractTexture texture,IQuad res,IQuad dst,Color4 color,float z){
 		//  3          2
 		//   ┌────┐
 		//   └────┘
 		//  0          1
-		RectVertex v0=RectVertex.atRect(dst,0,1);
-		v0.setPosition(dst.getBottomLeft(),z);
+		final RectVertex v0=RectVertex.atRect(dst,0,1);
+		v0.setPosition(new Vec3(dst.getBottomLeft(),z));
 		v0.setColor(color);
 		v0.setTexturePoint(texture.toTexturePosition(res.getBottomLeft()));
-		RectVertex v1=RectVertex.atRect(dst,1,1);
-		v1.setPosition(dst.getBottomRight(),z);
+		final RectVertex v1=RectVertex.atRect(dst,1,1);
+		v1.setPosition(new Vec3(dst.getBottomRight(),z));
 		v1.setColor(color);
 		v1.setTexturePoint(texture.toTexturePosition(res.getBottomRight()));
-		RectVertex v2=RectVertex.atRect(dst,1,0);
-		v2.setPosition(dst.getTopRight(),z);
+		final RectVertex v2=RectVertex.atRect(dst,1,0);
+		v2.setPosition(new Vec3(dst.getTopRight(),z));
 		v2.setColor(color);
 		v2.setTexturePoint(texture.toTexturePosition(res.getTopRight()));
-		RectVertex v3=RectVertex.atRect(dst,0,0);
-		v3.setPosition(dst.getTopLeft(),z);
+		final RectVertex v3=RectVertex.atRect(dst,0,0);
+		v3.setPosition(new Vec3(dst.getTopLeft(),z));
 		v3.setColor(color);
 		v3.setTexturePoint(texture.toTexturePosition(res.getTopLeft()));
 		return new RectVertex[]{v0,v1,v2,v3};
@@ -338,30 +300,15 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 		if(isEnablePost()){
 			checkPost(texture);
 			varyColor=varyColor.copyNew().multiple(mixColor).multiple(alpha);
-			Tracker.PrepareVertexData.watch();
-			final TextureVertex3D[] v=createBaseTextureVertexs(texture,res,dst,varyColor,z);
-			tmpBatch.add(v[0]);
-			tmpBatch.add(v[1]);
-			tmpBatch.add(v[2]);
-			tmpBatch.add(v[0]);
-			tmpBatch.add(v[2]);
-			tmpBatch.add(v[3]);
-			//Arrays.fill(v,null);
-			Tracker.PrepareVertexData.end();
+			final RectVertex[] v=createRectVertexs(texture,res,dst,varyColor,z);
+			tmpBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
+			Arrays.fill(v,null);
 		}else{
-			Tracker.PrepareVertexData.watch();
-			final TextureVertex3D[] v=createBaseTextureVertexs(texture,res,dst,varyColor,z);
-			tmpBatch.add(v[0]);
-			tmpBatch.add(v[1]);
-			tmpBatch.add(v[2]);
-			tmpBatch.add(v[0]);
-			tmpBatch.add(v[2]);
-			tmpBatch.add(v[3]);
-			//Arrays.fill(v,null);
-			Tracker.PrepareVertexData.end();
+			final RectVertex[] v=createRectVertexs(texture,res,dst,varyColor,z);
+			tmpBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
 			drawTexture3DBatch(tmpBatch,texture,alpha,mixColor);
 			tmpBatch.clear();
-			//Arrays.fill(v,null);
+			Arrays.fill(v,null);
 		}
 	}
 
@@ -372,13 +319,9 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 		if(isEnablePost()){
 			checkPost(texture);
 			varyColor=varyColor.copyNew().multiple(mixColor).multiple(finalAlpha);
-			for(TextureVertex3D v:makeupVertex(texture,resV,dstV,varyColor)){
-				tmpBatch.add(v);
-			}
+			tmpBatch.add(makeupVertex(texture,resV,dstV,varyColor));
 		}else{
-			for(TextureVertex3D v:makeupVertex(texture,resV,dstV,varyColor)){
-				tmpBatch.add(v);
-			}
+			tmpBatch.add(makeupVertex(texture,resV,dstV,varyColor));
 			drawTexture3DBatch(tmpBatch,texture,finalAlpha,mixColor);
 			tmpBatch.clear();
 		}

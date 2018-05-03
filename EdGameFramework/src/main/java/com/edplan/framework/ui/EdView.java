@@ -28,11 +28,11 @@ public class EdView implements IRunnableHandler
 	
 	private Visibility visiblility=Visibility.Visible;
 	
+	private DrawRequestParam drawRequestParam=DrawRequestParam.NewLayer;
+	
 	private MContext context;
 	
 	private EdDrawable background;
-	
-	
 	
 	public EdView(MContext context){
 		this.context=context;
@@ -103,6 +103,14 @@ public class EdView implements IRunnableHandler
 		return name;
 	}
 
+	public void setDrawRequestParam(DrawRequestParam drawRequestParam) {
+		this.drawRequestParam=drawRequestParam;
+	}
+
+	public DrawRequestParam getDrawRequestParam() {
+		return drawRequestParam;
+	}
+
 	public void setVisiblility(Visibility visiblility) {
 		this.visiblility=visiblility;
 	}
@@ -138,14 +146,15 @@ public class EdView implements IRunnableHandler
 		}
 	}
 
-	public final void measure(long width,long height){
+	public void measure(long width,long height){
 
 	}
 	
-	public void onMeasure(){
-		
+	public boolean onMotionEvent(EdMotionEvent e){
+		return false;
 	}
-
+	
+	
 
 	/**
 	 *这个涉及到点击事件的分发
@@ -154,4 +163,8 @@ public class EdView implements IRunnableHandler
 		// TODO: Implement this method
 		return area.inArea(v);
 	}
+	
+	
+	
+	
 }

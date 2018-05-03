@@ -18,11 +18,6 @@ public class Quad implements IQuad
 		initial();
 		set(r);
 	}
-	
-	public Quad swapXY(){
-		swap(topRight,bottomLeft);
-		return this;
-	}
 
 	public void setTopLeft(Vec2 topLeft) {
 		this.topLeft.set(topLeft);
@@ -103,7 +98,7 @@ public class Quad implements IQuad
 		return this;
 	}
 	
-	public Quad set(IQuad r){
+	public Quad set(RectF r){
 		return set(r.getTopLeft(),r.getTopRight(),r.getBottomLeft(),r.getBottomRight());
 	}
 	
@@ -135,18 +130,8 @@ public class Quad implements IQuad
 	}
 	
 	public static Vec2 mapPoint(Vec2 ptl,Vec2 ptr,Vec2 pbl,Vec2 pbr,float vx,float vy){
-		/*
 		float x=((ptl.x+pbl.x)*(1-vx)+(ptr.x+pbr.x)*vx)/2;
 		float y=((ptl.y+ptr.y)*(1-vy)+(pbl.y+pbr.y)*vy)/2;
-		*/
-		float omx=1-vx;
-		float omy=1-vy;
-		float lt=omx*omy;
-		float lb=omx*vy;
-		float rt=vx*omy;
-		float rb=vx*vy;
-		float x=lt*ptl.x+lb*pbl.x+rt*ptr.x+rb*pbr.x;
-		float y=lt*ptl.y+lb*pbl.y+rt*ptr.y+rb*pbr.y;
 		return new Vec2().set(x,y);
 	}
 }

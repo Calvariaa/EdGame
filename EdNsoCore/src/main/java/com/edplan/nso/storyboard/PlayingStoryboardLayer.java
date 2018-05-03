@@ -154,17 +154,17 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 		// TODO: Implement this method
 		newApply=0;
 		
-		PrepareTime.watch();
+		//PrepareTime.watch();
 		refreshObjects();
-		PrepareTime.end();
+		//PrepareTime.end();
 		
 		if(asyncPrepare)doAsyncPrepare();
 		int c=canvas.getBlendSetting().save();
 		canvas.enablePost();
 		for(ElementNode ele:spriteInField){
-			PrepareTime.watch();
+			//PrepareTime.watch();
 			if(!asyncPrepare)ele.element.prepareForDraw();
-			PrepareTime.end();
+			//PrepareTime.end();
 			ele.element.draw(canvas);
 		}
 		canvas.disablePost();

@@ -163,10 +163,6 @@ public class RectF implements Copyable,Area2D,IQuad
 		return new Quad(this);
 	}
 	
-	public Quad toQuad(Quad q){
-		return q.set(this);
-	}
-	
 	@Override
 	public RectF copy(){
 		return new RectF(this);

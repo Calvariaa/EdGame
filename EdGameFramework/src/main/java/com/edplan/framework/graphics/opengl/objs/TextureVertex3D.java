@@ -6,28 +6,26 @@ import com.edplan.framework.interfaces.Setable;
 public class TextureVertex3D extends Vertex3D
 {
 	public static final Vec2 DEF_TEXTURE_POINT=new Vec2(0,0);	
-	public final Vec2 texturePoint=DEF_TEXTURE_POINT.copy();
+	public Vec2 texturePoint;
 	
 	public TextureVertex3D(){
 		super();
+		texturePoint=DEF_TEXTURE_POINT.copy();
 	}
 	
 	public TextureVertex3D(float tx,float ty,float x,float y,float z,Color4 color){
 		super(x,y,z,color);
-		this.texturePoint.set(tx,ty);
+		this.texturePoint=new Vec2(tx,ty);
 	}
 	
 	public TextureVertex3D(Vec3 p){
 		super(p);
+		texturePoint=DEF_TEXTURE_POINT.copy();
 	}
 	
 	public TextureVertex3D(Vec3 p,Vec2 tp){
 		super(p);
-		this.texturePoint.set(tp);
-	}
-	
-	public TextureVertex3D(TextureVertex3D t){
-		set(t);
+		this.texturePoint=tp;
 	}
 	
 	@Override
@@ -39,11 +37,6 @@ public class TextureVertex3D extends Vertex3D
 	@Override
 	public TextureVertex3D setColor(Color4 color) {
 		this.color.set(color);
-		return this;
-	}
-	
-	public TextureVertex3D setPosition(float x,float y,float z){
-		this.position.set(x,y,z);
 		return this;
 	}
 
@@ -61,9 +54,10 @@ public class TextureVertex3D extends Vertex3D
 	}
 
 	@Override
-	public TextureVertex3D copy() {
+	public Vertex3D setPosition(Vec3 position) {
 		// TODO: Implement this method
-		return new TextureVertex3D(this);
+		this.position.set(position);
+		return this;
 	}
 	
 	public static TextureVertex3D atPosition(Vec3 pos){

@@ -7,9 +7,8 @@ import java.util.List;
 import com.edplan.framework.graphics.opengl.objs.VertexList;
 import com.edplan.framework.graphics.opengl.batch.base.IHasColor;
 import com.edplan.framework.graphics.opengl.batch.base.IHasPosition;
-import com.edplan.framework.interfaces.Addable;
 
-public class BaseColorBatch<T extends Vertex3D> implements BaseBatch,IHasColor,IHasPosition,Addable<T>
+public class BaseColorBatch<T extends Vertex3D> implements BaseBatch,IHasColor,IHasPosition
 {
 	protected List<T> vertexs;
 	
@@ -36,9 +35,8 @@ public class BaseColorBatch<T extends Vertex3D> implements BaseBatch,IHasColor,I
 			add(v);
 	}
 
-	@Override
 	public void add(T v){
-		vertexs.add((T)v.copy());
+		vertexs.add(v);
 	}
 	
 	public void clear(){

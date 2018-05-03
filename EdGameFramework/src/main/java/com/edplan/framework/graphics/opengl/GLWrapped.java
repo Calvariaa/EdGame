@@ -15,7 +15,6 @@ import android.opengl.GLES10;
 import android.opengl.GLES30;
 import android.opengl.GLES31Ext;
 import android.opengl.GLES11Ext;
-import com.edplan.framework.test.performance.Tracker;
 
 public class GLWrapped
 {
@@ -59,13 +58,17 @@ public class GLWrapped
 	}
 	
 	public static void onFrame(){
-		
+		drawCalls=0;
 	}
 	
+	private static int drawCalls=0;
 	public static void drawArrays(int mode,int offset,int count){
-		Tracker.DrawArray.watch();
 		GLES20.glDrawArrays(mode,offset,count);
-		Tracker.DrawArray.end();
+		drawCalls++;
+	}
+	
+	public static int frameDrawCalls(){
+		return drawCalls;
 	}
 	
 	private static int px1,px2,py1,py2;
