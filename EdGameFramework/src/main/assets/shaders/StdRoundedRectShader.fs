@@ -56,5 +56,6 @@ void main(){
 	}
 	
 	c*=r_alpha*u_FinalAlpha;
+	if(c.a<0.001)discard;
 	gl_FragColor=c;
 }

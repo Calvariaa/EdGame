@@ -16,9 +16,16 @@ import com.edplan.framework.fallback.GLES10Drawable;
 import com.edplan.framework.graphics.opengl.GL10Canvas2D;
 import java.util.LinkedList;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
+import com.edplan.framework.test.performance.Tracker;
 
 public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 {
+	public static Tracker.TrackNode PrepareTime;
+	
+	static{
+		 PrepareTime=Tracker.register("OsbPrepareTime");
+	}
+	
 	private List<ElementNode> sprites=new ArrayList<ElementNode>();
 	
 	private List<ElementNode> applyNode=new LinkedList<ElementNode>();
@@ -146,12 +153,18 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		newApply=0;
+		
+		PrepareTime.watch();
 		refreshObjects();
+		PrepareTime.end();
+		
 		if(asyncPrepare)doAsyncPrepare();
 		int c=canvas.getBlendSetting().save();
 		canvas.enablePost();
 		for(ElementNode ele:spriteInField){
+			PrepareTime.watch();
 			if(!asyncPrepare)ele.element.prepareForDraw();
+			PrepareTime.end();
 			ele.element.draw(canvas);
 		}
 		canvas.disablePost();

@@ -9,9 +9,9 @@ public class Vertex3D<T> implements Setable<Vertex3D>,Cloneable
 	
 	public static final Vec3 DEF_POSITION=new Vec3(0,0,0);
 	
-	public Vec3 position=new Vec3();
+	public final Vec3 position=new Vec3();
 	
-	public Color4 color=DEF_COLOR.copyNew();
+	public final Color4 color=DEF_COLOR.copyNew();
 	
 	public Vertex3D(){
 		//position=DEF_POSITION.copy();
