@@ -64,6 +64,14 @@ public class DataDrawBaseTexture implements ITexture3DBatch<TextureVertex3D>
 	}
 
 	@Override
+	public void add(TextureVertex3D[] ts) {
+		// TODO: Implement this method
+		for(TextureVertex3D v:ts){
+			add(v);
+		}
+	}
+	
+	@Override
 	public void add(TextureVertex3D t) {
 		// TODO: Implement this method
 		if(length>=vertexs.length)expand(vertexs.length*3/2+5);

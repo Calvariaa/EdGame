@@ -123,7 +123,7 @@ public abstract class BaseBuffer<T>
 	 */
 
 	public static FloatBuffer createFloatBuffer(int floatCount){
-		ByteBuffer bb=ByteBuffer.allocateDirect(floatCount*5);
+		ByteBuffer bb=ByteBuffer.allocateDirect(floatCount*4);
 		bb.order(ByteOrder.nativeOrder());
 		return bb.asFloatBuffer();
 	}

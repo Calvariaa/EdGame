@@ -23,12 +23,13 @@ import com.edplan.framework.math.Vec3;
 import com.edplan.framework.math.Vec4;
 import com.edplan.framework.utils.AbstractSRable;
 import java.util.Arrays;
+import com.edplan.framework.media.video.tbv.element.DataDrawBaseTexture;
 
 public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 {
 	private float defZ=0;
 
-	private Texture3DBatch<TextureVertex3D> tmpBatch;
+	private ITexture3DBatch<TextureVertex3D> tmpBatch;
 
 	private RectVertexBatch<RectVertex> tmpRectBatch;
 
@@ -65,8 +66,9 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 		return maxBatchSize;
 	}
 	
-	protected Texture3DBatch<TextureVertex3D> createTexture3DBatch(){
-		return new Texture3DBatch<TextureVertex3D>();
+	protected ITexture3DBatch<TextureVertex3D> createTexture3DBatch(){
+		//return new Texture3DBatch<TextureVertex3D>();
+		return new DataDrawBaseTexture(6);
 	}
 	
 	protected RectVertexBatch<RectVertex> createRectVertexBatch(){

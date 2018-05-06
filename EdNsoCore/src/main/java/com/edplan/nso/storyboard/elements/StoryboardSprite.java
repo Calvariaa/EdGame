@@ -124,9 +124,16 @@ public class StoryboardSprite implements IStoryboardElements
 		QueryAnimation<BaseDrawableSprite,T> anim=new QueryAnimation<BaseDrawableSprite,T>(sprite,obj_offset,interpolator,setter,true);
 		//Collections.sort(command,comparator);
 		if(command.size()==0)return;
+		
+		/*
 		T startV=(startValue!=null)?startValue:command.get(0).getStartValue();
 		setter.invoke(sprite,startV);
-		anim.transform(startV,offset-obj_offset,Easing.None);
+		anim.transform(startV,getStartTime(),0,Easing.None);
+		*/
+		
+		TypedCommand<T> tmp=command.get(0);
+		setter.invoke(sprite,tmp.getStartValue());
+		anim.transform(tmp.getStartValue(),offset-obj_offset,Easing.None);
 		for(TypedCommand<T> c:command){
 			anim.transform(c.getStartValue(),c.getStartTime(),0,c.getEasing());
 			anim.transform(c.getEndValue(),c.getStartTime(),c.getDuration(),c.getEasing());
