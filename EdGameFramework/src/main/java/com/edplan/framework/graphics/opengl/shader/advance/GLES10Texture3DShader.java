@@ -26,6 +26,7 @@ public class GLES10Texture3DShader extends Texture3DShader
 		}
 	}
 
+	/*
 	@Override
 	public void loadPosition(Vec3Buffer buffer) {
 		// TODO: Implement this method
@@ -121,4 +122,5 @@ public class GLES10Texture3DShader extends Texture3DShader
 		//super.loadMaskMatrix(mpm);
 		MLog.test.vOnce("es10loadMask","es-10-err","you call loadMaskMatrix in GLES10??");
 	}
+	*/
 }

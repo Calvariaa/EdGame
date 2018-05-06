@@ -24,6 +24,7 @@ import com.edplan.framework.graphics.opengl.batch.base.IHasTexturePosition;
 import com.edplan.framework.graphics.opengl.GLPaint;
 import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 import com.edplan.framework.graphics.opengl.Camera;
+import java.nio.FloatBuffer;
 
 public class Texture3DShader extends ColorShader
 {
@@ -70,7 +71,7 @@ public class Texture3DShader extends ColorShader
 	}
 	*/
 	
-	public void loadTexturePosition(Vec2Buffer buffer){
+	public void loadTexturePosition(FloatBuffer buffer){
 		vTexturePosition.loadData(buffer);
 	}
 
@@ -92,7 +93,7 @@ public class Texture3DShader extends ColorShader
 		}
 
 		@Override
-		public void loadPosition(Vec3Buffer buffer) {
+		public void loadPosition(FloatBuffer buffer) {
 			// TODO: Implement this method
 			//super.loadPosition(buffer);
 		}
@@ -104,7 +105,7 @@ public class Texture3DShader extends ColorShader
 		}
 
 		@Override
-		public void loadColor(Color4Buffer buffer) {
+		public void loadColor(FloatBuffer buffer) {
 			// TODO: Implement this method
 			//super.loadColor(buffer);
 		}
@@ -128,7 +129,7 @@ public class Texture3DShader extends ColorShader
 		}
 
 		@Override
-		public void loadTexturePosition(Vec2Buffer buffer) {
+		public void loadTexturePosition(FloatBuffer buffer) {
 			// TODO: Implement this method
 			//super.loadTexturePosition(buffer);
 		}

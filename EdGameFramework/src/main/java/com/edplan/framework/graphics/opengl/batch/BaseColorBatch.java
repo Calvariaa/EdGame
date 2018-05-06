@@ -1,12 +1,15 @@
 package com.edplan.framework.graphics.opengl.batch;
-import com.edplan.framework.graphics.opengl.buffer.Color4Buffer;
-import com.edplan.framework.graphics.opengl.buffer.Vec3Buffer;
-import com.edplan.framework.graphics.opengl.objs.Vertex3D;
-import java.util.ArrayList;
-import java.util.List;
-import com.edplan.framework.graphics.opengl.objs.VertexList;
 import com.edplan.framework.graphics.opengl.batch.base.IHasColor;
 import com.edplan.framework.graphics.opengl.batch.base.IHasPosition;
+import com.edplan.framework.graphics.opengl.buffer.BufferUtil;
+import com.edplan.framework.graphics.opengl.buffer.Color4Buffer;
+import com.edplan.framework.graphics.opengl.objs.Vertex3D;
+import com.edplan.framework.graphics.opengl.objs.VertexList;
+import com.edplan.framework.math.Vec3;
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.List;
+import com.edplan.framework.graphics.opengl.objs.Color4;
 
 public class BaseColorBatch<T extends Vertex3D> implements BaseBatch<T>,IHasColor,IHasPosition
 {
@@ -43,26 +46,50 @@ public class BaseColorBatch<T extends Vertex3D> implements BaseBatch<T>,IHasColo
 	
 	public void clear(){
 		vertexs.clear();
+		//colorBuffer.clear();
+		//positionBuffer.clear();
 	}
 
-	private Color4Buffer colorBuffer=new Color4Buffer();
+	private FloatBuffer colorBuffer;
 	@Override
-	public Color4Buffer makeColorBuffer(){
+	public FloatBuffer makeColorBuffer(){
+		int floatSize=4*getVertexCount();
+		if(colorBuffer==null){
+			colorBuffer=BufferUtil.createFloatBuffer(floatSize);
+		}
 		colorBuffer.clear();
-		for(T t:vertexs){
-			colorBuffer.add(t.getColor());
+		if(colorBuffer.remaining()<floatSize){
+			colorBuffer=BufferUtil.createFloatBuffer(floatSize);
+			colorBuffer.clear();
 		}
-		return colorBuffer;
+		Color4 tmp;
+		for(T t:vertexs){
+			tmp=t.getColor();
+			colorBuffer.put(tmp.r).put(tmp.g).put(tmp.b).put(tmp.a);
+		}
+		colorBuffer.position(0);
+		return colorBuffer;//colorBuffer;
 	}
 
-	private Vec3Buffer positionBuffer=new Vec3Buffer();
+	private FloatBuffer positionBuffer;
 	@Override
-	public Vec3Buffer makePositionBuffer(){
-		positionBuffer.clear();
-		for(T t:vertexs){
-			positionBuffer.add(t.getPosition());
+	public FloatBuffer makePositionBuffer(){
+		int floatSize=3*getVertexCount();
+		if(positionBuffer==null){
+			positionBuffer=BufferUtil.createFloatBuffer(floatSize);
 		}
-		return positionBuffer;
+		positionBuffer.clear();
+		if(positionBuffer.remaining()<floatSize){
+			positionBuffer=BufferUtil.createFloatBuffer(floatSize);
+			positionBuffer.clear();
+		}
+		Vec3 tmp;
+		for(T t:vertexs){
+			tmp=t.getPosition();
+			positionBuffer.put(tmp.x).put(tmp.y).put(tmp.z);
+		}
+		positionBuffer.position(0);
+		return positionBuffer;//positionBuffer;
 	}
 	
 }

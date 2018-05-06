@@ -16,6 +16,7 @@ import com.edplan.framework.graphics.opengl.objs.Color4;
 import java.util.List;
 import com.edplan.framework.graphics.opengl.batch.interfaces.ITexture3DBatch;
 import com.edplan.framework.utils.Tag;
+import java.nio.FloatBuffer;
 
 public class DataDrawBaseTexture implements ITexture3DBatch<TextureVertex3D>
 {
@@ -96,24 +97,24 @@ public class DataDrawBaseTexture implements ITexture3DBatch<TextureVertex3D>
 	}
 	
 	@Override
-	public Vec3Buffer makePositionBuffer() {
+	public FloatBuffer makePositionBuffer() {
 		// TODO: Implement this method
 		positionBuffer.limit(true,0,length);
-		return positionBuffer;
+		return null;//positionBuffer;
 	}
 
 	@Override
-	public Color4Buffer makeColorBuffer() {
+	public FloatBuffer makeColorBuffer() {
 		// TODO: Implement this method
 		colorBuffer.limit(true,0,length);
-		return colorBuffer;
+		return null;//colorBuffer;
 	}
 
 	@Override
-	public Vec2Buffer makeTexturePositionBuffer() {
+	public FloatBuffer makeTexturePositionBuffer() {
 		// TODO: Implement this method
 		texturePositionBuffer.limit(true,0,length);
-		return texturePositionBuffer;
+		return null;//texturePositionBuffer;
 	}
 
 	@Override
@@ -160,6 +161,7 @@ public class DataDrawBaseTexture implements ITexture3DBatch<TextureVertex3D>
 		}
 		d.textureId=id;
 		d.length=batch.getVertexCount();
+		/*
 		Vec2Buffer tp=((IHasTexturePosition)batch).makeTexturePositionBuffer();
 		Vec3Buffer pp=((IHasPosition)batch).makePositionBuffer();
 		Color4Buffer cp=((IHasColor)batch).makeColorBuffer();
@@ -168,6 +170,7 @@ public class DataDrawBaseTexture implements ITexture3DBatch<TextureVertex3D>
 			d.vertexs[i].position.set(pp.get(i));
 			d.vertexs[i].color.set(cp.get(i));
 		}
+		*/
 		return d;
 	}
 	

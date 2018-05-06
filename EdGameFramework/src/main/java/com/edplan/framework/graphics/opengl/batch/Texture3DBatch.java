@@ -1,15 +1,9 @@
 package com.edplan.framework.graphics.opengl.batch;
-import com.edplan.framework.graphics.opengl.buffer.Color4Buffer;
-import com.edplan.framework.graphics.opengl.buffer.Vec2Buffer;
-import com.edplan.framework.graphics.opengl.buffer.Vec3Buffer;
-import com.edplan.framework.graphics.opengl.objs.TextureVertex3D;
-import java.util.ArrayList;
-import java.util.List;
-import com.edplan.framework.graphics.opengl.objs.GLTexture;
-import com.edplan.framework.graphics.opengl.shader.GLProgram;
-import com.edplan.framework.graphics.opengl.shader.advance.Texture3DShader;
-import com.edplan.framework.graphics.opengl.batch.base.IHasTexturePosition;
 import com.edplan.framework.graphics.opengl.batch.interfaces.ITexture3DBatch;
+import com.edplan.framework.graphics.opengl.buffer.BufferUtil;
+import com.edplan.framework.graphics.opengl.objs.TextureVertex3D;
+import com.edplan.framework.math.Vec2;
+import java.nio.FloatBuffer;
 
 public class Texture3DBatch<T extends TextureVertex3D> extends BaseColorBatch<T> implements ITexture3DBatch<T>
 {
@@ -17,13 +11,24 @@ public class Texture3DBatch<T extends TextureVertex3D> extends BaseColorBatch<T>
 		
 	}
 
-	private Vec2Buffer texturePointBuffer=new Vec2Buffer();
+	private FloatBuffer texturePointBuffer;
 	@Override
-	public Vec2Buffer makeTexturePositionBuffer(){
-		texturePointBuffer.clear();
-		for(T t:vertexs){
-			texturePointBuffer.add(t.getTexturePoint());
+	public FloatBuffer makeTexturePositionBuffer(){
+		int floatSize=2*getVertexCount();
+		if(texturePointBuffer==null){
+			texturePointBuffer=BufferUtil.createFloatBuffer(floatSize);
 		}
-		return texturePointBuffer;
+		texturePointBuffer.clear();
+		if(texturePointBuffer.remaining()<floatSize){
+			texturePointBuffer=BufferUtil.createFloatBuffer(floatSize);
+			texturePointBuffer.clear();
+		}
+		Vec2 tmp;
+		for(T t:vertexs){
+			tmp=t.getTexturePoint();
+			texturePointBuffer.put(tmp.x).put(tmp.y);
+		}
+		texturePointBuffer.position(0);
+		return texturePointBuffer;//texturePointBuffer;
 	}
 }

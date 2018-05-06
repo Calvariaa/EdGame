@@ -14,6 +14,7 @@ import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
 import com.edplan.framework.graphics.opengl.batch.RectVertexBatch;
 import com.edplan.framework.graphics.opengl.batch.BaseBatch;
 import com.edplan.framework.graphics.opengl.batch.base.IHasRectPosition;
+import java.nio.FloatBuffer;
 
 public class RectTextureShader extends Texture3DShader
 {
@@ -45,7 +46,7 @@ public class RectTextureShader extends Texture3DShader
 		uInnerRect.loadRect(drawingRect,padding);
 	}
 	
-	public void loadRectPositions(Vec2Buffer buffer){
+	public void loadRectPositions(FloatBuffer buffer){
 		vRectPosition.loadData(buffer);
 	}
 

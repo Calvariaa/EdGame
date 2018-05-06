@@ -23,6 +23,7 @@ import com.edplan.framework.graphics.opengl.batch.BaseBatch;
 import android.opengl.GLES20;
 import com.edplan.framework.graphics.opengl.Camera;
 import com.edplan.framework.graphics.opengl.GLWrapped;
+import java.nio.FloatBuffer;
 
 public class ColorShader extends GLProgram 
 {
@@ -88,11 +89,11 @@ public class ColorShader extends GLProgram
 		uMaskMatrix.loadData(mpm);
 	}
 	
-	public void loadPosition(Vec3Buffer buffer){
+	public void loadPosition(FloatBuffer buffer){
 		vPosition.loadData(buffer);
 	}
 	
-	public void loadColor(Color4Buffer buffer){
+	public void loadColor(FloatBuffer buffer){
 		vColor.loadData(buffer);
 	}
 
@@ -128,7 +129,7 @@ public class ColorShader extends GLProgram
 		}
 
 		@Override
-		public void loadColor(Color4Buffer buffer) {
+		public void loadColor(FloatBuffer buffer) {
 			// TODO: Implement this method
 			//super.loadColor(buffer);
 		}
@@ -158,7 +159,7 @@ public class ColorShader extends GLProgram
 		}
 
 		@Override
-		public void loadPosition(Vec3Buffer buffer) {
+		public void loadPosition(FloatBuffer buffer) {
 			// TODO: Implement this method
 			//super.loadPosition(buffer);
 		}

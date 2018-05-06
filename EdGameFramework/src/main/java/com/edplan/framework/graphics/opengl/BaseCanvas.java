@@ -67,8 +67,8 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 	}
 	
 	protected ITexture3DBatch<TextureVertex3D> createTexture3DBatch(){
-		//return new Texture3DBatch<TextureVertex3D>();
-		return new DataDrawBaseTexture(6);
+		return new Texture3DBatch<TextureVertex3D>();
+		//return new DataDrawBaseTexture(6);
 	}
 	
 	protected RectVertexBatch<RectVertex> createRectVertexBatch(){

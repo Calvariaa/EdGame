@@ -8,6 +8,7 @@ import com.edplan.framework.graphics.opengl.buffer.Vec3Buffer;
 import java.nio.Buffer;
 import com.edplan.framework.utils.MLog;
 import android.util.Log;
+import java.nio.FloatBuffer;
 
 public class VertexAttrib 
 {
@@ -57,7 +58,7 @@ public class VertexAttrib
 		return name;
 	}
 	
-	public void loadData(Buffer datas){
+	public void loadData(FloatBuffer datas){
 		if(getHandle()==-1)return;
 		GLES20.glVertexAttribPointer(
 			getHandle(),   
@@ -70,11 +71,12 @@ public class VertexAttrib
 		GLES20.glEnableVertexAttribArray(getHandle());
 	}
 	
-	public void loadData(Vec2Buffer buffer){
+	/*
+	public void loadData(FloatBuffer buffer){
 		if(getType()!=Type.VEC2){
 			throw new GLException("only Type.VEC2 can use loadData(Vec2Buffer)");
 		}else{
-			loadData(buffer.makeBuffer());
+			loadData(buffer);
 		}
 	}
 	
@@ -93,6 +95,7 @@ public class VertexAttrib
 			loadData(buffer.makeBuffer());
 		}
 	}
+	*/
 	
 	public static VertexAttrib findAttrib(GLProgram program,String name,Type type){
 		VertexAttrib va=new VertexAttrib();
