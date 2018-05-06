@@ -163,6 +163,21 @@ public class RectF implements Copyable,Area2D,IQuad
 		return new Quad(this);
 	}
 	
+	public Quad toQuad(Quad q){
+		return q.set(this);
+	}
+	
+	public RectF thisXYWH(float x,float y,float w,float h){
+		this.basePoint.set(x,y);
+		width=w;
+		height=h;
+		return this;
+	}
+	
+	public RectF thisAnchorOWH(Anchor anchor,float ox,float oy,float w,float h){
+		return thisXYWH(ox-anchor.x()*w,oy-anchor.y()*h,w,h);
+	}
+	
 	@Override
 	public RectF copy(){
 		return new RectF(this);

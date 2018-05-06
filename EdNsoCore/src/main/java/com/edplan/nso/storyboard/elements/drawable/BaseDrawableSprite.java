@@ -22,7 +22,7 @@ import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public class BaseDrawableSprite extends ADrawableStoryboardElement
 {
-	private AbstractTexture texture;
+	protected AbstractTexture texture;
 	
 	private Anchor anchor=Anchor.Center;
 	
@@ -114,6 +114,10 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 	private List<QueryAnimation> animations=new ArrayList<QueryAnimation>();
 	
 	private QueryAnimation alphaAnimation;
+	
+	private RectF rawRect=new RectF();
+	
+	private Quad quad=new Quad();
 	
 	public BaseDrawableSprite(PlayingStoryboard storyboard,StoryboardSprite sprite){
 		super(storyboard);
@@ -266,20 +270,27 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		if(alpha<0.002)return;
-		Quad quad=
-			RectF.anchorOWH(
-				anchor,
-				currentPosition.x,
-				currentPosition.y,
-				texture.getWidth(),
-				texture.getHeight()
-			).scale(anchor,scale.x,scale.y)
-			.toQuad();
+		rawRect
+		 .thisAnchorOWH(
+			anchor,
+			currentPosition.x,
+			currentPosition.y,
+			texture.getWidth(),
+			texture.getHeight())
+		 .scale(anchor,scale.x,scale.y)
+		 .toQuad(quad);
 		quad.rotate(anchor,rotation);
 		quad.flip(flipH,flipV);
 		//默认只按次流程绘制且只绘制StoryboardSprite，这里省去save/restore节省时间
 		canvas.getBlendSetting().setBlendType(blendType);
 		canvas.drawTexture(texture,quad,varyingColor,alpha);
+		/*
+		if(flipV){
+			canvas.drawTexture(texture,quad,varyingColor,alpha*0.3f);
+		}else{
+			canvas.drawTexture(texture,quad,varyingColor,alpha);
+		}
+		*/
 	}
 
 	@Override

@@ -142,7 +142,7 @@ public class QueryAnimation<T,V> extends BasePreciseAnimation
 		return (hasNode())?getEndNode().endTime:0;
 	}
 	
-	private AnimNode getEndNode(){
+	public AnimNode getEndNode(){
 		return nodes.size()>0?nodes.get(nodes.size()-1):null;
 	}
 
@@ -171,6 +171,10 @@ public class QueryAnimation<T,V> extends BasePreciseAnimation
 			this.startTime=startTime;
 			this.endTime=startTime+duration;
 			this.easing=easing;
+		}
+		
+		public double getEndTime(){
+			return endTime;
 		}
 		
 		public V interplate(double time){

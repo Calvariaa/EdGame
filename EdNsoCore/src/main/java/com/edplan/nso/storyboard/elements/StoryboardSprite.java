@@ -17,6 +17,7 @@ import com.edplan.framework.ui.animation.interpolate.Vec2Interpolator;
 import com.edplan.framework.ui.animation.interpolate.Color4Interpolator;
 import com.edplan.framework.ui.animation.interpolate.InvalidInterpolator;
 import com.edplan.framework.utils.MLog;
+import com.edplan.framework.graphics.opengl.BlendType;
 
 public class StoryboardSprite implements IStoryboardElements
 {
@@ -117,18 +118,21 @@ public class StoryboardSprite implements IStoryboardElements
 			return (int)Math.signum(p1.getStartTime()-p2.getStartTime());
 		}
 	};
-	private <T> void applyCommands(BaseDrawableSprite sprite,List<TypedCommand<T>> command,ValueInterpolator<T> interpolator,InvokeSetter<BaseDrawableSprite,T> setter){
+	private <T> void applyCommands(BaseDrawableSprite sprite,List<TypedCommand<T>> command,ValueInterpolator<T> interpolator,InvokeSetter<BaseDrawableSprite,T> setter,T startValue,boolean keepInEnding){
 		double offset=sprite.getStartTime();
 		double obj_offset=getStartTime();
 		QueryAnimation<BaseDrawableSprite,T> anim=new QueryAnimation<BaseDrawableSprite,T>(sprite,obj_offset,interpolator,setter,true);
 		//Collections.sort(command,comparator);
 		if(command.size()==0)return;
-		TypedCommand<T> tmp=command.get(0);
-		setter.invoke(sprite,tmp.getStartValue());
-		anim.transform(tmp.getStartValue(),offset-obj_offset,Easing.None);
+		T startV=(startValue!=null)?startValue:command.get(0).getStartValue();
+		setter.invoke(sprite,startV);
+		anim.transform(startV,offset-obj_offset,Easing.None);
 		for(TypedCommand<T> c:command){
 			anim.transform(c.getStartValue(),c.getStartTime(),0,c.getEasing());
 			anim.transform(c.getEndValue(),c.getStartTime(),c.getDuration(),c.getEasing());
+		}
+		if(!keepInEnding){
+			anim.transform(startValue,anim.getEndNode().getEndTime(),0,Easing.None);
 		}
 		sprite.addAnimation(anim,setter);
 	}
@@ -159,15 +163,15 @@ public class StoryboardSprite implements IStoryboardElements
 		
 		BaseDrawableSprite sprite=(BaseDrawableSprite)ele;
 		initialTexture(sprite,storyboard);
-		applyCommands(sprite,getCommands(Selecters.SX),FloatInterpolator.Instance,BaseDrawableSprite.X);
-		applyCommands(sprite,getCommands(Selecters.SY),FloatInterpolator.Instance,BaseDrawableSprite.Y);
-		applyCommands(sprite,getCommands(Selecters.SScale),Vec2Interpolator.Instance,BaseDrawableSprite.Scale);
-		applyCommands(sprite,getCommands(Selecters.SRotation),FloatInterpolator.Instance,BaseDrawableSprite.Rotation);
-		applyCommands(sprite,getCommands(Selecters.SColour),Color4Interpolator.Instance,BaseDrawableSprite.Color);
-		applyCommands(sprite,getCommands(Selecters.SAlpha),FloatInterpolator.Instance,BaseDrawableSprite.Alpha);
-		applyCommands(sprite,getCommands(Selecters.SBlendType),InvalidInterpolator.ForBlendType,BaseDrawableSprite.Blend);
-		applyCommands(sprite,getCommands(Selecters.SFlipH),InvalidInterpolator.ForBoolean,BaseDrawableSprite.FlipH);
-		applyCommands(sprite,getCommands(Selecters.SFlipV),InvalidInterpolator.ForBoolean,BaseDrawableSprite.FlipV);
+		applyCommands(sprite,getCommands(Selecters.SX),FloatInterpolator.Instance,BaseDrawableSprite.X,initialPosition.x,true);
+		applyCommands(sprite,getCommands(Selecters.SY),FloatInterpolator.Instance,BaseDrawableSprite.Y,initialPosition.y,true);
+		applyCommands(sprite,getCommands(Selecters.SScale),Vec2Interpolator.Instance,BaseDrawableSprite.Scale,null,true);
+		applyCommands(sprite,getCommands(Selecters.SRotation),FloatInterpolator.Instance,BaseDrawableSprite.Rotation,0f,true);
+		applyCommands(sprite,getCommands(Selecters.SColour),Color4Interpolator.Instance,BaseDrawableSprite.Color,null,true);
+		applyCommands(sprite,getCommands(Selecters.SAlpha),FloatInterpolator.Instance,BaseDrawableSprite.Alpha,null,true);
+		applyCommands(sprite,getCommands(Selecters.SBlendType),InvalidInterpolator.ForBlendType,BaseDrawableSprite.Blend,BlendType.Normal,false);
+		applyCommands(sprite,getCommands(Selecters.SFlipH),InvalidInterpolator.ForBoolean,BaseDrawableSprite.FlipH,false,false);
+		applyCommands(sprite,getCommands(Selecters.SFlipV),InvalidInterpolator.ForBoolean,BaseDrawableSprite.FlipV,false,false);
 	}
 
 	@Override
