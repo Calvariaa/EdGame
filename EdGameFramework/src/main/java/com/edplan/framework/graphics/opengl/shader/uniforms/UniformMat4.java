@@ -5,34 +5,20 @@ import com.edplan.framework.math.Mat4;
 import android.opengl.GLES20;
 import com.edplan.framework.graphics.opengl.GLException;
 
-public class UniformMat4 implements DataUniform<Mat4>
+public class UniformMat4 extends DataUniform<Mat4>
 {
-	private int handle;
-	
-	private GLProgram program;
+	protected UniformMat4(int h){
+		super(h);
+	}
 
 	@Override
 	public void loadData(Mat4 t) {
 		// TODO: Implement this method
-		GLES20.glUniformMatrix4fv(getHandle(),1,false,t.data,0);
-	}
-	
-	@Override
-	public int getHandle() {
-		// TODO: Implement this method
-		return handle;
-	}
-
-	@Override
-	public GLProgram getProgram() {
-		// TODO: Implement this method
-		return program;
+		if(available)GLES20.glUniformMatrix4fv(getHandle(),1,false,t.data,0);
 	}
 	
 	public static UniformMat4 findUniform(GLProgram program,String name){
-		UniformMat4 um=new UniformMat4();
-		um.handle=GLES20.glGetUniformLocation(program.getProgramId(),name);
-		um.program=program;
+		UniformMat4 um=new UniformMat4(GLES20.glGetUniformLocation(program.getProgramId(),name));
 		//if(um.handle==-1)throw new GLException("handle "+name+" NOT found");
 		return um;
 	}

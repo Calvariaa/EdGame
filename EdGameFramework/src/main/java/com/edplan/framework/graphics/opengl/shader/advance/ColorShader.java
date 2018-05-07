@@ -16,10 +16,14 @@ import com.edplan.framework.graphics.opengl.shader.uniforms.UniformFloat;
 import com.edplan.framework.graphics.opengl.shader.uniforms.UniformMat4;
 import com.edplan.framework.math.Mat4;
 import java.nio.FloatBuffer;
+import android.util.Log;
 
 public class ColorShader extends BaseShader
 {
 	public static ColorShader Invalid=new InvalidColorShader();
+	
+	@PointerName("test")
+	public UniformFloat uTest;
 	
 	@PointerName(Unif.MVPMatrix)
 	public UniformMat4 uMVPMatrix;

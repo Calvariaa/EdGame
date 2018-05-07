@@ -1,10 +1,19 @@
 package com.edplan.framework.graphics.opengl.shader;
 
-public interface DataUniform<T>
+public abstract class DataUniform<T>
 {
-	public void loadData(T t);
+	protected final int handle;
 	
-	public int getHandle();
+	protected final boolean available;
 	
-	public GLProgram getProgram();
+	public DataUniform(int handle){
+		this.handle=handle;
+		this.available=(handle!=-1);
+	}
+	
+	public abstract void loadData(T t);
+	
+	public int getHandle(){
+		return handle;
+	}
 }

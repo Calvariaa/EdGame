@@ -7,24 +7,19 @@ import com.edplan.framework.graphics.opengl.shader.GLProgram;
 import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.Vec4;
 
-public class UniformColor4  implements DataUniform<Color4>
+public class UniformColor4 extends DataUniform<Color4>
 {
-	private String name;
-
-	private int handle;
-
-	private GLProgram program;
-
-	public UniformColor4(){
-
+	
+	protected UniformColor4(int h){
+		super(h);
 	}
 	
 	public void loadRect(RectF rect){
-		GLES20.glUniform4f(getHandle(),rect.getX1(),rect.getY1(),rect.getX2(),rect.getY2());
+		if(available)GLES20.glUniform4f(getHandle(),rect.getX1(),rect.getY1(),rect.getX2(),rect.getY2());
 	}
 	
 	public void loadRect(RectF rect,float padding){
-		GLES20.glUniform4f(getHandle(),rect.getX1()+padding,rect.getY1()+padding,rect.getX2()-padding,rect.getY2()-padding);
+		if(available)GLES20.glUniform4f(getHandle(),rect.getX1()+padding,rect.getY1()+padding,rect.getX2()-padding,rect.getY2()-padding);
 	}
 	
 	public void loadRect(RectF rect,Vec4 padding){
@@ -34,6 +29,7 @@ public class UniformColor4  implements DataUniform<Color4>
 	@Override
 	public void loadData(Color4 t) {
 		// TODO: Implement this method
+		if(available)
 		if(!t.premultiple){
 			GLES20.glUniform4f(getHandle(),t.r*t.a,t.g*t.a,t.b*t.a,t.a);
 		}else{
@@ -41,23 +37,8 @@ public class UniformColor4  implements DataUniform<Color4>
 		}
 	}
 
-	@Override
-	public int getHandle() {
-		// TODO: Implement this method
-		return handle;
-	}
-
-	@Override
-	public GLProgram getProgram() {
-		// TODO: Implement this method
-		return program;
-	}
-
 	public static UniformColor4 findUniform(GLProgram program,String name){
-		UniformColor4 um=new UniformColor4();
-		um.handle=GLES20.glGetUniformLocation(program.getProgramId(),name);
-		um.program=program;
-		um.name=name;
+		UniformColor4 um=new UniformColor4(GLES20.glGetUniformLocation(program.getProgramId(),name));
 		//if(um.handle==-1)throw new GLException("handle "+name+" NOT found");
 		return um;
 	}

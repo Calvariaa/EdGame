@@ -26,8 +26,6 @@ public abstract class BaseShader extends GLProgram
 				if(f.isAnnotationPresent(PointerName.class)){
 					String name=f.getAnnotation(PointerName.class).value();
 					f.setAccessible(true);
-					Log.v("load","cc "+UniformColor4.class);
-					Log.v("load","dclass "+f.getType());
 					if(f.getType().equals(VertexAttrib.class)){
 						AttribType type=f.getAnnotation(AttribType.class);
 						f.set(this,VertexAttrib.findAttrib(this,name,type.value()));
