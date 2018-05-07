@@ -1,10 +1,12 @@
 package com.edplan.framework.graphics.opengl.shader.advance;
 
-import com.edplan.framework.graphics.opengl.buffer.Color4Buffer;
-import com.edplan.framework.graphics.opengl.buffer.Vec2Buffer;
-import com.edplan.framework.graphics.opengl.buffer.Vec3Buffer;
+import com.edplan.framework.graphics.opengl.Camera;
+import com.edplan.framework.graphics.opengl.GLPaint;
+import com.edplan.framework.graphics.opengl.GLWrapped;
+import com.edplan.framework.graphics.opengl.batch.BaseBatch;
+import com.edplan.framework.graphics.opengl.batch.base.IHasColor;
+import com.edplan.framework.graphics.opengl.batch.base.IHasPosition;
 import com.edplan.framework.graphics.opengl.objs.Color4;
-import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.graphics.opengl.shader.Attr;
 import com.edplan.framework.graphics.opengl.shader.GLProgram;
 import com.edplan.framework.graphics.opengl.shader.Unif;
@@ -12,49 +14,39 @@ import com.edplan.framework.graphics.opengl.shader.VertexAttrib;
 import com.edplan.framework.graphics.opengl.shader.uniforms.UniformColor4;
 import com.edplan.framework.graphics.opengl.shader.uniforms.UniformFloat;
 import com.edplan.framework.graphics.opengl.shader.uniforms.UniformMat4;
-import com.edplan.framework.graphics.opengl.shader.uniforms.UniformSample2D;
 import com.edplan.framework.math.Mat4;
-import com.edplan.framework.graphics.opengl.GLPaint;
-import com.edplan.framework.graphics.opengl.batch.BaseColorBatch;
-import com.edplan.framework.graphics.opengl.GLCanvas2D;
-import com.edplan.framework.graphics.opengl.batch.base.IHasColor;
-import com.edplan.framework.graphics.opengl.batch.base.IHasPosition;
-import com.edplan.framework.graphics.opengl.batch.BaseBatch;
-import android.opengl.GLES20;
-import com.edplan.framework.graphics.opengl.Camera;
-import com.edplan.framework.graphics.opengl.GLWrapped;
 import java.nio.FloatBuffer;
 
-public class ColorShader extends GLProgram 
+public class ColorShader extends BaseShader
 {
 	public static ColorShader Invalid=new InvalidColorShader();
 	
-	private UniformMat4 uMVPMatrix;
+	@PointerName(Unif.MVPMatrix)
+	public UniformMat4 uMVPMatrix;
 	
-	private UniformMat4 uMaskMatrix;
+	@PointerName(Unif.MaskMatrix)
+	public UniformMat4 uMaskMatrix;
 	
-	//private UniformFloat uColorMixRate;
+	@PointerName(Unif.FinalAlpha)
+	public UniformFloat uFinalAlpha;
 	
-	private UniformFloat uFinalAlpha;
+	@PointerName(Unif.MixColor)
+	public UniformColor4 uMixColor;
 	
-	private UniformColor4 uMixColor;
+	@PointerName(Attr.Position)
+	@AttribType(VertexAttrib.Type.VEC3)
+	public VertexAttrib vPosition;
 	
-	private VertexAttrib vPosition;
-	
-	private VertexAttrib vColor;
+	@PointerName(Attr.Color)
+	@AttribType(VertexAttrib.Type.VEC4)
+	public VertexAttrib vColor;
 	
 	protected ColorShader(GLProgram program){
-		super(program.getVertexShader(),program.getFragmentShader(),program.getProgramId());
+		super(program,true);
 	}
 	
-	public void setUp(){
-		uMVPMatrix=UniformMat4.findUniform(this,Unif.MVPMatrix);
-		uMaskMatrix=UniformMat4.findUniform(this,Unif.MaskMatrix);
-		//uColorMixRate=UniformFloat.findUniform(this,Unif.ColorMixRate);
-		uFinalAlpha=UniformFloat.findUniform(this,Unif.FinalAlpha);
-		uMixColor=UniformColor4.findUniform(this,Unif.MixColor);
-		vPosition=VertexAttrib.findAttrib(this,Attr.Position,VertexAttrib.Type.VEC3);
-		vColor=VertexAttrib.findAttrib(this,Attr.Color,VertexAttrib.Type.VEC4);
+	protected ColorShader(GLProgram p,boolean i){
+		super(p,i);
 	}
 	
 	public void loadPaint(GLPaint paint,float alphaAdjust){
@@ -107,7 +99,6 @@ public class ColorShader extends GLProgram
 	
 	public static final ColorShader createCS(String vs,String fs){
 		ColorShader s=new ColorShader(GLProgram.createProgram(vs,fs));
-		s.setUp();
 		return s;
 	}
 	
@@ -119,13 +110,7 @@ public class ColorShader extends GLProgram
 	
 	public static class InvalidColorShader extends ColorShader{
 		public InvalidColorShader(){
-			super(GLProgram.invalidProgram());
-		}
-
-		@Override
-		public void setUp() {
-			// TODO: Implement this method
-			//super.setUp();
+			super(GLProgram.invalidProgram(),false);
 		}
 
 		@Override

@@ -1,49 +1,35 @@
 package com.edplan.framework.graphics.opengl.shader.advance;
-import com.edplan.framework.graphics.opengl.shader.GLProgram;
-import com.edplan.framework.graphics.opengl.shader.GLShader;
-import com.edplan.framework.graphics.opengl.shader.advance.interfaces.ITexturedVertex3DShader;
-import com.edplan.framework.graphics.opengl.shader.uniforms.UniformMat4;
-import com.edplan.framework.graphics.opengl.shader.VertexAttrib;
-import com.edplan.framework.graphics.opengl.shader.Unif;
-import com.edplan.framework.graphics.opengl.shader.Attr;
-import com.edplan.framework.math.Mat4;
-import com.edplan.framework.graphics.opengl.buffer.Vec3Buffer;
-import com.edplan.framework.graphics.opengl.buffer.Color4Buffer;
-import com.edplan.framework.graphics.opengl.buffer.Vec2Buffer;
-import com.edplan.framework.graphics.opengl.shader.uniforms.UniformFloat;
-import com.edplan.framework.graphics.opengl.shader.uniforms.UniformSample2D;
-import com.edplan.framework.graphics.opengl.objs.GLTexture;
-import com.edplan.framework.graphics.opengl.shader.uniforms.UniformColor4;
-import com.edplan.framework.graphics.opengl.objs.Color4;
-import com.edplan.framework.interfaces.Recycleable;
-import com.edplan.framework.graphics.opengl.batch.BaseColorBatch;
-import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
-import com.edplan.framework.graphics.opengl.objs.texture.TextureRegion;
+import com.edplan.framework.graphics.opengl.Camera;
+import com.edplan.framework.graphics.opengl.GLPaint;
 import com.edplan.framework.graphics.opengl.batch.BaseBatch;
 import com.edplan.framework.graphics.opengl.batch.base.IHasTexturePosition;
-import com.edplan.framework.graphics.opengl.GLPaint;
 import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
-import com.edplan.framework.graphics.opengl.Camera;
+import com.edplan.framework.graphics.opengl.objs.Color4;
+import com.edplan.framework.graphics.opengl.shader.Attr;
+import com.edplan.framework.graphics.opengl.shader.GLProgram;
+import com.edplan.framework.graphics.opengl.shader.Unif;
+import com.edplan.framework.graphics.opengl.shader.VertexAttrib;
+import com.edplan.framework.graphics.opengl.shader.uniforms.UniformSample2D;
+import com.edplan.framework.math.Mat4;
 import java.nio.FloatBuffer;
 
 public class Texture3DShader extends ColorShader
 {
 	public static Texture3DShader Invalid=new InvalidTexture3DShader();
 	
-	private UniformSample2D uTexture;
+	@PointerName(Unif.Texture)
+	public UniformSample2D uTexture;
 	
-	private VertexAttrib vTexturePosition;
+	@PointerName(Attr.Texturesition)
+	@AttribType(VertexAttrib.Type.VEC2)
+	public VertexAttrib vTexturePosition;
 	
 	protected Texture3DShader(GLProgram program){
-		super(program);
+		super(program,true);
 	}
-
-	@Override
-	public void setUp() {
-		// TODO: Implement this method
-		super.setUp();
-		uTexture=UniformSample2D.findUniform(this,Unif.Texture,0);
-		vTexturePosition=VertexAttrib.findAttrib(this,Attr.Texturesition,VertexAttrib.Type.VEC2);
+	
+	protected Texture3DShader(GLProgram p,boolean i){
+		super(p,i);
 	}
 
 	@Override
@@ -64,32 +50,19 @@ public class Texture3DShader extends ColorShader
 	public void loadTexture(AbstractTexture texture){
 		uTexture.loadData(texture.getTexture());
 	}
-	
-	/*
-	public void loadTexture(TextureRegion texture){
-		uTexture.loadData(texture.getTexture());
-	}
-	*/
-	
+
 	public void loadTexturePosition(FloatBuffer buffer){
 		vTexturePosition.loadData(buffer);
 	}
 
 	public static final Texture3DShader createT3S(String vs,String fs){
 		Texture3DShader s=new Texture3DShader(GLProgram.createProgram(vs,fs));
-		s.setUp();
 		return s;
 	}
 	
 	public static class InvalidTexture3DShader extends Texture3DShader{
 		public InvalidTexture3DShader(){
-			super(GLProgram.invalidProgram());
-		}
-
-		@Override
-		public void setUp() {
-			// TODO: Implement this method
-			//super.setUp();
+			super(GLProgram.invalidProgram(),false);
 		}
 
 		@Override

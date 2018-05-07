@@ -18,26 +18,25 @@ import java.nio.FloatBuffer;
 
 public class RectTextureShader extends Texture3DShader
 {
-	private VertexAttrib vRectPosition;
+	@PointerName(Attr.RectPosition)
+	@AttribType(VertexAttrib.Type.VEC2)
+	public VertexAttrib vRectPosition;
 	
-	private UniformColor4 uPadding;
+	@PointerName(Unif.Padding)
+	public UniformColor4 uPadding;
 	
-	private UniformColor4 uInnerRect;
+	@PointerName(Unif.InnerRect)
+	public UniformColor4 uInnerRect;
 	
-	private UniformColor4 uDrawingRect;
+	@PointerName(Unif.DrawingRect)
+	public UniformColor4 uDrawingRect;
 	
 	protected RectTextureShader(GLProgram p){
-		super(p);
+		super(p,true);
 	}
-
-	@Override
-	public void setUp() {
-		// TODO: Implement this method
-		super.setUp();
-		uPadding=UniformColor4.findUniform(this,Unif.Padding);
-		uInnerRect=UniformColor4.findUniform(this,Unif.InnerRect);
-		uDrawingRect=UniformColor4.findUniform(this,Unif.DrawingRect);
-		vRectPosition=VertexAttrib.findAttrib(this,Attr.RectPosition,VertexAttrib.Type.VEC2);
+	
+	protected RectTextureShader(GLProgram p,boolean i){
+		super(p,i);
 	}
 	
 	public void loadRectData(RectF drawingRect,Vec4 padding){
@@ -67,7 +66,6 @@ public class RectTextureShader extends Texture3DShader
 	
 	public static final RectTextureShader createRTS(String vs,String fs){
 		RectTextureShader s=new RectTextureShader(GLProgram.createProgram(vs,fs));
-		s.setUp();
 		return s;
 	}
 }

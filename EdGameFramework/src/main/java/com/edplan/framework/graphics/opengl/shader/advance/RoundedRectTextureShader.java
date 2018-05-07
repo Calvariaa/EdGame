@@ -14,26 +14,20 @@ public class RoundedRectTextureShader extends RectTextureShader
 {
 	public static final float DEFAULT_GLOW_FACTOR=0.5f;
 	
-	private UniformFloat uRoundedRidaus;
+	@PointerName(Unif.RoundedRidaus)
+	public UniformFloat uRoundedRidaus;
 	
-	private UniformColor4 uRoundedInner;
+	@PointerName(Unif.RoundedInner)
+	public UniformColor4 uRoundedInner;
 	
-	private UniformFloat uGlowFactor;
+	@PointerName(Unif.GlowFactor)
+	public UniformFloat uGlowFactor;
 	
-	private UniformColor4 uGlowColor;
+	@PointerName(Unif.GlowColor)
+	public UniformColor4 uGlowColor;
 	
 	protected RoundedRectTextureShader(GLProgram p){
 		super(p);
-	}
-
-	@Override
-	public void setUp() {
-		// TODO: Implement this method
-		super.setUp();
-		uRoundedRidaus=UniformFloat.findUniform(this,Unif.RoundedRidaus);
-		uRoundedInner=UniformColor4.findUniform(this,Unif.RoundedInner);
-		uGlowFactor=UniformFloat.findUniform(this,Unif.GlowFactor);
-		uGlowColor=UniformColor4.findUniform(this,Unif.GlowColor);
 	}
 	
 	public void loadRectData(RectF rect,Vec4 padding,float radius,Color4 glowColor,float glowFactor){
@@ -56,7 +50,6 @@ public class RoundedRectTextureShader extends RectTextureShader
 	
 	public static final RoundedRectTextureShader createRRTS(String vs,String fs){
 		RoundedRectTextureShader s=new RoundedRectTextureShader(GLProgram.createProgram(vs,fs));
-		s.setUp();
 		return s;
 	}
 }
