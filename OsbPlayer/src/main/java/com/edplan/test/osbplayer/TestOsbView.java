@@ -478,7 +478,7 @@ public class TestOsbView extends EdView
 		//printer.printString("draws:"+drawCalls+"/"+drawCalls2);
 		//printer.toNextLine();
 		printer.printString("memory:"+Runtime.getRuntime().freeMemory()/1024/1024+"/"+Runtime.getRuntime().totalMemory()/1024/1024+"/"+Runtime.getRuntime().maxMemory()/1024/1024);
-		if(test.enableStoryboard){
+		if(test.enableStoryboard&&enableOsb){
 			printer.toNextLine();
 			printer.printString(playingStoryboard.objectsInField()+"\n");
 			printer.printString("new: "+playingStoryboard.newApply()+"");
