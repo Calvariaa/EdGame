@@ -23,13 +23,5 @@ public abstract class EdDrawable<T extends BaseCanvas>
 		return context;
 	}
 
-//	public void setTranslationMatrix(Mat4 translationMatrix) {
-//		this.translationMatrix.set(translationMatrix);
-//	}
-
-//	public Mat4 getTranslationMatrix() {
-//		return translationMatrix;
-//	}
-
 	public abstract void draw(T canvas);
 }
