@@ -10,7 +10,8 @@ public class CommandTimeLineGroup
 {
 	public CommandTimeLine<Float> X=new CommandTimeLine<Float>();
 	public CommandTimeLine<Float> Y=new CommandTimeLine<Float>();
-	public CommandTimeLine<Vec2> Scale=new CommandTimeLine<Vec2>();
+	public CommandTimeLine<Float> ScaleX=new CommandTimeLine<Float>();
+	public CommandTimeLine<Float> ScaleY=new CommandTimeLine<Float>();
 	public CommandTimeLine<Float> Rotation=new CommandTimeLine<Float>();
 	public CommandTimeLine<Color4> Colour=new CommandTimeLine<Color4>();
 	public CommandTimeLine<Float> Alpha=new CommandTimeLine<Float>();
@@ -18,7 +19,7 @@ public class CommandTimeLineGroup
 	public CommandTimeLine<Boolean> FlipH=new CommandTimeLine<Boolean>();
 	public CommandTimeLine<Boolean> FlipV=new CommandTimeLine<Boolean>();
 	
-	private CommandTimeLine[] timeLines={X,Y,Scale,Rotation,Colour,Alpha,BlendingMode,FlipH,FlipV};
+	private CommandTimeLine[] timeLines={X,Y,ScaleX,ScaleY,Rotation,Colour,Alpha,BlendingMode,FlipH,FlipV};
 	
 	public <T> List<TypedCommand<T>> getCommands(CommandTimelineSelecter<T> timeline,double offset){
 		if(offset!=0){

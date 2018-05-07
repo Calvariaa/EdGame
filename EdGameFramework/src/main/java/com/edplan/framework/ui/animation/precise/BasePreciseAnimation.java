@@ -30,6 +30,10 @@ public class BasePreciseAnimation extends AbstractPreciseAnimation
 		//timeline.frameTime()-getStartTimeAtTimeline());
 	}
 	
+	public double currentTime(){
+		return getStartTimeAtTimeline()+getProgressTime();
+	}
+	
 	public void setStartTime(double startTime){
 		this.startTime=startTime;
 	}

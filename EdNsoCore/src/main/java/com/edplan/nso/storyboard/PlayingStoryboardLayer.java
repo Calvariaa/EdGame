@@ -154,17 +154,19 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 		// TODO: Implement this method
 		newApply=0;
 		
-		//PrepareTime.watch();
+		PrepareTime.watch();
 		refreshObjects();
-		//PrepareTime.end();
+		PrepareTime.end();
 		
 		if(asyncPrepare)doAsyncPrepare();
 		int c=canvas.getBlendSetting().save();
 		canvas.enablePost();
+		PrepareTime.watch();
 		for(ElementNode ele:spriteInField){
-			//PrepareTime.watch();
 			if(!asyncPrepare)ele.element.prepareForDraw();
-			//PrepareTime.end();
+		}
+		PrepareTime.end();
+		for(ElementNode ele:spriteInField){
 			ele.element.draw(canvas);
 		}
 		canvas.disablePost();
@@ -203,7 +205,11 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 			if(added)return;
 			newApply++;
 			added=true;
-			if(!preApplyMode)rawElement.onApply(element,storyboard);
+			if(!preApplyMode){
+				//PrepareTime.watch();
+				rawElement.onApply(element,storyboard);
+				//PrepareTime.end();
+			}
 			element.onAdd();
 		}
 		

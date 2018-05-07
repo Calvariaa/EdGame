@@ -39,6 +39,7 @@ import org.json.JSONObject;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
 import com.edplan.framework.test.Test;
 import com.edplan.framework.test.performance.Tracker;
+import com.edplan.nso.storyboard.PlayingStoryboardLayer;
 
 public class TestOsbView extends EdView
 {
@@ -485,7 +486,7 @@ public class TestOsbView extends EdView
 		printer.toNextLine();
 		printer.printString("osu: "+enableOsu+" osb: "+enableOsb+" msg: "+msg);
 		printer.toNextLine();
-		printer.printString(Tracker.DrawArray.toString());
+		printer.printString(PlayingStoryboardLayer.PrepareTime.toString());
 		printer.toNextLine();
 		printer.printString(Tracker.InjectData.toString());
 		printer.toNextLine();

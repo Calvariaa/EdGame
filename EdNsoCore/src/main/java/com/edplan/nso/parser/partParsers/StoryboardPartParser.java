@@ -139,7 +139,10 @@ public class StoryboardPartParser extends PartParser<PartEvents>
 						{
 							float startValue=Float.parseFloat(spl[4]);
 							float endValue=(spl.length>5)?Float.parseFloat(spl[5]):startValue;
-							if(timelineGroup!=null)timelineGroup.Scale.add(easing,startTime,endTime,new Vec2(startValue),new Vec2(endValue));
+							if(timelineGroup!=null){
+								timelineGroup.ScaleX.add(easing,startTime,endTime,startValue,endValue);
+								timelineGroup.ScaleY.add(easing,startTime,endTime,startValue,endValue);
+							}
 						}
 							break;
 						case "V":
@@ -148,7 +151,10 @@ public class StoryboardPartParser extends PartParser<PartEvents>
 							float startY=Float.parseFloat(spl[5]);
 							float endX=(spl.length>6)?Float.parseFloat(spl[6]):startX;
 							float endY=(spl.length>7)?Float.parseFloat(spl[7]):startY;
-							if(timelineGroup!=null)timelineGroup.Scale.add(easing,startTime,endTime,new Vec2(startX,startY),new Vec2(endX,endY));
+							if(timelineGroup!=null){
+								timelineGroup.ScaleX.add(easing,startTime,endTime,startX,endX);
+								timelineGroup.ScaleY.add(easing,startTime,endTime,startY,endY);
+							}
 						}
 							break;
 						case "R":

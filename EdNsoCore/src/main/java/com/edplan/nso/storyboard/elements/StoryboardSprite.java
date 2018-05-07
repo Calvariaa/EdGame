@@ -1,23 +1,24 @@
 package com.edplan.nso.storyboard.elements;
-import java.util.List;
-import java.util.ArrayList;
+import com.edplan.framework.graphics.opengl.BlendType;
+import com.edplan.framework.interfaces.FloatInvokeSetter;
+import com.edplan.framework.interfaces.InvokeSetter;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.ui.Anchor;
-import com.edplan.nso.storyboard.elements.drawable.BaseDrawableSprite;
+import com.edplan.framework.ui.animation.Easing;
+import com.edplan.framework.ui.animation.FloatQueryAnimation;
+import com.edplan.framework.ui.animation.QueryAnimation;
+import com.edplan.framework.ui.animation.interpolate.Color4Interpolator;
+import com.edplan.framework.ui.animation.interpolate.FloatInterpolator;
+import com.edplan.framework.ui.animation.interpolate.InvalidInterpolator;
+import com.edplan.framework.ui.animation.interpolate.RawFloatInterpolator;
+import com.edplan.framework.ui.animation.interpolate.ValueInterpolator;
+import com.edplan.framework.ui.animation.interpolate.Vec2Interpolator;
 import com.edplan.nso.storyboard.PlayingStoryboard;
 import com.edplan.nso.storyboard.elements.drawable.ADrawableStoryboardElement;
-import com.edplan.framework.ui.animation.QueryAnimation;
-import com.edplan.framework.ui.animation.interpolate.ValueInterpolator;
-import com.edplan.framework.interfaces.InvokeSetter;
-import java.util.Collections;
+import com.edplan.nso.storyboard.elements.drawable.BaseDrawableSprite;
+import java.util.ArrayList;
 import java.util.Comparator;
-import com.edplan.framework.ui.animation.Easing;
-import com.edplan.framework.ui.animation.interpolate.FloatInterpolator;
-import com.edplan.framework.ui.animation.interpolate.Vec2Interpolator;
-import com.edplan.framework.ui.animation.interpolate.Color4Interpolator;
-import com.edplan.framework.ui.animation.interpolate.InvalidInterpolator;
-import com.edplan.framework.utils.MLog;
-import com.edplan.framework.graphics.opengl.BlendType;
+import java.util.List;
 
 public class StoryboardSprite implements IStoryboardElements
 {
@@ -118,6 +119,7 @@ public class StoryboardSprite implements IStoryboardElements
 			return (int)Math.signum(p1.getStartTime()-p2.getStartTime());
 		}
 	};
+	
 	private <T> void applyCommands(BaseDrawableSprite sprite,List<TypedCommand<T>> command,ValueInterpolator<T> interpolator,InvokeSetter<BaseDrawableSprite,T> setter,T startValue,boolean keepInEnding){
 		double offset=sprite.getStartTime();
 		double obj_offset=getStartTime();
@@ -135,6 +137,32 @@ public class StoryboardSprite implements IStoryboardElements
 		setter.invoke(sprite,tmp.getStartValue());
 		anim.transform(tmp.getStartValue(),offset-obj_offset,Easing.None);
 		for(TypedCommand<T> c:command){
+			anim.transform(c.getStartValue(),c.getStartTime(),0,c.getEasing());
+			anim.transform(c.getEndValue(),c.getStartTime(),c.getDuration(),c.getEasing());
+		}
+		if(!keepInEnding){
+			anim.transform(startValue,anim.getEndNode().getEndTime(),0,Easing.None);
+		}
+		sprite.addAnimation(anim,setter);
+	}
+	
+	private void applyRawFloatCommands(BaseDrawableSprite sprite,List<TypedCommand<Float>> command,RawFloatInterpolator interpolator,FloatInvokeSetter<BaseDrawableSprite> setter,float startValue,boolean keepInEnding){
+		double offset=sprite.getStartTime();
+		double obj_offset=getStartTime();
+		FloatQueryAnimation<BaseDrawableSprite> anim=new FloatQueryAnimation<BaseDrawableSprite>(sprite,obj_offset,interpolator,setter,true);
+		//Collections.sort(command,comparator);
+		if(command.size()==0)return;
+
+		/*
+		 T startV=(startValue!=null)?startValue:command.get(0).getStartValue();
+		 setter.invoke(sprite,startV);
+		 anim.transform(startV,getStartTime(),0,Easing.None);
+		 */
+
+		TypedCommand<Float> tmp=command.get(0);
+		setter.invoke(sprite,tmp.getStartValue());
+		anim.transform(tmp.getStartValue(),offset-obj_offset,Easing.None);
+		for(TypedCommand<Float> c:command){
 			anim.transform(c.getStartValue(),c.getStartTime(),0,c.getEasing());
 			anim.transform(c.getEndValue(),c.getStartTime(),c.getDuration(),c.getEasing());
 		}
@@ -170,12 +198,13 @@ public class StoryboardSprite implements IStoryboardElements
 		
 		BaseDrawableSprite sprite=(BaseDrawableSprite)ele;
 		initialTexture(sprite,storyboard);
-		applyCommands(sprite,getCommands(Selecters.SX),FloatInterpolator.Instance,BaseDrawableSprite.X,initialPosition.x,true);
-		applyCommands(sprite,getCommands(Selecters.SY),FloatInterpolator.Instance,BaseDrawableSprite.Y,initialPosition.y,true);
-		applyCommands(sprite,getCommands(Selecters.SScale),Vec2Interpolator.Instance,BaseDrawableSprite.Scale,null,true);
-		applyCommands(sprite,getCommands(Selecters.SRotation),FloatInterpolator.Instance,BaseDrawableSprite.Rotation,0f,true);
+		applyRawFloatCommands(sprite,getCommands(Selecters.SX),RawFloatInterpolator.Instance,BaseDrawableSprite.XRaw,initialPosition.x,true);
+		applyRawFloatCommands(sprite,getCommands(Selecters.SY),RawFloatInterpolator.Instance,BaseDrawableSprite.YRaw,initialPosition.y,true);
+		applyRawFloatCommands(sprite,getCommands(Selecters.SScaleX),RawFloatInterpolator.Instance,BaseDrawableSprite.ScaleXRaw,1,true);
+		applyRawFloatCommands(sprite,getCommands(Selecters.SScaleY),RawFloatInterpolator.Instance,BaseDrawableSprite.ScaleYRaw,1,true);
+		applyRawFloatCommands(sprite,getCommands(Selecters.SRotation),RawFloatInterpolator.Instance,BaseDrawableSprite.RotationRaw,0f,true);
 		applyCommands(sprite,getCommands(Selecters.SColour),Color4Interpolator.Instance,BaseDrawableSprite.Color,null,true);
-		applyCommands(sprite,getCommands(Selecters.SAlpha),FloatInterpolator.Instance,BaseDrawableSprite.Alpha,null,true);
+		applyRawFloatCommands(sprite,getCommands(Selecters.SAlpha),RawFloatInterpolator.Instance,BaseDrawableSprite.AlphaRaw,1,true);
 		applyCommands(sprite,getCommands(Selecters.SBlendType),InvalidInterpolator.ForBlendType,BaseDrawableSprite.Blend,BlendType.Normal,false);
 		applyCommands(sprite,getCommands(Selecters.SFlipH),InvalidInterpolator.ForBoolean,BaseDrawableSprite.FlipH,false,false);
 		applyCommands(sprite,getCommands(Selecters.SFlipV),InvalidInterpolator.ForBoolean,BaseDrawableSprite.FlipV,false,false);

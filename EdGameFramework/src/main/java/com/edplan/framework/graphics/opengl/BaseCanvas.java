@@ -297,7 +297,7 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 	}
 	
 	public void drawTexture(AbstractTexture texture,IQuad res,IQuad dst,Color4 mixColor,Color4 varyColor,float z,float alpha){
-		checkCanDraw();
+		//checkCanDraw();
 		drawCalls++;
 		if(isEnablePost()){
 			checkPost(texture);
@@ -316,7 +316,7 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 
 
 	public void drawTexture(AbstractTexture texture,Vec2[] resV,Vec2[] dstV,Color4 varyColor,float finalAlpha,Color4 mixColor){
-		checkCanDraw();
+		//checkCanDraw();
 		drawCalls++;
 		if(isEnablePost()){
 			checkPost(texture);

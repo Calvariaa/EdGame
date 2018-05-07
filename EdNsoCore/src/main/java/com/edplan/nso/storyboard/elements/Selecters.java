@@ -20,11 +20,18 @@ public class Selecters {
 			return group.Y.getCommands();
 		}
 	};
-	public static final CommandTimelineSelecter<Vec2> SScale=new CommandTimelineSelecter<Vec2>(){
+	public static final CommandTimelineSelecter<Float> SScaleX=new CommandTimelineSelecter<Float>(){
 		@Override
-		public List<TypedCommand<Vec2>> select(CommandTimeLineGroup group) {
+		public List<TypedCommand<Float>> select(CommandTimeLineGroup group) {
 			// TODO: Implement this method
-			return group.Scale.getCommands();
+			return group.ScaleX.getCommands();
+		}
+	};
+	public static final CommandTimelineSelecter<Float> SScaleY=new CommandTimelineSelecter<Float>(){
+		@Override
+		public List<TypedCommand<Float>> select(CommandTimeLineGroup group) {
+			// TODO: Implement this method
+			return group.ScaleY.getCommands();
 		}
 	};
 	public static final CommandTimelineSelecter<Float> SRotation=new CommandTimelineSelecter<Float>(){

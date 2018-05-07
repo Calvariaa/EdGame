@@ -17,6 +17,7 @@ import com.edplan.superutils.MTimer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import com.edplan.framework.ui.EdView;
+import com.edplan.framework.test.performance.Tracker;
 
 public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 {
@@ -99,8 +100,9 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 		// TODO: Implement this method
 		MLog.test.vOnce("thread","thread","draw-thread: "+Thread.currentThread());
 		tmer.refresh();
-		uiLooper.loop(tmer.getDeltaTime());
+		Tracker.reset();
 		GLWrapped.onFrame();
+		uiLooper.loop(tmer.getDeltaTime());
 		GLCanvas2D canvas=new GLCanvas2D(rootLayer);
 		canvas.prepare();
 		canvas.getMProjMatrix().setOrtho(0,canvas.getWidth(),canvas.getHeight(),0,-100,100);
