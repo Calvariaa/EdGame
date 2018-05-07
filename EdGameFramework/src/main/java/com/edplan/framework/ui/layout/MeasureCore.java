@@ -40,39 +40,39 @@ public class MeasureCore
 	}
 	
 	public static long getChildMeasureSpec(long spec,float padding,long childDimension){
-		int mode=MeasureSpec.getMode(spec);
-		float size=Math.max(MeasureSpec.getSize(spec)-padding,0);
-		float psize=Param.getSize(childDimension);
+		int mode=EdMeasureSpec.getMode(spec);
+		float size=Math.max(EdMeasureSpec.getSize(spec)-padding,0);
+		//float psize=Param.getSize(childDimension);
 		int pmode=Param.getMode(childDimension);
 		float rsize=0;
 		int rmode=0;
 		switch(mode){
-			case MeasureSpec.MODE_DEFINEDED:
+			case EdMeasureSpec.MODE_DEFINEDED:
 				switch(pmode){
 					case Param.MATCH_PARENT:
 						rsize=size;
-						rmode=MeasureSpec.MODE_DEFINEDED;
+						rmode=EdMeasureSpec.MODE_DEFINEDED;
 						break;
 					case Param.WRAP_CONTENT:
-						rsize=psize;
-						rmode=MeasureSpec.MODE_AT_MOST;
+						rsize=Param.getSize(childDimension);
+						rmode=EdMeasureSpec.MODE_AT_MOST;
 						break;
 					default:
-						rsize=psize;
-						rmode=MeasureSpec.MODE_DEFINEDED;
+						rsize=Param.getSize(childDimension);
+						rmode=EdMeasureSpec.MODE_DEFINEDED;
 						break;
 				}
 				break;
-			case MeasureSpec.MODE_AT_MOST:
+			case EdMeasureSpec.MODE_AT_MOST:
 				switch(pmode){
 					case Param.MATCH_PARENT:
 					case Param.WRAP_CONTENT:
 						rsize=size;
-						rmode=MeasureSpec.MODE_AT_MOST;
+						rmode=EdMeasureSpec.MODE_AT_MOST;
 						break;
 					default:
-						rsize=psize;
-						rmode=MeasureSpec.MODE_DEFINEDED;
+						rsize=Param.getSize(childDimension);
+						rmode=EdMeasureSpec.MODE_DEFINEDED;
 						break;
 				}
 				break;
@@ -81,17 +81,16 @@ public class MeasureCore
 					case Param.MATCH_PARENT:
 					case Param.WRAP_CONTENT:
 						rsize=0;
-						rmode=MeasureSpec.MODE_NONE;
+						rmode=EdMeasureSpec.MODE_NONE;
 						break;
 					default:
-						rsize=psize;
-						rmode=MeasureSpec.MODE_DEFINEDED;
+						rsize=Param.getSize(childDimension);
+						rmode=EdMeasureSpec.MODE_DEFINEDED;
 						break;
 				}
 				break;
 		}
-		
-		return MeasureSpec.makeupMeasureSpec(rsize,rmode);
+		return EdMeasureSpec.makeupMeasureSpec(rsize,rmode);
 	}
 	
 	public static class Param{
@@ -128,38 +127,4 @@ public class MeasureCore
 		}
 	}
 	
-	public static class MeasureSpec{
-		public static final int SHIFT_SIZE=32;
-		public static final long SIZE_MASK=1<<SHIFT_SIZE-1;
-		public static final long MODE_MASK=3<<SHIFT_SIZE;
-
-		public static final int MODE_NONE=1;
-		public static final int MODE_AT_MOST=2;
-		public static final int MODE_DEFINEDED=3;
-
-		
-		public static long intToLongMode(int mode){
-			return ((long)mode)<<SHIFT_SIZE;
-		}
-		
-		public static long makeupMeasureSpec(float size,int mode){
-			return intToLongMode(mode)|Float.floatToRawIntBits(size);
-		}
-
-		public static float getSize(long spec){
-			return Float.intBitsToFloat((int)(spec&SIZE_MASK));
-		}
-
-		public static int getMode(long spec){
-			return (int)((spec&MODE_MASK)<<SHIFT_SIZE);
-		}
-
-		public static long adjustSize(long raw,float add){
-			return makeupMeasureSpec(getSize(raw)+add,getMode(raw));
-		}
-
-		public static long setSize(long raw,float size){
-			return makeupMeasureSpec(size,getMode(raw));
-		}
-	}
 }

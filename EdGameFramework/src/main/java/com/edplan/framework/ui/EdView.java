@@ -11,6 +11,7 @@ import com.edplan.superutils.classes.advance.IRunnableHandler;
 import com.edplan.framework.ui.layout.MeasureCore;
 import com.edplan.framework.ui.layout.LayoutParam;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
+import com.edplan.framework.ui.layout.EdMeasureSpec;
 
 public class EdView implements IRunnableHandler
 {
@@ -18,21 +19,22 @@ public class EdView implements IRunnableHandler
 	
 	private EdAbstractViewGroup parent;
 	
-	private LayoutParam layoutParam;
-
 	private String name;
-
-	private RectF area;
-	
-	//private Area2D touchArea;
-	
-	private Visibility visiblility=Visibility.Visible;
-	
-	private DrawRequestParam drawRequestParam=DrawRequestParam.NewLayer;
 	
 	private MContext context;
-	
+
 	private EdDrawable background;
+
+	private Visibility visiblility=Visibility.Visible;
+	
+	private LayoutParam layoutParam;
+
+	
+	private float measuredWidth,measuredHeight;
+	
+	private float minWidth,minHeight;
+	
+	private float left,right,top,bottom;
 	
 	public EdView(MContext context){
 		this.context=context;
@@ -103,14 +105,6 @@ public class EdView implements IRunnableHandler
 		return name;
 	}
 
-	public void setDrawRequestParam(DrawRequestParam drawRequestParam) {
-		this.drawRequestParam=drawRequestParam;
-	}
-
-	public DrawRequestParam getDrawRequestParam() {
-		return drawRequestParam;
-	}
-
 	public void setVisiblility(Visibility visiblility) {
 		this.visiblility=visiblility;
 	}
@@ -146,8 +140,57 @@ public class EdView implements IRunnableHandler
 		}
 	}
 
-	public void measure(long width,long height){
-
+	public final void measure(long widthSpec,long heightSpec){
+		onMeasure(widthSpec,heightSpec);
+	}
+	
+	protected void onMeasure(long widthSpec,long heightSpec){
+		setMeasuredDimensition(
+			getDefaultSize(getSuggestedMinWidth(),widthSpec),
+			getDefaultSize(getSuggestedMinHeight(),heightSpec));
+	}
+	
+	public float getSuggestedMinWidth(){
+		return (background==null)?minWidth:Math.max(minWidth,background.getMinWidth());
+	}
+	
+	public float getSuggestedMinHeight(){
+		return (background==null)?minHeight:Math.max(minHeight,background.getMinHeight());
+	}
+	
+	public static float getDefaultSize(float size,long spec){
+		float r=size;
+		int mode=EdMeasureSpec.getMode(spec);
+		switch(mode){
+			case EdMeasureSpec.MODE_NONE:
+				r=size;
+				break;
+			case EdMeasureSpec.MODE_DEFINEDED:
+			case EdMeasureSpec.MODE_AT_MOST:
+				r=EdMeasureSpec.getSize(spec);
+				break;
+		}
+		return r;
+	}
+	
+	protected final void setMeasuredDimensition(float w,float h){
+		measuredWidth=w;
+		measuredHeight=h;
+	}
+	
+	public void layout(float left,float top,float right,float bottom){
+		
+	}
+	
+	public void onLayout(){
+		
+	}
+	
+	protected final void setFrame(float left,float top,float right,float bottom){
+		this.left=left;
+		this.top=top;
+		this.right=right;
+		this.bottom=bottom;
 	}
 	
 	public boolean onMotionEvent(EdMotionEvent e){
@@ -161,7 +204,8 @@ public class EdView implements IRunnableHandler
 	 */
 	public boolean inArea(Vec2 v) {
 		// TODO: Implement this method
-		return area.inArea(v);
+		//return area.inArea(v);
+		return false;
 	}
 	
 	

@@ -26,6 +26,9 @@ public abstract class EdAbstractViewGroup extends EdView
 	
 	public abstract void dispatchDraw(GLCanvas2D canvas);
 	
+	@Override
+	public abstract void onLayout();
+	
 	public EdLayoutParam getDefaultLayoutParam(){
 		return null;
 	}

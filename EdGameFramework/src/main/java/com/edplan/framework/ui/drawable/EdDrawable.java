@@ -24,4 +24,12 @@ public abstract class EdDrawable<T extends BaseCanvas>
 	}
 
 	public abstract void draw(T canvas);
+	
+	public float getMinWidth(){
+		return 0;
+	}
+	
+	public float getMinHeight(){
+		return 0;
+	}
 }
