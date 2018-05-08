@@ -24,8 +24,8 @@ public class Texture3DBatch<T extends TextureVertex3D> extends BaseColorBatch<T>
 			texturePointBuffer.clear();
 		}
 		Vec2 tmp;
-		for(T t:vertexs){
-			tmp=t.getTexturePoint();
+		for(int i=0;i<idx;i++){
+			tmp=get(i).getTexturePoint();
 			texturePointBuffer.put(tmp.x).put(tmp.y);
 		}
 		texturePointBuffer.position(0);

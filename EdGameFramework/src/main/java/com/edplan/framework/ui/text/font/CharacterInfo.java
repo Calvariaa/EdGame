@@ -17,7 +17,7 @@ public class CharacterInfo
 	}
 	
 	public CharacterInfo(char text,GLTexture texture,int x,int y,int width,int height){
-		this(text,new TextureRegion(texture,new RectI(x,y,width,height)));
+		this(text,new TextureRegion(texture,new RectF(x,y,width,height)));
 	}
 
 	public int getWidth(){

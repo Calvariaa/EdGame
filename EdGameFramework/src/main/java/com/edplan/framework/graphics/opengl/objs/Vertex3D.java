@@ -1,6 +1,7 @@
 package com.edplan.framework.graphics.opengl.objs;
-import com.edplan.framework.math.Vec3;
 import com.edplan.framework.interfaces.Setable;
+import com.edplan.framework.math.Vec2;
+import com.edplan.framework.math.Vec3;
 
 public class Vertex3D<T> implements Setable<Vertex3D>
 {
@@ -49,6 +50,11 @@ public class Vertex3D<T> implements Setable<Vertex3D>
 
 	public Vertex3D setPosition(Vec3 position) {
 		this.position.set(position);
+		return this;
+	}
+	
+	public Vertex3D setPosition(Vec2 v,float z){
+		this.position.set(v.x,v.y,z);
 		return this;
 	}
 

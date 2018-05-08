@@ -4,6 +4,7 @@ import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.math.RectI;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
+import com.edplan.framework.math.IQuad;
 
 public class SwapXYTextureRegion extends AbstractTexture
 {
@@ -22,6 +23,12 @@ public class SwapXYTextureRegion extends AbstractTexture
 
 	public RectI getArea() {
 		return area;
+	}
+
+	@Override
+	public IQuad getRawQuad() {
+		// TODO: Implement this method
+		return null;
 	}
 
 	@Override

@@ -28,8 +28,7 @@ public class FBOPool
 			if(e.width>=width&&e.height>=height){
 				iter.remove();
 				FrameBufferObject fbo=e.fbo;
-				fbo.setWidth(width);
-				fbo.setHeight(height);
+				fbo.setBound(width,height);
 				//if(fbo.isBind())fbo.unBind();
 				currentMemory-=e.width*e.height;
 				//Log.v("fbo-pool","pop a "+e.width+"x"+e.height+" fbo. Current memory:"+currentMemory+" cur size: "+list.size());

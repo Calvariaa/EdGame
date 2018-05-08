@@ -58,8 +58,9 @@ public class VertexAttrib
 		return name;
 	}
 	
-	public void loadData(FloatBuffer datas){
+	public void loadData(Buffer datas){
 		if(getHandle()==-1)return;
+		GLES20.glEnableVertexAttribArray(getHandle());
 		GLES20.glVertexAttribPointer(
 			getHandle(),   
 			getType().dataCount, 
@@ -68,7 +69,19 @@ public class VertexAttrib
 			getType().step,   
 			datas
 		);
+	}
+	
+	public void loadData(Buffer datas,int step){
+		if(getHandle()==-1)return;
 		GLES20.glEnableVertexAttribArray(getHandle());
+		GLES20.glVertexAttribPointer(
+			getHandle(),   
+			getType().dataCount, 
+			getType().dataType, 
+			false,
+			step,   
+			datas
+		);
 	}
 	
 	/*

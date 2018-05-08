@@ -3,6 +3,7 @@ import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.math.Vec2;
 import java.util.ArrayList;
+import com.edplan.framework.math.IQuad;
 
 public class FrameTexture extends AbstractTexture
 {
@@ -62,6 +63,12 @@ public class FrameTexture extends AbstractTexture
 	public Vec2 toTexturePosition(float x,float y) {
 		// TODO: Implement this method
 		return currentFrameTexture().toTexturePosition(x,y);
+	}
+
+	@Override
+	public IQuad getRawQuad() {
+		// TODO: Implement this method
+		return null;
 	}
 	
 	/**

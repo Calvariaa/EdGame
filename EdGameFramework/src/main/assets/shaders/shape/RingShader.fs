@@ -19,5 +19,6 @@ float shapeColor(){
 void main(){
 	vec4 c=u_MixColor*f_VaryingColor;
 	c*=u_FinalAlpha*shapeColor;
+	if(c.a<0.001)discard;
 	gl_FragColor=c;
 }

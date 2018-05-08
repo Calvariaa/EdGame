@@ -201,7 +201,58 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 	public void drawTexture3DBatch(BaseBatch batch,AbstractTexture t){
 		drawTexture3DBatch(batch,t,1,Color4.ONE);
 	}
+	
+	/*
+	private TextureVertex3D[] createBaseVertexs(AbstractTexture texture,IQuad res,IQuad dst,Color4 color,float z){
+		//  3          2
+		//   ┌────┐
+		//   └────┘
+		//  0          1
+		final TextureVertex3D v0=new TextureVertex3D();
+		v0.setPosition(dst.getBottomLeft(),z);
+		v0.setColor(color);
+		v0.setTexturePoint(texture.toTexturePosition(res.getBottomLeft()));
+		final TextureVertex3D v1=new TextureVertex3D();
+		v1.setPosition(dst.getBottomRight(),z);
+		v1.setColor(color);
+		v1.setTexturePoint(texture.toTexturePosition(res.getBottomRight()));
+		final TextureVertex3D v2=new TextureVertex3D();
+		v2.setPosition(dst.getTopRight(),z);
+		v2.setColor(color);
+		v2.setTexturePoint(texture.toTexturePosition(res.getTopRight()));
+		final TextureVertex3D v3=new TextureVertex3D();
+		v3.setPosition(dst.getTopLeft(),z);
+		v3.setColor(color);
+		v3.setTexturePoint(texture.toTexturePosition(res.getTopLeft()));
+		return new TextureVertex3D[]{v0,v1,v2,v3};
+	}
+	*/
+	
+	private TextureVertex3D[] createBaseVertexs(IQuad textureQuad,IQuad dst,Color4 color,float z){
+		//  3          2
+		//   ┌────┐
+		//   └────┘
+		//  0          1
+		final TextureVertex3D v0=new TextureVertex3D();
+		v0.setPosition(dst.getBottomLeft(),z);
+		v0.setColor(color);
+		v0.setTexturePoint(textureQuad.getBottomLeft());
+		final TextureVertex3D v1=new TextureVertex3D();
+		v1.setPosition(dst.getBottomRight(),z);
+		v1.setColor(color);
+		v1.setTexturePoint(textureQuad.getBottomRight());
+		final TextureVertex3D v2=new TextureVertex3D();
+		v2.setPosition(dst.getTopRight(),z);
+		v2.setColor(color);
+		v2.setTexturePoint(textureQuad.getTopRight());
+		final TextureVertex3D v3=new TextureVertex3D();
+		v3.setPosition(dst.getTopLeft(),z);
+		v3.setColor(color);
+		v3.setTexturePoint(textureQuad.getTopLeft());
+		return new TextureVertex3D[]{v0,v1,v2,v3};
+	}
 
+	
 	private RectVertex[] createRectVertexs(AbstractTexture texture,IQuad res,IQuad dst,Color4 color,float z){
 		//  3          2
 		//   ┌────┐
@@ -302,15 +353,33 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 		if(isEnablePost()){
 			checkPost(texture);
 			varyColor=varyColor.copyNew().multiple(mixColor).multiple(alpha);
-			final RectVertex[] v=createRectVertexs(texture,res,dst,varyColor,z);
+			final TextureVertex3D[] v=createBaseVertexs(texture.toTextureQuad(res),dst,varyColor,z);
 			tmpBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
-			Arrays.fill(v,null);
+			//Arrays.fill(v,null);
 		}else{
-			final RectVertex[] v=createRectVertexs(texture,res,dst,varyColor,z);
+			final TextureVertex3D[] v=createBaseVertexs(texture.toTextureQuad(res),dst,varyColor,z);
 			tmpBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
 			drawTexture3DBatch(tmpBatch,texture,alpha,mixColor);
 			tmpBatch.clear();
-			Arrays.fill(v,null);
+			//Arrays.fill(v,null);
+		}
+	}
+	
+	public void drawTexture(AbstractTexture texture,IQuad dst,Color4 mixColor,Color4 varyColor,float z,float alpha){
+		//checkCanDraw();
+		drawCalls++;
+		if(isEnablePost()){
+			checkPost(texture);
+			varyColor=varyColor.copyNew().multiple(mixColor).multiple(alpha);
+			final TextureVertex3D[] v=createBaseVertexs(texture.getRawQuad(),dst,varyColor,z);
+			tmpBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
+			//Arrays.fill(v,null);
+		}else{
+			final TextureVertex3D[] v=createBaseVertexs(texture.getRawQuad(),dst,varyColor,z);
+			tmpBatch.add(v[0],v[1],v[2],v[0],v[2],v[3]);
+			drawTexture3DBatch(tmpBatch,texture,alpha,mixColor);
+			tmpBatch.clear();
+			//Arrays.fill(v,null);
 		}
 	}
 
@@ -334,15 +403,11 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 	}
 
 	public void drawTexture(AbstractTexture texture,IQuad dst,Color4 varyingColor,float alpha){
-		drawTexture(texture,RectF.xywh(0,0,texture.getWidth(),texture.getHeight()),dst,Color4.ONE,varyingColor,defZ,alpha);
+		drawTexture(texture,dst,Color4.ONE,varyingColor,defZ,alpha);
 	}
 
 	public void drawTexture(AbstractTexture texture,IQuad res,IQuad dst,Color4 mixColor,Color4 color,float alpha){
 		drawTexture(texture,res,dst,mixColor,color,defZ,alpha);
-	}
-
-	public void drawTexture(AbstractTexture texture,IQuad dst,Color4 mixColor,Color4 color,float z,float alpha){
-		drawTexture(texture,new RectF(0,0,texture.getWidth(),texture.getHeight()),dst,mixColor,color,z,alpha);
 	}
 
 	public void drawRectTexture(AbstractTexture texture,IQuad res,RectF dst,GLPaint paint){

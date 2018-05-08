@@ -25,6 +25,8 @@ import java.nio.IntBuffer;
 import com.edplan.framework.graphics.opengl.GLWrapped;
 import com.edplan.framework.graphics.opengl.ShaderManager;
 import android.util.Log;
+import com.edplan.framework.math.Quad;
+import com.edplan.framework.math.IQuad;
 
 public class GLTexture extends AbstractTexture
 {
@@ -75,10 +77,22 @@ public class GLTexture extends AbstractTexture
 	
 	private boolean recycled=false;
 	
+	private Quad rawQuad;
+	
 	public GLTexture(){
 		
 	}
 
+	@Override
+	public IQuad getRawQuad() {
+		// TODO: Implement this method
+		return rawQuad;
+	}
+
+	protected void endCreate(){
+		rawQuad=RectF.xywh(0,0,glWidth,glHeight).toQuad();
+	}
+	
 	@Override
 	public GLTexture getTexture() {
 		// TODO: Implement this method
@@ -196,6 +210,7 @@ public class GLTexture extends AbstractTexture
 		tex.textureId=t[0];
 		tex.glHeight=1;
 		tex.glWidth=1;
+		tex.endCreate();
 		//Log.v("fbo","gen tx: "+tex.textureId);
 		return tex;
 	}
@@ -209,6 +224,7 @@ public class GLTexture extends AbstractTexture
 		tex.height=h;
 		tex.glHeight=tex.height/(float)bmp.getHeight();
 		tex.glWidth=tex.width/(float)bmp.getWidth();
+		tex.endCreate();
 		GLUtils.texImage2D(GLES20.GL_TEXTURE_2D,0,bmp,0);
 		GLWrapped.checkGlError("load Texture");
 		return tex;

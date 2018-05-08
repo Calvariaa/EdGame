@@ -83,8 +83,7 @@ public abstract class BufferedDrawable extends EdDrawable implements IFadeable
 	protected void postToParent(AbstractTexture texture,BaseCanvas canvas){
 		//canvas.drawTexture(GLTexture.White,new RectF(0,0,texture.getWidth(),texture.getHeight()),
 		//				   RectF.ltrb(area.getX1(),area.getY1(),area.getX2(),area.getY2()),paint);
-		canvas.drawTexture(texture,new RectF(0,0,texture.getWidth(),texture.getHeight()),
-						   RectF.ltrb(area.getX1(),area.getY1(),area.getX2(),area.getY2()),paint);
+		canvas.drawTexture(texture,RectF.ltrb(area.getX1(),area.getY1(),area.getX2(),area.getY2()),paint);
 		MLog.test.vOnce("rect","rect",area.toString());
 	}
 	

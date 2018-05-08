@@ -52,13 +52,6 @@ public class TextureVertex3D extends Vertex3D
 	public Vec2 getTexturePoint() {
 		return texturePoint;
 	}
-
-	@Override
-	public Vertex3D setPosition(Vec3 position) {
-		// TODO: Implement this method
-		this.position.set(position);
-		return this;
-	}
 	
 	public static TextureVertex3D atPosition(Vec3 pos){
 		return new TextureVertex3D(pos);

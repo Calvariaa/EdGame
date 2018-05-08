@@ -4,24 +4,53 @@ import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
 import com.edplan.framework.math.RectI;
+import com.edplan.framework.math.Quad;
+import com.edplan.framework.math.IQuad;
 
 public class TextureRegion extends AbstractTexture
 {
 	private GLTexture texture;
 	
-	private RectI area=new RectI();
+	private RectF area=new RectF();
 	
-	public TextureRegion(GLTexture t,RectI area){
+	private Quad rawQuad;
+	
+	private int width,height;
+	
+	public TextureRegion(GLTexture t,RectF _area){
 		this.texture=t;
-		this.area.set(area);
+		setArea(_area);
 	}
 
-	public void setArea(RectI _area) {
+	public void setArea(RectF _area) {
 		this.area.set(_area);
+		updateArea();
+	}
+	
+	private void updateArea(){
+		width=(int)area.getWidth();
+		height=(int)area.getHeight();
+		if(rawQuad==null)rawQuad=new Quad();
+		rawQuad.set(
+			toTexturePosition(0,0),
+			toTexturePosition(getWidth(),0),
+			toTexturePosition(0,getHeight()),
+			toTexturePosition(getWidth(),getHeight()));
 	}
 
-	public RectI getArea() {
-		return area;
+	public void resize(float x,float y,float w,float h){
+		area.setXYWH(x,y,w,h);
+		updateArea();
+	}
+	
+	public void resize(float w,float h){
+		resize(area.getX1(),area.getY1(),w,h);
+	}
+
+	@Override
+	public IQuad getRawQuad() {
+		// TODO: Implement this method
+		return rawQuad;
 	}
 	
 	@Override
@@ -41,12 +70,12 @@ public class TextureRegion extends AbstractTexture
 	
 	@Override
 	public int getWidth(){
-		return area.getWidth();
+		return width;
 	}
 	
 	@Override
 	public int getHeight(){
-		return area.getHeight();
+		return height;
 	}
 	
 }

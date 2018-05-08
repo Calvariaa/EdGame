@@ -28,10 +28,24 @@ public class RectF implements Copyable,Area2D,IQuad
 		this.height=h;
 	}
 	
+	public RectF set(RectI r){
+		setBasePoint(r.getX1(),r.getY1());
+		width=r.getWidth();
+		height=r.getHeight();
+		return this;
+	}
+	
 	public RectF set(RectF rect){
 		setBasePoint(rect.getX1(),rect.getY1());
 		width=rect.getWidth();
 		height=rect.getHeight();
+		return this;
+	}
+	
+	public RectF setXYWH(float x,float y,float w,float h){
+		setBasePoint(x,y);
+		width=w;
+		height=h;
 		return this;
 	}
 	

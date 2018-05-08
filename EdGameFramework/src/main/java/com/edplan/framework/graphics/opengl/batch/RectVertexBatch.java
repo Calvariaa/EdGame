@@ -33,8 +33,8 @@ public class RectVertexBatch<T extends RectVertex> extends Texture3DBatch<T> imp
 			rectPositionBuffer.clear();
 		}
 		Vec2 tmp;
-		for(T t:vertexs){
-			tmp=t.getTexturePoint();
+		for(int i=0;i<idx;i++){
+			tmp=get(i).getTexturePoint();
 			rectPositionBuffer.put(tmp.x).put(tmp.y);
 		}
 		rectPositionBuffer.position(0);

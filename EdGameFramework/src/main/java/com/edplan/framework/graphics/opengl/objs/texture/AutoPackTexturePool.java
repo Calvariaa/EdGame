@@ -33,7 +33,7 @@ public class AutoPackTexturePool extends TexturePool
 	
 	private List<PackNode> packs=new ArrayList<PackNode>();
 	private List<AbstractTexture> packedTextures=new ArrayList<AbstractTexture>();
-	public List<RectI> packedPosition=new ArrayList<RectI>();
+	public List<RectF> packedPosition=new ArrayList<RectF>();
 	private PackNode currentPack;
 	private GLCanvas2D packCanvas;
 	private GLPaint rawPaint=new GLPaint();
@@ -164,7 +164,7 @@ public class AutoPackTexturePool extends TexturePool
 			packCanvas.drawTexture(raw,RectF.xywh(currentX,currentY,raw.getWidth(),raw.getHeight()),rawPaint);
 			packCanvas.restore();
 			packCanvas.unprepare();
-			RectI area=RectI.xywh(currentX,currentY,raw.getWidth(),raw.getHeight());
+			RectF area=RectF.xywh(currentX,currentY,raw.getWidth(),raw.getHeight());
 			AbstractTexture t=new TextureRegion(
 											currentPack.layer.getTexture().getTexture(),
 											//textureTest,

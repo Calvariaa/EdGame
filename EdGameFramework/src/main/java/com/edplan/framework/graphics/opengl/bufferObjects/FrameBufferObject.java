@@ -65,15 +65,23 @@ public class FrameBufferObject
 		return height;
 	}
 	
+	public void setBound(int w,int h){
+		width=w;
+		height=h;
+		region.resize(w,h);
+	}
+	
+	/*
 	public void setWidth(int w){
 		width=w;
-		if(region!=null)region.getArea().setWidth(w);
+		if(region!=null)region.setWidth(w);
 	}
 	
 	public void setHeight(int h){
 		height=h;
-		if(region!=null)region.getArea().setHeight(h);
+		if(region!=null)region.setHeight(h);
 	}
+	*/
 	
 	public void clearDepthBuffer(){
 		checkCurrent();
@@ -122,7 +130,7 @@ public class FrameBufferObject
 			throw new GLException("A FrameBufferObject can't attach two Texture...Maybe support future:(");
 		}else{
 			setColorAttachment(texture);
-			region=new TextureRegion(texture,new RectI(0,0,texture.getWidth(),texture.getHeight()));
+			region=new TextureRegion(texture,new RectF(0,0,texture.getWidth(),texture.getHeight()));
 			hasLinkRegion=true;
 			GLES20.glFramebufferTexture2D(
 				GLES20.GL_FRAMEBUFFER,

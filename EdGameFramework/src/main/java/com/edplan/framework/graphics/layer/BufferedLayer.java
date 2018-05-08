@@ -109,8 +109,7 @@ public class BufferedLayer
 		//Log.v("fbo-test","start reCreateBuffer");
 		if(frameBuffer!=null){
 			if(frameBuffer.getCreatedHeight()>=height&&frameBuffer.getCreatedWidth()>=width){
-				frameBuffer.setWidth(width);
-				frameBuffer.setHeight(height);
+				frameBuffer.setBound(width,height);
 				//Log.v("fbo-test","1 resize fbo "+frameBuffer.getFBOId());
 			}else{
 				if(joinPool&&!bufferedPool.saveFBO(frameBuffer)){

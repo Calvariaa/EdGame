@@ -10,27 +10,33 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import com.edplan.framework.graphics.opengl.objs.Color4;
+import java.util.Arrays;
 
 public class BaseColorBatch<T extends Vertex3D> implements BaseBatch<T>,IHasColor,IHasPosition
 {
-	protected List<T> vertexs;
+	protected Object[] vertexs;
+	protected int idx=0;
 	
 	public BaseColorBatch(){
-		vertexs=new ArrayList<T>();
+		vertexs=new Object[16];
 	}
 	
 	public T get(int idx){
-		return vertexs.get(idx);
+		return (T)vertexs[idx];
 	}
 
 	@Override
 	public int getVertexCount(){
-		return vertexs.size();
+		return idx;
 	}
 	
 	
 	public void add(VertexList<T> list){
 		add(list.listVertex());
+	}
+	
+	private void grow(int size){
+		vertexs=Arrays.copyOf(vertexs,size);
 	}
 	
 	@Override
@@ -41,13 +47,19 @@ public class BaseColorBatch<T extends Vertex3D> implements BaseBatch<T>,IHasColo
 
 	@Override
 	public void add(T v){
-		vertexs.add(v);
+		//vertexs.add(v);
+		if(idx==vertexs.length){
+			grow(vertexs.length*2+1);
+		}
+		vertexs[idx]=v;
+		idx++;
 	}
 	
 	public void clear(){
-		vertexs.clear();
+		//vertexs.clear();
 		//colorBuffer.clear();
 		//positionBuffer.clear();
+		idx=0;
 	}
 
 	private FloatBuffer colorBuffer;
@@ -63,8 +75,8 @@ public class BaseColorBatch<T extends Vertex3D> implements BaseBatch<T>,IHasColo
 			colorBuffer.clear();
 		}
 		Color4 tmp;
-		for(T t:vertexs){
-			tmp=t.getColor();
+		for(int i=0;i<idx;i++){
+			tmp=get(i).getColor();
 			colorBuffer.put(tmp.r).put(tmp.g).put(tmp.b).put(tmp.a);
 		}
 		colorBuffer.position(0);
@@ -84,8 +96,8 @@ public class BaseColorBatch<T extends Vertex3D> implements BaseBatch<T>,IHasColo
 			positionBuffer.clear();
 		}
 		Vec3 tmp;
-		for(T t:vertexs){
-			tmp=t.getPosition();
+		for(int i=0;i<idx;i++){
+			tmp=get(i).getPosition();
 			positionBuffer.put(tmp.x).put(tmp.y).put(tmp.z);
 		}
 		positionBuffer.position(0);
