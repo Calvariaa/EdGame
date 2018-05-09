@@ -66,9 +66,10 @@ public class GLES10MainRenderer implements GLSurfaceView.Renderer
 		GLES10.glViewport(0,0,width,heigth);
 		this.width=width;
 		this.height=heigth;
+		context.setDisplaySize(width,heigth);
 		GLWrapped.blend.setEnable(true);
 		GLWrapped.depthTest.set(false);
-		context.getContent().onCreate();
+		//context.getContent().onCreate();
 		Log.v("ini-log","ini-scr: "+width+":"+heigth);
 	}
 
@@ -86,12 +87,12 @@ public class GLES10MainRenderer implements GLSurfaceView.Renderer
 		GL10Canvas2D canvas=new GL10Canvas2D(width,height);
 		canvas.getMProjMatrix().setOrtho(0,canvas.getWidth(),canvas.getHeight(),0,-100,100);
 		if(debugUi){
-			if(context.getContent()!=null){
+			/*if(context.getContent()!=null){
 				canvas.enablePost();
 				canvas.drawColor(Color4.gray(0.3f));
 				((GLES10Drawable)context.getContent()).drawGL10(canvas);
 				canvas.disablePost();
-			}
+			}*/
 		}
 	}
 

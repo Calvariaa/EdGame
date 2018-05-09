@@ -7,83 +7,88 @@ import java.util.HashMap;
 import com.edplan.framework.MContext;
 import java.util.ArrayList;
 import com.edplan.framework.graphics.opengl.GLCanvas2D;
+import com.edplan.framework.ui.layout.EdLayoutParam;
+import com.edplan.framework.ui.layout.MeasureCore;
 
 public abstract class EdAbstractViewGroup extends EdView
 {
-	protected List<EdView> children=new ArrayList<EdView>();
-
-	protected List<EdLayoutParam> layoutParams=new ArrayList<EdLayoutParam>();
+	private List<ViewNode> children;
 	
-	protected HashMap<String,EdView> viewMap;
-
+	private LayoutTransition transition;
+	
 	public EdAbstractViewGroup(MContext context){
 		super(context);
+		children=new ArrayList<ViewNode>();
 	}
-	
-	public abstract void dispatchMesure();
-	
-	public abstract void dispatchTouchEvent();
-	
-	public abstract void dispatchDraw(GLCanvas2D canvas);
-	
+
+	public EdLayoutParam getDefaultParam(EdView view){
+		return new EdLayoutParam();
+	}
+
 	@Override
-	public abstract void onLayout();
-	
-	public EdLayoutParam getDefaultLayoutParam(){
-		return null;
+	protected final void layout(float left,float top,float right,float bottom) {
+		// TODO: Implement this method
+		if(transition==null||!transition.isChangingLayout()){
+			if(transition!=null){
+				transition.layoutChange(this);
+				super.layout(left, top, right, bottom);
+			}
+		}
+	}
+
+	protected void measureChildren(long widthSpec,long heightSpec){
+		for(ViewNode n:children){
+			EdView v=n.view;
+			if(v.getVisiblility()!=VISIBILITY_GONE){
+				measureChild(v,widthSpec,heightSpec);
+			}
+		}
 	}
 	
-	public void add(final EdView view){
-		post(new Runnable(){
-				@Override
-				public void run() {
-					// TODO: Implement this method
-					addUnsyn(view);
-				}
-			});
+	protected void measureChild(EdView view,long wspec,long hspec){
+		MeasureCore.measureChild(
+			view,
+			getPaddingHorizon(),
+			getPaddingVertical(),
+			wspec,
+			hspec);
 	}
 	
-	private void addUnsyn(EdView view){
-		children.add(view);
-		viewMap.put(view.getName(),view);
+	protected void measureChildWithMargin(EdView view,long wspec,long hspec,float wused,float hused){
+		MeasureCore.measureChildWithMargin(
+			view,
+			getPaddingHorizon(),
+			getPaddingVertical(),
+			wspec,
+			hspec,
+			wused,
+			hused);
 	}
 	
-	public void addAll(final EdView... views){
-		post(new Runnable(){
-				@Override
-				public void run() {
-					// TODO: Implement this method
-					for(EdView v:views){
-						addUnsyn(v);
-					}
-				}
-			});
+	protected ViewNode addToList(EdView view){
+		ViewNode n=new ViewNode(view);
+		children.add(n);
+		return n;
 	}
 	
-	public void remove(final EdView view){
-		post(new Runnable(){
-				@Override
-				public void run() {
-					// TODO: Implement this method
-					removeUnsyn(view);
-				}
-			});
+	public void addView(EdView view,EdLayoutParam param){
+		view.setLayoutParam(param);
+		addToList(view);
 	}
 	
-	private void removeUnsyn(EdView view){
-		children.remove(view);
-		viewMap.remove(view.getName());
+	public void addView(EdView view){
+		if(view.getLayoutParam()==null){
+			view.setLayoutParam(getDefaultParam(view));
+		}
+		addToList(view);
+	}
+
+	public class ViewNode{
+		public EdView view;
+		
+		public ViewNode(EdView view){
+			this.view=view;
+		}
 	}
 	
-	public void removeAll(final EdView... views){
-		post(new Runnable(){
-				@Override
-				public void run() {
-					// TODO: Implement this method
-					for(EdView v:views){
-						removeUnsyn(v);
-					}
-				}
-			});
-	}
 }

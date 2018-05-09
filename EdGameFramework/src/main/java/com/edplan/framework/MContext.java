@@ -33,13 +33,21 @@ public class MContext
 	
 	private int step;
 	
-	private EdView content;
-	
 	private UILooper uiLooper;
+	
+	private int displayWidth,displayHeight;
 	
 	public MContext(Context androidContext){
 		this.androidContext=androidContext;
 		//initial();
+	}
+
+	public int getDisplayWidth() {
+		return displayWidth;
+	}
+
+	public int getDisplayHeight() {
+		return displayHeight;
 	}
 
 	public Thread getMainThread() {
@@ -73,6 +81,7 @@ public class MContext
 		getUiLooper().post(r,delayMs);
 	}
 
+	/*
 	public void setContent(EdView content) {
 		this.content=content;
 	}
@@ -80,6 +89,7 @@ public class MContext
 	public EdView getContent() {
 		return content;
 	}
+	*/
 
 	/*
 	public void setStep(int step) {
@@ -92,6 +102,11 @@ public class MContext
 	
 	private IRunnableHandler getRunnableHandler() {
 		return uiLooper;
+	}
+	
+	public void setDisplaySize(int w,int h){
+		this.displayWidth=w;
+		this.displayHeight=h;
 	}
 	
 	public void initial(){

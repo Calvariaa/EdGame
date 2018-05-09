@@ -1,6 +1,6 @@
 package com.edplan.framework.ui.layout;
 
-public class MarginLayoutParam extends LayoutParam
+public class MarginLayoutParam extends EdLayoutParam
 {
 	public float marginLeft;
 	public float marginRight;

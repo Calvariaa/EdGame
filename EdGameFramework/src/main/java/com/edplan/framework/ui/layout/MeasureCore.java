@@ -6,8 +6,8 @@ public class MeasureCore
 	public static void measureChildWithMargin(
 		EdView view,
 		float paddingHorizon,float paddingVertical,
-		long parentWidthSpec,float widthUsed,
-		long parentHeightSpec,float heightUsed
+		long parentWidthSpec,long parentHeightSpec,
+		float widthUsed,float heightUsed
 	){
 		MarginLayoutParam param=(MarginLayoutParam)view.getLayoutParam();
 		long widthSpec=getChildMeasureSpec(
@@ -24,17 +24,16 @@ public class MeasureCore
 	public static void measureChild(
 		EdView view,
 		float paddingHorizon,float paddingVertical,
-		long parentWidthSpec,float widthUsed,
-		long parentHeightSpec,float heightUsed
+		long parentWidthSpec,long parentHeightSpec
 	){
-		LayoutParam param=view.getLayoutParam();
+		EdLayoutParam param=view.getLayoutParam();
 		long widthSpec=getChildMeasureSpec(
 			parentWidthSpec,
-			paddingHorizon+widthUsed,
+			paddingHorizon,
 			param.width);
 		long heightSpec=getChildMeasureSpec(
 			parentHeightSpec,
-			paddingVertical+heightUsed,
+			paddingVertical,
 			param.height);
 		view.measure(widthSpec,heightSpec);
 	}
@@ -92,39 +91,4 @@ public class MeasureCore
 		}
 		return EdMeasureSpec.makeupMeasureSpec(rsize,rmode);
 	}
-	
-	public static class Param{
-		public static final int SHIFT_SIZE=32;
-		public static final long SIZE_MASK=1<<SHIFT_SIZE-1;
-		public static final long MODE_MASK=3<<SHIFT_SIZE;
-
-		public static final int NONE=0;
-		public static final int MATCH_PARENT=1;
-		public static final int WRAP_CONTENT=2;
-		
-		public static long intToLongMode(int mode){
-			return ((long)mode)<<SHIFT_SIZE;
-		}
-
-		public static long makeupParam(float size,int mode){
-			return intToLongMode(mode)|Float.floatToRawIntBits(size);
-		}
-
-		public static float getSize(long param){
-			return Float.intBitsToFloat((int)(param&SIZE_MASK));
-		}
-
-		public static int getMode(long param){
-			return (int)((param&MODE_MASK)<<SHIFT_SIZE);
-		}
-
-		public static long adjustSize(long raw,float add){
-			return makeupParam(getSize(raw)+add,getMode(raw));
-		}
-
-		public static long setSize(long raw,float size){
-			return makeupParam(size,getMode(raw));
-		}
-	}
-	
 }

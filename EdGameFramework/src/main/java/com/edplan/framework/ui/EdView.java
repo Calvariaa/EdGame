@@ -9,13 +9,19 @@ import com.edplan.framework.ui.uiobjs.DrawRequestParam;
 import com.edplan.framework.ui.uiobjs.Visibility;
 import com.edplan.superutils.classes.advance.IRunnableHandler;
 import com.edplan.framework.ui.layout.MeasureCore;
-import com.edplan.framework.ui.layout.LayoutParam;
+import com.edplan.framework.ui.layout.EdLayoutParam;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
 import com.edplan.framework.ui.layout.EdMeasureSpec;
 
 public class EdView implements IRunnableHandler
 {
 	protected static int CUSTOM_INDEX=0;
+	
+	public static final int VISIBILITY_SHOW=1;
+	
+	public static final int VISIBILITY_HIDDEN=2;
+	
+	public static final int VISIBILITY_GONE=3;
 	
 	private EdAbstractViewGroup parent;
 	
@@ -25,16 +31,15 @@ public class EdView implements IRunnableHandler
 
 	private EdDrawable background;
 
-	private Visibility visiblility=Visibility.Visible;
+	private int visiblility=VISIBILITY_SHOW;
 	
-	private LayoutParam layoutParam;
-
+	private EdLayoutParam layoutParam;
 	
 	private float measuredWidth,measuredHeight;
 	
 	private float minWidth,minHeight;
 	
-	private float left,right,top,bottom;
+	private float leftToParent,rightToParent,topToParent,bottomToParent;
 	
 	public EdView(MContext context){
 		this.context=context;
@@ -43,12 +48,44 @@ public class EdView implements IRunnableHandler
 		}
 		initialName();
 	}
+	
+	public float getPaddingLeft(){
+		return 0;
+	}
+	
+	public float getPaddingTop(){
+		return 0;
+	}
+	
+	public float getPaddingRight(){
+		return 0;
+	}
+	
+	public float getPaddingBottom(){
+		return 0;
+	}
+	
+	public float getPaddingHorizon(){
+		return getPaddingLeft()+getPaddingRight();
+	}
+	
+	public float getPaddingVertical(){
+		return getPaddingTop()+getPaddingBottom();
+	}
 
-	public void setLayoutParam(LayoutParam layoutParam) {
+	public float getMeasuredWidth() {
+		return measuredWidth;
+	}
+
+	public float getMeasuredHeight() {
+		return measuredHeight;
+	}
+
+	public void setLayoutParam(EdLayoutParam layoutParam) {
 		this.layoutParam=layoutParam;
 	}
 
-	public LayoutParam getLayoutParam() {
+	public EdLayoutParam getLayoutParam() {
 		return layoutParam;
 	}
 	
@@ -105,11 +142,11 @@ public class EdView implements IRunnableHandler
 		return name;
 	}
 
-	public void setVisiblility(Visibility visiblility) {
+	public void setVisiblility(int visiblility) {
 		this.visiblility=visiblility;
 	}
 
-	public Visibility getVisiblility() {
+	public int getVisiblility() {
 		return visiblility;
 	}
 	
@@ -178,19 +215,30 @@ public class EdView implements IRunnableHandler
 		measuredHeight=h;
 	}
 	
-	public void layout(float left,float top,float right,float bottom){
+	/**
+	 *四个参数分别为子view到父view坐标系的距离
+	 */
+	protected void layout(float left,float top,float right,float bottom){
+		boolean hasChanged=setFrame(left,top,right,bottom);
+		if(hasChanged){
+			onLayout(hasChanged,left,top,right,bottom);
+		}
+	}
+	
+	public void onLayout(boolean changed,float left,float top,float right,float bottom){
 		
 	}
 	
-	public void onLayout(){
-		
-	}
-	
-	protected final void setFrame(float left,float top,float right,float bottom){
-		this.left=left;
-		this.top=top;
-		this.right=right;
-		this.bottom=bottom;
+	protected final boolean setFrame(float left,float top,float right,float bottom){
+		boolean hasChanged=false;
+		if(leftToParent!=left||topToParent!=top||rightToParent!=right||bottomToParent!=bottom){
+			hasChanged=true;
+			this.leftToParent=left;
+			this.topToParent=top;
+			this.rightToParent=right;
+			this.bottomToParent=bottom;
+		}
+		return hasChanged;
 	}
 	
 	public boolean onMotionEvent(EdMotionEvent e){

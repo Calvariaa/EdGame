@@ -18,6 +18,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import com.edplan.framework.ui.EdView;
 import com.edplan.framework.test.performance.Tracker;
+import com.edplan.framework.ui.ViewRoot;
 
 public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 {
@@ -27,10 +28,13 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 
 	private UILooper uiLooper;
 	
+	private ViewRoot viewRoot;
+	
 	private int glVersion;
 	
 	public MainRenderer(Context con){
 		context=new MContext(con);
+		viewRoot=new ViewRoot(context);
 	}
 
 	public void setGlVersion(int glVersion) {
@@ -68,7 +72,7 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 			context.setUiLooper(uiLooper);
 			tmer.initial();
 			
-			context.setContent(createContentView(context));
+			viewRoot.setContentView(createContentView(context));
 			
 			initialCount++;
 			Log.v("gl_initial","initial id: "+initialCount);
@@ -81,13 +85,19 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 	@Override
 	public void onSurfaceChanged(GL10 p1,int width,int heigth) {
 		// TODO: Implement this method
+		context.setDisplaySize(width,heigth);
+		viewRoot.onChange(width,heigth);
+		
+		
 		rootLayer=new DefBufferedLayer(context,width,heigth);
 		rootLayer.checkChange();
 		rootLayer.prepare();
 		for(int i=0;i<10;i++){
 			BufferedLayer.DEF_FBOPOOL.saveFBO(FrameBufferObject.create(1000,1000,true));
 		}
-		context.getContent().onCreate();
+		
+		viewRoot.getContentView().onCreate();
+		
 		Log.v("ini-log","ini-scr: "+width+":"+heigth);
 	}
 
@@ -107,10 +117,8 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 		canvas.prepare();
 		canvas.getMProjMatrix().setOrtho(0,canvas.getWidth(),canvas.getHeight(),0,-100,100);
 		if(debugUi){
-			if(context.getContent()!=null){
-				canvas.drawColor(Color4.gray(0.3f));
-				context.getContent().draw(canvas);
-			}
+			canvas.drawColor(Color4.gray(0.0f));
+			viewRoot.onNewFrame(canvas,tmer.getDeltaTime());
 		}
 		canvas.unprepare();
 	}
