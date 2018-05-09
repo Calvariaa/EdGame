@@ -7,6 +7,7 @@ import java.util.List;
 import com.edplan.nso.ruleset.std.objects.StdPath;
 import com.edplan.framework.graphics.line.approximator.CircleApproximator;
 import com.edplan.framework.graphics.line.approximator.BezierApproximator;
+import com.edplan.framework.graphics.line.approximator.CatmullApproximator;
 
 public class StdSliderPathMaker
 {
@@ -45,6 +46,8 @@ public class StdSliderPathMaker
 					if(sub.size()!=0)return sub;
 				}
 				break;
+			case Catmull:
+				return (new CatmullApproximator(subPoints)).createCatmull();
 		}
 		return (new BezierApproximator(subPoints)).createBezier();
 	}
