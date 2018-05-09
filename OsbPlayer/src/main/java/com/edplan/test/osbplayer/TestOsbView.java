@@ -40,6 +40,7 @@ import com.edplan.framework.graphics.opengl.BaseCanvas;
 import com.edplan.framework.test.Test;
 import com.edplan.framework.test.performance.Tracker;
 import com.edplan.nso.storyboard.PlayingStoryboardLayer;
+import com.edplan.framework.resource.MultipleResource;
 
 public class TestOsbView extends EdView
 {
@@ -235,9 +236,15 @@ public class TestOsbView extends EdView
 						long s=System.currentTimeMillis();
 						decoder.parse();
 						storyboard=decoder.getStoryboard();
+						AResource res=new DirResource(osb.getParentFile());
+						//if(enableOsu){
+						//	if(beatmap.getGeneral().isUseSkinSprites()){
+								res=new MultipleResource(res,skin.getResource());
+						//	}
+						//}
 						System.out.println("end edcode osb: "+storyboard.getObjectCount());
 						playingStoryboard=new PlayingStoryboard(getContext(),timeline,storyboard,
-																new DirResource(osb.getParentFile()));
+																res,skin);
 						//test.testFloder().subResource(test.testBeatmapFloder+""));
 						//new DirResource(osb.getParentFile()));
 						System.out.println("end transform to playing state");

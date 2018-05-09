@@ -63,6 +63,9 @@ public class GeneralParser extends PartParser<PartGeneral>
 					case PartGeneral.SpecialStyle:
 						part.setSpecialStyle(U.toBool(entry[1]));
 						return true;
+					case PartGeneral.UseSkinSprites:
+						part.setUseSkinSprites(U.toBool(entry[1]));
+						return true;
 					case PartGeneral.EpilepsyWarning:
 						part.setEpilepsyWarning(U.toBool(entry[1]));
 						return true;

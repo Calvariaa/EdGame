@@ -22,6 +22,7 @@ import com.edplan.framework.graphics.opengl.GL10Canvas2D;
 import com.edplan.framework.graphics.opengl.GLWrapped;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
 import com.edplan.framework.test.Test;
+import com.edplan.nso.resource.OsuSkin;
 
 public class PlayingStoryboard extends EdDrawable implements GLES10Drawable
 {
@@ -35,11 +36,12 @@ public class PlayingStoryboard extends EdDrawable implements GLES10Drawable
 	
 	public Storyboard storyboard;
 	
-	public PlayingStoryboard(MContext context,PreciseTimeline timeline,Storyboard storyboard,AResource resource){
+	public PlayingStoryboard(MContext context,PreciseTimeline timeline,Storyboard storyboard,AResource resource,OsuSkin skin){
 		super(context);
 		this.storyboard=storyboard;
 		this.resource=new BufferedListResource(resource);
 		this.resource.setIgnoreCase(true);
+		//this.resource.printDetails();
 		//new BufferedListResource(resource.subResource("SB/Font")).printDetails();
 		//this.resource.printDetails();
 		loadPool();

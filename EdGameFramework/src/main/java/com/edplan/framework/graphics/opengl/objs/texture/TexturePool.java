@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import com.edplan.framework.graphics.opengl.objs.GLTexture;
+import android.util.Log;
 
 public class TexturePool
 {
@@ -56,7 +58,10 @@ public class TexturePool
 	
 	protected AbstractTexture loadTexture(String msg){
 		AbstractTexture t=loader.load(msg);
-		if(t==null)throw new RuntimeException("err load Texture: "+msg);
+		if(t==null){
+			Log.e("load texture","err load: "+msg);
+			t=GLTexture.ErrorTexture;
+		}//throw new RuntimeException("err load Texture: "+msg);
 		return t;
 	}
 	

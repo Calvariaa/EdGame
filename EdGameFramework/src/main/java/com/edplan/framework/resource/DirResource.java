@@ -21,8 +21,8 @@ public class DirResource extends AResource
 		// TODO: Implement this method
 		File f=new File(dir,path);
 		if((!f.exists())||f.isDirectory()){
-			//return null;
-			throw new RuntimeException("err open input: "+f.exists()+","+f.isDirectory()+","+f.getAbsolutePath());
+			return null;
+			//throw new RuntimeException("err open input: "+f.exists()+","+f.isDirectory()+","+f.getAbsolutePath());
 		}
 		return new FileInputStream(f);
 	}

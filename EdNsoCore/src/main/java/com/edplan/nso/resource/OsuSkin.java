@@ -18,6 +18,8 @@ public class OsuSkin
 {
 	private HashMap<String,ResourceInfo> resourceDictionary=new HashMap<String,ResourceInfo>();
 	
+	private AResource resource;
+	
 	@AResType(ResType.TEXTURE)
 	@AResPath("hitcircle.png")
 	public TextureInfo hitcircle;
@@ -51,6 +53,14 @@ public class OsuSkin
 	
 	public OsuSkin(){
 		initial();
+	}
+
+	public void setResource(AResource resource) {
+		this.resource=resource;
+	}
+
+	public AResource getResource() {
+		return resource;
 	}
 	
 	public void initial(){
@@ -101,6 +111,7 @@ public class OsuSkin
 	}
 	
 	public void load(AResource res){
+		this.resource=res;
 		try{
 			Class klass=OsuSkin.class;
 			Field[] fields=klass.getFields();
