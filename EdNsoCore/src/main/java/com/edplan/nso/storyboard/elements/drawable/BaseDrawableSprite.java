@@ -309,6 +309,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 			.scale(anchor,scale.x,scale.y)
 			.toQuad(quad);
 		quad.rotate(anchor,rotation);
+		//quad.rotate(quad.getPointByAnchor(anchor),rotation);
 		quad.flip(flipH,flipV);
 	}
 	
@@ -350,7 +351,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 			texture.getHeight()
 		).scale(anchor,scale.x,scale.y)
 			.toQuad();
-		quad.rotate(anchor,rotation);
+		//quad.rotate(anchor,rotation);
 		quad.flip(flipH,flipV);
 		//默认只按次流程绘制且只绘制StoryboardSprite，这里省去save/restore节省时间
 		GLWrapped.blend.setBlendType(blendType);
