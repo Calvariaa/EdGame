@@ -85,6 +85,14 @@ public class TestOsbView extends EdView
 	private boolean enableOsu,enableOsb;
 	
 	private String msg="none";
+	
+	
+	
+	private static Tracker.TrackNode main;
+	static{
+		main=Tracker.register("main");
+	}
+	
 
 	public TestOsbView(MContext context,JSONObject obj){
 		super(context);
@@ -280,6 +288,15 @@ public class TestOsbView extends EdView
 	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		super.draw(canvas);
+		
+		/*
+		main.watch();
+		Main m=new Main();
+		m.main();
+		main.end();
+		*/
+		
+		
 		renderTime+=getContext().getFrameDeltaTime();
 		int audioOffset=(int)(timeline.frameTime()-audio.currentPlayTimeMS());
 
@@ -495,7 +512,7 @@ public class TestOsbView extends EdView
 		printer.toNextLine();
 		printer.printString(PlayingStoryboardLayer.PrepareTime.toString());
 		printer.toNextLine();
-		printer.printString(Tracker.InjectData.toString());
+		printer.printString(main.toString());
 		printer.toNextLine();
 		printer.printString(Tracker.PrepareVertexData.toString());
 		//printer.setTextSize(50);
