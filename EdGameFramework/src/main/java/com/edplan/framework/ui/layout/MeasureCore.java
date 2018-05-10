@@ -9,12 +9,12 @@ public class MeasureCore
 		long parentWidthSpec,long parentHeightSpec,
 		float widthUsed,float heightUsed
 	){
-		MarginLayoutParam param=(MarginLayoutParam)view.getLayoutParam();
-		long widthSpec=getChildMeasureSpec(
+		final MarginLayoutParam param=(MarginLayoutParam)view.getLayoutParam();
+		final long widthSpec=getChildMeasureSpec(
 			parentWidthSpec,
 			paddingHorizon+param.getMarginHorizon()+widthUsed,
 			param.width);
-		long heightSpec=getChildMeasureSpec(
+		final long heightSpec=getChildMeasureSpec(
 			parentHeightSpec,
 			paddingVertical+param.getMarginVertical()+heightUsed,
 			param.height);
@@ -26,12 +26,12 @@ public class MeasureCore
 		float paddingHorizon,float paddingVertical,
 		long parentWidthSpec,long parentHeightSpec
 	){
-		EdLayoutParam param=view.getLayoutParam();
-		long widthSpec=getChildMeasureSpec(
+		final EdLayoutParam param=view.getLayoutParam();
+		final long widthSpec=getChildMeasureSpec(
 			parentWidthSpec,
 			paddingHorizon,
 			param.width);
-		long heightSpec=getChildMeasureSpec(
+		final long heightSpec=getChildMeasureSpec(
 			parentHeightSpec,
 			paddingVertical,
 			param.height);
@@ -39,10 +39,9 @@ public class MeasureCore
 	}
 	
 	public static long getChildMeasureSpec(long spec,float padding,long childDimension){
-		int mode=EdMeasureSpec.getMode(spec);
-		float size=Math.max(EdMeasureSpec.getSize(spec)-padding,0);
-		//float psize=Param.getSize(childDimension);
-		int pmode=Param.getMode(childDimension);
+		final int mode=EdMeasureSpec.getMode(spec);
+		final float size=Math.max(EdMeasureSpec.getSize(spec)-padding,0);
+		final int pmode=Param.getMode(childDimension);
 		float rsize=0;
 		int rmode=0;
 		switch(mode){

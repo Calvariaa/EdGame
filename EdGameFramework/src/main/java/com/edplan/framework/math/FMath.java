@@ -82,4 +82,8 @@ public class FMath
 	public static float linear(float progress,float bottom,float top){
 		return bottom*progress+top*(1-progress);
 	}
+	
+	public static boolean almostEqual(double v1,double v2,double t){
+		return Math.abs(v1-v2)<=t;
+	}
 }

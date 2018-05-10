@@ -12,19 +12,32 @@ import com.edplan.framework.ui.layout.MeasureCore;
 
 public abstract class EdAbstractViewGroup extends EdView
 {
-	private List<ViewNode> children;
+	private EdView[] children;
+	private int idx;
 	
 	private LayoutTransition transition;
 	
 	public EdAbstractViewGroup(MContext context){
 		super(context);
-		children=new ArrayList<ViewNode>();
+		children=new EdView[1];
 	}
 
-	public EdLayoutParam getDefaultParam(EdView view){
-		return new EdLayoutParam();
-	}
+	public abstract EdLayoutParam getDefaultParam(EdView view);
 
+	@Override
+	protected abstract void onLayout(boolean changed, float left, float top, float right, float bottom);
+
+	@Override
+	protected abstract void onMeasure(long widthSpec, long heightSpec);
+	
+	public EdView getChildAt(int i){
+		return children[i];
+	}
+	
+	public int getChildrenCount(){
+		return idx;
+	}
+	
 	@Override
 	protected final void layout(float left,float top,float right,float bottom) {
 		// TODO: Implement this method
@@ -35,10 +48,16 @@ public abstract class EdAbstractViewGroup extends EdView
 			}
 		}
 	}
+	
+	protected void layoutChildren(float left,float top,float right,float bottom){
+		final int count=getChildrenCount();
+		
+	}
 
 	protected void measureChildren(long widthSpec,long heightSpec){
-		for(ViewNode n:children){
-			EdView v=n.view;
+		final int count=getChildrenCount();
+		for(int i=0;i<count;i++){
+			final EdView v=getChildAt(i);
 			if(v.getVisiblility()!=VISIBILITY_GONE){
 				measureChild(v,widthSpec,heightSpec);
 			}
@@ -65,15 +84,17 @@ public abstract class EdAbstractViewGroup extends EdView
 			hused);
 	}
 	
-	protected ViewNode addToList(EdView view){
-		ViewNode n=new ViewNode(view);
-		children.add(n);
-		return n;
+	protected void addToList(EdView v){
+		if(idx>=children.length){
+			children=Arrays.copyOf(children,children.length*3/2+1);
+		}
+		children[idx]=v;
+		idx++;
 	}
 	
 	public void addView(EdView view,EdLayoutParam param){
 		view.setLayoutParam(param);
-		addToList(view);
+		addView(view);
 	}
 	
 	public void addView(EdView view){
@@ -81,14 +102,6 @@ public abstract class EdAbstractViewGroup extends EdView
 			view.setLayoutParam(getDefaultParam(view));
 		}
 		addToList(view);
-	}
-
-	public class ViewNode{
-		public EdView view;
-		
-		public ViewNode(EdView view){
-			this.view=view;
-		}
 	}
 	
 }

@@ -26,26 +26,12 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 	private Anchor anchor=Anchor.Center;
 	
 	private Vec2 currentPosition=new Vec2();
-	public static InvokeSetter<BaseDrawableSprite,Float> X=new InvokeSetter<BaseDrawableSprite,Float>(){
-		@Override
-		public void invoke(BaseDrawableSprite target,Float value) {
-			// TODO: Implement this method
-			target.currentPosition.x=value;
-		}
-	};
 	public static FloatInvokeSetter<BaseDrawableSprite> XRaw=new FloatInvokeSetter<BaseDrawableSprite>(){
 		@Override
 		public void invoke(BaseDrawableSprite target,float value) {
 			// TODO: Implement this method
 			target.currentPosition.x=value;
-		}
-	};
-	
-	public static InvokeSetter<BaseDrawableSprite,Float> Y=new InvokeSetter<BaseDrawableSprite,Float>(){
-		@Override
-		public void invoke(BaseDrawableSprite target,Float value) {
-			// TODO: Implement this method
-			target.currentPosition.y=value;
+			target.invalidateQuad();
 		}
 	};
 	public static FloatInvokeSetter<BaseDrawableSprite> YRaw=new FloatInvokeSetter<BaseDrawableSprite>(){
@@ -53,40 +39,29 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		public void invoke(BaseDrawableSprite target,float value) {
 			// TODO: Implement this method
 			target.currentPosition.y=value;
+			target.invalidateQuad();
 		}
 	};
 	
 	
 	private float rotation=0;
-	public static InvokeSetter<BaseDrawableSprite,Float> Rotation=new InvokeSetter<BaseDrawableSprite,Float>(){
-		@Override
-		public void invoke(BaseDrawableSprite target,Float value) {
-			// TODO: Implement this method
-			target.rotation=value;
-		}
-	};
 	public static FloatInvokeSetter<BaseDrawableSprite> RotationRaw=new FloatInvokeSetter<BaseDrawableSprite>(){
 		@Override
 		public void invoke(BaseDrawableSprite target,float value) {
 			// TODO: Implement this method
 			target.rotation=value;
+			target.invalidateQuad();
 		}
 	};
 	
 	
 	private Vec2 scale=new Vec2(1,1);
-	public static InvokeSetter<BaseDrawableSprite,Vec2> Scale=new InvokeSetter<BaseDrawableSprite,Vec2>(){
-		@Override
-		public void invoke(BaseDrawableSprite target,Vec2 value) {
-			// TODO: Implement this method
-			target.scale.set(value);
-		}
-	};
 	public static FloatInvokeSetter<BaseDrawableSprite> ScaleXRaw=new FloatInvokeSetter<BaseDrawableSprite>(){
 		@Override
 		public void invoke(BaseDrawableSprite target,float value) {
 			// TODO: Implement this method
 			target.scale.x=value;
+			target.invalidateQuad();
 		}
 	};
 	public static FloatInvokeSetter<BaseDrawableSprite> ScaleYRaw=new FloatInvokeSetter<BaseDrawableSprite>(){
@@ -94,6 +69,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		public void invoke(BaseDrawableSprite target,float value) {
 			// TODO: Implement this method
 			target.scale.y=value;
+			target.invalidateQuad();
 		}
 	};
 	
@@ -104,6 +80,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		public void invoke(BaseDrawableSprite target,Boolean value) {
 			// TODO: Implement this method
 			target.flipH=value;
+			target.invalidateQuad();
 		}
 	};
 	
@@ -113,17 +90,11 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		public void invoke(BaseDrawableSprite target,Boolean value) {
 			// TODO: Implement this method
 			target.flipV=value;
+			target.invalidateQuad();
 		}
 	};
 	
 	private float alpha=1;
-	public static InvokeSetter<BaseDrawableSprite,Float> Alpha=new InvokeSetter<BaseDrawableSprite,Float>(){
-		@Override
-		public void invoke(BaseDrawableSprite target,Float value) {
-			// TODO: Implement this method
-			target.alpha=value;
-		}
-	};
 	public static FloatInvokeSetter<BaseDrawableSprite> AlphaRaw=new FloatInvokeSetter<BaseDrawableSprite>(){
 		@Override
 		public void invoke(BaseDrawableSprite target,float value) {
@@ -151,6 +122,8 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		}
 	};
 	
+	private boolean needReCreateQuad=true;
+	
 	private double startTime;
 	
 	private double endTime;
@@ -176,16 +149,20 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		currentPosition.set(sprite.getInitialPosition());
 	}
 	
+	public void invalidateQuad(){
+		needReCreateQuad=true;
+	}
+	
 	public List<BasePreciseAnimation> getAnimations(){
 		return animations;
 	}
 	
 	public void addAnimation(BasePreciseAnimation anim,InvokeSetter setter){
-		if(setter!=Alpha){
-			animations.add(anim);
-		}else{
-			alphaAnimation=anim;
-		}
+		//if(setter!=Alpha){
+		animations.add(anim);
+		//}else{
+		//	alphaAnimation=anim;
+		//}
 	}
 
 	public void addAnimation(BasePreciseAnimation anim,FloatInvokeSetter setter){
@@ -321,21 +298,28 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		}
 	}
 	
-	@Override
-	public void draw(BaseCanvas canvas) {
-		// TODO: Implement this method
-		if(alpha<0.002)return;
+	public void updateQuad(){
 		rawRect
-		 .thisAnchorOWH(
+			.thisAnchorOWH(
 			anchor,
 			currentPosition.x,
 			currentPosition.y,
 			texture.getWidth(),
 			texture.getHeight())
-		 .scale(anchor,scale.x,scale.y)
-		 .toQuad(quad);
+			.scale(anchor,scale.x,scale.y)
+			.toQuad(quad);
 		quad.rotate(anchor,rotation);
 		quad.flip(flipH,flipV);
+	}
+	
+	@Override
+	public void draw(BaseCanvas canvas) {
+		// TODO: Implement this method
+		if(alpha<0.002)return;
+		if(needReCreateQuad){
+			updateQuad();
+			needReCreateQuad=false;
+		}
 		//默认只按次流程绘制且只绘制StoryboardSprite，这里省去save/restore节省时间
 		canvas.getBlendSetting().setBlendType(blendType);
 		canvas.drawTexture(texture,quad,varyingColor,alpha);

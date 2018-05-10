@@ -37,6 +37,8 @@ public class VertexAttrib
 	private String name;
 	
 	private GLProgram program;
+	
+	private int step;
 
 	VertexAttrib(){
 		
@@ -66,7 +68,7 @@ public class VertexAttrib
 			getType().dataCount, 
 			getType().dataType, 
 			false,
-			getType().step,   
+			step,   
 			datas
 		);
 	}
@@ -115,6 +117,16 @@ public class VertexAttrib
 		va.handle=GLES20.glGetAttribLocation(program.getProgramId(),name);
 		va.type=type;
 		va.program=program;
+		va.step=type.step;
+		return va;
+	}
+	
+	public static VertexAttrib findAttrib(GLProgram program,String name,Type type,int step){
+		VertexAttrib va=new VertexAttrib();
+		va.handle=GLES20.glGetAttribLocation(program.getProgramId(),name);
+		va.type=type;
+		va.program=program;
+		va.step=step;
 		return va;
 	}
 }

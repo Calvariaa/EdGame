@@ -4,20 +4,25 @@ public class EdLayoutParam
 {
 	public static final long DEFAULT_SIZE_PARAM;
 	
+	public static final int DEFAULT_GRAVITY=0;
+	
 	static{
 		DEFAULT_SIZE_PARAM=Param.makeupParam(0,Param.WRAP_CONTENT);
 	}
-	
-	
+
 	public long width;
 	public long height;
+	public int gravity;
 	
 	public EdLayoutParam(){
-		
+		width=DEFAULT_SIZE_PARAM;
+		height=DEFAULT_SIZE_PARAM;
+		gravity=DEFAULT_GRAVITY;
 	}
 	
 	public EdLayoutParam(EdLayoutParam l){
 		width=l.width;
 		height=l.height;
+		gravity=l.gravity;
 	}
 }

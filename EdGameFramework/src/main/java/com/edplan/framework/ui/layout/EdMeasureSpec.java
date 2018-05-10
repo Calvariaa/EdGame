@@ -35,8 +35,8 @@ public class EdMeasureSpec{
 	}
 	
 	public static String toString(long spec){
-		int mode=getMode(spec);
-		float size=getSize(spec);
+		final int mode=getMode(spec);
+		final float size=getSize(spec);
 		return "[mode:"+mode+",size:"+size+"]";
 	}
 }
