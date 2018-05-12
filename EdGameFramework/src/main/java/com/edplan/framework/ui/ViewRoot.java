@@ -5,6 +5,9 @@ import com.edplan.framework.utils.BitUtil;
 import com.edplan.framework.ui.layout.EdMeasureSpec;
 import android.util.Log;
 import com.edplan.framework.test.performance.Tracker;
+import com.edplan.framework.ui.layout.EdLayoutParam;
+import com.edplan.framework.ui.layout.Gravity;
+import com.edplan.framework.ui.layout.Param;
 
 public class ViewRoot
 {
@@ -34,6 +37,13 @@ public class ViewRoot
 
 	public void setContentView(EdView contentView) {
 		this.contentView=contentView;
+		if(contentView.getLayoutParam()==null){
+			EdLayoutParam param=new EdLayoutParam();
+			param.gravity=Gravity.None;
+			param.width=Param.makeupParam(0,Param.MATCH_PARENT);
+			param.height=Param.makeupParam(0,Param.MATCH_PARENT);
+			contentView.setLayoutParam(param);
+		}
 	}
 
 	public EdView getContentView() {

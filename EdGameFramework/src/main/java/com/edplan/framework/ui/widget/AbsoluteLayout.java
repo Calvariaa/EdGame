@@ -35,8 +35,8 @@ public class AbsoluteLayout extends EdAbstractViewGroup
 
 	public class AbsoluteParam extends EdLayoutParam
 	{
-		public float x;
-		public float y;
+		public float xoffset;
+		public float yoffset;
 
 		public AbsoluteParam(EdLayoutParam p){
 			super(p);

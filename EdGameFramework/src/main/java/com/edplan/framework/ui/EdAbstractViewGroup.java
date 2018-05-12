@@ -52,6 +52,17 @@ public abstract class EdAbstractViewGroup extends EdView
 	protected void layoutChildren(float left,float top,float right,float bottom){
 		final int count=getChildrenCount();
 		
+		final float parentLeft=getPaddingLeft();
+		final float parentRight=right-left-getPaddingRight();
+		final float parentTop=getPaddingTop();
+		final float parentBottom=bottom-top-getPaddingBottom();
+		
+		for(int i=0;i<count;i++){
+			final EdView view=getChildAt(i);
+			if(view.getVisiblility()!=VISIBILITY_GONE){
+				
+			}
+		}
 	}
 
 	protected void measureChildren(long widthSpec,long heightSpec){
