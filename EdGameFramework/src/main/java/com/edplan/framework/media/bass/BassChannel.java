@@ -11,6 +11,14 @@ public class BassChannel
 	private Type type;
 	private int chaId;
 	
+	protected BassChannel(int chaId,Type type){
+		if(chaId==0){
+			throw new RuntimeException("err bass: "+BASS.BASS_ErrorGetCode());
+		}
+		this.chaId=chaId;
+		this.type=type;
+	}
+	
 	
 	public enum Type{
 		Stream,Sample,Music
@@ -91,14 +99,9 @@ public class BassChannel
 	}
 	
 	public static BassChannel createStreamFromBuffer(ByteBuffer buffer){
-		return new BassChannel(BASS.BASS_StreamCreateFile(buffer,0,0,0),Type.Stream);
+		return new BassChannel(BASS.BASS_StreamCreateFile(buffer,0,buffer.remaining(),0),Type.Stream);
 	}
-	
-	private BassChannel(int chaId,Type type){
-		this.chaId=chaId;
-		this.type=type;
-	}
-	
+
 	static{
 		Bass.prepare();
 	}

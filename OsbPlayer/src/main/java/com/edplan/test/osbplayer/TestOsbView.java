@@ -149,8 +149,13 @@ public class TestOsbView extends EdView
 					break;
 				}
 			}
-
-			audio=BassChannel.createStreamFromFile(
+			
+			AResource dirr=new DirResource(mp3.getParentFile());
+			
+			
+			audio=
+			BassChannel.createStreamFromBuffer(
+			//BassChannel.createStreamFromFile(
 				//test.dir+"/"+
 				//.createStreamFromResource(getContext().getAssetResource(),"osu/test/beatmap/"+
 				//.createStreamFromAsset(getContext(),"osu/test/beatmap/"+
@@ -169,7 +174,10 @@ public class TestOsbView extends EdView
 				//"8/audio.mp3"
 				//"9/02-knife_party-centipede.mp3"
 				//test.getSongPath()
-				mp3.getAbsolutePath()
+				//mp3.getAbsolutePath()
+				dirr.loadBuffer(
+				mp3.getName()
+				)
 			);
 			timeline=new AudioTimeline(audio);
 

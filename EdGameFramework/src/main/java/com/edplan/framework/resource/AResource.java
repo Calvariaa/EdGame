@@ -9,6 +9,7 @@ import java.nio.ByteBuffer;
 import java.io.BufferedInputStream;
 import java.nio.ByteOrder;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
+import java.util.ArrayList;
 
 public abstract class AResource
 {
@@ -36,15 +37,18 @@ public abstract class AResource
 	}
 	
 	public String loadText(String path) throws IOException{
+		/*
 		BufferedReader r=openBufferedReader(path);
 		if(r==null)return null;
 		StringBuilder sb=new StringBuilder();
 		String s;
 		while((s=r.readLine())!=null){
-			sb.append(s);
+			sb.append(s).append("\n");
 		}
 		r.close();
 		return sb.toString();
+		*/
+		return new String(readFully(path));
 	}
 	
 	public ByteBuffer loadBuffer(String path) throws IOException{
@@ -59,7 +63,15 @@ public abstract class AResource
 			buffer.put(bu,0,l);
 		}
 		in.close();
+		buffer.position(0);
 		return buffer;
+	}
+	
+	public byte[] readFully(String path) throws IOException{
+		ByteBuffer buffer=loadBuffer(path);
+		byte[] bits=new byte[buffer.remaining()];
+		buffer.get(bits);
+		return bits;
 	}
 	
 	public boolean isFile(String path) throws IOException{
