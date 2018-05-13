@@ -8,11 +8,7 @@ import java.util.Stack;
 public class Vec2 implements Interplateable<Vec2>
 {
 	public static final Vec2 BASE_POINT=new Vec2(0,0);
-	
-	public static final Stack<Vec2> cache=new Stack<Vec2>();
-	
-	public static final int MAX_CACHE=2000;
-	
+
 	public float x,y;
 	
 	public Vec2(){

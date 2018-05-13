@@ -20,6 +20,14 @@ import java.nio.FloatBuffer;
 
 public class DataDrawBaseTexture implements ITexture3DBatch<TextureVertex3D>
 {
+
+	@Override
+	public TextureVertex3D createNext()
+	{
+		// TODO: Implement this method
+		return null;
+	}
+
 	public int textureId;
 	public TextureVertex3D[] vertexs;
 	public int length;
