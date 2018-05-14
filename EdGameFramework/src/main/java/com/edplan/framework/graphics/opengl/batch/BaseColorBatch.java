@@ -24,13 +24,6 @@ public class BaseColorBatch<T extends Vertex3D> implements BaseBatch<T>,IHasColo
 	public T get(int idx){
 		return (T)vertexs[idx];
 	}
-	
-	@Override
-	public T createNext()
-	{
-		// TODO: Implement this method
-		return null;
-	}
 
 	@Override
 	public int getVertexCount(){

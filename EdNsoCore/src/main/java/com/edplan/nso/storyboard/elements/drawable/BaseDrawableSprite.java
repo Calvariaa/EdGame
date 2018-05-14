@@ -18,6 +18,9 @@ import com.edplan.nso.storyboard.elements.drawable.BaseDrawableSprite;
 import java.util.ArrayList;
 import java.util.List;
 import com.edplan.framework.ui.animation.precise.BasePreciseAnimation;
+import com.edplan.framework.graphics.opengl.fast.FastRenderer;
+import com.edplan.framework.graphics.opengl.fast.FastQuad;
+import java.util.Arrays;
 
 public class BaseDrawableSprite extends ADrawableStoryboardElement
 {
@@ -31,7 +34,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		public void invoke(BaseDrawableSprite target,float value) {
 			// TODO: Implement this method
 			target.currentPosition.x=value;
-			target.invalidateQuad();
+			//target.invalidateQuad();
 		}
 	};
 	public static FloatInvokeSetter<BaseDrawableSprite> YRaw=new FloatInvokeSetter<BaseDrawableSprite>(){
@@ -39,7 +42,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		public void invoke(BaseDrawableSprite target,float value) {
 			// TODO: Implement this method
 			target.currentPosition.y=value;
-			target.invalidateQuad();
+			//target.invalidateQuad();
 		}
 	};
 	
@@ -50,7 +53,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		public void invoke(BaseDrawableSprite target,float value) {
 			// TODO: Implement this method
 			target.rotation=value;
-			target.invalidateQuad();
+			//target.invalidateQuad();
 		}
 	};
 	
@@ -61,7 +64,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		public void invoke(BaseDrawableSprite target,float value) {
 			// TODO: Implement this method
 			target.scale.x=value;
-			target.invalidateQuad();
+			//target.invalidateQuad();
 		}
 	};
 	public static FloatInvokeSetter<BaseDrawableSprite> ScaleYRaw=new FloatInvokeSetter<BaseDrawableSprite>(){
@@ -69,7 +72,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		public void invoke(BaseDrawableSprite target,float value) {
 			// TODO: Implement this method
 			target.scale.y=value;
-			target.invalidateQuad();
+			//target.invalidateQuad();
 		}
 	};
 	
@@ -80,7 +83,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		public void invoke(BaseDrawableSprite target,Boolean value) {
 			// TODO: Implement this method
 			target.flipH=value;
-			target.invalidateQuad();
+			//target.invalidateQuad();
 		}
 	};
 	
@@ -90,7 +93,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		public void invoke(BaseDrawableSprite target,Boolean value) {
 			// TODO: Implement this method
 			target.flipV=value;
-			target.invalidateQuad();
+			//target.invalidateQuad();
 		}
 	};
 	
@@ -130,7 +133,9 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 	
 	private String path;
 	
-	private List<BasePreciseAnimation> animations=new ArrayList<BasePreciseAnimation>();
+	private BasePreciseAnimation[] animations=new BasePreciseAnimation[9];
+	
+	private int idx;
 	
 	private BasePreciseAnimation alphaAnimation;
 	
@@ -153,13 +158,13 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		needReCreateQuad=true;
 	}
 	
-	public List<BasePreciseAnimation> getAnimations(){
+	public BasePreciseAnimation[] getAnimations(){
 		return animations;
 	}
 	
 	public void addAnimation(BasePreciseAnimation anim,InvokeSetter setter){
 		//if(setter!=Alpha){
-		animations.add(anim);
+		animations[idx++]=anim;
 		//}else{
 		//	alphaAnimation=anim;
 		//}
@@ -167,7 +172,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 
 	public void addAnimation(BasePreciseAnimation anim,FloatInvokeSetter setter){
 		if(setter!=AlphaRaw){
-			animations.add(anim);
+			animations[idx++]=anim;
 		}else{
 			alphaAnimation=anim;
 		}
@@ -261,6 +266,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		hasAdd=true;
 		if(alphaAnimation!=null)alphaAnimation.onStart();
 		for(BasePreciseAnimation anim:animations){
+			if(anim==null)break;
 			anim.onStart();
 		}
 	}
@@ -275,11 +281,12 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 	public void onRemove() {
 		// TODO: Implement this method
 		for(BasePreciseAnimation anim:animations){
+			if(anim==null)break;
 			anim.onFinish();
 			anim.onEnd();
 			anim.dispos();
 		}
-		animations.clear();
+		Arrays.fill(animations,null);
 		if(alphaAnimation!=null){
 			alphaAnimation.onFinish();
 			alphaAnimation.onEnd();
@@ -294,6 +301,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		refreshAnimation(alphaAnimation,time);
 		if(alpha<0.002)return;
 		for(BasePreciseAnimation anim:animations){
+			if(anim==null)break;
 			refreshAnimation(anim,time);
 		}
 	}
@@ -312,6 +320,26 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		//quad.rotate(quad.getPointByAnchor(anchor),rotation);
 		quad.flip(flipH,flipV);
 	}
+
+	FastQuad fastQuad;
+	@Override
+	public void drawFastRenderer(FastRenderer renderer){
+		// TODO: Implement this method
+		if(alpha<0.002)return;
+		//if(needReCreateQuad){
+			updateQuad();
+		//	needReCreateQuad=false;
+		//}
+		if(fastQuad==null)fastQuad=new FastQuad();
+		renderer.setBlendType(blendType);
+		renderer.setCurrentTexture(texture);
+		fastQuad.load(renderer);
+		fastQuad.setColor(varyingColor.r,varyingColor.g,varyingColor.b,varyingColor.a*alpha);
+		fastQuad.setQuad(quad);
+		fastQuad.setTextureCoord(texture.getRawQuad());
+		fastQuad.addToRenderer(renderer);
+	}
+	
 	
 	@Override
 	public void draw(BaseCanvas canvas) {

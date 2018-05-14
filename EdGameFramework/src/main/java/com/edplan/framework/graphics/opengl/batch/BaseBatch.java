@@ -2,7 +2,6 @@ package com.edplan.framework.graphics.opengl.batch;
 
 public interface BaseBatch<T>
 {
-	public T createNext();
 	
 	public void add(T t);
 	

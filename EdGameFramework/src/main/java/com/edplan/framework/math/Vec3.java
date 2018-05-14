@@ -2,6 +2,8 @@ package com.edplan.framework.math;
 
 public class Vec3
 {
+	public static final int FLOATS=3;
+	
 	public float x,y,z;
 	
 	public Vec3(float x,float y,float z){

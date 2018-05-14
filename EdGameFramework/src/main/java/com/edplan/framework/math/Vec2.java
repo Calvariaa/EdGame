@@ -4,9 +4,12 @@ import com.edplan.framework.ui.animation.interpolate.Interplateable;
 import com.edplan.framework.ui.animation.interpolate.ValueInterpolator;
 import com.edplan.framework.ui.animation.interpolate.Vec2Interpolator;
 import java.util.Stack;
+import com.edplan.framework.math.its.IVec2;
 
-public class Vec2 implements Interplateable<Vec2>
+public class Vec2 implements Interplateable<Vec2>,IVec2
 {
+	public static final int FLOATS=2;
+	
 	public static final Vec2 BASE_POINT=new Vec2(0,0);
 
 	public float x,y;
@@ -33,6 +36,36 @@ public class Vec2 implements Interplateable<Vec2>
 		this.x=x;
 		this.y=y;
 		return this;
+	}
+	
+
+
+	@Override
+	public float getX()
+	{
+		// TODO: Implement this method
+		return x;
+	}
+
+	@Override
+	public float getY()
+	{
+		// TODO: Implement this method
+		return y;
+	}
+
+	@Override
+	public void setX(float v)
+	{
+		// TODO: Implement this method
+		x=v;
+	}
+
+	@Override
+	public void setY(float v)
+	{
+		// TODO: Implement this method
+		y=v;
 	}
 	
 	public Vec2 set(Vec2 v){
@@ -97,8 +130,8 @@ public class Vec2 implements Interplateable<Vec2>
 	}
 	
 	public Vec2 rotate(float r){
-		float c=(float)Math.cos(r);
-		float s=(float)Math.sin(r);
+		float c=FMath.cos(r);
+		float s=FMath.sin(r);
 		float tmpX=x;
 		x=x*c-y*s;
 		y=y*c+tmpX*s;
@@ -110,11 +143,19 @@ public class Vec2 implements Interplateable<Vec2>
 		return rotate(o.x,o.y,r);
 	}
 	
+	public Vec2 rotate(float ox,float oy,float s,float c){
+		final float xr=x-ox;
+		final float yr=y-oy;
+		x=ox+xr*c-yr*s;
+		y=oy+yr*c+xr*s;
+		return this;
+	}
+	
 	public Vec2 rotate(float ox,float oy,float r){
-		float c=FMath.cos(r);
-		float s=FMath.sin(r);
-		float xr=x-ox;
-		float yr=y-oy;
+		final float c=FMath.cos(r);
+		final float s=FMath.sin(r);
+		final float xr=x-ox;
+		final float yr=y-oy;
 		x=ox+xr*c-yr*s;
 		y=oy+yr*c+xr*s;
 		return this;
@@ -122,7 +163,7 @@ public class Vec2 implements Interplateable<Vec2>
 	
 	
 	public Vec2 postMatrix(Mat2 m){
-		float tmpX=x;
+		final float tmpX=x;
 		x=x*m.get(0,0)+y*m.get(1,0);
 		y=tmpX*m.get(1,0)+y*m.get(1,1);
 		return this;
@@ -169,24 +210,21 @@ public class Vec2 implements Interplateable<Vec2>
 	public Vec3 toVec3(float z){
 		return new Vec3(this,z);
 	}
+
 	
-	/*
-	public static Vec2 instance(){
-		if(cache.isEmpty()){
-			return new Vec2();
-		}else{
-			return cache.pop();
-		}
+	public static void rotate(IVec2 v,float ox,float oy,float r){
+		float c=FMath.cos(r);
+		float s=FMath.sin(r);
+		float x=v.getX()-ox;
+		float y=v.getY()-oy;
+		v.setX(x*c-y*s+ox);
+		v.setY(y*c+x*s+oy);
 	}
 	
-	public static Vec2 instance(float x,float y){
-		return instance().set(x,y);
+	public static void zoom(IVec2 v,float ox,float oy,float zoomTimesX,float zoomTimesY){
+		v.setX(zoomTimesX*(v.getX()-ox)+ox);
+		v.setY(zoomTimesY*(v.getY()-oy)+oy);
 	}
-	
-	public static Vec2 instance(float v){
-		return instance().set(v,v);
-	}
-	*/
 	
 	public static float sizeOfTriangle(Vec2 v1,Vec2 v2,Vec2 v3){
 		return (v1.x*v2.y+v2.x*v3.y+v3.x*v1.y-v1.x*v3.y-v2.x*v1.y-v3.x*v2.y)/2;

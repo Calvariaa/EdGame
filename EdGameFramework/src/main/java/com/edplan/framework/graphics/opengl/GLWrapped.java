@@ -15,6 +15,7 @@ import android.opengl.GLES10;
 import android.opengl.GLES30;
 import android.opengl.GLES31Ext;
 import android.opengl.GLES11Ext;
+import java.nio.Buffer;
 
 public class GLWrapped
 {
@@ -64,6 +65,11 @@ public class GLWrapped
 	private static int drawCalls=0;
 	public static void drawArrays(int mode,int offset,int count){
 		GLES20.glDrawArrays(mode,offset,count);
+		drawCalls++;
+	}
+	
+	public static void drawElements(int mode,int count,int type,Buffer b){
+		GLES20.glDrawElements(mode,count,type,b);
 		drawCalls++;
 	}
 	

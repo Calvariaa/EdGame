@@ -21,20 +21,17 @@ import android.util.Log;
 public class ColorShader extends BaseShader
 {
 	public static ColorShader Invalid=new InvalidColorShader();
-	
-	@PointerName("test")
-	public UniformFloat uTest;
-	
-	@PointerName(Unif.MVPMatrix)
+
+	@PointerName
 	public UniformMat4 uMVPMatrix;
 	
-	@PointerName(Unif.MaskMatrix)
+	@PointerName
 	public UniformMat4 uMaskMatrix;
 	
-	@PointerName(Unif.FinalAlpha)
+	@PointerName
 	public UniformFloat uFinalAlpha;
 	
-	@PointerName(Unif.MixColor)
+	@PointerName
 	public UniformColor4 uMixColor;
 	
 	@PointerName(Attr.Position)

@@ -25,10 +25,18 @@ public abstract class BaseShader extends GLProgram
 			for(Field f:fields){
 				if(f.isAnnotationPresent(PointerName.class)){
 					String name=f.getAnnotation(PointerName.class).value();
+					if(name.length()==0){
+						name=defaultFieldNameToPointerName(f.getName());
+					}
 					f.setAccessible(true);
 					if(f.getType().equals(VertexAttrib.class)){
 						AttribType type=f.getAnnotation(AttribType.class);
-						f.set(this,VertexAttrib.findAttrib(this,name,type.value()));
+						if(f.isAnnotationPresent(AttribVAOData.class)){
+							AttribVAOData vaodata=f.getAnnotation(AttribVAOData.class);
+							f.set(this,VertexAttrib.findAttrib(this,name,type.value(),vaodata.step(),vaodata.offset()));
+						}else{
+							f.set(this,VertexAttrib.findAttrib(this,name,type.value()));
+						}
 					}else if(f.getType().equals(UniformMat2.class)){
 						f.set(this,UniformMat2.findUniform(this,name));
 					}else if(f.getType().equals(UniformMat4.class)){
@@ -52,11 +60,24 @@ public abstract class BaseShader extends GLProgram
 		}
 	}
 	
+	public static String defaultFieldNameToPointerName(String fn){
+		if(fn.startsWith("u")||fn.startsWith("a")){
+			return fn.substring(0,1)+"_"+fn.substring(1,fn.length());
+		}else{
+			throw new GLException("if you didn't set PointName, Field should start with \"a\" or \"u\"");
+		}
+	}
+	
 	public static @interface PointerName{
-		public String value();
+		public String value() default "";
 	}
 	
 	public static @interface AttribType{
 		public VertexAttrib.Type value();
+	}
+	
+	public static @interface AttribVAOData{
+		public int step();
+		public int offset();
 	}
 }

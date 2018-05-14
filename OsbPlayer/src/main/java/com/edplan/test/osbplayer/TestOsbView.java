@@ -520,7 +520,7 @@ public class TestOsbView extends EdView
 		printer.toNextLine();
 		printer.printString(PlayingStoryboardLayer.PrepareTime.toString());
 		printer.toNextLine();
-		printer.printString(main.toString());
+		printer.printString(PlayingStoryboardLayer.RenderOsb.toString());
 		printer.toNextLine();
 		printer.printString(Tracker.PrepareVertexData.toString());
 		//printer.setTextSize(50);

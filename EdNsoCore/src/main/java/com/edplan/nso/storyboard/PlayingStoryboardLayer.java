@@ -17,13 +17,16 @@ import com.edplan.framework.graphics.opengl.GL10Canvas2D;
 import java.util.LinkedList;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
 import com.edplan.framework.test.performance.Tracker;
+import com.edplan.framework.graphics.opengl.fast.FastRenderer;
 
 public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 {
 	public static Tracker.TrackNode PrepareTime;
+	public static Tracker.TrackNode RenderOsb;
 	
 	static{
 		 PrepareTime=Tracker.register("OsbPrepareTime");
+		 RenderOsb=Tracker.register("OsbRenderOsb");
 	}
 	
 	private List<ElementNode> sprites=new ArrayList<ElementNode>();
@@ -44,6 +47,8 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 	
 	private ApplyThread applyThread;
 	
+	private FastRenderer renderer;
+	
 	public PlayingStoryboardLayer(StoryboardLayer layer,PlayingStoryboard storyboard){
 		super(storyboard.getContext());
 		this.storyboard=storyboard;
@@ -52,13 +57,14 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 		for(IStoryboardElements ele:layer.getElements()){
 			if(ele.isDrawable()){
 				depth++;
-				ADrawableStoryboardElement drawable=ele.createDrawable(storyboard);
-				ElementNode node=new ElementNode();
-				node.startTime=drawable.getStartTime();
-				node.endTime=drawable.getEndTime();
-				node.element=drawable;
-				node.rawElement=ele;
-				node.depth=sprites.size();
+				final ADrawableStoryboardElement drawable=ele.createDrawable(storyboard);
+				final ElementNode node=new ElementNode(
+					sprites.size(),
+					drawable.getStartTime(),
+					drawable.getEndTime(),
+					drawable,
+					ele
+				);
 				sprites.add(node);
 				if(preApplyMode)ele.onApply(drawable,storyboard);
 				/*
@@ -79,6 +85,8 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 		spritesNotAdded.addAll(sprites);
 		applyNode.addAll(sprites);
 		sprites.clear();
+		
+		renderer=new FastRenderer();
 		
 		applyThread=new ApplyThread();
 		applyThread.start();
@@ -158,6 +166,8 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 		refreshObjects();
 		PrepareTime.end();
 		
+		renderer.ensureSize(spriteInField.size()*6,spriteInField.size()*4*2);
+		
 		if(asyncPrepare)doAsyncPrepare();
 		int c=canvas.getBlendSetting().save();
 		canvas.enablePost();
@@ -166,9 +176,17 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 			if(!asyncPrepare)ele.element.prepareForDraw();
 		}
 		PrepareTime.end();
+		
+		RenderOsb.watch();
+		renderer.start(canvas);
 		for(ElementNode ele:spriteInField){
-			ele.element.draw(canvas);
+			ele.element.drawFastRenderer(renderer);
+			//ele.element.draw(canvas);
 		}
+		renderer.end();
+		RenderOsb.end();
+		
+		
 		canvas.disablePost();
 		canvas.getBlendSetting().restoreToCount(c);
 	}
@@ -189,13 +207,21 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 	}
 	
 	public class ElementNode{
-		public int depth;
-		public double startTime;
-		public double endTime;
-		public ADrawableStoryboardElement element;
-		public IStoryboardElements rawElement;
+		public final int depth;
+		public final double startTime;
+		public final double endTime;
+		public final ADrawableStoryboardElement element;
+		public final IStoryboardElements rawElement;
 		
 		boolean added=false;
+		
+		public ElementNode(int d,double st,double et,ADrawableStoryboardElement ele,IStoryboardElements rele){
+			depth=d;
+			startTime=st;
+			endTime=et;
+			element=ele;
+			rawElement=rele;
+		}
 	
 		public boolean hasAdded(){
 			return added;

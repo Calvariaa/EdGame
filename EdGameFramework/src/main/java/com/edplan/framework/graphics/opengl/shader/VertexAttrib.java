@@ -39,6 +39,9 @@ public class VertexAttrib
 	private GLProgram program;
 	
 	private int step;
+	
+	//当使用VAO的时候会用到
+	public int offset;
 
 	VertexAttrib(){
 		
@@ -86,6 +89,19 @@ public class VertexAttrib
 		);
 	}
 	
+	public void loadVAOData(){
+		if(getHandle()==-1)return;
+		GLES20.glEnableVertexAttribArray(getHandle());
+		GLES20.glVertexAttribPointer(
+			getHandle(),   
+			getType().dataCount, 
+			getType().dataType, 
+			false,
+			step,   
+			offset
+		);
+	}
+	
 	/*
 	public void loadData(FloatBuffer buffer){
 		if(getType()!=Type.VEC2){
@@ -121,12 +137,13 @@ public class VertexAttrib
 		return va;
 	}
 	
-	public static VertexAttrib findAttrib(GLProgram program,String name,Type type,int step){
+	public static VertexAttrib findAttrib(GLProgram program,String name,Type type,int step,int offset){
 		VertexAttrib va=new VertexAttrib();
 		va.handle=GLES20.glGetAttribLocation(program.getProgramId(),name);
 		va.type=type;
 		va.program=program;
 		va.step=step;
+		va.offset=offset;
 		return va;
 	}
 }

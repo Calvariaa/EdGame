@@ -4,6 +4,8 @@ import android.graphics.Color;
 
 public class Color4
 {
+	public static final int FLOATS=4;
+	
 	public static final Color4 ONE=Color4.rgba(1,1,1,1,true);
 	
 	public static final Color4 White=Color4.rgba(1,1,1,1,true);

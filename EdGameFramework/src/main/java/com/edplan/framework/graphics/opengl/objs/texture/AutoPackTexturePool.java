@@ -43,6 +43,7 @@ public class AutoPackTexturePool extends TexturePool
 	
 	//public GLTexture textureTest;
 	
+	private int marginX=2,marginY=2;
 	
 	private MContext context;
 	
@@ -157,7 +158,7 @@ public class AutoPackTexturePool extends TexturePool
 	}
 	
 	private AbstractTexture tryAddInLine(AbstractTexture raw,String msg){
-		if(currentY+raw.getHeight()<currentPack.layer.getWidth()){
+		if(currentY+raw.getHeight()+marginY<currentPack.layer.getHeight()){
 			packCanvas.prepare();
 			packCanvas.save();
 			//packCanvas.getData().getShaders().setTexture3DShader(ShaderManager.getRawTextureShader());
@@ -172,8 +173,8 @@ public class AutoPackTexturePool extends TexturePool
 			currentPack.inPacks.put(msg,t);
 			packedPosition.add(area);
 			packedTextures.add(t);
-			currentX+=raw.getWidth();
-			lineMaxY=Math.max(lineMaxY,currentY+raw.getHeight());
+			currentX+=raw.getWidth()+marginX;
+			lineMaxY=Math.max(lineMaxY,currentY+raw.getHeight()+marginY);
 			return t;
 		}else{
 			toNewPack();
@@ -182,7 +183,7 @@ public class AutoPackTexturePool extends TexturePool
 	}
 	
 	private AbstractTexture tryAddToPack(AbstractTexture raw,String msg){
-		if(currentX+raw.getWidth()<currentPack.layer.getWidth()){
+		if(currentX+raw.getWidth()+marginX<currentPack.layer.getWidth()){
 			return tryAddInLine(raw,msg);
 		}else{
 			toNextLine();

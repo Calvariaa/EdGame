@@ -90,9 +90,9 @@ public class Quad implements IQuad
 	}
 
 	private void swap(Vec2 v1,Vec2 v2){
-		Vec2 v3=v1.copy();
-		v1.set(v2);
-		v2.set(v3);
+		final float x=v1.x,y=v1.y;
+		v1.set(v2.x,v2.y);
+		v2.set(x,y);
 	}
 
 	@Override
@@ -162,8 +162,10 @@ public class Quad implements IQuad
 	}
 
 	public void rotate(float ox,float oy,float ang){
+		final float s=FMath.sin(ang);
+		final float c=FMath.cos(ang);
 		for(Vec2 v:vertexs){
-			v.rotate(ox,oy,ang);
+			v.rotate(ox,oy,s,c);
 		}
 	}
 
