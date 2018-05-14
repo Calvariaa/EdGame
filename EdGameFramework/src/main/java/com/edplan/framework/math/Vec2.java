@@ -211,6 +211,13 @@ public class Vec2 implements Interplateable<Vec2>,IVec2
 		return new Vec3(this,z);
 	}
 
+	public static void rotate(final IVec2 v,final float ox,final float oy,final float s,final float c){
+		final float x=v.getX()-ox;
+		final float y=v.getY()-oy;
+		v.setX(x*c-y*s+ox);
+		v.setY(y*c+x*s+oy);
+	}
+	
 	
 	public static void rotate(IVec2 v,float ox,float oy,float r){
 		float c=FMath.cos(r);

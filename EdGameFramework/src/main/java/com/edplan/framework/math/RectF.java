@@ -88,6 +88,10 @@ public class RectF implements Copyable,Area2D,IQuad
 		return basePoint.copy().add(x*width,y*height);
 	}
 	
+	public void getPoint(float x,float y,Vec2 target){
+		target.set(basePoint.x+width*x,basePoint.y+height*y);
+	}
+	
 	public float getX1(){
 		return basePoint.x;
 	}
@@ -159,10 +163,11 @@ public class RectF implements Copyable,Area2D,IQuad
 	public RectF padding(Vec4 p){
 		return padding(p.r,p.g,p.b,p.a);
 	}
-	
+
 	public RectF scale(Anchor anchor,float sx,float sy){
-		Vec2 o=getPoint(anchor.x(),anchor.y());
-		basePoint.zoom(o,sx,sy);
+		final float ox=basePoint.x+anchor.x()*width;
+		final float oy=basePoint.y+anchor.y()*height;
+		basePoint.zoom(ox,oy,sx,sy);
 		width*=sx;
 		height*=sy;
 		return this;

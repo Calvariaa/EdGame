@@ -21,6 +21,7 @@ import com.edplan.framework.ui.animation.precise.BasePreciseAnimation;
 import com.edplan.framework.graphics.opengl.fast.FastRenderer;
 import com.edplan.framework.graphics.opengl.fast.FastQuad;
 import java.util.Arrays;
+import com.edplan.framework.math.FMath;
 
 public class BaseDrawableSprite extends ADrawableStoryboardElement
 {
@@ -306,6 +307,7 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		}
 	}
 	
+	final Vec2 bufferedAnchor=new Vec2();
 	public void updateQuad(){
 		rawRect
 			.thisAnchorOWH(
@@ -316,7 +318,10 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 			texture.getHeight())
 			.scale(anchor,scale.x,scale.y)
 			.toQuad(quad);
-		quad.rotate(anchor,rotation);
+		if(Math.abs(rotation)>0.01){
+			rawRect.getPoint(anchor.x(),anchor.y(),bufferedAnchor);
+			quad.rotate(bufferedAnchor.x,bufferedAnchor.y,rotation);
+		}
 		//quad.rotate(quad.getPointByAnchor(anchor),rotation);
 		quad.flip(flipH,flipV);
 	}
@@ -326,14 +331,25 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 	public void drawFastRenderer(FastRenderer renderer){
 		// TODO: Implement this method
 		if(alpha<0.002)return;
-		//if(needReCreateQuad){
-			updateQuad();
-		//	needReCreateQuad=false;
-		//}
+		updateQuad();
+		/*
+		rawRect
+			.thisAnchorOWH(
+			anchor,
+			currentPosition.x,
+			currentPosition.y,
+			texture.getWidth(),
+			texture.getHeight())
+			.scale(anchor,scale.x,scale.y);*/
 		if(fastQuad==null)fastQuad=new FastQuad();
 		renderer.setBlendType(blendType);
 		renderer.setCurrentTexture(texture);
 		fastQuad.load(renderer);
+		/*
+		fastQuad.RawQuad.set(rawRect);
+		fastQuad.RawQuad.rotare(anchor,rotation);
+		fastQuad.RawQuad.flip(flipH,flipV);
+		*/
 		fastQuad.setColor(varyingColor.r,varyingColor.g,varyingColor.b,varyingColor.a*alpha);
 		fastQuad.setQuad(quad);
 		fastQuad.setTextureCoord(texture.getRawQuad());

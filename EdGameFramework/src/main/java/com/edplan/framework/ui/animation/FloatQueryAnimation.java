@@ -23,6 +23,8 @@ public class FloatQueryAnimation<T> extends BasePreciseAnimation
 	private double initialOffset;
 
 	private T target;
+	
+	private float currentValue=Float.MIN_VALUE;
 
 	public FloatQueryAnimation(T target,double initialOffset,RawFloatInterpolator interpolator,FloatInvokeSetter<T> setter,boolean alwaysInitial){
 		this.target=target;
@@ -157,11 +159,11 @@ public class FloatQueryAnimation<T> extends BasePreciseAnimation
 
 	public class AnimNode{
 		//这些时间均为ProgressTime
-		float value;
-		Easing easing;
-		double endTime;
-		double duration;
-		double startTime;
+		final float value;
+		final Easing easing;
+		final double endTime;
+		final double duration;
+		final double startTime;
 
 		public AnimNode next;
 		public AnimNode pre;
@@ -187,8 +189,12 @@ public class FloatQueryAnimation<T> extends BasePreciseAnimation
 		}
 
 		public void apply(double progressTime){
-			double p=Math.min(1,Math.max(0,(duration==0)?1:((progressTime-startTime)/duration)));
-			setter.invoke(target,interplate(p));
+			final double p=Math.min(1,Math.max(0,(duration==0)?1:((progressTime-startTime)/duration)));
+			final float v=interplate(p);
+			if(Math.abs(v-currentValue)>0.005){
+				setter.invoke(target,v);
+				currentValue=v;
+			}
 		}
 
 		public void dispos(){
