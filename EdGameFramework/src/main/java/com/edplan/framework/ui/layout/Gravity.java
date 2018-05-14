@@ -1,6 +1,9 @@
 package com.edplan.framework.ui.layout;
 import java.util.HashMap;
 
+/** 
+ *描述组件相对位置
+ */
 public class Gravity
 {
 	public static final int VERTICAL_LEFT_BITS=4;

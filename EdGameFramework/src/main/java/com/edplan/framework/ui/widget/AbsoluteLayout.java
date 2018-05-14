@@ -35,6 +35,9 @@ public class AbsoluteLayout extends EdAbstractViewGroup
 
 	public class AbsoluteParam extends EdLayoutParam
 	{
+		/** 
+		 *相对于当前Gravity的offset
+		 */
 		public float xoffset;
 		public float yoffset;
 
