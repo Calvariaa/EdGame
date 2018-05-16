@@ -191,7 +191,7 @@ public class FloatQueryAnimation<T> extends BasePreciseAnimation
 		public void apply(double progressTime){
 			final double p=Math.min(1,Math.max(0,(duration==0)?1:((progressTime-startTime)/duration)));
 			final float v=interplate(p);
-			if(Math.abs(v-currentValue)>0.005){
+			if(Math.abs(v-currentValue)>0.0005){
 				setter.invoke(target,v);
 				currentValue=v;
 			}
