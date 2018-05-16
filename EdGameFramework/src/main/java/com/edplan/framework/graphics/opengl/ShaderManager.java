@@ -1,6 +1,5 @@
 package com.edplan.framework.graphics.opengl;
 import com.edplan.framework.graphics.opengl.shader.advance.Texture3DShader;
-import com.edplan.framework.main.GameContext;
 import com.edplan.framework.MContext;
 import java.io.IOException;
 import com.edplan.framework.resource.AResource;
