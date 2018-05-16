@@ -14,7 +14,7 @@ import com.edplan.framework.graphics.opengl.BaseCanvas;
 /**
  *用来封装将材质绘制到canvas上的Drawable，有类似canvas.drawTexture的方法
  */
-public class TextureDrawable<T extends BaseCanvas> extends EdDrawable<T> implements IFadeable,IScaleable2D,IRotateable2D
+public class TextureDrawable extends EdDrawable implements IFadeable,IScaleable2D,IRotateable2D
 {
 	private float rotation;
 	
@@ -127,7 +127,7 @@ public class TextureDrawable<T extends BaseCanvas> extends EdDrawable<T> impleme
 	}
 
 	@Override
-	public void draw(T canvas) {
+	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		for(BindTexture t:textures){
 			drawBindTexture(t,canvas);

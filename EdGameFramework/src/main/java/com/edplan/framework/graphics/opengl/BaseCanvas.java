@@ -98,8 +98,8 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 		return this;
 	}
 
-	public BaseCanvas clip(Vec2 wh){
-		getData().clip(wh);
+	public BaseCanvas clip(float w,float h){
+		getData().clip(w,h);
 		return this;
 	}
 

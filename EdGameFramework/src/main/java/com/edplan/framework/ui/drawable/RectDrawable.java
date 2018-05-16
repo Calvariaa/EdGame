@@ -4,8 +4,10 @@ import com.edplan.framework.MContext;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.GLPaint;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
+import com.edplan.framework.graphics.opengl.objs.GLTexture;
+import com.edplan.framework.math.RectF;
 
-public class RectDrawable<T extends BaseCanvas> extends EdDrawable<T>
+public class RectDrawable extends EdDrawable
 {
 	private GLPaint paint=new GLPaint();
 	
@@ -18,8 +20,8 @@ public class RectDrawable<T extends BaseCanvas> extends EdDrawable<T>
 	}
 
 	@Override
-	public void draw(T canvas) {
+	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
-		
+		canvas.drawTexture(GLTexture.ErrorTexture,RectF.xywh(0,0,canvas.getWidth(),canvas.getHeight()),paint);
 	}
 }

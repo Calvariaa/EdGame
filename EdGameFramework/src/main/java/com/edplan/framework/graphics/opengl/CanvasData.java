@@ -7,7 +7,7 @@ import com.edplan.framework.math.Mat4;
 import com.edplan.framework.math.Vec2;
 
 public class CanvasData implements Recycleable,Copyable {
-
+	
 	private float width;
 
 	private float height;
@@ -136,9 +136,9 @@ public class CanvasData implements Recycleable,Copyable {
 		return camera;
 	}
 	
-	public CanvasData clip(Vec2 wh){
-		setWidth(wh.x);
-		setHeight(wh.y);
+	public CanvasData clip(float w,float h){
+		setWidth(w);
+		setHeight(h);
 		return this;
 	}
 

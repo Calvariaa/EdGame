@@ -111,6 +111,7 @@ public class TestOsbView extends EdView
 
 	@Override
 	public void onCreate(){
+		super.onCreate();
 		Test.get().setBoolean(Test.IS_RELEASE,false);
 		test=new TestData();
 		try {
@@ -293,9 +294,9 @@ public class TestOsbView extends EdView
 	boolean ifend=false;
 	double renderTime=0;
 	@Override
-	public void draw(BaseCanvas canvas) {
+	public void onDraw(BaseCanvas canvas) {
 		// TODO: Implement this method
-		super.draw(canvas);
+		//super.draw(canvas);
 		
 		/*
 		main.watch();
@@ -371,7 +372,7 @@ public class TestOsbView extends EdView
 		newCanvas.translate(newCanvas.getWidth()/2-PlayField.BASE_X/2/osuScale,0);
 		newCanvas.scaleContent(osuScale);
 		newCanvas.translate(PlayField.PADDING_X,PlayField.PADDING_Y);
-		newCanvas.clip(new Vec2(PlayField.CANVAS_SIZE_X,PlayField.CANVAS_SIZE_Y));
+		newCanvas.clip(PlayField.CANVAS_SIZE_X,PlayField.CANVAS_SIZE_Y);
 		/*
 		 GLPaint testLine=new GLPaint();
 		 testLine.setVaryingColor(Color4.rgba(0,0,1,0.5f));

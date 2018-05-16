@@ -8,7 +8,10 @@ public class EdMeasureSpec{
 	public static final int MODE_NONE=1;
 	public static final int MODE_AT_MOST=2;
 	public static final int MODE_DEFINEDED=3;
-
+	
+	public static final long LONG_MODE_NONE=((long)MODE_NONE)<<SHIFT_SIZE;
+	public static final long LONG_MODE_AT_MOST=((long)MODE_AT_MOST)<<SHIFT_SIZE;
+	public static final long LONG_MODE_DEFINEDED=((long)MODE_DEFINEDED)<<SHIFT_SIZE;
 
 	public static long intToLongMode(int mode){
 		return ((long)mode)<<SHIFT_SIZE;

@@ -11,6 +11,7 @@ import com.edplan.framework.ui.layout.EdLayoutParam;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
 import com.edplan.framework.ui.layout.EdMeasureSpec;
 import com.edplan.framework.ui.layout.LayoutException;
+import android.util.Log;
 
 public class EdView implements IRunnableHandler
 {
@@ -40,6 +41,8 @@ public class EdView implements IRunnableHandler
 
 	private float leftToParent,rightToParent,topToParent,bottomToParent;
 
+	private boolean hasCreated=false;
+	
 	public EdView(MContext context){
 		this.context=context;
 		if(!checkCurrentThread()){
@@ -47,7 +50,35 @@ public class EdView implements IRunnableHandler
 		}
 		initialName();
 	}
+	
+	public boolean hasCreated(){
+		return hasCreated;
+	}
+	
+	public float getTop(){
+		return topToParent;
+	}
+	
+	public float getBottom(){
+		return bottomToParent;
+	}
+	
+	public float getLeft(){
+		return leftToParent;
+	}
+	
+	public float getRight(){
+		return rightToParent;
+	}
+	
+	public float getWidth(){
+		return getRight()-getLeft();
+	}
 
+	public float getHeight(){
+		return getBottom()-getTop();
+	}
+	
 	public float getPaddingLeft(){
 		return 0;
 	}
@@ -129,7 +160,7 @@ public class EdView implements IRunnableHandler
 	}
 
 	private void initialName(){
-		name=CUSTOM_INDEX+"";
+		name="@index/"+CUSTOM_INDEX;
 		CUSTOM_INDEX++;
 	}
 
@@ -150,24 +181,18 @@ public class EdView implements IRunnableHandler
 	}
 
 	public void onCreate(){
-
+		hasCreated=true;
 	}
 
-	/**
-	 *onDraw is called by this view'parent before
-	 *draw this view.
-	 *发生在measure之后
-	 *@param canvas: parent's canvas, where 
-	 */
 	public void onDraw(BaseCanvas canvas){
-
+		defaultDraw(canvas);
 	}
 
-	/**
-	 *@param canvas: The canvas to draw this voew's content.
-	 *This canvas maybe based on a FBO or parent's canvas.
-	 */
-	public void draw(BaseCanvas canvas){
+	public void defaultDraw(BaseCanvas canvas){
+		drawBackground(canvas);
+	}
+	
+	protected void drawBackground(BaseCanvas canvas){
 		if(background!=null){
 			int s=canvas.save();
 			//canvas.getMaskMatrix().post(background.getTranslationMatrix());
@@ -219,6 +244,7 @@ public class EdView implements IRunnableHandler
 		measuredWidth=w;
 		measuredHeight=h;
 		hasSetMeasureDimension=true;
+		//Log.v("setMeasureDimension","view:"+getName()+" "+w+","+h);
 	}
 
 	/**

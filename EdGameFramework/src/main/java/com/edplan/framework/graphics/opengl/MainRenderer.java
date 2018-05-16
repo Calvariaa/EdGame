@@ -72,7 +72,7 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 			context.setUiLooper(uiLooper);
 			tmer.initial();
 			
-			viewRoot.setContentView(createContentView(context));
+			
 			
 			initialCount++;
 			Log.v("gl_initial","initial id: "+initialCount);
@@ -95,7 +95,8 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 		for(int i=0;i<10;i++){
 			BufferedLayer.DEF_FBOPOOL.saveFBO(FrameBufferObject.create(1000,1000,true));
 		}
-		
+
+		viewRoot.setContentView(createContentView(context));
 		viewRoot.getContentView().onCreate();
 		
 		Log.v("ini-log","ini-scr: "+width+":"+heigth);

@@ -9,7 +9,7 @@ import com.edplan.framework.graphics.opengl.BaseCanvas;
  *默认绘制在整个canvas上，
  *默认不进行layout
  */
-public abstract class EdDrawable<T extends BaseCanvas>
+public abstract class EdDrawable
 {
 //	private Mat4 translationMatrix=Mat4.createIdentity();
 
@@ -23,7 +23,7 @@ public abstract class EdDrawable<T extends BaseCanvas>
 		return context;
 	}
 
-	public abstract void draw(T canvas);
+	public abstract void draw(BaseCanvas canvas);
 	
 	public float getMinWidth(){
 		return 0;

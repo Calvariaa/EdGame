@@ -4,7 +4,7 @@ import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.MContext;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
 
-public class TextureTextDrawable<T extends BaseCanvas> extends EdDrawable<T>
+public class TextureTextDrawable extends EdDrawable
 {
 	
 	
@@ -13,7 +13,7 @@ public class TextureTextDrawable<T extends BaseCanvas> extends EdDrawable<T>
 	}
 
 	@Override
-	public void draw(T canvas) {
+	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 	}
 }

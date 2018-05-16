@@ -21,6 +21,10 @@ import javax.microedition.khronos.opengles.GL10;
 import org.json.JSONObject;
 import com.edplan.framework.graphics.opengl.MainRenderer;
 import com.edplan.framework.ui.EdView;
+import com.edplan.framework.ui.widget.AbsoluteLayout;
+import com.edplan.framework.ui.layout.EdLayoutParam;
+import com.edplan.framework.ui.layout.Param;
+import com.edplan.framework.ui.drawable.RectDrawable;
 
 public class OsbRenderer extends MainRenderer
 {
@@ -34,6 +38,28 @@ public class OsbRenderer extends MainRenderer
 	@Override
 	public EdView createContentView(MContext c) {
 		// TODO: Implement this method
-		return new TestOsbView(c,initialJson);
+		AbsoluteLayout layout=new AbsoluteLayout(c);
+		{
+			TestOsbView view=new TestOsbView(c,initialJson);
+			view.setName("main");
+			EdLayoutParam param=new EdLayoutParam();
+			param.width=Param.MODE_MATCH_PARENT;
+			param.height=Param.MODE_MATCH_PARENT;
+			layout.addView(view,param);
+		}
+		{
+			RectDrawable drawable=new RectDrawable(c);
+			drawable.setColor(Color4.rgba(1,1,1,0.5f));
+			EdView view=new EdView(c);
+			view.setName("testWidget");
+			view.setBackground(drawable);
+			EdLayoutParam param=new EdLayoutParam();
+			param.width=Param.makeupParam(100);
+			param.height=Param.makeupParam(100);
+			param.xoffset=500;
+			layout.addView(view,param);
+		}
+		
+		return layout;
 	}
 }

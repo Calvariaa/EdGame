@@ -8,6 +8,7 @@ import com.edplan.framework.test.performance.Tracker;
 import com.edplan.framework.ui.layout.EdLayoutParam;
 import com.edplan.framework.ui.layout.Gravity;
 import com.edplan.framework.ui.layout.Param;
+import com.edplan.framework.ui.layout.MeasureCore;
 
 public class ViewRoot
 {
@@ -16,6 +17,8 @@ public class ViewRoot
 	public static final int FLAG_INVALIDATE_LAYOUT=1<<1;
 	
 	public static final int FLAG_INVALIDATE_DRAW=1<<2;
+	
+	
 	
 	private MContext context;
 	
@@ -66,7 +69,7 @@ public class ViewRoot
 			EdMeasureSpec.makeupMeasureSpec(
 				context.getDisplayHeight(),
 				EdMeasureSpec.MODE_AT_MOST);
-		contentView.measure(wm,hm);
+		MeasureCore.measureChild(contentView,0,0,wm,hm);
 		Tracker.InvalidateMeasure.end();
 		/*
 		Log.v("ui-layout",Long.toBinaryString(((long)1)<<32)+" "+Long.toBinaryString(EdMeasureSpec.MODE_MASK)+":"+Long.toBinaryString(EdMeasureSpec.SIZE_MASK));
@@ -100,7 +103,7 @@ public class ViewRoot
 		
 		
 		if(contentView!=null){
-			contentView.draw(canvas);
+			contentView.onDraw(canvas);
 		}
 	}
 }

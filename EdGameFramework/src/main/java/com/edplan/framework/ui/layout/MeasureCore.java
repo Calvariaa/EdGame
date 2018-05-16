@@ -1,5 +1,6 @@
 package com.edplan.framework.ui.layout;
 import com.edplan.framework.ui.EdView;
+import android.util.Log;
 
 public class MeasureCore
 {
@@ -36,6 +37,7 @@ public class MeasureCore
 			paddingVertical,
 			param.height);
 		view.measure(widthSpec,heightSpec);
+		//Log.v("measure","view:"+view.getName()+" "+EdMeasureSpec.toString(widthSpec)+" : "+EdMeasureSpec.toString(heightSpec));
 	}
 	
 	public static long getChildMeasureSpec(long spec,float padding,long childDimension){
