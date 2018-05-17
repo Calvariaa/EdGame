@@ -34,9 +34,9 @@ public class ColorShader extends BaseShader
 	@PointerName
 	public UniformColor4 uMixColor;
 	
-	@PointerName(Attr.Position)
+	@PointerName
 	@AttribType(VertexAttrib.Type.VEC3)
-	public VertexAttrib vPosition;
+	public VertexAttrib aPosition;
 	
 	@PointerName(Attr.Color)
 	@AttribType(VertexAttrib.Type.VEC4)
@@ -83,7 +83,7 @@ public class ColorShader extends BaseShader
 	}
 	
 	public void loadPosition(FloatBuffer buffer){
-		vPosition.loadData(buffer);
+		aPosition.loadData(buffer);
 	}
 	
 	public void loadColor(FloatBuffer buffer){

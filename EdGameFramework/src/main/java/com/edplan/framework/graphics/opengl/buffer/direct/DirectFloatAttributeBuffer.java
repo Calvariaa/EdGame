@@ -6,7 +6,7 @@ import com.edplan.framework.math.Vec2;
 import java.nio.FloatBuffer;
 import java.util.Arrays;
 
-public class DirectFloatAttributeBuffer
+public class DirectFloatAttributeBuffer implements DirectAttributeBuffer
 {
 	public float[] ary;
 	public FloatBuffer buffer;
@@ -14,10 +14,21 @@ public class DirectFloatAttributeBuffer
 
 	public VertexAttrib attributePointer;
 
-	public DirectFloatAttributeBuffer(int size){
+	public DirectFloatAttributeBuffer(int size,VertexAttrib att){
 		ensureSize(size);
+		attributePointer=att;
+	}
+	
+	@Override
+	public void loadToAttribute(){
+		// TODO: Implement this method
+		buffer.position(0);
+		buffer.put(ary);
+		buffer.position(0);
+		attributePointer.loadData(buffer);
 	}
 
+	@Override
 	public void ensureSize(int size){
 		if(ary==null){
 			ary=new float[size];

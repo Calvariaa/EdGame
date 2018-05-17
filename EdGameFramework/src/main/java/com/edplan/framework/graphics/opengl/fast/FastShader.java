@@ -52,8 +52,9 @@ public class FastShader extends BaseShader
 		"uniform sampler2D u_Texture;",
 
 		"void main(){",
-		"	vec4 t=texture2D(u_Texture,f_TextureCoord);",
-		"	@include <FragmentFinal>",
+		"	vec4 c=texture2D(u_Texture,f_TextureCoord)*f_VaryingColor;",
+		"	if(c.a<0.005)discard;",
+		"	gl_FragColor=c;",
 		"}"
 		);
 	}

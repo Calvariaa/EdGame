@@ -4,6 +4,11 @@ import com.edplan.framework.graphics.opengl.shader.advance.BaseShader;
 import com.edplan.framework.graphics.opengl.shader.GLProgram;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.graphics.opengl.Camera;
+import com.edplan.framework.graphics.opengl.shader.uniforms.UniformMat4;
+import com.edplan.framework.graphics.opengl.shader.uniforms.UniformFloat;
+import com.edplan.framework.graphics.opengl.shader.VertexAttrib;
+import com.edplan.framework.graphics.opengl.shader.VertexAttrib.Type;
+import com.edplan.framework.graphics.opengl.shader.uniforms.UniformSample2D;
 
 public class OsbShader extends BaseShader
 {
@@ -16,11 +21,11 @@ public class OsbShader extends BaseShader
 									 "uniform mat4 u_MVPMatrix;",
 									 "uniform float u_Time;",
 									 
-									 "attribute vec4 a_TextureCoord;",
+									 "attribute vec2 a_TextureCoord;",
 									 
 									 "attribute vec2 a_AnchorOffset;",
 
-									 //vec4第一位表示起始值，第二位表示结束值，第三位表示开始时间，第四位表示结束时间
+									 //vec4第一位表示起始值，第二位表示结束值，第三位表示开始时间，第四位表示动画长度
 									 "attribute vec4 a_PositionX;",
 									 "attribute vec4 a_PositionY;",
 									 "attribute vec4 a_ScaleX;",
@@ -58,7 +63,7 @@ public class OsbShader extends BaseShader
 									 "}",
 									 
 									 "vec4 makeColor(){",
-									 "	return applyEasing(a_VaryingColor0,a_VaryingColor1,getProgress(a_ColorTime.x,a_ColorTime.y),a_CEasing);",
+									 "	return applyEasing(applyAlpha(a_VaryingColor0),applyAlpha(a_VaryingColor1),getProgress(a_ColorTime.x,a_ColorTime.y),a_CEasing);",
 									 "}",
 									 
 									 "void main(){",
@@ -85,17 +90,57 @@ public class OsbShader extends BaseShader
 									   );
 	}
 	
+	@PointerName
+	public UniformMat4
+		uMVPMatrix;
+	
+	@PointerName
+	public UniformFloat
+		uTime;
+	
+	@PointerName
+	public UniformSample2D
+		uTexture;
+	
+	@PointerName
+	@AttribType(Type.VEC2)
+	public VertexAttrib
+		aTextureCoord,
+		aColorTime,
+		aAnchorOffset;
+	
+	@PointerName
+	@AttribType(Type.VEC4)
+	public VertexAttrib
+		aPositionX,
+		aPositionY,
+		aScaleX,
+		aScaleY,
+		aRotation,
+			
+		aVaryingColor0,
+		aVaryingColor1;
+	
+	@PointerName
+	@AttribType(Type.INT)
+	public VertexAttrib
+		aXEasing,
+		aYEasing,
+		aXSEasing,
+		aYSEasing,
+		aREasing,
+		aCEasing;
 	
 	public OsbShader(){
 		super(GLProgram.createProgram(VertexShader,FragmentShader),true);
 	}
 	
 	public void bindTexture(GLTexture t){
-		
+		uTexture.loadData(t);
 	}
 	
 	public void loadCamera(Camera c){
-		
+		uMVPMatrix.loadData(c.getFinalMatrix());
 	}
 	
 }

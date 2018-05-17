@@ -6,7 +6,7 @@ import com.edplan.framework.math.Vec3;
 import java.nio.FloatBuffer;
 import java.util.Arrays;
 
-public class DirectVec3AttributeBuffer
+public class DirectVec3AttributeBuffer implements DirectAttributeBuffer
 {
 	public float[] ary;
 	public FloatBuffer buffer;
@@ -14,10 +14,22 @@ public class DirectVec3AttributeBuffer
 
 	public VertexAttrib attributePointer;
 
-	public DirectVec3AttributeBuffer(int size){
+	public DirectVec3AttributeBuffer(int size,VertexAttrib att){
 		ensureSize(size);
+		attributePointer=att;
 	}
+	
+	@Override
+	public void loadToAttribute(){
+		// TODO: Implement this method
+		buffer.position(0);
+		buffer.put(ary);
+		buffer.position(0);
+		attributePointer.loadData(buffer);
+	}
+	
 
+	@Override
 	public void ensureSize(int size){
 		if(ary==null){
 			ary=new float[size*Vec3.FLOATS];

@@ -6,7 +6,7 @@ import com.edplan.framework.math.Vec2;
 import com.edplan.framework.graphics.opengl.buffer.BufferUtil;
 import java.util.Arrays;
 
-public class DirectVec2AttributeBuffer
+public class DirectVec2AttributeBuffer implements DirectAttributeBuffer
 {
 	public float[] ary;
 	public FloatBuffer buffer;
@@ -14,10 +14,21 @@ public class DirectVec2AttributeBuffer
 	
 	public VertexAttrib attributePointer;
 	
-	public DirectVec2AttributeBuffer(int size){
+	public DirectVec2AttributeBuffer(int size,VertexAttrib att){
 		ensureSize(size);
+		attributePointer=att;
+	}
+
+	@Override
+	public void loadToAttribute(){
+		// TODO: Implement this method
+		buffer.position(0);
+		buffer.put(ary);
+		buffer.position(0);
+		attributePointer.loadData(buffer);
 	}
 	
+	@Override
 	public void ensureSize(int size){
 		if(ary==null){
 			ary=new float[size*Vec2.FLOATS];

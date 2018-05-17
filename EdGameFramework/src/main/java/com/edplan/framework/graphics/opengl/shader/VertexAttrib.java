@@ -103,32 +103,12 @@ public class VertexAttrib
 			offset
 		);
 	}
-	
-	/*
-	public void loadData(FloatBuffer buffer){
-		if(getType()!=Type.VEC2){
-			throw new GLException("only Type.VEC2 can use loadData(Vec2Buffer)");
-		}else{
-			loadData(buffer);
-		}
+
+	@Override
+	public String toString(){
+		// TODO: Implement this method
+		return name+":"+type.name()+":"+super.toString();
 	}
-	
-	public void loadData(Vec3Buffer buffer){
-		if(getType()!=Type.VEC3){
-			throw new GLException("only Type.VEC3 can use loadData(Vec3Buffer)");
-		}else{
-			loadData(buffer.makeBuffer());
-		}
-	}
-	
-	public void loadData(Color4Buffer buffer){
-		if(getType()!=Type.VEC4){
-			throw new GLException("only Type.VEC4 can use loadData(Color4Buffer)");
-		}else{
-			loadData(buffer.makeBuffer());
-		}
-	}
-	*/
 	
 	public static VertexAttrib findAttrib(GLProgram program,String name,Type type){
 		VertexAttrib va=new VertexAttrib();
@@ -136,6 +116,7 @@ public class VertexAttrib
 		va.type=type;
 		va.program=program;
 		va.step=type.step;
+		va.name=name;
 		return va;
 	}
 	
@@ -146,6 +127,7 @@ public class VertexAttrib
 		va.program=program;
 		va.step=step;
 		va.offset=offset;
+		va.name=name;
 		return va;
 	}
 }

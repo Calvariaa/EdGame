@@ -5,7 +5,7 @@ import com.edplan.framework.graphics.opengl.shader.VertexAttrib;
 import java.nio.IntBuffer;
 import java.util.Arrays;
 
-public class DirectIntAttributeBuffer
+public class DirectIntAttributeBuffer implements DirectAttributeBuffer
 {
 	public int[] ary;
 	public IntBuffer buffer;
@@ -13,10 +13,21 @@ public class DirectIntAttributeBuffer
 
 	public VertexAttrib attributePointer;
 
-	public DirectIntAttributeBuffer(int size){
+	public DirectIntAttributeBuffer(int size,VertexAttrib attb){
 		ensureSize(size);
+		this.attributePointer=attb;
+	}
+	
+	@Override
+	public void loadToAttribute(){
+		// TODO: Implement this method
+		buffer.position(0);
+		buffer.put(ary);
+		buffer.position(0);
+		attributePointer.loadData(buffer);
 	}
 
+	@Override
 	public void ensureSize(int size){
 		if(ary==null){
 			ary=new int[size];
