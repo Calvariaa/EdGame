@@ -19,6 +19,7 @@ import com.edplan.nso.storyboard.elements.drawable.BaseDrawableSprite;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import com.edplan.framework.math.FMath;
 
 public class StoryboardSprite implements IStoryboardElements
 {
@@ -162,8 +163,12 @@ public class StoryboardSprite implements IStoryboardElements
 		TypedCommand<Float> tmp=command.get(0);
 		setter.invoke(sprite,tmp.getStartValue());
 		anim.transform(tmp.getStartValue(),offset-obj_offset,Easing.None);
+		float preValue=Float.MAX_VALUE;
 		for(TypedCommand<Float> c:command){
-			anim.transform(c.getStartValue(),c.getStartTime(),0,c.getEasing());
+			if(!FMath.allmostEqual(c.getStartValue(),preValue,0.0001f)){
+				anim.transform(c.getStartValue(),c.getStartTime(),0,Easing.None);
+			}
+			preValue=c.getEndValue();
 			anim.transform(c.getEndValue(),c.getStartTime(),c.getDuration(),c.getEasing());
 		}
 		if(!keepInEnding){

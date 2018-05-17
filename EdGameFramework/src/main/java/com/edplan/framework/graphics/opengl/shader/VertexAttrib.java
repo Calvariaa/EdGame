@@ -15,7 +15,9 @@ public class VertexAttrib
 	public enum Type{
 		VEC2(2,2*4,GLES20.GL_FLOAT),
 		VEC3(3,3*4,GLES20.GL_FLOAT),
-		VEC4(4,4*4,GLES20.GL_FLOAT);
+		VEC4(4,4*4,GLES20.GL_FLOAT),
+		FLOAT(1,1*4,GLES20.GL_FLOAT),
+		INT(1,1*4,GLES20.GL_INT);
 		
 		private final int dataCount;
 		

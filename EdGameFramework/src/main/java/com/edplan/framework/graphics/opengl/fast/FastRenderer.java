@@ -238,9 +238,25 @@ public class FastRenderer
 
 		public class PositionPointer implements IVec3
 		{
+
+			@Override
+			public void set(float xv,float yv,float zv){
+				// TODO: Implement this method
+				positionArray[x]=xv;
+				positionArray[y]=yv;
+				positionArray[z]=zv;
+			}
+			
+			@Override
 			public void set(Vec2 v){
-				positionArray[x]=v.x;
-				positionArray[y]=v.y;
+				// TODO: Implement this method
+				set(v.x,v.y);
+			}
+			
+			@Override
+			public void set(float xv,float yv){
+				positionArray[x]=xv;
+				positionArray[y]=yv;
 			}
 			
 			@Override
@@ -282,9 +298,17 @@ public class FastRenderer
 
 		public class TextureCoordPointer implements IVec2
 		{
-			public void set(Vec2 vc){
-				textureCoordArray[u]=vc.x;
-				textureCoordArray[v]=vc.y;
+
+			@Override
+			public void set(Vec2 v){
+				// TODO: Implement this method
+				set(v.x,v.y);
+			}
+			
+			@Override
+			public void set(float xv,float yv){
+				textureCoordArray[u]=xv;
+				textureCoordArray[v]=yv;
 			}
 			
 			@Override

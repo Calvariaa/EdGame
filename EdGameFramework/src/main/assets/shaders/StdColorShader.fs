@@ -9,7 +9,5 @@ uniform vec4 u_MixColor;
 
 void main(){
 	vec4 c=u_MixColor*f_VaryingColor;
-	c*=u_FinalAlpha;
-	if(c.a<0.001)discard;
-	gl_FragColor=c;
+	@include <FragmentFinal>
 }

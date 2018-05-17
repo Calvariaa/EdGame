@@ -8,11 +8,11 @@ import android.view.MotionEvent;
 import android.util.Log;
 import com.edplan.framework.test.TestStaticData;
 import android.view.View;
+import com.edplan.framework.main.MainApplication;
 
 public class BaseGLSurfaceView extends GLSurfaceView
 {
 	MainRenderer mRenderer;
-	
 	
 	/*
 	public BaseGLSurfaceView(Context con){

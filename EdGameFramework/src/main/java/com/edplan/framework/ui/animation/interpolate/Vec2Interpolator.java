@@ -14,6 +14,7 @@ public class Vec2Interpolator implements ValueInterpolator<Vec2>
 		double inp=EasingManager.apply(easing,time);
 		float x=(float)(startValue.x*(1-inp)+endValue.x*inp);
 		float y=(float)(startValue.y*(1-inp)+endValue.y*inp);
-		return buffer.set(x,y);
+		buffer.set(x,y);
+		return buffer;
 	}
 }

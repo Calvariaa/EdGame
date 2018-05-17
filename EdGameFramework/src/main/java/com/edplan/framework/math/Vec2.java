@@ -32,10 +32,9 @@ public class Vec2 implements Interplateable<Vec2>,IVec2
 		this(v,v);
 	}
 	
-	public Vec2 set(float x,float y){
+	public void set(float x,float y){
 		this.x=x;
 		this.y=y;
-		return this;
 	}
 	
 
@@ -68,8 +67,8 @@ public class Vec2 implements Interplateable<Vec2>,IVec2
 		y=v;
 	}
 	
-	public Vec2 set(Vec2 v){
-		return set(v.x,v.y);
+	public void set(Vec2 v){
+		set(v.x,v.y);
 	}
 	
 	public Vec2 add(Vec2 v){
@@ -198,7 +197,7 @@ public class Vec2 implements Interplateable<Vec2>,IVec2
 	//}
 	
 	public Vec2 copy(){
-		return new Vec2().set(this);
+		return new Vec2(this);
 	}
 
 	@Override

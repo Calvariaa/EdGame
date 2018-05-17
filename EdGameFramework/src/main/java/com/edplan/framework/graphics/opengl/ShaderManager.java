@@ -11,6 +11,7 @@ import com.edplan.framework.graphics.opengl.batch.BaseColorBatch;
 import com.edplan.framework.graphics.opengl.batch.RectVertexBatch;
 import com.edplan.framework.graphics.opengl.batch.Texture3DBatch;
 import com.edplan.framework.graphics.opengl.shader.advance.GLES10Texture3DShader;
+import com.edplan.framework.graphics.opengl.shader.compile.CompileRawStringStore;
 
 public class ShaderManager
 {
@@ -127,7 +128,22 @@ public class ShaderManager
 	
 	public static void initStatic(MContext context){
 		if(GLWrapped.GL_VERSION>=2){
-			shaderManager=new ShaderManager(context.getAssetResource().subResource("shaders"));
+			final AResource shaderDir=context.getAssetResource().subResource("shaders");
+			final AResource storeDir=shaderDir.subResource("store");
+			
+			try{
+				for (String name:storeDir.list("")){
+					if(name.endsWith(".store")){
+						CompileRawStringStore.get().addToStore(storeDir.loadText(name));
+					}
+				}
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+
+			shaderManager=new ShaderManager(shaderDir);
 			try {
 				rawTextureShader=Texture3DShader.createT3S(
 					shaderManager.res.loadText(PATH.PATH_Texture3DShader + ".vs"),

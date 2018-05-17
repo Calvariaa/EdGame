@@ -25,13 +25,14 @@ import com.edplan.framework.ui.widget.AbsoluteLayout;
 import com.edplan.framework.ui.layout.EdLayoutParam;
 import com.edplan.framework.ui.layout.Param;
 import com.edplan.framework.ui.drawable.RectDrawable;
+import com.edplan.framework.main.MainApplication;
 
 public class OsbRenderer extends MainRenderer
 {
 	JSONObject initialJson;
 
-	public OsbRenderer(Context con,JSONObject initialJson){
-		super(con);
+	public OsbRenderer(Context con,MainApplication app,JSONObject initialJson){
+		super(con,app);
 		this.initialJson=initialJson;
 	}
 

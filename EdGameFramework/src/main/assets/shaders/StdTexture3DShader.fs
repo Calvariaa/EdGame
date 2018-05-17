@@ -12,7 +12,5 @@ uniform sampler2D u_Texture;
 void main(){
 	vec4 t=texture2D(u_Texture,f_TexturePosition);
 	vec4 c=u_MixColor*f_VaryingColor*t;
-	c*=u_FinalAlpha;
-	if(c.a<0.001)discard;
-	gl_FragColor=c;
+	@include <FragmentFinal>
 }

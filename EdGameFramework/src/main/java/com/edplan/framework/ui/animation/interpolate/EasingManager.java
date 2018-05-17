@@ -11,6 +11,18 @@ public class EasingManager
 
 	static final double bounce_const = 1 / 2.75;
 	
+	static{
+		/*
+		System.out.println("const float elastic_const="+elastic_const+";");
+		System.out.println("const float elastic_const2="+elastic_const2+";");
+		System.out.println("const float back_const="+back_const+";");
+		System.out.println("const float back_const2="+back_const2+";");
+		System.out.println("const float bounce_const="+bounce_const+";");
+		double v=1;
+		System.out.println(--v*v*v*4+1);
+		*/
+	}
+	
 	public static final boolean ENABLE_EASING=true;
 	/*
 	private EasingInterpolator[] interpolators={
@@ -103,7 +115,6 @@ public class EasingManager
 				case InOutQuad:
 					if (v < .5) return v * v * 2;
 					return --v * v * -2 + 1;
-
 				case InCubic:
 					return v * v * v;
 				case OutCubic:

@@ -203,6 +203,6 @@ public class Quad implements IQuad
 		final float rb=vx*vy;
 		final float x=lt*ptl.x+lb*pbl.x+rt*ptr.x+rb*pbr.x;
 		final float y=lt*ptl.y+lb*pbl.y+rt*ptr.y+rb*pbr.y;
-		return new Vec2().set(x,y);
+		return new Vec2(x,y);
 	}
 }

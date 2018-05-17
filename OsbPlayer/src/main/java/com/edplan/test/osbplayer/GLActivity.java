@@ -8,8 +8,10 @@ import android.widget.Toast;
 import com.edplan.framework.GameActivity;
 import com.edplan.framework.graphics.opengl.BaseGLSurfaceView;
 import com.squareup.leakcanary.LeakCanary;
+import com.edplan.framework.main.MainApplication;
+import com.edplan.framework.graphics.opengl.MainRenderer;
 
-public class GLActivity extends GameActivity 
+public class GLActivity extends Activity 
 {
 
 	BaseGLSurfaceView sv;
@@ -17,22 +19,26 @@ public class GLActivity extends GameActivity
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO: Implement this method
 		super.onCreate(savedInstanceState);
-		//setContentView(R.layout.mains);
-		//LeakCanary.install(this);
+		OsbApplication app=new OsbApplication();
+		app.setUpActivity(this);
 	}
-
-	@Override
-	public BaseGLSurfaceView createGameSurface() {
-		// TODO: Implement this method
-		try {
-			Bundle data=this.getIntent().getExtras();
-			return new OsbGLSurfaceView(
-				this,
-				new OsbRenderer(this,new JSONObject(data.getString(StaticData.InitialJSON))));
-		} catch (JSONException e) {
-			e.printStackTrace();
-			Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
-			return null;
+	
+	public class OsbApplication extends MainApplication
+	{
+		@Override
+		public MainRenderer createRenderer(){
+			// TODO: Implement this method
+			Bundle data=getIntent().getExtras();
+			try
+			{
+				return new OsbRenderer(GLActivity.this, this, new JSONObject(data.getString(StaticData.InitialJSON)));
+			}
+			catch (JSONException e)
+			{
+				e.printStackTrace();
+				Toast.makeText(GLActivity.this,e.getMessage(),Toast.LENGTH_LONG).show();
+				return null;
+			}
 		}
 	}
 }

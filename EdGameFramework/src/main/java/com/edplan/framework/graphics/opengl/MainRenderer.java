@@ -19,10 +19,13 @@ import javax.microedition.khronos.opengles.GL10;
 import com.edplan.framework.ui.EdView;
 import com.edplan.framework.test.performance.Tracker;
 import com.edplan.framework.ui.ViewRoot;
+import com.edplan.framework.main.MainApplication;
 
 public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 {
 	private MContext context;
+	
+	private MainApplication app;
 	
 	private DefBufferedLayer rootLayer;
 
@@ -32,8 +35,9 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 	
 	private int glVersion;
 	
-	public MainRenderer(Context con){
+	public MainRenderer(Context con,MainApplication app){
 		context=new MContext(con);
+		this.app=app;
 		viewRoot=new ViewRoot(context);
 	}
 
@@ -71,9 +75,6 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 			uiLooper=new UILooper();
 			context.setUiLooper(uiLooper);
 			tmer.initial();
-			
-			
-			
 			initialCount++;
 			Log.v("gl_initial","initial id: "+initialCount);
 		} catch (Exception e) {
@@ -87,15 +88,15 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 		// TODO: Implement this method
 		context.setDisplaySize(width,heigth);
 		viewRoot.onChange(width,heigth);
-		
-		
 		rootLayer=new DefBufferedLayer(context,width,heigth);
 		rootLayer.checkChange();
 		rootLayer.prepare();
+		
+		app.onGLCreate();
+		
 		for(int i=0;i<10;i++){
 			BufferedLayer.DEF_FBOPOOL.saveFBO(FrameBufferObject.create(1000,1000,true));
 		}
-
 		viewRoot.setContentView(createContentView(context));
 		viewRoot.getContentView().onCreate();
 		

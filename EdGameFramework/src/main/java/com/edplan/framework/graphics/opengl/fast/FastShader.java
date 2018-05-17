@@ -53,9 +53,7 @@ public class FastShader extends BaseShader
 
 		"void main(){",
 		"	vec4 t=texture2D(u_Texture,f_TextureCoord);",
-		"	t=f_VaryingColor*t;",
-		"	if(t.a<0.001)discard;",
-		"	gl_FragColor=t;",
+		"	@include <FragmentFinal>",
 		"}"
 		);
 	}

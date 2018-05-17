@@ -44,7 +44,6 @@ import com.edplan.framework.resource.MultipleResource;
 
 public class TestOsbView extends EdView
 {
-
 	private StdPlayField playField;
 
 	private StdBeatmap beatmap;
