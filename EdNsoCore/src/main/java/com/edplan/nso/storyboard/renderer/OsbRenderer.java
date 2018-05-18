@@ -23,6 +23,8 @@ import com.edplan.framework.graphics.opengl.buffer.direct.Vec4Pointer;
 import com.edplan.framework.graphics.opengl.buffer.direct.IntPointer;
 import com.edplan.framework.graphics.opengl.buffer.direct.Vec2Pointer;
 import com.edplan.framework.timing.PreciseTimeline;
+import com.edplan.nso.storyboard.renderer.OsbRenderer.FloatMainFrameHandler;
+import com.edplan.nso.storyboard.renderer.OsbRenderer.OsbVertex;
 
 public class OsbRenderer
 {
@@ -46,6 +48,9 @@ public class OsbRenderer
 	
 	private final DirectVec4AttributeBuffer rotationBuffer;
 	private final DirectIntAttributeBuffer REasingBuffer;
+	
+	private final DirectVec4AttributeBuffer alphaBuffer;
+	private final DirectIntAttributeBuffer AEasingBuffer;
 	
 	private final DirectVec4AttributeBuffer color0Buffer,color1Buffer;
 	private final DirectVec2AttributeBuffer colorTimeBuffer;
@@ -72,6 +77,8 @@ public class OsbRenderer
 	private BaseCanvas frameCanvas;
 	
 	private final PreciseTimeline timeline;
+	
+	public float frameTime;
 
 	public OsbRenderer(PreciseTimeline timeline){
 		this.timeline=timeline;
@@ -83,6 +90,7 @@ public class OsbRenderer
 		scaleXBuffer=new DirectVec4AttributeBuffer(INITIAL_VERTEXS,shader.aScaleX);
 		scaleYBuffer=new DirectVec4AttributeBuffer(INITIAL_VERTEXS,shader.aScaleY);
 		rotationBuffer=new DirectVec4AttributeBuffer(INITIAL_VERTEXS,shader.aRotation);
+		alphaBuffer=new DirectVec4AttributeBuffer(INITIAL_VERTEXS,shader.aAlpha);
 		
 		color0Buffer=new DirectVec4AttributeBuffer(INITIAL_VERTEXS,shader.aVaryingColor0);
 		color1Buffer=new DirectVec4AttributeBuffer(INITIAL_VERTEXS,shader.aVaryingColor1);
@@ -94,6 +102,7 @@ public class OsbRenderer
 		YSEasingBuffer=new DirectIntAttributeBuffer(INITIAL_VERTEXS,shader.aYSEasing);
 		REasingBuffer=new DirectIntAttributeBuffer(INITIAL_VERTEXS,shader.aREasing);
 		CEasingBuffer=new DirectIntAttributeBuffer(INITIAL_VERTEXS,shader.aCEasing);
+		AEasingBuffer=new DirectIntAttributeBuffer(INITIAL_VERTEXS,shader.aAEasing);
 		
 		buffers=new DirectAttributeBuffer[]{
 			anchorOffsetBuffer,
@@ -139,7 +148,7 @@ public class OsbRenderer
 		}
 	}
 
-	public void addIndices(short... ind){
+	public void addIndices(int... ind){
 		if(idcx+ind.length>=indices.length)
 			flush();
 		for(int i=0;i<ind.length;i++){
@@ -182,6 +191,7 @@ public class OsbRenderer
 		if(isRendering)
 			throw new RuntimeException("A LegacyRenderer can't call start when rendering");
 		isRendering=true;
+		frameTime=(float)timeline.frameTime();
 		frameCanvas=canvas;
 		blendType=frameCanvas.getBlendSetting().getBlendType();
 		resetIdxData();
@@ -221,7 +231,7 @@ public class OsbRenderer
 		
 		public final FloatMainFrameHandler PositionX,PositionY;
 		public final FloatMainFrameHandler ScaleX,ScaleY;
-		public final FloatMainFrameHandler Rotation;
+		public final FloatMainFrameHandler Rotation,Alpha;
 		
 		public final ColorMainFrameHandler Color;
 
@@ -234,6 +244,7 @@ public class OsbRenderer
 			ScaleX=new FloatMainFrameHandler(scaleXBuffer.pointers[index],XSEasingBuffer.pointers[index]);
 			ScaleY=new FloatMainFrameHandler(scaleYBuffer.pointers[index],YSEasingBuffer.pointers[index]);
 			Rotation=new FloatMainFrameHandler(rotationBuffer.pointers[index],REasingBuffer.pointers[index]);
+			Alpha=new FloatMainFrameHandler(alphaBuffer.pointers[index],AEasingBuffer.pointers[index]);
 			Color=new ColorMainFrameHandler(color0Buffer.pointers[index],color1Buffer.pointers[index],colorTimeBuffer.pointers[index],CEasingBuffer.pointers[index]);
 		}
 		
@@ -242,7 +253,64 @@ public class OsbRenderer
 		}
 	}
 	
-	public static class FloatMainFrameHandler{
+	public interface HandlerSelecter{
+		public IFloatMainFrameHandler select(OsbVertex vertex);
+	}
+	
+	public static class KeyFrameSelecters{
+		public static final HandlerSelecter PositionX=new HandlerSelecter(){
+			@Override
+			public OsbRenderer.FloatMainFrameHandler select(OsbRenderer.OsbVertex vertex){
+				// TODO: Implement this method
+				return vertex.PositionX;
+			}
+		};
+		public static final HandlerSelecter PositionY=new HandlerSelecter(){
+			@Override
+			public OsbRenderer.FloatMainFrameHandler select(OsbRenderer.OsbVertex vertex){
+				// TODO: Implement this method
+				return vertex.PositionY;
+			}
+		};
+		public static final HandlerSelecter ScaleX=new HandlerSelecter(){
+			@Override
+			public OsbRenderer.FloatMainFrameHandler select(OsbRenderer.OsbVertex vertex){
+				// TODO: Implement this method
+				return vertex.ScaleX;
+			}
+		};
+		public static final HandlerSelecter ScaleY=new HandlerSelecter(){
+			@Override
+			public OsbRenderer.FloatMainFrameHandler select(OsbRenderer.OsbVertex vertex){
+				// TODO: Implement this method
+				return vertex.ScaleY;
+			}
+		};
+		public static final HandlerSelecter Rotation=new HandlerSelecter(){
+			@Override
+			public OsbRenderer.FloatMainFrameHandler select(OsbRenderer.OsbVertex vertex){
+				// TODO: Implement this method
+				return vertex.Rotation;
+			}
+		};
+		public static final HandlerSelecter Alpha=new HandlerSelecter(){
+			@Override
+			public OsbRenderer.FloatMainFrameHandler select(OsbRenderer.OsbVertex vertex){
+				// TODO: Implement this method
+				return vertex.Alpha;
+			}
+		};
+	}
+	
+	public interface IFloatMainFrameHandler{
+		public void update(float startValue,float endValue,double startTime,double duration,Easing easing);
+	}
+	
+	public interface IMainFrameHandler<T>{
+		public void update(T startValue,T endValue,double startTime,double duration,Easing easing);
+	}
+	
+	public static class FloatMainFrameHandler implements IFloatMainFrameHandler{
 		private final Vec4Pointer pointer;
 		
 		private final IntPointer easingPointer;
@@ -252,13 +320,14 @@ public class OsbRenderer
 			easingPointer=e;
 		}
 		
+		@Override
 		public void update(float startValue,float endValue,double startTime,double duration,Easing easing){
 			pointer.set(startValue,endValue,(float)startTime,(float)duration);
 			easingPointer.set(easing.ordinal());
 		}
 	}
 	
-	public static class ColorMainFrameHandler{
+	public static class ColorMainFrameHandler implements IMainFrameHandler<Color4>{
 		private final Vec4Pointer startColor,endColor;
 		
 		private final Vec2Pointer timePointer;
@@ -272,6 +341,7 @@ public class OsbRenderer
 			easingPointer=es;
 		}
 		
+		@Override
 		public void update(Color4 startValue,Color4 endValue,double startTime,double duration,Easing easing){
 			startColor.set(startValue);
 			endColor.set(endValue);

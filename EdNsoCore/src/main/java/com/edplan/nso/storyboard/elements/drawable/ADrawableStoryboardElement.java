@@ -4,6 +4,7 @@ import com.edplan.framework.timing.PreciseTimeline;
 import com.edplan.framework.ui.drawable.EdDrawable;
 import com.edplan.nso.storyboard.PlayingStoryboard;
 import com.edplan.framework.graphics.opengl.fast.FastRenderer;
+import com.edplan.nso.storyboard.renderer.OsbRenderer;
 
 public abstract class ADrawableStoryboardElement extends EdDrawable implements GLES10Drawable
 {
@@ -25,6 +26,8 @@ public abstract class ADrawableStoryboardElement extends EdDrawable implements G
 	public PlayingStoryboard getStoryboard() {
 		return storyboard;
 	}
+	
+	public abstract void drawOsbRenderer(OsbRenderer renderer);
 	
 	public abstract void drawFastRenderer(FastRenderer renderer);
 	

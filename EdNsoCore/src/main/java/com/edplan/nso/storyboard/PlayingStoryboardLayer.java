@@ -1,23 +1,20 @@
 package com.edplan.nso.storyboard;
+import com.edplan.framework.fallback.GLES10Drawable;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
+import com.edplan.framework.graphics.opengl.GL10Canvas2D;
+import com.edplan.framework.graphics.opengl.GLWrapped;
+import com.edplan.framework.graphics.opengl.fast.FastRenderer;
+import com.edplan.framework.test.performance.Tracker;
 import com.edplan.framework.ui.drawable.EdDrawable;
-import com.edplan.framework.graphics.opengl.GLCanvas2D;
-import com.edplan.framework.timing.PreciseTimeline;
-import java.util.List;
-import com.edplan.nso.storyboard.elements.drawable.BaseDrawableSprite;
-import java.util.ArrayList;
 import com.edplan.nso.storyboard.elements.IStoryboardElements;
 import com.edplan.nso.storyboard.elements.drawable.ADrawableStoryboardElement;
-import java.util.Iterator;
+import com.edplan.nso.storyboard.renderer.OsbRenderer;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import com.edplan.framework.graphics.opengl.GLWrapped;
-import com.edplan.nso.storyboard.elements.StoryboardSprite;
-import com.edplan.framework.fallback.GLES10Drawable;
-import com.edplan.framework.graphics.opengl.GL10Canvas2D;
+import java.util.Iterator;
 import java.util.LinkedList;
-import com.edplan.framework.graphics.opengl.BaseCanvas;
-import com.edplan.framework.test.performance.Tracker;
-import com.edplan.framework.graphics.opengl.fast.FastRenderer;
+import java.util.List;
 
 public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 {
@@ -35,8 +32,6 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 	
 	private List<ElementNode> spritesNotAdded=new LinkedList<ElementNode>();
 	
-	private int index=0;
-	
 	private List<ElementNode> spriteInField=new ArrayList<ElementNode>();
 	
 	private PlayingStoryboard storyboard;
@@ -46,6 +41,8 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 	private int newApply=0;
 	
 	private ApplyThread applyThread;
+	
+	//private OsbRenderer renderer;
 	
 	private FastRenderer renderer;
 	
@@ -86,6 +83,7 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 		applyNode.addAll(sprites);
 		sprites.clear();
 		
+		//renderer=new OsbRenderer(storyboard.getTimeline());
 		renderer=new FastRenderer();
 		
 		applyThread=new ApplyThread();
@@ -180,6 +178,7 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 		RenderOsb.watch();
 		renderer.start(canvas);
 		for(ElementNode ele:spriteInField){
+			//ele.element.drawOsbRenderer(renderer);
 			ele.element.drawFastRenderer(renderer);
 			//ele.element.draw(canvas);
 		}

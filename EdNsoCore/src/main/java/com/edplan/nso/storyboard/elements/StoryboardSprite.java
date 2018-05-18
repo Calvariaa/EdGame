@@ -2,24 +2,23 @@ package com.edplan.nso.storyboard.elements;
 import com.edplan.framework.graphics.opengl.BlendType;
 import com.edplan.framework.interfaces.FloatInvokeSetter;
 import com.edplan.framework.interfaces.InvokeSetter;
+import com.edplan.framework.math.FMath;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.ui.Anchor;
 import com.edplan.framework.ui.animation.Easing;
 import com.edplan.framework.ui.animation.FloatQueryAnimation;
 import com.edplan.framework.ui.animation.QueryAnimation;
 import com.edplan.framework.ui.animation.interpolate.Color4Interpolator;
-import com.edplan.framework.ui.animation.interpolate.FloatInterpolator;
 import com.edplan.framework.ui.animation.interpolate.InvalidInterpolator;
 import com.edplan.framework.ui.animation.interpolate.RawFloatInterpolator;
 import com.edplan.framework.ui.animation.interpolate.ValueInterpolator;
-import com.edplan.framework.ui.animation.interpolate.Vec2Interpolator;
 import com.edplan.nso.storyboard.PlayingStoryboard;
 import com.edplan.nso.storyboard.elements.drawable.ADrawableStoryboardElement;
 import com.edplan.nso.storyboard.elements.drawable.BaseDrawableSprite;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import com.edplan.framework.math.FMath;
 
 public class StoryboardSprite implements IStoryboardElements
 {
@@ -125,7 +124,7 @@ public class StoryboardSprite implements IStoryboardElements
 		double offset=sprite.getStartTime();
 		double obj_offset=getStartTime();
 		QueryAnimation<BaseDrawableSprite,T> anim=new QueryAnimation<BaseDrawableSprite,T>(sprite,obj_offset,interpolator,setter,true);
-		//Collections.sort(command,comparator);
+		Collections.sort(command,comparator);
 		if(command.size()==0)return;
 		
 		/*
@@ -151,7 +150,7 @@ public class StoryboardSprite implements IStoryboardElements
 		double offset=sprite.getStartTime();
 		double obj_offset=getStartTime();
 		FloatQueryAnimation<BaseDrawableSprite> anim=new FloatQueryAnimation<BaseDrawableSprite>(sprite,obj_offset,interpolator,setter,true);
-		//Collections.sort(command,comparator);
+		Collections.sort(command,comparator);
 		if(command.size()==0)return;
 
 		/*

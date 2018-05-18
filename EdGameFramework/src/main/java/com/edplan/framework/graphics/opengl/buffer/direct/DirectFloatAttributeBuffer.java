@@ -19,6 +19,10 @@ public class DirectFloatAttributeBuffer implements DirectAttributeBuffer
 		attributePointer=att;
 	}
 	
+	public void updateRange(int start,int end){
+		
+	}
+	
 	@Override
 	public void loadToAttribute(){
 		// TODO: Implement this method

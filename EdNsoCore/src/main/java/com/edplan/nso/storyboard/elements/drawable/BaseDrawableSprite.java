@@ -22,6 +22,7 @@ import com.edplan.framework.graphics.opengl.fast.FastRenderer;
 import com.edplan.framework.graphics.opengl.fast.FastQuad;
 import java.util.Arrays;
 import com.edplan.framework.math.FMath;
+import com.edplan.nso.storyboard.renderer.OsbRenderer;
 
 public class BaseDrawableSprite extends ADrawableStoryboardElement
 {
@@ -355,7 +356,11 @@ public class BaseDrawableSprite extends ADrawableStoryboardElement
 		fastQuad.setTextureCoord(texture.getRawQuad());
 		fastQuad.addToRenderer(renderer);
 	}
-	
+
+	@Override
+	public void drawOsbRenderer(OsbRenderer renderer){
+		// TODO: Implement this method
+	}
 	
 	@Override
 	public void draw(BaseCanvas canvas) {

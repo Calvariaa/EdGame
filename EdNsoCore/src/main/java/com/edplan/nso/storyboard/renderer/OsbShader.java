@@ -31,6 +31,7 @@ public class OsbShader extends BaseShader
 									 "attribute vec4 a_ScaleX;",
 									 "attribute vec4 a_ScaleY;",
 									 "attribute vec4 a_Rotation;",
+									 "attribute vec4 a_Alpha;",
 									 
 									 "attribute vec4 a_VaryingColor0;",
 									 "attribute vec4 a_VaryingColor1;",
@@ -42,6 +43,7 @@ public class OsbShader extends BaseShader
 									 "attribute int a_YSEasing;",
 									 "attribute int a_REasing;",
 									 "attribute int a_CEasing;",
+									 "attribute int a_AEasing;",
 
 									 "varying vec2 f_TextureCoord;",
 									 "varying vec4 f_VaryingColor;",
@@ -68,7 +70,7 @@ public class OsbShader extends BaseShader
 									 
 									 "void main(){",
 									 "	f_TextureCoord=a_TextureCoord;",
-									 "	f_VaryingColor=makeColor();",
+									 "	f_VaryingColor=makeColor()*makeFloat(a_Alpha,a_AEasing);",
 									 "  vec2 pos=vec2(makeFloat(a_PositionX,a_XEasing),makeFloat(a_PositionY,a_YEasing));",
 									 "	vec2 scale=vec2(makeFloat(a_ScaleX,a_XSEasing),makeFloat(a_ScaleY,a_YSEasing));",
 									 "  pos+=rotate(a_AnchorOffset*scale,makeFloat(a_Rotation,a_REasing));",
@@ -117,6 +119,7 @@ public class OsbShader extends BaseShader
 		aScaleX,
 		aScaleY,
 		aRotation,
+		aAlpha,
 			
 		aVaryingColor0,
 		aVaryingColor1;
@@ -129,7 +132,8 @@ public class OsbShader extends BaseShader
 		aXSEasing,
 		aYSEasing,
 		aREasing,
-		aCEasing;
+		aCEasing,
+		aAEasing;
 	
 	public OsbShader(){
 		super(GLProgram.createProgram(VertexShader,FragmentShader),true);
