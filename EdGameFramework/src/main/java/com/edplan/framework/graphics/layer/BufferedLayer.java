@@ -42,6 +42,14 @@ public class BufferedLayer
 		bufferedPool=DEF_FBOPOOL;
 	}
 	
+	public BufferedLayer(MContext context){
+		this.context=context;
+		this.width=1;
+		this.height=1;
+		this.hasDepthBuffer=true;
+		bufferedPool=DEF_FBOPOOL;
+	}
+	
 	public BufferedLayer(MContext context,FrameBufferObject fbo){
 		this.context=context;
 		this.frameBuffer=fbo;

@@ -280,6 +280,7 @@ public class TestOsbView extends EdView
 					} catch (Exception e) {
 						e.printStackTrace();
 						enableOsb=false;
+						msg=e.getMessage();
 					}
 				}
 

@@ -1,16 +1,4 @@
 @name <Color>
-
-vec4 decodeInt(int c){
-	float a=float(c%255)/255.0;
-	c/=255;
-	float b=float(c%255)/255.0;
-	c/=255;
-	float g=float(c%255)/255.0;
-	c/=255;
-	float r=float(c)/255.0;
-	return vec4(r,g,b,a);
-}
-
 vec4 applyAlpha(vec4 v){
 	return vec4(v.rgb*v.a,v.a);
 }

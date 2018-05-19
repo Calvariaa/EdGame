@@ -40,7 +40,7 @@ public class GLShader
                 Log.e("ES20_ERROR", "Could not compile shader " + shaderType + ":");
                 Log.e("ES20_ERROR", GLES20.glGetShaderInfoLog(shader));
                 GLES20.glDeleteShader(shader);
-                throw new GLException("err complie shader: "+source);
+                throw new GLException("err complie shader: "+source.substring(0,Math.min(source.length(),500)));
             }  
         }
         return new GLShader(shaderType,shader);

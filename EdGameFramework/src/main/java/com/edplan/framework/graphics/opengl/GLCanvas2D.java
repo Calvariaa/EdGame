@@ -33,22 +33,11 @@ public class GLCanvas2D extends BaseCanvas // extends AbstractSRable<CanvasData>
 	public GLCanvas2D(BufferedLayer layer){
 		this.layer=layer;
 		initial();
-		getData().setWidth(layer.getWidth());
-		getData().setHeight(layer.getHeight());
 	}
 	
 	public GLCanvas2D(GLTexture texture,MContext context){
 		this(new BufferedLayer(context,texture));
 	}
-
-	/*
-	@Override
-	protected ITexture3DBatch<TextureVertex3D> createTexture3DBatch() {
-		// TODO: Implement this method
-		setMaxBatchSize(4000);
-		return new DataDrawBaseTexture(4000);
-	}
-	*/
 
 	@Override
 	public void onSave(CanvasData t) {

@@ -140,6 +140,7 @@ public class PlayingStoryboard extends EdDrawable implements GLES10Drawable
 		canvas.restoreToCount(i);
 	}
 
+	
 	@Override
 	public void drawGL10(GL10Canvas2D canvas) {
 		// TODO: Implement this method
@@ -147,7 +148,7 @@ public class PlayingStoryboard extends EdDrawable implements GLES10Drawable
 		//canvas.getData().getShaders().setColorShader(ColorShader.Invalid);
 		//canvas.getData().getShaders().setTexture3DShader(Texture3DShader.Invalid);
 		for(Map.Entry<String,PlayingStoryboardLayer> e:layers.entrySet()){
-			e.getValue().drawGL10(canvas);
+			//e.getValue().drawGL10(canvas);
 		}
 		canvas.restoreToCount(i);
 	}

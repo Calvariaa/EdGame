@@ -20,7 +20,7 @@ public class OsbSprite
 	
 	protected short flip=0;
 	
-	protected BlendType blendType;
+	protected BlendType blendType=BlendType.Normal;
 	
 	protected OsbFloatKeyFrameQuery PositionX,PositionY,ScaleX,ScaleY,Rotation,Alpha;
 	
@@ -145,7 +145,7 @@ public class OsbSprite
 	}
 	
 	private AbstractTexture preDrawTexture;
-	private short preFlip;
+	private short preFlip=100;
 	public void drawOsbRenderer(OsbRenderer renderer){
 		final float time=renderer.frameTime;
 		Alpha.update(time);

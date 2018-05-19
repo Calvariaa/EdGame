@@ -25,9 +25,16 @@ import com.edplan.framework.graphics.opengl.buffer.direct.Vec2Pointer;
 import com.edplan.framework.timing.PreciseTimeline;
 import com.edplan.nso.storyboard.renderer.OsbRenderer.FloatMainFrameHandler;
 import com.edplan.nso.storyboard.renderer.OsbRenderer.OsbVertex;
+import com.edplan.framework.test.performance.Tracker;
 
 public class OsbRenderer
 {
+	public static final Tracker.TrackNode UpdateBuffer;
+	
+	static{
+		UpdateBuffer=Tracker.register("OsbRenderer::UpdateBuffer");
+	}
+	
 	public static final int INITIAL_VERTEXS=32;
 	
 	public static final int MAX_INDICES_COUNT=30000;
@@ -111,6 +118,7 @@ public class OsbRenderer
 			positionYBuffer,
 			scaleXBuffer,
 			scaleYBuffer,
+			alphaBuffer,
 			rotationBuffer,
 			color0Buffer,
 			color1Buffer,
@@ -120,7 +128,8 @@ public class OsbRenderer
 			XSEasingBuffer,
 			YSEasingBuffer,
 			REasingBuffer,
-			CEasingBuffer  
+			CEasingBuffer,
+			AEasingBuffer
 		};
 		ensureSize(INITIAL_VERTEXS,INITIAL_VERTEXS*3);
 	}
@@ -204,11 +213,13 @@ public class OsbRenderer
 		shader.bindTexture(texture);
 		shader.loadCamera(frameCanvas.getCamera());
 		shader.uTime.loadData((float)timeline.frameTime());
+		UpdateBuffer.watch();
 		for(DirectAttributeBuffer b:buffers)
 			b.loadToAttribute();
 		indicesBuffer.position(0);
 		indicesBuffer.put(indices,0,idcx);
 		indicesBuffer.position(0);
+		UpdateBuffer.end();
 		GLWrapped.drawElements(GLWrapped.GL_TRIANGLES,idcx,GLES20.GL_INT,indicesBuffer);
 		resetIdxData();
 	}

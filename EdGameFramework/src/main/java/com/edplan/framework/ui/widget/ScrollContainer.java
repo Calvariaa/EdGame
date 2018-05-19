@@ -1,11 +1,11 @@
 package com.edplan.framework.ui.widget;
 import com.edplan.framework.ui.EdAbstractViewGroup;
 import com.edplan.framework.MContext;
+import com.edplan.framework.ui.EdContainer;
 
-public class ScrollLayout extends EdAbstractViewGroup
+public class ScrollContainer extends EdContainer
 {
-	
-	public ScrollLayout(MContext c){
+	public ScrollContainer(MContext c){
 		super(c);
 	}
 	

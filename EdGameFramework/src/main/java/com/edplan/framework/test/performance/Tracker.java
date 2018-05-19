@@ -12,14 +12,17 @@ public class Tracker
 	public static final String INJECT_DATA="INJECT_DATA";
 	public static final String MAIN_LOOPER="MAIN_LOOPER";
 	
-	public static final String INVALIDATE_MEASURE="INVALIDATE_MEASURE";
+	public static final String DRAW_UI="DRAW_UI";
+	public static final String INVALIDATE_MEASURE_AND_LAYOUT="INVALIDATE_MEASURE";
+	
 	
 	public static final TrackNode DrawArray;
 	public static final TrackNode PrepareVertexData;
 	public static final TrackNode InjectData;
 	public static final TrackNode MainLooper;
+	public static final TrackNode DrawUI;
 	
-	public static final TrackNode InvalidateMeasure;
+	public static final TrackNode InvalidateMeasureAndLayout;
 	
 	private static ArrayList<TrackNode> nodes;
 	private static HashMap<String,TrackNode> namemap;
@@ -34,7 +37,8 @@ public class Tracker
 		InjectData=register(INJECT_DATA);
 		MainLooper=register(MAIN_LOOPER);
 		
-		InvalidateMeasure=register(INVALIDATE_MEASURE);
+		InvalidateMeasureAndLayout=register(INVALIDATE_MEASURE_AND_LAYOUT);
+		DrawUI=register(DRAW_UI);
 	}
 	
 	public static TrackNode register(String name){

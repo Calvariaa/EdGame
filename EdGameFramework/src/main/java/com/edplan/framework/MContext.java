@@ -12,6 +12,7 @@ import com.edplan.framework.ui.EdView;
 import com.edplan.framework.ui.looper.UILooper;
 import com.edplan.superutils.classes.advance.IRunnableHandler;
 import com.edplan.framework.ui.looper.UIStep;
+import com.edplan.framework.ui.ViewRoot;
 
 public class MContext
 {
@@ -37,9 +38,19 @@ public class MContext
 	
 	private int displayWidth,displayHeight;
 	
+	private ViewRoot viewRoot;
+	
 	public MContext(Context androidContext){
 		this.androidContext=androidContext;
 		//initial();
+	}
+
+	public void setViewRoot(ViewRoot viewRoot){
+		this.viewRoot=viewRoot;
+	}
+
+	public ViewRoot getViewRoot(){
+		return viewRoot;
 	}
 
 	public int getDisplayWidth() {

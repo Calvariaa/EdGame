@@ -17,6 +17,13 @@ public abstract class AbstractSRable<T extends Copyable> implements Recycleable
 	
 	public abstract T getDefData();
 	
+	public void reinitial(){
+		saves.clear();
+		currentData=getDefData();
+		currentDataIndex=0;
+		saves.push(currentData);
+	}
+	
 	public void initial(){
 		saves=new Stack<T>();
 		currentData=getDefData();

@@ -37,13 +37,13 @@ public class OsbShader extends BaseShader
 									 "attribute vec4 a_VaryingColor1;",
 									 "attribute vec2 a_ColorTime;",
 									 
-									 "attribute int a_XEasing;",
-									 "attribute int a_YEasing;",
-									 "attribute int a_XSEasing;",
-									 "attribute int a_YSEasing;",
-									 "attribute int a_REasing;",
-									 "attribute int a_CEasing;",
-									 "attribute int a_AEasing;",
+									 "attribute float a_XEasing;",
+									 "attribute float a_YEasing;",
+									 "attribute float a_XSEasing;",
+									 "attribute float a_YSEasing;",
+									 "attribute float a_REasing;",
+									 "attribute float a_CEasing;",
+									 "attribute float a_AEasing;",
 
 									 "varying vec2 f_TextureCoord;",
 									 "varying vec4 f_VaryingColor;",
@@ -65,15 +65,15 @@ public class OsbShader extends BaseShader
 									 "}",
 									 
 									 "vec4 makeColor(){",
-									 "	return applyEasing(applyAlpha(a_VaryingColor0),applyAlpha(a_VaryingColor1),getProgress(a_ColorTime.x,a_ColorTime.y),a_CEasing);",
+									 "	return applyEasing(applyAlpha(a_VaryingColor0),applyAlpha(a_VaryingColor1),getProgress(a_ColorTime.x,a_ColorTime.y),te(a_CEasing));",
 									 "}",
 									 
 									 "void main(){",
 									 "	f_TextureCoord=a_TextureCoord;",
-									 "	f_VaryingColor=makeColor()*makeFloat(a_Alpha,a_AEasing);",
-									 "  vec2 pos=vec2(makeFloat(a_PositionX,a_XEasing),makeFloat(a_PositionY,a_YEasing));",
-									 "	vec2 scale=vec2(makeFloat(a_ScaleX,a_XSEasing),makeFloat(a_ScaleY,a_YSEasing));",
-									 "  pos+=rotate(a_AnchorOffset*scale,makeFloat(a_Rotation,a_REasing));",
+									 "	f_VaryingColor=makeColor()*makeFloat(a_Alpha,te(a_AEasing));",
+									 "  vec2 pos=vec2(makeFloat(a_PositionX,te(a_XEasing)),makeFloat(a_PositionY,te(a_YEasing)));",
+									 "	vec2 scale=vec2(makeFloat(a_ScaleX,te(a_XSEasing)),makeFloat(a_ScaleY,te(a_YSEasing)));",
+									 "  pos+=rotate(a_AnchorOffset*scale,makeFloat(a_Rotation,te(a_REasing)));",
 									 "	gl_Position=u_MVPMatrix*vec4(pos,0.0,1.0);",
 									 "}"
 									 );
@@ -86,8 +86,9 @@ public class OsbShader extends BaseShader
 									   "uniform sampler2D u_Texture;",
 
 									   "void main(){",
-									   "	vec4 t=texture2D(u_Texture,f_TextureCoord);",
-									   "	@include <FragmentFinal>",
+									   "	vec4 c=texture2D(u_Texture,f_TextureCoord)*f_VaryingColor;",
+									   "	if(c.a<0.001)discard;",
+									   "	gl_FragColor=c;",
 									   "}"
 									   );
 	}

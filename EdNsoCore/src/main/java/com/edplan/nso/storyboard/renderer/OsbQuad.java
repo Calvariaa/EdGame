@@ -141,7 +141,7 @@ public class OsbQuad
 	
 	public void dispos(){
 		for(int i=0;i<vertexs.length;i++){
-			vertexs[i].loadback();
+			if(vertexs[i]!=null)vertexs[i].loadback();
 			vertexs[i]=null;
 		}
 	}

@@ -55,7 +55,7 @@ public class OsbRenderer extends MainRenderer
 			view.setName("testWidget");
 			view.setBackground(drawable);
 			EdLayoutParam param=new EdLayoutParam();
-			param.width=Param.makeupParam(100);
+			param.width=Param.MODE_MATCH_PARENT;
 			param.height=Param.makeupParam(100);
 			param.xoffset=500;
 			layout.addView(view,param);

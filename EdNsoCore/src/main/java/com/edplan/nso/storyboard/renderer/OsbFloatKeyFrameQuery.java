@@ -44,6 +44,10 @@ public class OsbFloatKeyFrameQuery
 		commands=list;
 		frames=new OsbFloatKeyFrame[commands.size()];
 		nextFrameStartTime=new float[frames.length];
+		for(int i=0;i<frames.length;i++){
+			final TypedCommand<Float> command=commands.get(i);
+			frames[i]=new OsbFloatKeyFrame(command.getStartValue(),command.getEndValue(),(float)command.getStartTime(),(float)command.getDuration(),command.getEasing());
+		}
 		for(int i=1;i<frames.length;i++){
 			nextFrameStartTime[i-1]=frames[i].startTime;
 		}

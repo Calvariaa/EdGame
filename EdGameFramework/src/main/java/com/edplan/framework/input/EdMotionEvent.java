@@ -33,7 +33,6 @@ public class EdMotionEvent
 	public EdMotionEvent(EdMotionEvent event){
 		set(event);
 	}
-
 	
 	public void setPointCount(int pointCount) {
 		this.pointCount=pointCount;

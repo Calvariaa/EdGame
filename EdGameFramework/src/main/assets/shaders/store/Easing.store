@@ -7,6 +7,10 @@ const float back_const2=2.5949095;
 const float bounce_const=0.36363636363636365;
 const float pi=3.1415926535897932384626;
 
+int te(float f){
+	return int(floor(f+0.1));
+}
+
 float outBounce(float v){
 	if (v < bounce_const)
 		return 7.5625 * v * v;
@@ -133,17 +137,17 @@ float easing(float v,int code){
 }
 
 float applyEasing(float v1,float v2,float t,int e){
-	return mix(v1,v2,easing(clamp(t,0,1),e));
+	return mix(v1,v2,easing(clamp(t,0.0,1.0),e));
 }
 
 vec2 applyEasing(vec2 v1,vec2 v2,float t,int e){
-	return mix(v1,v2,easing(clamp(t,0,1),e));
+	return mix(v1,v2,easing(clamp(t,0.0,1.0),e));
 }
 
 vec3 applyEasing(vec3 v1,vec3 v2,float t,int e){
-	return mix(v1,v2,easing(clamp(t,0,1),e));
+	return mix(v1,v2,easing(clamp(t,0.0,1.0),e));
 }
 
 vec4 applyEasing(vec4 v1,vec4 v2,float t,int e){
-	return mix(v1,v2,easing(clamp(t,0,1),e));
+	return mix(v1,v2,easing(clamp(t,0.0,1.0),e));
 }

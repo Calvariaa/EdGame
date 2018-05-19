@@ -70,12 +70,8 @@ public abstract class EdAbstractViewGroup extends EdView
 			}
 		}
 	}
-
-	@Override
-	public void onDraw(BaseCanvas canvas){
-		// TODO: Implement this method
-		drawBackground(canvas);
-		
+	
+	protected void dispatchDraw(BaseCanvas canvas){
 		final int count=getChildrenCount();
 		for(int i=0;i<count;i++){
 			final EdView view=getChildAt(i);
@@ -91,14 +87,19 @@ public abstract class EdAbstractViewGroup extends EdView
 			}
 		}
 	}
+
+	@Override
+	public void onDraw(BaseCanvas canvas){
+		// TODO: Implement this method
+		drawBackground(canvas);
+		dispatchDraw(canvas);
+	}
 	
 	protected void layoutChildren(float left,float top,float right,float bottom){
 		final int count=getChildrenCount();
 		
 		final float parentLeft=getPaddingLeft();
-		final float parentRight=right-left-getPaddingRight();
 		final float parentTop=getPaddingTop();
-		final float parentBottom=bottom-top-getPaddingBottom();
 		
 		for(int i=0;i<count;i++){
 			final EdView view=getChildAt(i);

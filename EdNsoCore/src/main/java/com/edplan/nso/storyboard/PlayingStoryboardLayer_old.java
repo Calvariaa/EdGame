@@ -17,7 +17,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
+public class PlayingStoryboardLayer_old extends EdDrawable implements GLES10Drawable
 {
 	public static Tracker.TrackNode PrepareTime;
 	public static Tracker.TrackNode RenderOsb;
@@ -27,13 +27,13 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 		RenderOsb=Tracker.register("OsbRenderOsb");
 	}
 
-	private LinkedList<ElementNode> sprites=new LinkedList<ElementNode>();
+	private List<ElementNode> sprites=new ArrayList<ElementNode>();
 
 	private List<ElementNode> applyNode=new LinkedList<ElementNode>();
 
 	private List<ElementNode> spritesNotAdded=new LinkedList<ElementNode>();
 
-	//private List<ElementNode> spriteInField=new ArrayList<ElementNode>();
+	private List<ElementNode> spriteInField=new ArrayList<ElementNode>();
 
 	private PlayingStoryboard storyboard;
 
@@ -46,12 +46,8 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 	//private OsbRenderer renderer;
 
 	private FastRenderer renderer;
-	
-	private SpriteNode first;
-	
-	private int elementsInField=0;
 
-	public PlayingStoryboardLayer(StoryboardLayer layer,PlayingStoryboard storyboard){
+	public PlayingStoryboardLayer_old(StoryboardLayer layer,PlayingStoryboard storyboard){
 		super(storyboard.getContext());
 		this.storyboard=storyboard;
 		int depth=-1;
@@ -79,7 +75,7 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 		}
 		Collections.sort(sprites, new Comparator<ElementNode>(){
 				@Override
-				public int compare(PlayingStoryboardLayer.ElementNode p1,PlayingStoryboardLayer.ElementNode p2) {
+				public int compare(PlayingStoryboardLayer_old.ElementNode p1,PlayingStoryboardLayer_old.ElementNode p2) {
 					// TODO: Implement this method
 					return (int)Math.signum(p1.startTime-p2.startTime);
 				}
@@ -101,12 +97,12 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 	}
 
 	public int objectInField(){
-		return elementsInField;
+		return spriteInField.size();
 	}
 
 	private static Comparator<ElementNode> nodeSorter=new Comparator<ElementNode>(){
 		@Override
-		public int compare(PlayingStoryboardLayer.ElementNode p1,PlayingStoryboardLayer.ElementNode p2) {
+		public int compare(PlayingStoryboardLayer_old.ElementNode p1,PlayingStoryboardLayer_old.ElementNode p2) {
 			// TODO: Implement this method
 			return p1.depth-p2.depth;
 		}
@@ -119,75 +115,29 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 		while(iter.hasNext()){
 			ele=iter.next();
 			if(ele.startTime<=time){
-				final SpriteNode n=new SpriteNode(ele);
-				elementsInField++;
-				if(first==null){
-					first=n;
-				}else{
-					final int nodeDepth=ele.depth;
-					SpriteNode node=first;
-					if(node.ele.depth>nodeDepth){
-						n.next=node;
-						node.pre=n;
-						first=n;
-					}else if(node.next==null){
-						node.next=n;
-						n.pre=node;
-					}else{
-						node=node.next;
-						while(true){
-							if(node.ele.depth>nodeDepth){
-								n.pre=node.pre;
-								n.next=node;
-								node.pre.next=n;
-								node.pre=n;
-								break;
-							}else if(node.next==null){
-								node.next=n;
-								n.pre=node;
-								break;
-							}else{
-								node=node.next;
-							}
-						}
-					}
-				}
+				spriteInField.add(ele);
 				if(!ele.hasAdded())ele.apply();
 				iter.remove();
 			}else{
 				break;
 			}
 		}
-		
-		//iter=spriteInField.iterator();
-		SpriteNode node=first;
-		while(node!=null){
-			if(node.ele.endTime<time){
-				elementsInField--;
-				node.ele.onRemove();
-				if(node==first){
-					first=node.next;
-				}else{
-					node.pre.next=node.next;
-					if(node.next!=null)node.next.pre=node.pre;
-					node.pre=null;
-				}
-				final SpriteNode n=node;
-				node=node.next;
-				n.next=null;
-				continue;
+		iter=spriteInField.iterator();
+		while(iter.hasNext()){
+			ele=iter.next();
+			if(ele.endTime<time){
+				ele.onRemove();
+				iter.remove();
 			}
-			node=node.next;
 		}
-		//Collections.sort(spriteInField,nodeSorter);
+		Collections.sort(spriteInField,nodeSorter);
 	}
 
 	int asyncThreadCount=16;
 	protected void doAsyncPrepare(){
-		/*
 		PrepareThread[] ts=new PrepareThread[asyncThreadCount];
 		Iterator<ElementNode> nodes=spriteInField.iterator();
-		int maxSize=elementsInField/asyncThreadCount+2;
+		int maxSize=spriteInField.size()/asyncThreadCount+2;
 		for(int i=0;i<asyncThreadCount;i++){
 			int count=0;
 			ts[i]=new PrepareThread();
@@ -203,7 +153,6 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 				e.printStackTrace();
 			}
 		}
-		*/
 	}
 
 	private boolean asyncPrepare=false;
@@ -216,39 +165,24 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 		refreshObjects();
 		PrepareTime.end();
 
-		renderer.ensureSize(elementsInField*6,elementsInField*4*2);
+		renderer.ensureSize(spriteInField.size()*6,spriteInField.size()*4*2);
 
 		if(asyncPrepare)doAsyncPrepare();
 		int c=canvas.getBlendSetting().save();
 		canvas.enablePost();
 		PrepareTime.watch();
-		SpriteNode node=first;
-		while(node!=null){
-			node.ele.element.prepareForDraw();
-			node=node.next;
-		}
-		/*
 		for(ElementNode ele:spriteInField){
 			if(!asyncPrepare)ele.element.prepareForDraw();
 		}
-		*/
 		PrepareTime.end();
 
 		RenderOsb.watch();
 		renderer.start(canvas);
-		
-		node=first;
-		while(node!=null){
-			node.ele.element.drawFastRenderer(renderer);
-			node=node.next;
-		}
-		/*
 		for(ElementNode ele:spriteInField){
 			//ele.element.drawOsbRenderer(renderer);
 			ele.element.drawFastRenderer(renderer);
 			//ele.element.draw(canvas);
 		}
-		*/
 		renderer.end();
 		RenderOsb.end();
 
@@ -257,11 +191,9 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 		canvas.getBlendSetting().restoreToCount(c);
 	}
 
-	
 	@Override
 	public void drawGL10(GL10Canvas2D canvas) {
 		// TODO: Implement this method
-		/*
 		newApply=0;
 		refreshObjects();
 		int c=GLWrapped.blend.save();
@@ -272,7 +204,6 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 		canvas.postDraw();
 		//canvas.setEnablePost(false);
 		GLWrapped.blend.restoreToCount(c);
-		*/
 	}
 
 	public class ElementNode{
@@ -372,16 +303,6 @@ public class PlayingStoryboardLayer extends EdDrawable implements GLES10Drawable
 			currentTime=time;
 		}
 
-	}
-	
-	public static class SpriteNode{
-		public final ElementNode ele;
-		public SpriteNode next;
-		public SpriteNode pre;
-		
-		public SpriteNode(ElementNode ele){
-			this.ele=ele;
-		}
 	}
 
 }

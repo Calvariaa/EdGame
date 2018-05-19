@@ -12,6 +12,8 @@ import com.edplan.framework.graphics.opengl.BaseCanvas;
 import com.edplan.framework.ui.layout.EdMeasureSpec;
 import com.edplan.framework.ui.layout.LayoutException;
 import android.util.Log;
+import com.edplan.framework.ui.inputs.ScrollEvent;
+import com.edplan.framework.ui.inputs.HoverEvent;
 
 public class EdView implements IRunnableHandler
 {
@@ -22,7 +24,7 @@ public class EdView implements IRunnableHandler
 	public static final int VISIBILITY_HIDDEN=2;
 
 	public static final int VISIBILITY_GONE=3;
-
+	
 	private EdAbstractViewGroup parent;
 
 	private String name;
@@ -43,12 +45,61 @@ public class EdView implements IRunnableHandler
 
 	private boolean hasCreated=false;
 	
+	/**
+	 *当前view是否是焦点view，焦点view会在处理滚动，点击等事件时有较高的优先级
+	 */
+	private boolean focus=false;
+	
+	/**
+	 *设置是否处理点击事件（事件开始结束均在view范围内，且事件时间不是太久)
+	 */
+	private boolean clickable=false;
+	
+	/**
+	 *设置是否处理长摁事件（事件开始结束均在view范围内，且事件时间比较久)
+	 */
+	private boolean longclickable=false;
+	
+	/**
+	 *是否接受滚动，包含了两个方向相关的信息。
+	 *具体的取值在ScrollEvent.java
+	 */
+	private int scrollableFlag;
+	
 	public EdView(MContext context){
 		this.context=context;
 		if(!checkCurrentThread()){
 			throw new RuntimeException("you can only create a view in main thread!");
 		}
 		initialName();
+	}
+
+	public ViewRoot getViewRoot(){
+		return getContext().getViewRoot();
+	}
+
+	public void setScrollableFlag(int scrollableFlag){
+		this.scrollableFlag=scrollableFlag;
+	}
+
+	public int getScrollableFlag(){
+		return scrollableFlag;
+	}
+
+	public void setLongclickable(boolean longclickable){
+		this.longclickable=longclickable;
+	}
+
+	public boolean isLongclickable(){
+		return longclickable;
+	}
+
+	public void setClickable(boolean clickable){
+		this.clickable=clickable;
+	}
+
+	public boolean isClickable(){
+		return clickable;
 	}
 	
 	public boolean hasCreated(){
@@ -273,22 +324,47 @@ public class EdView implements IRunnableHandler
 		return hasChanged;
 	}
 
+	/**
+	 *处理滚动事件
+	 */
+	public boolean onScroll(ScrollEvent event){
+		return false;
+	}
+	
+	/**
+	 *处理原始点击事件
+	 */
 	public boolean onMotionEvent(EdMotionEvent e){
 		return false;
 	}
-
-
-
+	
 	/**
-	 *这个涉及到点击事件的分发
+	 *点击事件开始时被调用，只有被设置为clickable=true才会被调用
 	 */
-	public boolean inArea(Vec2 v){
-		// TODO: Implement this method
-		//return area.inArea(v);
+	public boolean onStartClick(){
+		return false;
+	}
+	
+	/**
+	 *对应点击事件被触发
+	 */
+	public boolean onClickEvent(){
 		return false;
 	}
 
+	/**
+	 *对应长摁事件被触发
+	 */
+	public boolean onLongClickEvent(){
+		return false;
+	}
+	
+	public boolean onClickEventCancel(){
+		return false;
+	}
 
-
-
+	public boolean onHoverEvent(HoverEvent event){
+		return false;
+	}
+	
 }

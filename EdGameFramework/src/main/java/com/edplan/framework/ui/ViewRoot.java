@@ -9,6 +9,10 @@ import com.edplan.framework.ui.layout.EdLayoutParam;
 import com.edplan.framework.ui.layout.Gravity;
 import com.edplan.framework.ui.layout.Param;
 import com.edplan.framework.ui.layout.MeasureCore;
+import android.view.MotionEvent;
+import com.edplan.framework.ui.inputs.NativeInputQuery;
+import java.util.List;
+import com.edplan.framework.input.EdMotionEvent;
 
 public class ViewRoot
 {
@@ -18,8 +22,6 @@ public class ViewRoot
 	
 	public static final int FLAG_INVALIDATE_DRAW=1<<2;
 	
-	
-	
 	private MContext context;
 	
 	private EdView contentView;
@@ -28,16 +30,27 @@ public class ViewRoot
 	
 	private int frameInvalidateState;
 	
-	private boolean alwaysInvalidateMeasure=false;
+	private boolean alwaysInvalidateMeasure=true;
 	
-	private boolean alwaysInvalidateLayout=false;
+	private boolean alwaysInvalidateLayout=true;
 	
 	private boolean alwaysInvalidateDraw=true;
+	
+	private NativeInputQuery nativeInputManager=new NativeInputQuery();
 	
 	public ViewRoot(MContext c){
 		this.context=c;
 	}
+	
+	public void postNativeEvent(MotionEvent event){
+		nativeInputManager.postEvent(event);
+	}
 
+	
+	protected void handlerInputs(){
+		List<EdMotionEvent> events=nativeInputManager.getQuery();
+	}
+	
 	public void setContentView(EdView contentView) {
 		this.contentView=contentView;
 		if(contentView.getLayoutParam()==null){
@@ -60,7 +73,6 @@ public class ViewRoot
 	}
 	
 	protected void postMeasure(){
-		Tracker.InvalidateMeasure.watch();
 		long wm=
 			EdMeasureSpec.makeupMeasureSpec(
 				context.getDisplayWidth(),
@@ -70,28 +82,22 @@ public class ViewRoot
 				context.getDisplayHeight(),
 				EdMeasureSpec.MODE_AT_MOST);
 		MeasureCore.measureChild(contentView,0,0,wm,hm);
-		Tracker.InvalidateMeasure.end();
-		/*
-		Log.v("ui-layout",Long.toBinaryString(((long)1)<<32)+" "+Long.toBinaryString(EdMeasureSpec.MODE_MASK)+":"+Long.toBinaryString(EdMeasureSpec.SIZE_MASK));
-		Log.v("ui-layout","measureSpec : "+wm+","+hm+" "+EdMeasureSpec.toString(wm)+","+EdMeasureSpec.toString(hm));
-		Log.v("ui-layout","measure : "+contentView.getMeasuredWidth()+","+contentView.getMeasuredHeight()+" cost: "+Tracker.InvalidateMeasure.totalTimeMS+"ms");
-		*/
 	}
 	
 	protected void postLayout(){
 		contentView.layout(0,0,contentView.getMeasuredWidth(),contentView.getMeasuredHeight());
 	}
 	
-	public void onNewFrame(BaseCanvas canvas,double deltaTime){
-		frameInvalidateState=0;
+	protected void checkInvalidate(){
+		Tracker.InvalidateMeasureAndLayout.watch();
 		if(alwaysInvalidateMeasure
-			||BitUtil.match(invalidateFlag,FLAG_INVALIDATE_MEASURE)
-		){
+		   ||BitUtil.match(invalidateFlag,FLAG_INVALIDATE_MEASURE)
+		   ){
 			postMeasure();
 			invalidateFlag&=~FLAG_INVALIDATE_MEASURE;
 			frameInvalidateState|=FLAG_INVALIDATE_MEASURE;
 		}
-		
+
 		if(alwaysInvalidateLayout
 		   ||BitUtil.match(invalidateFlag,FLAG_INVALIDATE_LAYOUT)
 		   ){
@@ -99,11 +105,21 @@ public class ViewRoot
 			invalidateFlag&=~FLAG_INVALIDATE_LAYOUT;
 			frameInvalidateState|=FLAG_INVALIDATE_LAYOUT;
 		}
+		Tracker.InvalidateMeasureAndLayout.end();
+	}
+	
+	public void onNewFrame(BaseCanvas canvas,double deltaTime){
+		frameInvalidateState=0;
 		
+		checkInvalidate();
+		handlerInputs();
+		checkInvalidate();
 		
 		
 		if(contentView!=null){
+			Tracker.DrawUI.watch();
 			contentView.onDraw(canvas);
+			Tracker.DrawUI.end();
 		}
 	}
 }
