@@ -90,7 +90,7 @@ public abstract class BufferedDrawable extends EdDrawable implements IFadeable
 	/**
 	 *如何绘制内容
 	 */
-	protected abstract void drawContent(GLCanvas2D canvas);
+	protected abstract void drawContent(BaseCanvas canvas);
 
 	@Override
 	public void draw(BaseCanvas canvas) {

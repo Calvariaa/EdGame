@@ -10,6 +10,8 @@ import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.ui.layout.EdLayoutParam;
 import com.edplan.framework.ui.layout.MeasureCore;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
+import com.edplan.framework.ui.inputs.EdMotionEvent;
+import com.edplan.framework.math.RectF;
 
 public abstract class EdAbstractViewGroup extends EdView
 {
@@ -93,6 +95,96 @@ public abstract class EdAbstractViewGroup extends EdView
 		// TODO: Implement this method
 		drawBackground(canvas);
 		dispatchDraw(canvas);
+	}
+	
+	private int holdingPointer=-1;
+	private EdView viewUsingPointer;
+	
+	protected void clearPointerInfo(){
+		holdingPointer=-1;
+		viewUsingPointer=null;
+	}
+	
+	protected boolean dispatchMotionEvent(EdMotionEvent event){
+		boolean useevent=false;
+		//暂时只支持单点触控
+		if(holdingPointer!=-1&&holdingPointer!=event.getPointerId()){
+			return false;
+		}
+		switch(event.getEventType()){
+			case Down:
+				final int count=getChildrenCount();
+				for(int i=count-1;i>=0;i--){
+					final EdView view=getChildAt(i);
+					if(RectF.inLTRB(event.getX(),event.getY(),view.getLeft(),view.getTop(),view.getRight(),view.getBottom())){
+						final float x=event.getX(),y=event.getY();
+						event.transform(view.getLeft(),view.getTop());
+						if(view.onMotionEvent(event)){
+							useevent=true;
+							holdingPointer=event.getPointerId();
+							viewUsingPointer=view;
+							break;
+						}
+						event.setEventPosition(x,y);
+					}
+				}
+				break;
+			case Move:
+				if(viewUsingPointer!=null){
+					if(viewUsingPointer.getParent()!=this){
+						//已经不在这个ViewGroup中了
+						clearPointerInfo();
+						return false;
+					}
+					final float x=event.getX(),y=event.getY();
+					event.transform(viewUsingPointer.getLeft(),viewUsingPointer.getTop());
+					useevent=viewUsingPointer.onMotionEvent(event);
+					event.setEventPosition(x,y);
+				}
+				break;
+			case Up:
+				if(viewUsingPointer!=null){
+					if(viewUsingPointer.getParent()!=this){
+						//已经不在这个ViewGroup中了
+						clearPointerInfo();
+						return false;
+					}
+					final float x=event.getX(),y=event.getY();
+					event.transform(viewUsingPointer.getLeft(),viewUsingPointer.getTop());
+					useevent=viewUsingPointer.onMotionEvent(event);
+					event.setEventPosition(x,y);
+					clearPointerInfo();
+				}
+				break;
+			case Cancel:
+				if(viewUsingPointer!=null){
+					if(viewUsingPointer.getParent()!=this){
+						//已经不在这个ViewGroup中了
+						clearPointerInfo();
+						return false;
+					}
+					final float x=event.getX(),y=event.getY();
+					event.transform(viewUsingPointer.getLeft(),viewUsingPointer.getTop());
+					useevent=viewUsingPointer.onMotionEvent(event);
+					event.setEventPosition(x,y);
+					clearPointerInfo();
+				}
+				break;
+		}
+		return useevent;
+	}
+
+	@Override
+	public boolean onMotionEvent(EdMotionEvent e){
+		// TODO: Implement this method
+		
+		
+		
+		if(!dispatchMotionEvent(e)){
+			return super.onMotionEvent(e);
+		}else{
+			return true;
+		}
 	}
 	
 	protected void layoutChildren(float left,float top,float right,float bottom){

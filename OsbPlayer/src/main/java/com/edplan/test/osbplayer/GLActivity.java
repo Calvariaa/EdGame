@@ -5,7 +5,6 @@ import android.os.Bundle;
 import org.json.JSONObject;
 import org.json.JSONException;
 import android.widget.Toast;
-import com.edplan.framework.GameActivity;
 import com.edplan.framework.graphics.opengl.BaseGLSurfaceView;
 import com.squareup.leakcanary.LeakCanary;
 import com.edplan.framework.main.MainApplication;
@@ -13,8 +12,6 @@ import com.edplan.framework.graphics.opengl.MainRenderer;
 
 public class GLActivity extends Activity 
 {
-
-	BaseGLSurfaceView sv;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO: Implement this method

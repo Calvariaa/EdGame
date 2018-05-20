@@ -28,4 +28,6 @@ public class Orientation
 	public static final int DIRECTION_B2T=DIRECTION_SMALL2BIG<<DIRECTION_LEFT_BITS;
 
 	public static final int DIRECTION_NONE_VERTICAL=DIRECTION_NONE<<DIRECTION_LEFT_BITS;
+	
+	
 }

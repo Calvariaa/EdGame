@@ -4,6 +4,7 @@ import com.edplan.framework.ui.animation.AnimationHandler;
 import com.edplan.superutils.classes.advance.IRunnableHandler;
 import com.edplan.superutils.classes.advance.RunnableHandler;
 import com.edplan.superutils.interfaces.Loopable;
+import android.os.SystemClock;
 
 public class UILooper extends StepLooper implements IRunnableHandler 
 {
@@ -27,6 +28,8 @@ public class UILooper extends StepLooper implements IRunnableHandler
 	//绘制操作
 	//private UIDrawer
 
+	private long frameUptimeMillions;
+	
 	public UILooper(){
 		runnableHandler=new RunnableHandler();
 		otherLoopableHandler=new LooperLoopable<Loopable>();
@@ -42,6 +45,17 @@ public class UILooper extends StepLooper implements IRunnableHandler
 
 	public AnimationHandler getAnimaHandler() {
 		return animaHandler;
+	}
+	
+	public double calTimeOverThread(long uptimeRelative){
+		return getTimer().runnedTime+(uptimeRelative-SystemClock.uptimeMillis());
+	}
+
+	@Override
+	public void loop(double deltaTime){
+		// TODO: Implement this method
+		frameUptimeMillions=SystemClock.uptimeMillis();
+		super.loop(deltaTime);
 	}
 
 	@Override

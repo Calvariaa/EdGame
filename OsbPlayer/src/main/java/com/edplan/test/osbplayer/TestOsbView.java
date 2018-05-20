@@ -41,6 +41,7 @@ import com.edplan.framework.test.Test;
 import com.edplan.framework.test.performance.Tracker;
 import com.edplan.nso.storyboard.PlayingStoryboardLayer;
 import com.edplan.framework.resource.MultipleResource;
+import com.edplan.framework.ui.inputs.EdMotionEvent;
 
 public class TestOsbView extends EdView
 {
@@ -85,7 +86,7 @@ public class TestOsbView extends EdView
 	
 	private String msg="none";
 	
-	
+	private Vec2 touchPosition=new Vec2();
 	
 	private static Tracker.TrackNode main;
 	static{
@@ -289,6 +290,13 @@ public class TestOsbView extends EdView
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public boolean onMotionEvent(EdMotionEvent e){
+		// TODO: Implement this method
+		touchPosition.set(e.getX(),e.getY());
+		return true;
 	}
 
 	boolean ifend=false;
@@ -538,8 +546,8 @@ public class TestOsbView extends EdView
 		baseLinePaint.setMixColor(Color4.rgba(0,1,0,0.6f));
 		canvas.drawLine(0,baseLine+font.getCommon().base*printer.getScale(),1000,baseLine+font.getCommon().base*printer.getScale(),baseLinePaint);
 
-		Vec2 v=TestStaticData.touchPosition.copy();
-		v.zoom(canvas.getWidth(),canvas.getHeight(),2,2);
+		Vec2 v=touchPosition.copy();
+		//v.zoom(canvas.getWidth(),canvas.getHeight(),2,2);
 		canvas.drawTexture(cursor,RectF.anchorOWH(Anchor.Center,v.x,v.y,100,100),new GLPaint());
 
 

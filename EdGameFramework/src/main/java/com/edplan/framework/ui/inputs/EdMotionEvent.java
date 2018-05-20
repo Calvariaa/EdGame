@@ -1,4 +1,5 @@
-package com.edplan.framework.input;
+package com.edplan.framework.ui.inputs;
+
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.interfaces.Copyable;
 import android.view.MotionEvent;
@@ -11,27 +12,41 @@ public class EdMotionEvent
 	/**
 	 *记录事件对应原始输入的类型
 	 */
-	private RawType rawType;
-	
-	private Vec2 eventPosition=new Vec2();
-	
-	private EventType eventType;
-	
-	private int pointerId;
-	
+	public RawType rawType;
+
+	public Vec2 eventPosition=new Vec2();
+
+	public EventType eventType;
+
+	public int pointerId;
+
 	/**
 	 *相关联的按键，比如鼠标点击的时候用这个判定左右键
 	 */
-	private int keyCode;
-	
-	private int pointCount;
-	
+	public int keyCode;
+
+	public int pointCount;
+
+	public double time;
+
 	public EdMotionEvent(){
-		
+
 	}
-	
+
 	public EdMotionEvent(EdMotionEvent event){
 		set(event);
+	}
+	
+	public float getX(){
+		return eventPosition.x;
+	}
+
+	public float getY(){
+		return eventPosition.y;
+	}
+	
+	public void transform(float dx,float dy){
+		eventPosition.move(dx,dy);
 	}
 	
 	public void setPointCount(int pointCount) {
@@ -49,8 +64,9 @@ public class EdMotionEvent
 		this.pointerId=e.pointerId;
 		this.keyCode=e.keyCode;
 		this.pointCount=e.pointCount;
+		this.time=e.time;
 	}
-	
+
 	public void setRawType(RawType rawType) {
 		this.rawType=rawType;
 	}
@@ -59,8 +75,8 @@ public class EdMotionEvent
 		return rawType;
 	}
 
-	public void setEventPosition(Vec2 eventPosition) {
-		this.eventPosition.set(eventPosition);
+	public void setEventPosition(float x,float y) {
+		this.eventPosition.set(x,y);
 	}
 
 	public Vec2 getEventPosition() {
@@ -90,18 +106,11 @@ public class EdMotionEvent
 	public int getKeyCode() {
 		return keyCode;
 	}
-	
+
 	public EdMotionEvent copy(){
 		return new EdMotionEvent(this);
 	}
-	
-	public static EdMotionEvent load(MotionEvent raw){
-		EdMotionEvent event=new EdMotionEvent();
-		event.eventPosition.set(raw.getX(),raw.getY());
-		event.eventType=parseType(raw.getActionMasked());
-		return event;
-	}
-	
+
 	public static EventType parseType(int actionMasked){
 		switch(actionMasked){
 			case MotionEvent.ACTION_DOWN:
@@ -121,7 +130,7 @@ public class EdMotionEvent
 			default:return EventType.Cancel;
 		}
 	}
-	
+
 	/**
 	 *一个事件组应该是以下类型：
 	 *1：Down - Move x n - Cancel 或者 Up
@@ -144,9 +153,9 @@ public class EdMotionEvent
 		HoverExit,
 		//Cancel：对应事件组被取消
 		Cancel
-	}
-	
+		}
+
 	public enum RawType{
 		TouchScreen,Tablet,Mouse
-	}
+		}
 }

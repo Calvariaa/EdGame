@@ -1,7 +1,8 @@
 package com.edplan.framework.input.manager;
-import com.edplan.framework.input.EdMotionEvent;
 
-public class MotionManager<H extends IMotionEventHandler,K> implements IMotionManager<H,K>
+import com.edplan.framework.ui.inputs.EdMotionEvent;
+
+	public class MotionManager<H extends IMotionEventHandler,K> implements IMotionManager<H,K>
 {
 	@Override
 	public void unregisterHandler(H area) {

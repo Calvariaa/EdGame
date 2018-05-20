@@ -180,10 +180,10 @@ public class SliderBody extends BasePiece
 		}
 
 		@Override
-		protected void drawContent(GLCanvas2D canvas) {
+		protected void drawContent(BaseCanvas canvas) {
 			// TODO: Implement this method
 			canvas.drawColor(Color4.Alpha);
-			canvas.clearDepthBuffer();
+			canvas.clearBuffer();
 			DrawLinePath<Texture3DBatch> d=new DrawLinePath<Texture3DBatch>(
 								getSliderPath()
 								 .cutPath(

@@ -12,7 +12,6 @@ import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.graphics.opengl.GLWrapped;
 import com.edplan.framework.graphics.opengl.bufferObjects.FrameBufferObject;
 import com.edplan.framework.graphics.opengl.objs.Color4;
-import com.edplan.framework.input.EdMotionEvent;
 import com.edplan.framework.test.TestStaticData;
 import com.edplan.framework.ui.looper.UILooper;
 import com.edplan.framework.utils.MLog;

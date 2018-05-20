@@ -1,19 +1,14 @@
 package com.edplan.framework.ui;
 import com.edplan.framework.MContext;
-import com.edplan.framework.graphics.opengl.GLCanvas2D;
-import com.edplan.framework.input.EdMotionEvent;
-import com.edplan.framework.math.RectF;
-import com.edplan.framework.math.Vec2;
-import com.edplan.framework.ui.drawable.EdDrawable;
-import com.edplan.superutils.classes.advance.IRunnableHandler;
-import com.edplan.framework.ui.layout.MeasureCore;
-import com.edplan.framework.ui.layout.EdLayoutParam;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
+import com.edplan.framework.ui.drawable.EdDrawable;
+import com.edplan.framework.ui.inputs.EdMotionEvent;
+import com.edplan.framework.ui.inputs.HoverEvent;
+import com.edplan.framework.ui.inputs.ScrollEvent;
+import com.edplan.framework.ui.layout.EdLayoutParam;
 import com.edplan.framework.ui.layout.EdMeasureSpec;
 import com.edplan.framework.ui.layout.LayoutException;
-import android.util.Log;
-import com.edplan.framework.ui.inputs.ScrollEvent;
-import com.edplan.framework.ui.inputs.HoverEvent;
+import com.edplan.superutils.classes.advance.IRunnableHandler;
 
 public class EdView implements IRunnableHandler
 {
@@ -45,6 +40,8 @@ public class EdView implements IRunnableHandler
 
 	private boolean hasCreated=false;
 	
+	private boolean pressed=false;
+	
 	/**
 	 *当前view是否是焦点view，焦点view会在处理滚动，点击等事件时有较高的优先级
 	 */
@@ -72,6 +69,21 @@ public class EdView implements IRunnableHandler
 			throw new RuntimeException("you can only create a view in main thread!");
 		}
 		initialName();
+	}
+	
+	/**
+	 *如果当前view在滚动，停止滚动
+	 */
+	public void stopScrolling(){
+		
+	}
+
+	public void setPressed(boolean pressed){
+		this.pressed=pressed;
+	}
+
+	public boolean isPressed(){
+		return pressed;
 	}
 
 	public ViewRoot getViewRoot(){
@@ -323,20 +335,26 @@ public class EdView implements IRunnableHandler
 		}
 		return hasChanged;
 	}
-
-	/**
-	 *处理滚动事件
-	 */
-	public boolean onScroll(ScrollEvent event){
-		return false;
-	}
 	
 	/**
 	 *处理原始点击事件
 	 */
 	public boolean onMotionEvent(EdMotionEvent e){
+		
 		return false;
 	}
+	
+	/**
+	 *处理悬浮事件
+	 */
+	public boolean onHoverEvent(HoverEvent event){
+		return false;
+	}
+	
+	
+	/**
+	 *下面这些都必须获取焦点后再被应用
+	 */
 	
 	/**
 	 *点击事件开始时被调用，只有被设置为clickable=true才会被调用
@@ -363,8 +381,10 @@ public class EdView implements IRunnableHandler
 		return false;
 	}
 
-	public boolean onHoverEvent(HoverEvent event){
+	/**
+	 *处理滚动事件
+	 */
+	public boolean onScroll(ScrollEvent event){
 		return false;
 	}
-	
 }

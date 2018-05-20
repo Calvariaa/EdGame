@@ -249,4 +249,8 @@ public class RectF implements Copyable,Area2D,IQuad
 	public static RectF anchorOWH(Anchor anchor,float ox,float oy,float width,float height){
 		return xywh(ox-anchor.x()*width,oy-anchor.y()*height,width,height);
 	}
+	
+	public static boolean inLTRB(float x,float y,float l,float t,float r,float b){
+		return x>=l&&x<=r&&y>=t&&y<=b;
+	}
 }

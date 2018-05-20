@@ -61,6 +61,7 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 		// TODO: Implement this method
 		//Log.v("thread","touch-thread: "+Thread.currentThread());
 		TestStaticData.touchPosition.set(e.getX(),e.getY());
+		viewRoot.postNativeEvent(e);
 		return true;
 	}
 
