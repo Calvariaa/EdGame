@@ -42,6 +42,7 @@ import com.edplan.framework.test.performance.Tracker;
 import com.edplan.nso.storyboard.PlayingStoryboardLayer;
 import com.edplan.framework.resource.MultipleResource;
 import com.edplan.framework.ui.inputs.EdMotionEvent;
+import com.edplan.framework.timing.AdjustableTimeline;
 
 public class TestOsbView extends EdView
 {
@@ -124,6 +125,7 @@ public class TestOsbView extends EdView
 			//font.setErrCharacter(BMFont.CHAR_NOT_FOUND);
 			font.addFont(res,"Noto-Basic.fnt");
 			font.setErrCharacter('⊙');
+			TextPrinter.setDefaultFont(font);
 			TextPrinter.addFont(font,"default");
 
 			cursor=getContext().getAssetResource().subResource("osu/skins/default").loadTexture("cursor.png");
@@ -180,7 +182,9 @@ public class TestOsbView extends EdView
 				mp3.getName()
 				)
 			);
-			timeline=new AudioTimeline(audio);
+			timeline=
+			//new AdjustableTimeline(0.5f);
+			new AudioTimeline(audio);
 
 			skin=new OsuSkin();
 			skin.load(
@@ -332,8 +336,8 @@ public class TestOsbView extends EdView
 								// TODO: Implement this method
 								getContext().getUiLooper().addLoopableBeforeDraw(timeline);
 								audio.play();
-								//audio.seekTo(42000);
-								//timeline.onLoop(103000*5);
+								audio.seekTo(20000);
+								timeline.onLoop(20000);
 							}
 						},2000);
 				}

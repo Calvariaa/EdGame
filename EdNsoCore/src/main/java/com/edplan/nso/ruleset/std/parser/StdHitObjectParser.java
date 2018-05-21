@@ -43,6 +43,8 @@ public class StdHitObjectParser implements HitObjectParser<StdHitObject>
 		return defParser;
 	}
 	
+	private int sliderIndex=0;
+	
 	public StdTypedParser createDefParser(){
 		return new StdTypedParser(){
 			@Override
@@ -57,6 +59,7 @@ public class StdHitObjectParser implements HitObjectParser<StdHitObject>
 					case Slider:
 						StdSlider s=new StdSlider();
 						injectBaseDatas(bd,s);
+						s.setSliderIndex(sliderIndex++);
 						s.setPath(parsePath(new Vec2(s.getStartX(),s.getStartY()),spl));
 						s.setRepeat(U.toInt(spl.next()));
 						s.setPixelLength(U.toDouble(spl.next()));

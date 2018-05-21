@@ -28,6 +28,10 @@ import com.edplan.framework.ui.drawable.RectDrawable;
 import com.edplan.framework.main.MainApplication;
 import com.edplan.framework.ui.widget.TestButton;
 import com.edplan.framework.ui.widget.TestScroller;
+import com.edplan.framework.ui.widget.LinearLayout;
+import com.edplan.framework.ui.layout.Orientation;
+import com.edplan.framework.ui.layout.MarginLayoutParam;
+import com.edplan.framework.ui.layout.Gravity;
 
 public class OsbRenderer extends MainRenderer
 {
@@ -83,6 +87,41 @@ public class OsbRenderer extends MainRenderer
 			param.xoffset=0;
 			param.yoffset=0;
 			layout.addView(button,param);
+		}
+		{
+			RectDrawable drawable=new RectDrawable(c);
+			drawable.setColor(Color4.rgba(1,1,1,0.5f));
+			LinearLayout llayout=new LinearLayout(c);
+			llayout.setGravity(Gravity.Center);
+			llayout.setBackground(drawable);
+			llayout.setOrientation(Orientation.DIRECTION_L2R);
+			llayout.setPaddingTop(10);
+			
+			EdLayoutParam lparam=new EdLayoutParam();
+			lparam.width=Param.MODE_WRAP_CONTENT;
+			lparam.height=Param.MODE_WRAP_CONTENT;
+			lparam.xoffset=400;
+			lparam.yoffset=400;
+			{
+				TestButton button=new TestButton(c);
+				button.setName("testButton");
+				MarginLayoutParam param=new MarginLayoutParam();
+				param.width=Param.makeupParam(100);
+				param.height=Param.makeupParam(61.8f);
+				param.marginRight=10;
+				//button.setVisiblility(EdView.VISIBILITY_HIDDEN);
+				llayout.addView(button,param);
+			}
+			{
+				TestButton button=new TestButton(c);
+				button.setName("testButton");
+				MarginLayoutParam param=new MarginLayoutParam();
+				param.width=Param.makeupParam(100);
+				param.height=Param.makeupParam(61.8f);
+				param.marginRight=10;
+				llayout.addView(button,param);
+			}
+			layout.addView(llayout,lparam);
 		}
 		return layout;
 	}

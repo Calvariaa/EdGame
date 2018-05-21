@@ -12,20 +12,17 @@ public class EdLayoutParam
 
 	public long width;
 	public long height;
-	public int gravity;
 	public float xoffset;
 	public float yoffset;
 	
 	public EdLayoutParam(){
 		width=DEFAULT_SIZE_PARAM;
 		height=DEFAULT_SIZE_PARAM;
-		gravity=DEFAULT_GRAVITY;
 	}
 	
 	public EdLayoutParam(EdLayoutParam l){
 		width=l.width;
 		height=l.height;
-		gravity=l.gravity;
 		xoffset=l.xoffset;
 		yoffset=l.yoffset;
 	}

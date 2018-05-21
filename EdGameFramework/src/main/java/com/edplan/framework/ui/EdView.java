@@ -12,6 +12,7 @@ import com.edplan.framework.ui.layout.LayoutException;
 import com.edplan.superutils.classes.advance.IRunnableHandler;
 import com.edplan.framework.utils.BitUtil;
 import com.edplan.framework.math.Vec2;
+import com.edplan.framework.ui.layout.MarginLayoutParam;
 
 public class EdView implements IRunnableHandler
 {
@@ -66,12 +67,38 @@ public class EdView implements IRunnableHandler
 	 */
 	private int scrollableFlag;
 	
+	private int gravity;
+	
 	public EdView(MContext context){
 		this.context=context;
 		if(!checkCurrentThread()){
 			throw new RuntimeException("you can only create a view in main thread!");
 		}
 		initialName();
+	}
+	
+	public float getMarginHorizonIfHas(){
+		if(getLayoutParam() instanceof MarginLayoutParam){
+			return ((MarginLayoutParam)getLayoutParam()).getMarginHorizon();
+		}else{
+			return 0;
+		}
+	}
+	
+	public float getMarginVerticalIfHas(){
+		if(getLayoutParam() instanceof MarginLayoutParam){
+			return ((MarginLayoutParam)getLayoutParam()).getMarginVertical();
+		}else{
+			return 0;
+		}
+	}
+
+	public void setGravity(int gravity){
+		this.gravity=gravity;
+	}
+
+	public int getGravity(){
+		return gravity;
 	}
 	
 	/**
@@ -316,7 +343,7 @@ public class EdView implements IRunnableHandler
 	/**
 	 *四个参数分别为子view到父view坐标系的距离
 	 */
-	protected void layout(float left,float top,float right,float bottom){
+	public void layout(float left,float top,float right,float bottom){
 		boolean hasChanged=setFrame(left,top,right,bottom);
 		if(hasChanged){
 			onLayout(hasChanged,left,top,right,bottom);

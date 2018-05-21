@@ -32,9 +32,9 @@ public class ViewRoot
 	
 	private int frameInvalidateState;
 	
-	private boolean alwaysInvalidateMeasure=true;
+	private boolean alwaysInvalidateMeasure=false;
 	
-	private boolean alwaysInvalidateLayout=true;
+	private boolean alwaysInvalidateLayout=false;
 	
 	private boolean alwaysInvalidateDraw=true;
 	
@@ -67,7 +67,6 @@ public class ViewRoot
 		this.contentView=contentView;
 		if(contentView.getLayoutParam()==null){
 			EdLayoutParam param=new EdLayoutParam();
-			param.gravity=Gravity.None;
 			param.width=Param.makeupParam(0,Param.MATCH_PARENT);
 			param.height=Param.makeupParam(0,Param.MATCH_PARENT);
 			contentView.setLayoutParam(param);

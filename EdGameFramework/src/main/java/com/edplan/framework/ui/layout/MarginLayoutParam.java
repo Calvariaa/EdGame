@@ -11,6 +11,10 @@ public class MarginLayoutParam extends EdLayoutParam
 		
 	}
 	
+	public MarginLayoutParam(EdLayoutParam l){
+		super(l);
+	}
+	
 	public MarginLayoutParam(MarginLayoutParam l){
 		super(l);
 		marginRight=l.marginRight;

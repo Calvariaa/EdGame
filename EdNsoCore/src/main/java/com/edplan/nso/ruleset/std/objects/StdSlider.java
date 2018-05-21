@@ -5,11 +5,20 @@ import java.util.List;
 
 public class StdSlider extends StdHitObject
 {
+	private int sliderIndex;
 	private double pixelLength;
 	private int repeat;
 	private StdPath path;
 	private int[] edgeHitsounds;
 	private List<Vct2<Integer,Integer>> edgeAdditions;
+
+	public void setSliderIndex(int sliderIndex){
+		this.sliderIndex=sliderIndex;
+	}
+
+	public int getSliderIndex(){
+		return sliderIndex;
+	}
 
 	public void setEdgeAdditions(List<Vct2<Integer, Integer>> edgeAdditions){
 		this.edgeAdditions=edgeAdditions;

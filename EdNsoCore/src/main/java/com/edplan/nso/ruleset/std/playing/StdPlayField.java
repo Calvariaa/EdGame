@@ -1,55 +1,55 @@
 package com.edplan.nso.ruleset.std.playing;
 import android.util.Log;
 import com.edplan.framework.MContext;
-import com.edplan.framework.graphics.opengl.GLCanvas2D;
+import com.edplan.framework.graphics.line.LinePath;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 import com.edplan.framework.graphics.opengl.GLPaint;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.timing.PreciseTimeline;
 import com.edplan.nso.ruleset.amodel.playing.PlayField;
 import com.edplan.nso.ruleset.amodel.playing.PlayingBeatmap;
+import com.edplan.nso.ruleset.std.StdBeatmap;
+import com.edplan.nso.ruleset.std.objects.StdHitCircle;
+import com.edplan.nso.ruleset.std.objects.StdHitObject;
+import com.edplan.nso.ruleset.std.objects.StdSlider;
+import com.edplan.nso.ruleset.std.objects.StdSpinner;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdHitObject;
+import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdSlider;
 import com.edplan.nso.ruleset.std.playing.drawable.interfaces.IHasApproachCircle;
+import com.edplan.nso.ruleset.std.playing.drawable.interfaces.IHasBackgroundDrawable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import com.edplan.nso.ruleset.std.objects.StdHitObject;
-import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdFollowpoint;
-import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdSlider;
-import com.edplan.framework.graphics.line.LinePath;
-import com.edplan.framework.utils.stream.IEnum;
-import com.edplan.nso.ruleset.std.playing.drawable.interfaces.IHasBackgroundDrawable;
-import com.edplan.framework.graphics.opengl.BaseCanvas;
 
-public class StdPlayField extends PlayField
-{
+public class StdPlayField extends PlayField{
 	private FieldDrawables backgroundLayerExtension=new FieldDrawables();
-	
+
 	private FieldDrawables drawableHitObjects=new FieldDrawables();
-	
+
 	private FieldDrawables connectionDrawables=new FieldDrawables();
-	
+
 	private PreciseTimeline timeline;
-	
+
 	//private approachCircleLayer;
-	
+
 	//private connectionLayer;
-	
+
 	public StdPlayField(MContext context,PreciseTimeline timeline){
 		super(context);
 		this.timeline=timeline;
 	}
-	
+
 	public int objectInFieldCount(){
 		return drawableHitObjects.getObjectsInField().size();
 	}
 
-	public List<DrawableStdHitObject> getDrawableHitObjects() {
+	public List<DrawableStdHitObject> getDrawableHitObjects(){
 		return drawableHitObjects.getObjects();
 	}
 
 	@Override
-	public void applyBeatmap(PlayingBeatmap res) {
+	public void applyBeatmap(PlayingBeatmap res){
 		// TODO: Implement this method
 		Log.v("beatmap-data",res.getDifficulty().makeString());
 		if(res instanceof StdPlayingBeatmap){
@@ -61,7 +61,7 @@ public class StdPlayField extends PlayField
 			throw new IllegalArgumentException("you can only apply a StdPlayingBeatmap to StdPlayField");
 		}
 	}
-	
+
 	protected void drawBackgroundLayer(BaseCanvas canvas){
 		DrawableStdHitObject obj;
 		for(int i=drawableHitObjects.getObjectsInField().size()-1;i>=0;i--){
@@ -84,7 +84,7 @@ public class StdPlayField extends PlayField
 		}
 		canvas.disablePost();
 	}
-	
+
 	protected void drawConnectionLayer(BaseCanvas canvas){
 		DrawableStdHitObject obj;
 		//canvas.enablePost();
@@ -94,7 +94,7 @@ public class StdPlayField extends PlayField
 		}
 		//canvas.disablePost();
 	}
-	
+
 	protected void drawApproachCircleLayer(BaseCanvas canvas){
 		DrawableStdHitObject obj;
 		canvas.enablePost();
@@ -106,9 +106,9 @@ public class StdPlayField extends PlayField
 		}
 		canvas.disablePost();
 	}
-	
+
 	private void drawTestLayer(BaseCanvas canvas){
-		
+
 		List<DrawableStdHitObject> l=drawableHitObjects.getObjectsInField();
 		GLPaint paint=new GLPaint();
 		//paint.setColorMixRate(1);
@@ -127,15 +127,15 @@ public class StdPlayField extends PlayField
 			}
 		}
 	}
-	
+
 	@Override
-	public void draw(BaseCanvas canvas) {
+	public void draw(BaseCanvas canvas){
 		// TODO: Implement this method
 		int curTime=(int)timeline.frameTime();
 		//添加新的物件
 		drawableHitObjects.prepareToDraw(curTime);
 		connectionDrawables.prepareToDraw(curTime);
-		
+
 		drawBackgroundLayer(canvas);
 		drawConnectionLayer(canvas);
 		drawContentLayer(canvas);
@@ -150,34 +150,34 @@ public class StdPlayField extends PlayField
 		private List<DrawableStdHitObject> hitObjectsInField=new ArrayList<DrawableStdHitObject>();
 
 		private int savedIndex=0;
-		
+
 		public FieldDrawables(){
-			
+
 		}
 
-		
-		
-		public void setObjectsInField(List<DrawableStdHitObject> hitObjectsInField) {
+
+
+		public void setObjectsInField(List<DrawableStdHitObject> hitObjectsInField){
 			this.hitObjectsInField=hitObjectsInField;
 		}
 
-		public List<DrawableStdHitObject> getObjectsInField() {
+		public List<DrawableStdHitObject> getObjectsInField(){
 			return hitObjectsInField;
 		}
 
-		public void setObjects(List<DrawableStdHitObject> drawableHitObjects) {
+		public void setObjects(List<DrawableStdHitObject> drawableHitObjects){
 			this.drawableHitObjects=drawableHitObjects;
 		}
 
-		public List<DrawableStdHitObject> getObjects() {
+		public List<DrawableStdHitObject> getObjects(){
 			return drawableHitObjects;
 		}
-		
+
 		public void prepareToDraw(int curTime){
 			pullNewAdded(curTime);
 			deleteFinished();
 		}
-		
+
 		private void showHitObject(DrawableStdHitObject obj){
 			hitObjectsInField.add(obj);
 			obj.onShow();
@@ -191,16 +191,16 @@ public class StdPlayField extends PlayField
 		private void pullNewAdded(int curTime){
 			DrawableStdHitObject obj;
 			/*
-			while(hitObjects.hasNext()){
-				obj=hitObjects.next();
-				if(obj.getShowTime()<=curTime){
-					showHitObject(obj);
-					hitObjects.next();
-				}else{
-					break;
-				}
-			}
-			*/
+			 while(hitObjects.hasNext()){
+			 obj=hitObjects.next();
+			 if(obj.getShowTime()<=curTime){
+			 showHitObject(obj);
+			 hitObjects.next();
+			 }else{
+			 break;
+			 }
+			 }
+			 */
 			for(;savedIndex<drawableHitObjects.size();savedIndex++){
 				obj=drawableHitObjects.get(savedIndex);
 				if(obj.getShowTime()<=curTime){
@@ -222,6 +222,6 @@ public class StdPlayField extends PlayField
 				}
 			}
 		}
-		
+
 	}
 }

@@ -5,7 +5,7 @@ package com.edplan.framework.ui.layout;
  */
 public class Orientation
 {
-	public static final int DIRECTION_LEFT_BITS=0;
+	public static final int DIRECTION_LEFT_BITS=4;
 	
 	public static final int HORIZON_MASK=(1<<DIRECTION_LEFT_BITS)-1;
 	

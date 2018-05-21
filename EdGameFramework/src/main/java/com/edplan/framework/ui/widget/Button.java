@@ -6,7 +6,5 @@ public class Button
 	
 	public static class ButtonInterface{
 		
-		
-		
 	}
 }

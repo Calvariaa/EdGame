@@ -17,6 +17,8 @@ import com.edplan.nso.resource.OsuSkin;
 import com.edplan.nso.ruleset.std.objects.StdSlider;
 import com.edplan.nso.ruleset.std.playing.drawable.DrawableStdSlider;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
+import com.edplan.framework.math.RectF;
+import com.edplan.framework.ui.text.font.drawing.TextPrinter;
 
 public class SliderBody extends BasePiece
 {
@@ -34,6 +36,18 @@ public class SliderBody extends BasePiece
 		super(c,t);
 		this.slider=(StdSlider)sld.getHitObject();
 		sliderPath=sld.getPath();
+	}
+	
+	public void applyStackOffset(float offset){
+		/*
+		sliderPath.translate(offset,offset);
+		sliderPath.measure();
+		sliderPath.bufferLength((float)slider.getPixelLength());
+		if(sliderBuffered!=null){
+			sliderBuffered.setArea(sliderPath.getDrawArea());
+			sliderBuffered.postUpdate();
+		}
+		*/
 	}
 	
 	public Vec2 getCurrentHeadPoint(){
@@ -177,6 +191,20 @@ public class SliderBody extends BasePiece
 
 		public GLTexture getSliderPathTexture() {
 			return sliderPathTexture;
+		}
+
+		@Override
+		public void draw(BaseCanvas canvas){
+			// TODO: Implement this method
+			super.draw(canvas);
+			//canvas.drawTexture(GLTexture.White,getArea(),Color4.gray(0.3f),0.5f);
+			//Vec2 startPoint=getArea().getTopLeft();
+			/*
+			TextPrinter printer=new TextPrinter(startPoint.x,startPoint.y+30);
+			printer.setTextSize(30);
+			printer.printString(slider.getSliderIndex()+"");
+			printer.draw(canvas);
+			*/
 		}
 
 		@Override

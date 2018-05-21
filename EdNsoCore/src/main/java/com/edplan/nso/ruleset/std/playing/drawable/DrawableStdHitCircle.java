@@ -56,6 +56,15 @@ public class DrawableStdHitCircle extends DrawableStdHitObject implements IHasAp
 	}
 
 	@Override
+	public void onApplyStackHeight(){
+		// TODO: Implement this method
+		super.onApplyStackHeight();
+		circlePiece.setOrigin(getStackedStartPoint());
+		comboPiece.setOrigin(getStackedStartPoint());
+		approachCircle.setOrigin(getStackedStartPoint());
+	}
+
+	@Override
 	public void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
 		super.draw(canvas);

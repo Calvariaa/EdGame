@@ -71,7 +71,7 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 	@Override
 	public Vec2 getEndPoint() {
 		// TODO: Implement this method
-		return endPoint;
+		return endPoint.copy();
 	}
 
 	@Override
@@ -88,6 +88,7 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 		StdSliderPathMaker maker=new StdSliderPathMaker(slider.getPath());
 		maker.setBaseSize(getBaseSize());
 		path=maker.calculatePath();
+		
 		path.measure();
 		path.bufferLength((float)slider.getPixelLength());
 		endPoint=(slider.getRepeat()%2==1)?path.getMeasurer().atLength((float)slider.getPixelLength()):new Vec2(slider.getStartX(),slider.getStartY());
@@ -104,6 +105,13 @@ public class DrawableStdSlider extends DrawableStdHitObject implements IHasAppro
 		
 		comboPiece=new ComboIndexPiece(getContext(),beatmap.getTimeLine(),getComboIndex());
 		applyPiece(comboPiece,beatmap);
+	}
+
+	@Override
+	public void onApplyStackHeight(){
+		// TODO: Implement this method
+		super.onApplyStackHeight();
+		if(body!=null)body.applyStackOffset(getStackOffset());
 	}
 
 	@Override

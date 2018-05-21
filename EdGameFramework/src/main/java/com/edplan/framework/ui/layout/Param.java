@@ -9,6 +9,7 @@ public class Param{
 	public static final int MATCH_PARENT=1;
 	public static final int WRAP_CONTENT=2;
 
+	public static final long MODE_WRAP_CONTENT=((long)WRAP_CONTENT)<<SHIFT_SIZE;
 	public static final long MODE_MATCH_PARENT=((long)MATCH_PARENT)<<SHIFT_SIZE;
 
 	public static long intToLongMode(int mode){

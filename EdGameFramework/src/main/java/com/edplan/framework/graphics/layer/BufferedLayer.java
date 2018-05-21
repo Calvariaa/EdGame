@@ -97,6 +97,7 @@ public class BufferedLayer
 
 	public void setWidth(int width) {
 		checkBind("setWidth",false);
+		if(width<=0)width=1;
 		this.width=width;
 	}
 
@@ -106,6 +107,7 @@ public class BufferedLayer
 
 	public void setHeight(int height) {
 		checkBind("setHeight",false);
+		if(height<=0)height=1;
 		this.height=height;
 	}
 

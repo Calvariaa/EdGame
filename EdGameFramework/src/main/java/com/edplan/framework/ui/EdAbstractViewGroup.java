@@ -25,6 +25,44 @@ public abstract class EdAbstractViewGroup extends EdView
 		children=new EdView[1];
 	}
 
+	private float paddingLeft,paddingTop,paddingRight,paddingBottom;
+
+	public void setPaddingLeft(float paddingLeft){
+		this.paddingLeft=paddingLeft;
+	}
+
+	@Override
+	public float getPaddingLeft(){
+		return paddingLeft;
+	}
+
+	public void setPaddingTop(float paddingTop){
+		this.paddingTop=paddingTop;
+	}
+
+	@Override
+	public float getPaddingTop(){
+		return paddingTop;
+	}
+
+	public void setPaddingRight(float paddingRight){
+		this.paddingRight=paddingRight;
+	}
+
+	@Override
+	public float getPaddingRight(){
+		return paddingRight;
+	}
+
+	public void setPaddingBottom(float paddingBottom){
+		this.paddingBottom=paddingBottom;
+	}
+
+	@Override
+	public float getPaddingBottom(){
+		return paddingBottom;
+	}
+	
 	public EdLayoutParam getDefaultParam(EdView view){
 		// TODO: Implement this method
 		final EdLayoutParam param=view.getLayoutParam();
@@ -61,7 +99,7 @@ public abstract class EdAbstractViewGroup extends EdView
 	}
 	
 	@Override
-	protected final void layout(float left,float top,float right,float bottom) {
+	public final void layout(float left,float top,float right,float bottom) {
 		// TODO: Implement this method
 		if(transition==null||!transition.isChangingLayout()){
 			if(transition!=null){
@@ -187,12 +225,33 @@ public abstract class EdAbstractViewGroup extends EdView
 		}
 	}
 	
+	protected float getDefaultMaxChildrenMeasuredWidthWithMargin(){
+		final int count=getChildrenCount();
+		float m=0;
+		for(int i=0;i<count;i++){
+			final EdView v=getChildAt(i);
+			m=Math.max(v.getMeasuredWidth()+v.getMarginHorizonIfHas(),m);
+		}
+		return m;
+	}
+	
 	protected float getDefaultMaxChildrenMeasuredWidth(){
 		final int count=getChildrenCount();
 		float m=0;
 		for(int i=0;i<count;i++){
 			final EdView v=getChildAt(i);
 			m=Math.max(v.getMeasuredWidth(),m);
+		}
+		return m;
+	}
+	
+	
+	protected float getDefaultMaxChildrenMeasuredHeightWithMargin(){
+		final int count=getChildrenCount();
+		float m=0;
+		for(int i=0;i<count;i++){
+			final EdView v=getChildAt(i);
+			m=Math.max(v.getMeasuredHeight()+v.getMarginVerticalIfHas(),m);
 		}
 		return m;
 	}
@@ -269,8 +328,12 @@ public abstract class EdAbstractViewGroup extends EdView
 		}
 	}
 	
+	public EdLayoutParam adjustParam(EdView view,EdLayoutParam param){
+		return param;
+	}
+	
 	public void addView(EdView view,EdLayoutParam param){
-		view.setLayoutParam(param);
+		view.setLayoutParam(adjustParam(view,param));
 		addView(view);
 	}
 	

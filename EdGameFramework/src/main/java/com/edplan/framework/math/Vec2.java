@@ -71,6 +71,10 @@ public class Vec2 implements Interplateable<Vec2>,IVec2
 		set(v.x,v.y);
 	}
 	
+	public Vec2 add(float a){
+		return add(a,a);
+	}
+	
 	public Vec2 add(Vec2 v){
 		return add(v.x,v.y);
 	}

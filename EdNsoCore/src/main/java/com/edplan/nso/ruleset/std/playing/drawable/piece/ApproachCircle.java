@@ -51,7 +51,7 @@ public class ApproachCircle extends BasePiece
 			// TODO: Implement this method
 			float fp=AnimationHelper.getFloatProgress(p,getDuration());
 			//p/(float)getDuration();
-			float s=4.5f*(1-fp)+1.0f*fp;
+			float s=4f*(1-fp)+1.0f*fp;
 			setScale(s,s);
 		}
 

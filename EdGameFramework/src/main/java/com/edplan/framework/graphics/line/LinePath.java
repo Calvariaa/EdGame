@@ -77,10 +77,7 @@ public class LinePath implements AbstractPath
 		for(Vec2 v:positions){
 			v.add(dx,dy);
 		}
-		maxX+=dx;
-		minX+=dx;
-		maxY+=dy;
-		minY+=dy;
+		recomputeBounds();
 	}
 
 	@Override

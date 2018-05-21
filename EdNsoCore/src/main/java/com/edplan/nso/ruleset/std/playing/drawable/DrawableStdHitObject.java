@@ -35,11 +35,27 @@ public class DrawableStdHitObject extends DrawableHitObject
 	private Color4 accentColor=Color4.rgba(1,1,1,1);
 	
 	private int comboIndex=1;
+	
+	private float stackHeight;
+	
+	private float baseScale=1;
 
 	public DrawableStdHitObject(MContext c,StdHitObject obj){
 		super(c);
 		hitObject=obj;
 		setOrigin(new Vec2(obj.getStartX(),obj.getStartY()));
+	}
+
+	public float getStackOffset(){
+		return getStackHeight()*baseScale*-6.4f;
+	}
+	
+	public void setStackHeight(float stackHeight){
+		this.stackHeight=stackHeight;
+	}
+
+	public float getStackHeight(){
+		return stackHeight;
 	}
 
 	public void setComboIndex(int comboIndex) {
@@ -60,6 +76,14 @@ public class DrawableStdHitObject extends DrawableHitObject
 	
 	public int getObjPredictedEndTime(){
 		return getObjStartTime();
+	}
+	
+	public Vec2 getStackedStartPoint(){
+		return getStartPoint().add(getStackOffset());
+	}
+	
+	public Vec2 getStackedEndPoint(){
+		return getEndPoint().add(getStackOffset());
 	}
 	
 	public Vec2 getStartPoint(){
@@ -100,6 +124,7 @@ public class DrawableStdHitObject extends DrawableHitObject
 
 	public void setBaseSize(float baseSize) {
 		this.baseSize=baseSize;
+		baseScale=baseSize/64;
 	}
 
 	public float getBaseSize() {
@@ -130,9 +155,13 @@ public class DrawableStdHitObject extends DrawableHitObject
 	
 	protected void applyPiece(BasePiece p,PlayingBeatmap beatmap){
 		p.setAccentColor(getAccentColor());
-		p.setOrigin(getOrigin());
+		p.setOrigin(getStackedStartPoint());
 		p.setBaseSize(getBaseSize());
 		p.setSkin(beatmap.getSkin());
+	}
+	
+	public void onApplyStackHeight(){
+		
 	}
 	
 	/**

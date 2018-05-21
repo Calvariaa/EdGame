@@ -10,16 +10,30 @@ public class MeasureCore
 		long parentWidthSpec,long parentHeightSpec,
 		float widthUsed,float heightUsed
 	){
-		final MarginLayoutParam param=(MarginLayoutParam)view.getLayoutParam();
-		final long widthSpec=getChildMeasureSpec(
-			parentWidthSpec,
-			paddingHorizon+param.getMarginHorizon()+widthUsed,
-			param.width);
-		final long heightSpec=getChildMeasureSpec(
-			parentHeightSpec,
-			paddingVertical+param.getMarginVertical()+heightUsed,
-			param.height);
-		view.measure(widthSpec,heightSpec);
+		final EdLayoutParam param=view.getLayoutParam();
+		if(param instanceof MarginLayoutParam){
+			final MarginLayoutParam mparam=(MarginLayoutParam)param;
+			final long widthSpec=getChildMeasureSpec(
+				parentWidthSpec,
+				paddingHorizon+mparam.getMarginHorizon()+widthUsed,
+				param.width);
+			final long heightSpec=getChildMeasureSpec(
+				parentHeightSpec,
+				paddingVertical+mparam.getMarginVertical()+heightUsed,
+				param.height);
+			view.measure(widthSpec,heightSpec);
+		}else{
+			final long widthSpec=getChildMeasureSpec(
+				parentWidthSpec,
+				paddingHorizon+widthUsed,
+				param.width);
+			final long heightSpec=getChildMeasureSpec(
+				parentHeightSpec,
+				paddingVertical+heightUsed,
+				param.height);
+			view.measure(widthSpec,heightSpec);
+		}
+		
 	}
 	
 	public static void measureChild(
