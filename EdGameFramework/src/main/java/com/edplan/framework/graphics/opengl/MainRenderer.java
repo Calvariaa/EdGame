@@ -85,30 +85,36 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 			tmer.initial();
 			initialCount++;
 			Log.v("gl_initial","initial id: "+initialCount);
+			//context.toast("SurfaceCreate");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
 	
+	boolean hasCreate=false;
 	@Override
 	public void onSurfaceChanged(GL10 p1,int width,int heigth) {
 		// TODO: Implement this method
+		//context.toast("SurfaceChange ["+width+","+heigth+"] "+id);
+		//System.out.println("SurfaceChange ["+width+","+heigth+"] "+id);
 		context.setDisplaySize(width,heigth);
 		viewRoot.onChange(width,heigth);
+		
 		rootLayer=new DefBufferedLayer(context,width,heigth);
 		rootLayer.checkChange();
 		rootLayer.prepare();
 		
-		app.onGLCreate();
-		
-		for(int i=0;i<10;i++){
-			BufferedLayer.DEF_FBOPOOL.saveFBO(FrameBufferObject.create(1000,1000,true));
+		if(!hasCreate){
+			hasCreate=true;
+			app.onGLCreate();
+			for(int i=0;i<10;i++){
+				BufferedLayer.DEF_FBOPOOL.saveFBO(FrameBufferObject.create(1000,1000,true));
+			}
+			viewRoot.setContentView(createContentView(context));
+			viewRoot.getContentView().onCreate();
 		}
-		viewRoot.setContentView(createContentView(context));
-		viewRoot.getContentView().onCreate();
 		
-		Log.v("ini-log","ini-scr: "+width+":"+heigth);
+		//Log.v("ini-log","ini-scr: "+width+":"+heigth);
 	}
 
 	float a=0;
