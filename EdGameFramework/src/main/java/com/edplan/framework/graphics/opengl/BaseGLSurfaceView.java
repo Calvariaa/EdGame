@@ -32,8 +32,9 @@ public class BaseGLSurfaceView extends GLSurfaceView
 		this.setEGLConfigChooser(new MSAAConfig());
 		mRenderer=r;
 		mRenderer.setGlVersion(2);
+		mRenderer.register(this);
 		this.setRenderer(mRenderer);
-		if(mRenderer instanceof OnTouchListener)this.setOnTouchListener((OnTouchListener)mRenderer);
+		//if(mRenderer instanceof OnTouchListener)this.setOnTouchListener((OnTouchListener)mRenderer);
 		this.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
 	}
 
@@ -42,6 +43,7 @@ public class BaseGLSurfaceView extends GLSurfaceView
 		// TODO: Implement this method
 		//Log.v("thread","touch-thread: "+Thread.currentThread());
 		TestStaticData.touchPosition.set(event.getX(),event.getY());
+		mRenderer.onTouch(this,event);
 		return true;
 	}
 	

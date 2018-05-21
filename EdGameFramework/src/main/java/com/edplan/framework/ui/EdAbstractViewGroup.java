@@ -97,6 +97,7 @@ public abstract class EdAbstractViewGroup extends EdView
 		dispatchDraw(canvas);
 	}
 	
+	/*
 	private int holdingPointer=-1;
 	private EdView viewUsingPointer;
 	
@@ -104,82 +105,64 @@ public abstract class EdAbstractViewGroup extends EdView
 		holdingPointer=-1;
 		viewUsingPointer=null;
 	}
+	*/
+	
+	private PointerHolder holder;
 	
 	protected boolean dispatchMotionEvent(EdMotionEvent event){
+		if(holder==null)holder=new PointerHolder();
+		if(holder.ifIgnore(event))return false;
+		
 		boolean useevent=false;
+		/*
 		//暂时只支持单点触控
 		if(holdingPointer!=-1&&holdingPointer!=event.getPointerId()){
 			return false;
 		}
+		*/
+		final float x=event.getX(),y=event.getY();
+		final EdView viewUsingPointer=holder.getHoldingView(event);
+		if(viewUsingPointer!=null){
+			if(viewUsingPointer.getParent()!=this){
+				//已经不在这个ViewGroup中了
+				holder.clearPointerInfo(event);
+				return false;
+			}
+		}
+		event.transform(-getLeft(),-getTop());
 		switch(event.getEventType()){
 			case Down:
 				final int count=getChildrenCount();
 				for(int i=count-1;i>=0;i--){
 					final EdView view=getChildAt(i);
-					if(RectF.inLTRB(event.getX(),event.getY(),view.getLeft(),view.getTop(),view.getRight(),view.getBottom())){
-						final float x=event.getX(),y=event.getY();
-						event.transform(view.getLeft(),view.getTop());
+					if(view.inViewBound(event.getX(),event.getY())){
 						if(view.onMotionEvent(event)){
 							useevent=true;
-							holdingPointer=event.getPointerId();
-							viewUsingPointer=view;
+							holder.setHoldingView(event,view);
 							break;
 						}
-						event.setEventPosition(x,y);
 					}
 				}
 				break;
 			case Move:
-				if(viewUsingPointer!=null){
-					if(viewUsingPointer.getParent()!=this){
-						//已经不在这个ViewGroup中了
-						clearPointerInfo();
-						return false;
-					}
-					final float x=event.getX(),y=event.getY();
-					event.transform(viewUsingPointer.getLeft(),viewUsingPointer.getTop());
-					useevent=viewUsingPointer.onMotionEvent(event);
-					event.setEventPosition(x,y);
-				}
+				useevent=viewUsingPointer.onMotionEvent(event);
 				break;
 			case Up:
-				if(viewUsingPointer!=null){
-					if(viewUsingPointer.getParent()!=this){
-						//已经不在这个ViewGroup中了
-						clearPointerInfo();
-						return false;
-					}
-					final float x=event.getX(),y=event.getY();
-					event.transform(viewUsingPointer.getLeft(),viewUsingPointer.getTop());
-					useevent=viewUsingPointer.onMotionEvent(event);
-					event.setEventPosition(x,y);
-					clearPointerInfo();
-				}
+				useevent=viewUsingPointer.onMotionEvent(event);
+				holder.clearPointerInfo(event);
 				break;
 			case Cancel:
-				if(viewUsingPointer!=null){
-					if(viewUsingPointer.getParent()!=this){
-						//已经不在这个ViewGroup中了
-						clearPointerInfo();
-						return false;
-					}
-					final float x=event.getX(),y=event.getY();
-					event.transform(viewUsingPointer.getLeft(),viewUsingPointer.getTop());
-					useevent=viewUsingPointer.onMotionEvent(event);
-					event.setEventPosition(x,y);
-					clearPointerInfo();
-				}
+				useevent=viewUsingPointer.onMotionEvent(event);
+				holder.clearPointerInfo(event);
 				break;
 		}
+		event.setEventPosition(x,y);
 		return useevent;
 	}
 
 	@Override
 	public boolean onMotionEvent(EdMotionEvent e){
 		// TODO: Implement this method
-		
-		
-		
 		if(!dispatchMotionEvent(e)){
 			return super.onMotionEvent(e);
 		}else{
@@ -275,6 +258,7 @@ public abstract class EdAbstractViewGroup extends EdView
 	}
 	
 	protected void addToList(EdView v){
+		v.setParent(this);
 		if(idx>=children.length){
 			children=Arrays.copyOf(children,children.length*3/2+1);
 		}
@@ -297,4 +281,33 @@ public abstract class EdAbstractViewGroup extends EdView
 		addToList(view);
 	}
 	
+	public class PointerHolder{
+		public EdView[] holdingView=new EdView[EdMotionEvent.MAX_POINTER];
+		//public boolean[] handlePointer=new boolean[EdMotionEvent.MAX_POINTER];
+		
+		public PointerHolder(){
+			//Arrays.fill(handlePointer,false);
+		}
+		
+		public void setHoldingView(EdMotionEvent e,EdView view){
+			holdingView[e.getPointerId()]=view;
+		}
+		
+		public boolean ifIgnore(EdMotionEvent e){
+			if(e.getEventType()!=EdMotionEvent.EventType.Down){
+				if(holdingView[e.getPointerId()]==null)return true;
+				return false;
+			}else{
+				return false;
+			}
+		}
+		
+		public EdView getHoldingView(EdMotionEvent e){
+			return holdingView[e.getPointerId()];
+		}
+		
+		public void clearPointerInfo(EdMotionEvent e){
+			holdingView[e.getPointerId()]=null;
+		}
+	}
 }

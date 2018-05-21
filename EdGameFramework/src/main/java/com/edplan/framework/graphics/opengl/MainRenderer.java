@@ -56,6 +56,10 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 		return rootLayer;
 	}
 
+	public void register(BaseGLSurfaceView view){
+		context.setHoldingView(view);
+	}
+	
 	@Override
 	public boolean onTouch(View p1,MotionEvent e) {
 		// TODO: Implement this method

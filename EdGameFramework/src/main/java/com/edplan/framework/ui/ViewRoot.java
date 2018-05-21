@@ -153,9 +153,10 @@ public class ViewRoot
 
 		public void postSingleEvent(EdMotionEvent event){
 			if(contentView==null)return;
+			//context.toast(event.toString());
+			//System.out.println(event.toString());
 			if(contentView.onMotionEvent(event)){
 				//事件被直接拦截，直接交给内容view处理
-				
 			}
 			
 			switch(event.eventType){

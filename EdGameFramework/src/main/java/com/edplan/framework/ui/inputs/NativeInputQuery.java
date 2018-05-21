@@ -17,7 +17,7 @@ public class NativeInputQuery
 	
 	public void postEvent(MotionEvent raw){
 		synchronized(this){
-			eventQuery1.add(load(raw));
+			eventQuery1.addAll(load(raw));
 		}
 	}
 	
@@ -36,13 +36,38 @@ public class NativeInputQuery
 		eventQuery2=q;
 	}
 	
-	public EdMotionEvent load(MotionEvent raw){
-		EdMotionEvent event=new EdMotionEvent();
-		event.eventPosition.set(raw.getX(),raw.getY());
-		event.eventType=EdMotionEvent.parseType(raw.getActionMasked());
-		event.pointerId=raw.getPointerId(raw.getActionIndex());
-		event.rawType=RawType.TouchScreen;
-		event.time=context.getUiLooper().calTimeOverThread(raw.getEventTime());
-		return event;
+	public List<EdMotionEvent> load(MotionEvent raw){
+		if(raw.getPointerId(raw.getActionIndex())>=EdMotionEvent.MAX_POINTER){
+			//不对过多点做反应
+			return new ArrayList<EdMotionEvent>();
+		}
+		List<EdMotionEvent> events=new ArrayList<EdMotionEvent>();
+		EdMotionEvent.EventType eventType=EdMotionEvent.parseType(raw.getActionMasked());
+		if(eventType==EdMotionEvent.EventType.Move){
+			for(int idx=0;idx<raw.getPointerCount();idx++){
+				final EdMotionEvent event=new EdMotionEvent();
+				final int id=raw.getPointerId(idx);
+				event.eventType=eventType;
+				event.pointerId=id;
+				event.eventPosition.set(raw.getX(idx),raw.getY(idx));
+				event.rawType=RawType.TouchScreen;
+				event.pointCount=raw.getPointerCount();
+				event.time=context.getUiLooper().calTimeOverThread(raw.getEventTime());
+				events.add(event);
+			}
+		}else{
+			final EdMotionEvent event=new EdMotionEvent();
+			final int idx=raw.getActionIndex();
+			final int id=raw.getPointerId(idx);
+			event.eventType=eventType;
+			event.pointerId=id;
+			event.eventPosition.set(raw.getX(idx),raw.getY(idx));
+			event.rawType=RawType.TouchScreen;
+			event.pointCount=raw.getPointerCount();
+			event.time=context.getUiLooper().calTimeOverThread(raw.getEventTime());
+			events.add(event);
+		}
+		
+		return events;
 	}
 }

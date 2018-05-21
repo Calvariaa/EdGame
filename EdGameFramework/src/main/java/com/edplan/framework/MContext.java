@@ -13,6 +13,8 @@ import com.edplan.framework.ui.looper.UILooper;
 import com.edplan.superutils.classes.advance.IRunnableHandler;
 import com.edplan.framework.ui.looper.UIStep;
 import com.edplan.framework.ui.ViewRoot;
+import com.edplan.framework.graphics.opengl.BaseGLSurfaceView;
+import android.widget.Toast;
 
 public class MContext
 {
@@ -30,6 +32,8 @@ public class MContext
 	
 	private Context androidContext;
 	
+	private BaseGLSurfaceView holdingView;
+	
 	private ApplicationAssetResource assetResource;
 	
 	private int step;
@@ -43,6 +47,26 @@ public class MContext
 	public MContext(Context androidContext){
 		this.androidContext=androidContext;
 		//initial();
+	}
+	
+	public void toast(final String msg){
+		if(holdingView!=null){
+			holdingView.post(new Runnable(){
+					@Override
+					public void run(){
+						// TODO: Implement this method
+						Toast.makeText(androidContext,msg,Toast.LENGTH_SHORT).show();
+					}
+				});
+		}
+	}
+
+	public void setHoldingView(BaseGLSurfaceView holdingView){
+		this.holdingView=holdingView;
+	}
+
+	public BaseGLSurfaceView getHoldingView(){
+		return holdingView;
 	}
 
 	public void setViewRoot(ViewRoot viewRoot){

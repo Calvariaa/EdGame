@@ -1,6 +1,7 @@
 package com.edplan.framework.ui;
 import com.edplan.framework.MContext;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
+import com.edplan.framework.math.RectF;
 import com.edplan.framework.ui.drawable.EdDrawable;
 import com.edplan.framework.ui.inputs.EdMotionEvent;
 import com.edplan.framework.ui.inputs.HoverEvent;
@@ -9,6 +10,8 @@ import com.edplan.framework.ui.layout.EdLayoutParam;
 import com.edplan.framework.ui.layout.EdMeasureSpec;
 import com.edplan.framework.ui.layout.LayoutException;
 import com.edplan.superutils.classes.advance.IRunnableHandler;
+import com.edplan.framework.utils.BitUtil;
+import com.edplan.framework.math.Vec2;
 
 public class EdView implements IRunnableHandler
 {
@@ -336,12 +339,63 @@ public class EdView implements IRunnableHandler
 		return hasChanged;
 	}
 	
+	
+	private ClickChecker clickChecker;
+	protected boolean handleClick(EdMotionEvent event){
+		if(clickChecker==null)clickChecker=new ClickChecker();
+		if(!clickChecker.checkPointer(event)){
+			return false;
+		}
+		switch(event.getEventType()){
+			case Down:
+				clickChecker.down(event);
+				return true;
+			case Move:
+				clickChecker.move(event);
+				return true;
+			case Up:
+				clickChecker.up(event);
+				return true;
+			case Cancel:
+				clickChecker.cancel();
+				return true;
+		}
+		return true;
+	}
+	
+	private ScrollChecker scrollChecker;
+	
+	protected int handleScroll(EdMotionEvent e){
+		if(scrollChecker==null)scrollChecker=new ScrollChecker();
+		return scrollChecker.handleEvent(e);
+	}
+	
 	/**
-	 *处理原始点击事件
+	 *处理原始点击事件，重写后可能使对clickable,longclickable和scrollFlag的设置失效
 	 */
 	public boolean onMotionEvent(EdMotionEvent e){
-		
-		return false;
+		boolean result=false;
+		if(scrollableFlag!=0){
+			switch(handleScroll(e)){
+				case ScrollChecker.STATE_PASS:
+					break;
+				case ScrollChecker.STATE_CHECKING:
+					result=true;
+					break;
+				case ScrollChecker.STATE_INTERCEPT:
+					e.setEventType(EdMotionEvent.EventType.Cancel);
+					result=true;
+					break;
+				case ScrollChecker.STATE_HANDLING:
+					return true;
+				case ScrollChecker.STATE_CANCELED:
+					break;
+			}
+		}
+		if(clickable){
+			result|=handleClick(e);
+		}
+		return result;
 	}
 	
 	/**
@@ -359,26 +413,26 @@ public class EdView implements IRunnableHandler
 	/**
 	 *点击事件开始时被调用，只有被设置为clickable=true才会被调用
 	 */
-	public boolean onStartClick(){
-		return false;
+	public void onStartClick(){
+		
 	}
 	
 	/**
 	 *对应点击事件被触发
 	 */
-	public boolean onClickEvent(){
-		return false;
+	public void onClickEvent(){
+		
 	}
 
 	/**
 	 *对应长摁事件被触发
 	 */
-	public boolean onLongClickEvent(){
-		return false;
+	public void onLongClickEvent(){
+		
 	}
 	
-	public boolean onClickEventCancel(){
-		return false;
+	public void onClickEventCancel(){
+		
 	}
 
 	/**
@@ -386,5 +440,208 @@ public class EdView implements IRunnableHandler
 	 */
 	public boolean onScroll(ScrollEvent event){
 		return false;
+	}
+	
+	public boolean inViewBound(float x,float y){
+		return RectF.inLTRB(x,y,getLeft(),getTop(),getRight(),getBottom());
+	}
+	
+	public class ScrollChecker{
+		public static final int STATE_PASS=0;
+		public static final int STATE_CHECKING=1;
+		public static final int STATE_INTERCEPT=3;
+		public static final int STATE_HANDLING=4;
+		public static final int STATE_CANCELED=5;
+		
+		private int holdingPointer=-1;
+		private float preX,preY;
+		private float startX,startY;
+		private boolean isScrolling=false;
+		
+		public void clearPointerData(){
+			holdingPointer=-1;
+			preX=0;
+			preY=0;
+			startX=0;
+			startY=0;
+			isScrolling=false;
+		}
+		
+		public boolean checkPointer(EdMotionEvent event){
+			if(holdingPointer==-1){
+				return event.getEventType()==EdMotionEvent.EventType.Down;
+			}else{
+				return event.getPointerId()==holdingPointer;
+			}
+		}
+		
+		public int handleEvent(EdMotionEvent event){
+			if(!checkPointer(event)){
+				return STATE_PASS;
+			}
+			switch(event.getEventType()){
+				case Down:
+					holdingPointer=event.getPointerId();
+					startX=event.getX();
+					startY=event.getY();
+					preX=event.getX();
+					preY=event.getY();
+					return STATE_CHECKING;
+				case Move:
+					if(isScrolling){
+						ScrollEvent se=new ScrollEvent();
+						se.setState(ScrollEvent.STATE_SCROLLING);
+						if(BitUtil.match(scrollableFlag,ScrollEvent.DIRECTION_HORIZON)){
+							se.addScrollFlag(ScrollEvent.DIRECTION_HORIZON);
+							se.setScrollX(event.getX()-preX);
+						}
+						if(BitUtil.match(scrollableFlag,ScrollEvent.DIRECTION_VERTICAL)){
+							se.addScrollFlag(ScrollEvent.DIRECTION_VERTICAL);
+							se.setScrollY(event.getY()-preY);
+						}
+						preX=event.getX();
+						preY=event.getY();
+						onScroll(se);
+						return STATE_HANDLING;
+					}else{
+						boolean startScroll=false;
+						ScrollEvent se=null;
+						if(BitUtil.match(scrollableFlag,ScrollEvent.DIRECTION_HORIZON)){
+							if(Math.abs(event.getX()-startX)>ViewConfiguration.START_SCROLL_OFFSET){
+								startScroll=true;
+								se=new ScrollEvent();
+								se.setState(ScrollEvent.STATE_START);
+								se.addScrollFlag(ScrollEvent.DIRECTION_HORIZON);
+								se.setScrollX(event.getX()-startX);
+							}
+						}
+						if(BitUtil.match(scrollableFlag,ScrollEvent.DIRECTION_VERTICAL)){
+							if(Math.abs(event.getY()-startY)>ViewConfiguration.START_SCROLL_OFFSET){
+								startScroll=true;
+								if(se==null){
+									se=new ScrollEvent();
+									se.setState(ScrollEvent.STATE_START);
+								}
+								se.addScrollFlag(ScrollEvent.DIRECTION_VERTICAL);
+								se.setScrollY(event.getY()-startY);
+							}
+						}
+						preX=event.getX();
+						preY=event.getY();
+						if(startScroll){
+							onScroll(se);
+							isScrolling=true;
+							return STATE_INTERCEPT;
+						}else{
+							return STATE_CHECKING;
+						}
+					}
+				case Up:
+					if(isScrolling){
+						ScrollEvent se=new ScrollEvent();
+						se.setState(ScrollEvent.STATE_END);
+						if(BitUtil.match(scrollableFlag,ScrollEvent.DIRECTION_HORIZON)){
+							se.addScrollFlag(ScrollEvent.DIRECTION_HORIZON);
+							se.setScrollX(event.getX()-preX);
+						}
+						if(BitUtil.match(scrollableFlag,ScrollEvent.DIRECTION_VERTICAL)){
+							se.addScrollFlag(ScrollEvent.DIRECTION_VERTICAL);
+							se.setScrollY(event.getY()-preY);
+						}
+						onScroll(se);
+						clearPointerData(); 
+						return STATE_HANDLING;
+					}else{
+						clearPointerData();
+						return STATE_PASS;
+					}
+				case Cancel:
+				default:
+					ScrollEvent se=new ScrollEvent();
+					se.setState(ScrollEvent.STATE_END);
+					if(BitUtil.match(scrollableFlag,ScrollEvent.DIRECTION_HORIZON)){
+						se.addScrollFlag(ScrollEvent.DIRECTION_HORIZON);
+						se.setScrollX(event.getX()-preX);
+					}
+					if(BitUtil.match(scrollableFlag,ScrollEvent.DIRECTION_VERTICAL)){
+						se.addScrollFlag(ScrollEvent.DIRECTION_VERTICAL);
+						se.setScrollY(event.getY()-preY);
+					}
+					onScroll(se);
+					clearPointerData();
+					getContext().toast("cancel by parent");
+					return STATE_CANCELED;
+			}
+		}
+	}
+	
+	public class ClickChecker{
+		private int clickPointer=-1;
+		private float downX,downY,currentX,currentY;
+		private double downTime;
+
+		public void clearPointerData(){
+			clickPointer=-1;
+			downX=0;
+			downY=0;
+			currentX=0;
+			currentY=0;
+			downTime=0;
+		}
+		
+		public boolean checkPointer(EdMotionEvent event){
+			if(clickPointer==-1){
+				return event.getEventType()==EdMotionEvent.EventType.Down;
+			}else{
+				return event.getPointerId()==clickPointer;
+			}
+		}
+		
+		public void down(EdMotionEvent event){
+			setPressed(true);
+			clickPointer=event.getPointerId();
+			downX=event.getX();
+			downY=event.getY();
+			currentX=event.getX();
+			currentY=event.getY();
+			downTime=event.getTime();
+			if(longclickable){
+				post(new Runnable(){
+						@Override
+						public void run(){
+							// TODO: Implement this method
+							if(isPressed()){
+								setPressed(false);
+								clearPointerData();
+								onLongClickEvent();
+							}
+						}
+					}, ViewConfiguration.LONGCLICK_DELAY_MS);
+			}
+		}
+		
+		public void move(EdMotionEvent event){
+			currentX=event.getX();
+			currentY=event.getY();
+			if(!inViewBound(currentX,currentY))
+			{
+				clearPointerData();
+				setPressed(false);
+				onClickEventCancel();
+				getContext().toast(event.getX()+":"+event.getY()+" "+getLeft()+":"+getTop()+":"+getRight()+":"+getBottom());
+			}
+		}
+		
+		public void up(EdMotionEvent event){
+			clearPointerData();
+			setPressed(false);
+			onClickEvent();
+		}
+		
+		public void cancel(){
+			clearPointerData();
+			setPressed(false);
+			onClickEventCancel();
+		}
 	}
 }

@@ -9,6 +9,8 @@ import android.view.MotionEvent;
  */
 public class EdMotionEvent
 {
+	public static final int MAX_POINTER=5;
+	
 	/**
 	 *记录事件对应原始输入的类型
 	 */
@@ -35,6 +37,14 @@ public class EdMotionEvent
 
 	public EdMotionEvent(EdMotionEvent event){
 		set(event);
+	}
+
+	public void setTime(double time){
+		this.time=time;
+	}
+
+	public double getTime(){
+		return time;
 	}
 	
 	public float getX(){
@@ -158,4 +168,10 @@ public class EdMotionEvent
 	public enum RawType{
 		TouchScreen,Tablet,Mouse
 		}
+
+	@Override
+	public String toString(){
+		// TODO: Implement this method
+		return "["+pointerId+"/"+pointCount+","+eventType+","+eventPosition+"]";
+	}
 }

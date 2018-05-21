@@ -26,6 +26,8 @@ import com.edplan.framework.ui.layout.EdLayoutParam;
 import com.edplan.framework.ui.layout.Param;
 import com.edplan.framework.ui.drawable.RectDrawable;
 import com.edplan.framework.main.MainApplication;
+import com.edplan.framework.ui.widget.TestButton;
+import com.edplan.framework.ui.widget.TestScroller;
 
 public class OsbRenderer extends MainRenderer
 {
@@ -48,6 +50,7 @@ public class OsbRenderer extends MainRenderer
 			param.height=Param.MODE_MATCH_PARENT;
 			layout.addView(view,param);
 		}
+		/*
 		{
 			RectDrawable drawable=new RectDrawable(c);
 			drawable.setColor(Color4.rgba(1,1,1,0.5f));
@@ -60,7 +63,27 @@ public class OsbRenderer extends MainRenderer
 			param.xoffset=500;
 			layout.addView(view,param);
 		}
-		
+		*/
+		{
+			TestButton button=new TestButton(c);
+			button.setName("testButton");
+			EdLayoutParam param=new EdLayoutParam();
+			param.width=Param.makeupParam(100);
+			param.height=Param.makeupParam(61.8f);
+			param.xoffset=100;
+			param.yoffset=100;
+			layout.addView(button,param);
+		}
+		{
+			TestScroller button=new TestScroller(c);
+			button.setName("testScroller");
+			EdLayoutParam param=new EdLayoutParam();
+			param.width=Param.makeupParam(100);
+			param.height=Param.MODE_MATCH_PARENT;
+			param.xoffset=0;
+			param.yoffset=0;
+			layout.addView(button,param);
+		}
 		return layout;
 	}
 }
