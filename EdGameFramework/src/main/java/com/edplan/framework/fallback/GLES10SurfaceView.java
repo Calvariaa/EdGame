@@ -10,23 +10,15 @@ import javax.microedition.khronos.egl.EGLDisplay;
 
 public class GLES10SurfaceView extends GLSurfaceView 
 {
+	
 	Renderer mRenderer;
+	
 
 	public GLES10SurfaceView(Context con){
 		super(con);
 		this.setEGLContextClientVersion(1);
 		this.setEGLConfigChooser(new MSAAConfig());
 		mRenderer=new GLES10MainRenderer(getContext(),1);
-		this.setRenderer(mRenderer);
-		if(mRenderer instanceof OnTouchListener)this.setOnTouchListener((OnTouchListener)mRenderer);
-		this.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-	}
-
-	public GLES10SurfaceView(Context con,MainRenderer r){
-		super(con);
-		this.setEGLContextClientVersion(2);
-		this.setEGLConfigChooser(new MSAAConfig());
-		mRenderer=r;
 		this.setRenderer(mRenderer);
 		if(mRenderer instanceof OnTouchListener)this.setOnTouchListener((OnTouchListener)mRenderer);
 		this.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);

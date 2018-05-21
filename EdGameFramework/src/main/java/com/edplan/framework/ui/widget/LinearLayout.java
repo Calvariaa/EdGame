@@ -26,9 +26,18 @@ public class LinearLayout extends EdAbstractViewGroup
 	protected void onLayout(boolean changed,float left,float top,float right,float bottom){
 		// TODO: Implement this method
 	}
+	
+	protected void measureVertical(long widthSpec,long heightSpec){
+		
+	}
 
 	@Override
 	protected void onMeasure(long widthSpec,long heightSpec){
 		// TODO: Implement this method
+		if(orientation==Orientation.DIRECTION_T2B){
+			measureVertical(widthSpec,heightSpec);
+		}else{
+			
+		}
 	}
 }

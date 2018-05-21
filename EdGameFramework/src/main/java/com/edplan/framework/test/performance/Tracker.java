@@ -15,12 +15,14 @@ public class Tracker
 	public static final String DRAW_UI="DRAW_UI";
 	public static final String INVALIDATE_MEASURE_AND_LAYOUT="INVALIDATE_MEASURE";
 	
+	public static final String TOTAL_FRAME_TIME="TOTAL_FRAME_TIME";
 	
 	public static final TrackNode DrawArray;
 	public static final TrackNode PrepareVertexData;
 	public static final TrackNode InjectData;
 	public static final TrackNode MainLooper;
 	public static final TrackNode DrawUI;
+	public static final TrackNode TotalFrameTime;
 	
 	public static final TrackNode InvalidateMeasureAndLayout;
 	
@@ -39,6 +41,7 @@ public class Tracker
 		
 		InvalidateMeasureAndLayout=register(INVALIDATE_MEASURE_AND_LAYOUT);
 		DrawUI=register(DRAW_UI);
+		TotalFrameTime=register(TOTAL_FRAME_TIME);
 	}
 	
 	public static TrackNode register(String name){

@@ -20,6 +20,8 @@ import com.edplan.framework.ui.EdView;
 import com.edplan.framework.test.performance.Tracker;
 import com.edplan.framework.ui.ViewRoot;
 import com.edplan.framework.main.MainApplication;
+import com.edplan.framework.Framework;
+import android.opengl.GLES20;
 
 public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 {
@@ -119,6 +121,7 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 		MLog.test.vOnce("thread","thread","draw-thread: "+Thread.currentThread());
 		tmer.refresh();
 		Tracker.reset();
+		Tracker.TotalFrameTime.watch();
 		GLWrapped.onFrame();
 		uiLooper.loop(tmer.getDeltaTime());
 		GLCanvas2D canvas=new GLCanvas2D(rootLayer);
@@ -129,6 +132,34 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 			viewRoot.onNewFrame(canvas,tmer.getDeltaTime());
 		}
 		canvas.unprepare();
+		GLES20.glFlush();
+		
+		Tracker.TotalFrameTime.end();
+		if(Tracker.TotalFrameTime.totalTimeMS<14.5){
+			try
+			{
+				double time=14.5-Tracker.TotalFrameTime.totalTimeMS;
+				Thread.currentThread().sleep((int)time,Framework.msToNm(time%1));
+			}
+			catch (InterruptedException e)
+			{}
+		}
+		//context.getHoldingView().forceRequestDraw();
 	}
-
+	
+	
+	public class LogClock{
+		double keyTime;
+		int idx;
+		
+		public void start(){
+			idx=0;
+			keyTime=Framework.relativePreciseTimeMillion();
+		}
+		
+		public void log(){
+			System.out.println(idx++ +":"+(Framework.relativePreciseTimeMillion()-keyTime));
+			keyTime=Framework.relativePreciseTimeMillion();
+		}
+	}
 }

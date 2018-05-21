@@ -9,6 +9,10 @@ public class Framework
 		return System.nanoTime()/1000000d;
 	}
 	
+	public static int msToNm(double ms){
+		return (int)(ms*1000000);
+	}
+	
 	public static long absoluteTimeMillion(){
 		return System.currentTimeMillis();
 	}
