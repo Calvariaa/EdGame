@@ -201,11 +201,38 @@ public abstract class EdAbstractViewGroup extends EdView
 	@Override
 	public boolean onMotionEvent(EdMotionEvent e){
 		// TODO: Implement this method
-		if(!dispatchMotionEvent(e)){
-			return super.onMotionEvent(e);
-		}else{
-			return true;
+		boolean result=false;
+		switch(handleScroll(e)){
+			case EVENT_FLAG_HANDLED:
+				return true;
+			case EVENT_FLAG_CHECKING:
+				result=true;
+				break;
+			case EVENT_FLAG_CANCELED:
+				result=true;
+				break;
+			case EVENT_FLAG_PASS:
+			default:
+				break;
 		}
+		
+		if(dispatchMotionEvent(e))return true;
+		
+		switch(handleClick(e)){
+			case EVENT_FLAG_HANDLED:
+				return true;
+			case EVENT_FLAG_CHECKING:
+				result=true;
+				break;
+			case EVENT_FLAG_CANCELED:
+				result=true;
+				break;
+			case EVENT_FLAG_PASS:
+			default:
+				break;
+		}
+
+		return result;
 	}
 	
 	protected void layoutChildren(float left,float top,float right,float bottom){
@@ -310,6 +337,17 @@ public abstract class EdAbstractViewGroup extends EdView
 			view,
 			getPaddingHorizon(),
 			getPaddingVertical(),
+			wspec,
+			hspec,
+			wused,
+			hused);
+	}
+	
+	protected void measureChildWithMarginIgnorePadding(EdView view,long wspec,long hspec,float wused,float hused){
+		MeasureCore.measureChildWithMargin(
+			view,
+			0,
+			0,
 			wspec,
 			hspec,
 			wused,

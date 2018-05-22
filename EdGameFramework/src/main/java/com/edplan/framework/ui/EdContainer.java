@@ -5,6 +5,8 @@ import com.edplan.framework.graphics.layer.BufferedLayer;
 import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.graphics.opengl.GLPaint;
 import com.edplan.framework.math.RectF;
+import com.edplan.framework.math.Vec2;
+import com.edplan.framework.graphics.opengl.objs.Color4;
 
 
 /**
@@ -25,6 +27,10 @@ public abstract class EdContainer extends EdAbstractViewGroup
 		postPaint=new GLPaint();
 	}
 	
+	public Vec2 getBufferSize(){
+		return new Vec2(layer.getWidth(),layer.getHeight());
+	}
+	
 	protected void updateLayerSize(BaseCanvas canvas){
 		layer.setWidth((int)(getWidth()/canvas.getPixelDensity()));
 		layer.setHeight((int)(getHeight()/canvas.getPixelDensity()));
@@ -35,14 +41,21 @@ public abstract class EdContainer extends EdAbstractViewGroup
 		layerCanvas.scaleContent(canvas.getPixelDensity());
 		layerCanvas.clip(getWidth(),getHeight());
 	}
+	
+	protected void drawContainer(BaseCanvas canvas){
+		super.dispatchDraw(canvas);
+	}
 
 	@Override
 	protected void dispatchDraw(BaseCanvas canvas){
 		// TODO: Implement this method
+		
 		updateLayerSize(canvas);
 		updateCanvas(canvas);
 		layerCanvas.prepare();
-		super.dispatchDraw(layerCanvas);
+		layerCanvas.drawColor(Color4.Alpha);
+		layerCanvas.clearBuffer();
+		drawContainer(layerCanvas);
 		layerCanvas.unprepare();
 		canvas.drawTexture(layer.getTexture(),RectF.xywh(0,0,getWidth(),getHeight()),postPaint);
 	}

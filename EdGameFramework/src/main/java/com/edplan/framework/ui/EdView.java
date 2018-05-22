@@ -17,6 +17,12 @@ import com.edplan.framework.ui.layout.MarginLayoutParam;
 public class EdView implements IRunnableHandler
 {
 	protected static int CUSTOM_INDEX=0;
+	
+	public static final int FLAG_INVALIDATE_MEASURE=Invalidate.FLAG_INVALIDATE_MEASURE;
+
+	public static final int FLAG_INVALIDATE_LAYOUT=Invalidate.FLAG_INVALIDATE_LAYOUT;
+
+	public static final int FLAG_INVALIDATE_DRAW=Invalidate.FLAG_INVALIDATE_DRAW;
 
 	public static final int VISIBILITY_SHOW=1;
 
@@ -24,13 +30,25 @@ public class EdView implements IRunnableHandler
 
 	public static final int VISIBILITY_GONE=3;
 	
+	//没有处理事件，事件下发
+	public static final int EVENT_FLAG_PASS=0;
+	
+	//处理了事件，但是继续下发，返回值变成true
+	public static final int EVENT_FLAG_CHECKING=1;
+	
+	//处理了事件，不继续下发，返回值变成true
+	public static final int EVENT_FLAG_HANDLED=2;
+	
+	//处理了事件，处理中产生了拦截
+	public static final int EVENT_FLAG_CANCELED=3;
+	
 	private EdAbstractViewGroup parent;
 
 	private String name;
 
 	private MContext context;
 
-	private EdDrawable background;
+	protected EdDrawable background;
 
 	private int visiblility=VISIBILITY_SHOW;
 
@@ -69,12 +87,37 @@ public class EdView implements IRunnableHandler
 	
 	private int gravity;
 	
+	/**
+	 *用于在完成layout后的动态位置变换
+	 */
+	private float offsetX,offsetY;
+	
 	public EdView(MContext context){
 		this.context=context;
 		if(!checkCurrentThread()){
 			throw new RuntimeException("you can only create a view in main thread!");
 		}
 		initialName();
+	}
+
+	public void setOffsetX(float offsetX){
+		this.offsetX=offsetX;
+	}
+
+	public float getOffsetX(){
+		return offsetX;
+	}
+
+	public void setOffsetY(float offsetY){
+		this.offsetY=offsetY;
+	}
+
+	public float getOffsetY(){
+		return offsetY;
+	}
+	
+	public void invalidate(int flag){
+		getViewRoot().invalidate(flag);
 	}
 	
 	public float getMarginHorizonIfHas(){
@@ -101,6 +144,10 @@ public class EdView implements IRunnableHandler
 		return gravity;
 	}
 	
+	public boolean isStrictInvalidateLayout(){
+		return true;
+	}
+	
 	/**
 	 *如果当前view在滚动，停止滚动
 	 */
@@ -120,11 +167,11 @@ public class EdView implements IRunnableHandler
 		return getContext().getViewRoot();
 	}
 
-	public void setScrollableFlag(int scrollableFlag){
+	protected void setScrollableFlag(int scrollableFlag){
 		this.scrollableFlag=scrollableFlag;
 	}
 
-	public int getScrollableFlag(){
+	protected int getScrollableFlag(){
 		return scrollableFlag;
 	}
 
@@ -149,19 +196,19 @@ public class EdView implements IRunnableHandler
 	}
 	
 	public float getTop(){
-		return topToParent;
+		return topToParent+offsetY;
 	}
 	
 	public float getBottom(){
-		return bottomToParent;
+		return bottomToParent+offsetY;
 	}
 	
 	public float getLeft(){
-		return leftToParent;
+		return leftToParent+offsetX;
 	}
 	
 	public float getRight(){
-		return rightToParent;
+		return rightToParent+offsetX;
 	}
 	
 	public float getWidth(){
@@ -346,7 +393,11 @@ public class EdView implements IRunnableHandler
 	public void layout(float left,float top,float right,float bottom){
 		boolean hasChanged=setFrame(left,top,right,bottom);
 		if(hasChanged){
-			onLayout(hasChanged,left,top,right,bottom);
+			onLayout(true,left,top,right,bottom);
+		}else{
+			if(isStrictInvalidateLayout()){
+				onLayout(false,left,top,right,bottom);
+			}
 		}
 	}
 
@@ -368,33 +419,54 @@ public class EdView implements IRunnableHandler
 	
 	
 	private ClickChecker clickChecker;
-	protected boolean handleClick(EdMotionEvent event){
-		if(clickChecker==null)clickChecker=new ClickChecker();
-		if(!clickChecker.checkPointer(event)){
-			return false;
+	protected int handleClick(EdMotionEvent event){
+		if(clickable){
+			if(clickChecker==null)clickChecker=new ClickChecker();
+			if(!clickChecker.checkPointer(event)){
+				return EVENT_FLAG_PASS;
+			}
+			switch(event.getEventType()){
+				case Down:
+					clickChecker.down(event);
+					return EVENT_FLAG_HANDLED;
+				case Move:
+					clickChecker.move(event);
+					return EVENT_FLAG_HANDLED;
+				case Up:
+					clickChecker.up(event);
+					return EVENT_FLAG_HANDLED;
+				case Cancel:
+					clickChecker.cancel();
+					return EVENT_FLAG_CANCELED;
+			}
+			return EVENT_FLAG_PASS;
+		}else{
+			return EVENT_FLAG_PASS;
 		}
-		switch(event.getEventType()){
-			case Down:
-				clickChecker.down(event);
-				return true;
-			case Move:
-				clickChecker.move(event);
-				return true;
-			case Up:
-				clickChecker.up(event);
-				return true;
-			case Cancel:
-				clickChecker.cancel();
-				return true;
-		}
-		return true;
 	}
 	
 	private ScrollChecker scrollChecker;
 	
 	protected int handleScroll(EdMotionEvent e){
-		if(scrollChecker==null)scrollChecker=new ScrollChecker();
-		return scrollChecker.handleEvent(e);
+		if(scrollableFlag!=0){
+			if(scrollChecker==null)scrollChecker=new ScrollChecker();
+			switch(scrollChecker. handleEvent(e)){
+				case ScrollChecker.STATE_PASS:
+					return EVENT_FLAG_PASS;
+				case ScrollChecker.STATE_CHECKING:
+					return EVENT_FLAG_CHECKING;
+				case ScrollChecker.STATE_INTERCEPT:
+					e.setEventType(EdMotionEvent.EventType.Cancel);
+					return EVENT_FLAG_CANCELED;
+				case ScrollChecker.STATE_HANDLING:
+					return EVENT_FLAG_HANDLED;
+				case ScrollChecker.STATE_CANCELED:
+				default:
+					return EVENT_FLAG_CANCELED;
+			}
+		}else{
+			return EVENT_FLAG_PASS;
+		}
 	}
 	
 	/**
@@ -402,25 +474,31 @@ public class EdView implements IRunnableHandler
 	 */
 	public boolean onMotionEvent(EdMotionEvent e){
 		boolean result=false;
-		if(scrollableFlag!=0){
-			switch(handleScroll(e)){
-				case ScrollChecker.STATE_PASS:
-					break;
-				case ScrollChecker.STATE_CHECKING:
-					result=true;
-					break;
-				case ScrollChecker.STATE_INTERCEPT:
-					e.setEventType(EdMotionEvent.EventType.Cancel);
-					result=true;
-					break;
-				case ScrollChecker.STATE_HANDLING:
-					return true;
-				case ScrollChecker.STATE_CANCELED:
-					break;
-			}
+		switch(handleScroll(e)){
+			case EVENT_FLAG_HANDLED:
+				return true;
+			case EVENT_FLAG_CHECKING:
+				result=true;
+				break;
+			case EVENT_FLAG_CANCELED:
+				result=true;
+				break;
+			case EVENT_FLAG_PASS:
+			default:
+				break;
 		}
-		if(clickable){
-			result|=handleClick(e);
+		switch(handleClick(e)){
+			case EVENT_FLAG_HANDLED:
+				return true;
+			case EVENT_FLAG_CHECKING:
+				result=true;
+				break;
+			case EVENT_FLAG_CANCELED:
+				result=true;
+				break;
+			case EVENT_FLAG_PASS:
+			default:
+				break;
 		}
 		return result;
 	}
@@ -482,6 +560,7 @@ public class EdView implements IRunnableHandler
 		
 		private int holdingPointer=-1;
 		private float preX,preY;
+		private double preTime;
 		private float startX,startY;
 		private boolean isScrolling=false;
 		
@@ -513,10 +592,13 @@ public class EdView implements IRunnableHandler
 					startY=event.getY();
 					preX=event.getX();
 					preY=event.getY();
+					preTime=event.getTime();
 					return STATE_CHECKING;
 				case Move:
 					if(isScrolling){
 						ScrollEvent se=new ScrollEvent();
+						se.setTime(event.getTime());
+						se.setDeltaTime(event.getTime()-preTime);
 						se.setState(ScrollEvent.STATE_SCROLLING);
 						if(BitUtil.match(scrollableFlag,ScrollEvent.DIRECTION_HORIZON)){
 							se.addScrollFlag(ScrollEvent.DIRECTION_HORIZON);
@@ -528,6 +610,7 @@ public class EdView implements IRunnableHandler
 						}
 						preX=event.getX();
 						preY=event.getY();
+						preTime=event.getTime();
 						onScroll(se);
 						return STATE_HANDLING;
 					}else{
@@ -537,6 +620,8 @@ public class EdView implements IRunnableHandler
 							if(Math.abs(event.getX()-startX)>ViewConfiguration.START_SCROLL_OFFSET){
 								startScroll=true;
 								se=new ScrollEvent();
+								se.setDeltaTime(event.getTime()-preTime);
+								se.setTime(event.getTime());
 								se.setState(ScrollEvent.STATE_START);
 								se.addScrollFlag(ScrollEvent.DIRECTION_HORIZON);
 								se.setScrollX(event.getX()-startX);
@@ -547,6 +632,8 @@ public class EdView implements IRunnableHandler
 								startScroll=true;
 								if(se==null){
 									se=new ScrollEvent();
+									se.setTime(event.getTime());
+									se.setDeltaTime(event.getTime()-preTime);
 									se.setState(ScrollEvent.STATE_START);
 								}
 								se.addScrollFlag(ScrollEvent.DIRECTION_VERTICAL);
@@ -555,6 +642,7 @@ public class EdView implements IRunnableHandler
 						}
 						preX=event.getX();
 						preY=event.getY();
+						preTime=event.getTime();
 						if(startScroll){
 							onScroll(se);
 							isScrolling=true;
@@ -566,6 +654,8 @@ public class EdView implements IRunnableHandler
 				case Up:
 					if(isScrolling){
 						ScrollEvent se=new ScrollEvent();
+						se.setTime(event.getTime());
+						se.setDeltaTime(event.getTime()-preTime);
 						se.setState(ScrollEvent.STATE_END);
 						if(BitUtil.match(scrollableFlag,ScrollEvent.DIRECTION_HORIZON)){
 							se.addScrollFlag(ScrollEvent.DIRECTION_HORIZON);
@@ -585,7 +675,9 @@ public class EdView implements IRunnableHandler
 				case Cancel:
 				default:
 					ScrollEvent se=new ScrollEvent();
-					se.setState(ScrollEvent.STATE_END);
+					se.setTime(event.getTime());
+					se.setDeltaTime(event.getTime()-preTime);
+					se.setState(ScrollEvent.STATE_CANCEL);
 					if(BitUtil.match(scrollableFlag,ScrollEvent.DIRECTION_HORIZON)){
 						se.addScrollFlag(ScrollEvent.DIRECTION_HORIZON);
 						se.setScrollX(event.getX()-preX);
@@ -596,7 +688,7 @@ public class EdView implements IRunnableHandler
 					}
 					onScroll(se);
 					clearPointerData();
-					getContext().toast("cancel by parent");
+					//getContext().toast("cancel by parent");
 					return STATE_CANCELED;
 			}
 		}
@@ -655,7 +747,7 @@ public class EdView implements IRunnableHandler
 				clearPointerData();
 				setPressed(false);
 				onClickEventCancel();
-				getContext().toast(event.getX()+":"+event.getY()+" "+getLeft()+":"+getTop()+":"+getRight()+":"+getBottom());
+				//getContext().toast(event.getX()+":"+event.getY()+" "+getLeft()+":"+getTop()+":"+getRight()+":"+getBottom());
 			}
 		}
 		

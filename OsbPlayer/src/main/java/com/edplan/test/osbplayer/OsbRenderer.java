@@ -32,6 +32,7 @@ import com.edplan.framework.ui.widget.LinearLayout;
 import com.edplan.framework.ui.layout.Orientation;
 import com.edplan.framework.ui.layout.MarginLayoutParam;
 import com.edplan.framework.ui.layout.Gravity;
+import com.edplan.framework.ui.widget.ScrollContainer;
 
 public class OsbRenderer extends MainRenderer
 {
@@ -94,14 +95,14 @@ public class OsbRenderer extends MainRenderer
 			LinearLayout llayout=new LinearLayout(c);
 			llayout.setGravity(Gravity.Center);
 			llayout.setBackground(drawable);
-			llayout.setOrientation(Orientation.DIRECTION_L2R);
+			llayout.setOrientation(Orientation.DIRECTION_T2B);
 			llayout.setPaddingTop(10);
 			
 			EdLayoutParam lparam=new EdLayoutParam();
-			lparam.width=Param.MODE_WRAP_CONTENT;
-			lparam.height=Param.MODE_WRAP_CONTENT;
+			lparam.width=Param.makeupParam(600);
+			lparam.height=Param.makeupParam(400);
 			lparam.xoffset=400;
-			lparam.yoffset=400;
+			lparam.yoffset=100;
 			{
 				TestButton button=new TestButton(c);
 				button.setName("testButton");
@@ -122,6 +123,34 @@ public class OsbRenderer extends MainRenderer
 				llayout.addView(button,param);
 			}
 			layout.addView(llayout,lparam);
+		}
+		{
+			RectDrawable drawable=new RectDrawable(c);
+			drawable.setColor(Color4.rgba(1,1,1,0.5f));
+			ScrollContainer llayout=new ScrollContainer(c);
+			llayout.setGravity(Gravity.Center);
+			llayout.setBackground(drawable);
+			llayout.setOrientation(Orientation.DIRECTION_T2B);
+			llayout.setPaddingTop(10);
+			llayout.setPaddingBottom(10);
+			llayout.setChildoffset(50);
+			
+			EdLayoutParam lparam=new EdLayoutParam();
+			lparam.width=Param.makeupParam(250);
+			lparam.height=Param.makeupParam(560);
+			lparam.xoffset=400;
+			lparam.yoffset=500;
+			
+			layout.addView(llayout,lparam);
+			
+			for(int i=0;i<20;i++){
+				TestButton button=new TestButton(c);
+				button.setName("testButton");
+				MarginLayoutParam param=new MarginLayoutParam();
+				param.width=Param.makeupParam(200);
+				param.height=Param.makeupParam(50);
+				llayout.addView(button,param);
+			}
 		}
 		return layout;
 	}

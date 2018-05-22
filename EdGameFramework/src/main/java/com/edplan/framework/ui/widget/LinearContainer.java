@@ -1,27 +1,26 @@
 package com.edplan.framework.ui.widget;
-import com.edplan.framework.ui.EdAbstractViewGroup;
+
 import com.edplan.framework.MContext;
-import com.edplan.framework.ui.layout.Orientation;
-import com.edplan.framework.ui.layout.EdMeasureSpec;
+import com.edplan.framework.ui.EdAbstractViewGroup;
 import com.edplan.framework.ui.EdView;
 import com.edplan.framework.ui.layout.EdLayoutParam;
-import com.edplan.framework.ui.layout.MarginLayoutParam;
+import com.edplan.framework.ui.layout.EdMeasureSpec;
 import com.edplan.framework.ui.layout.Gravity;
-import com.edplan.framework.utils.BitUtil;
+import com.edplan.framework.ui.layout.MarginLayoutParam;
+import com.edplan.framework.ui.layout.Orientation;
 import com.edplan.framework.ui.EdContainer;
-import android.util.Log;
 
-public class LinearLayout extends EdAbstractViewGroup
+public class LinearContainer extends EdContainer
 {
 	protected int orientation;
-	
+
 	protected float childoffset;
-	
+
 	protected float startOffset;
-	
-	protected boolean enableGravityCenter=true;
-	
-	public LinearLayout(MContext c){
+
+	protected boolean enableGravityCenter;
+
+	public LinearContainer(MContext c){
 		super(c);
 		orientation=Orientation.DIRECTION_L2R;
 	}
@@ -71,9 +70,9 @@ public class LinearLayout extends EdAbstractViewGroup
 			return new MarginLayoutParam(param);
 		}
 	}
-	
+
 	private float latestUsedSpace;
-	
+
 	protected void layoutHorizon(float left,float top,float right,float bottom){
 		final int count=getChildrenCount();
 
@@ -84,20 +83,20 @@ public class LinearLayout extends EdAbstractViewGroup
 		float widthUsed=parentLeft+startOffset;
 		final int gravity=getGravity();
 		if(enableGravityCenter)if(gravity==Gravity.Center){
-			final float cy=(parentTop+parentBottom)/2;
-			widthUsed=(parentLeft+parentRight-latestUsedSpace)/2;
-			for(int i=0;i<count;i++){
-				final EdView view=getChildAt(i);
-				if(view.getVisiblility()!=VISIBILITY_GONE){
-					final MarginLayoutParam param=(MarginLayoutParam)view.getLayoutParam();
-					final float dx=param.xoffset+widthUsed+param.marginLeft;
-					final float dy=param.yoffset+cy-view.getMeasuredHeight()/2+param.marginTop;
-					view.layout(dx,dy,view.getMeasuredWidth()+dx,view.getMeasuredHeight()+dy);
-					widthUsed+=param.getMarginHorizon()+view.getMeasuredWidth()+childoffset;
+				final float cy=(parentTop+parentBottom)/2;
+				widthUsed=(parentLeft+parentRight-latestUsedSpace)/2;
+				for(int i=0;i<count;i++){
+					final EdView view=getChildAt(i);
+					if(view.getVisiblility()!=VISIBILITY_GONE){
+						final MarginLayoutParam param=(MarginLayoutParam)view.getLayoutParam();
+						final float dx=param.xoffset+widthUsed+param.marginLeft;
+						final float dy=param.yoffset+cy-view.getMeasuredHeight()/2+param.marginTop;
+						view.layout(dx,dy,view.getMeasuredWidth()+dx,view.getMeasuredHeight()+dy);
+						widthUsed+=param.getMarginHorizon()+view.getMeasuredWidth()+childoffset;
+					}
 				}
+				return;
 			}
-			return;
-		}
 		switch(gravity&Gravity.MASK_VERTICAL){
 			case Gravity.BOTTOM:{
 					for(int i=0;i<count;i++){
@@ -139,7 +138,7 @@ public class LinearLayout extends EdAbstractViewGroup
 				}break;
 		}
 	}
-	
+
 	protected void layoutVertical(float left,float top,float right,float bottom){
 		final int count=getChildrenCount();
 
@@ -150,20 +149,20 @@ public class LinearLayout extends EdAbstractViewGroup
 		float heightUsed=parentTop+startOffset;
 		final int gravity=getGravity();
 		if(enableGravityCenter)if(gravity==Gravity.Center){
-			final float cx=(parentLeft+parentRight)/2;
-			heightUsed=(parentTop+parentBottom-latestUsedSpace)/2;
-			for(int i=0;i<count;i++){
-				final EdView view=getChildAt(i);
-				if(view.getVisiblility()!=VISIBILITY_GONE){
-					final MarginLayoutParam param=(MarginLayoutParam)view.getLayoutParam();
-					final float dx=param.xoffset+cx-view.getMeasuredWidth()/2;
-					final float dy=param.yoffset+heightUsed+param.marginTop;
-					view.layout(dx,dy,view.getMeasuredWidth()+dx,view.getMeasuredHeight()+dy);
-					heightUsed+=param.getMarginVertical()+view.getMeasuredHeight()+childoffset;
+				final float cx=(parentLeft+parentRight)/2;
+				heightUsed=(parentTop+parentBottom-latestUsedSpace)/2;
+				for(int i=0;i<count;i++){
+					final EdView view=getChildAt(i);
+					if(view.getVisiblility()!=VISIBILITY_GONE){
+						final MarginLayoutParam param=(MarginLayoutParam)view.getLayoutParam();
+						final float dx=param.xoffset+cx-view.getMeasuredWidth()/2;
+						final float dy=param.yoffset+heightUsed+param.marginTop;
+						view.layout(dx,dy,view.getMeasuredWidth()+dx,view.getMeasuredHeight()+dy);
+						heightUsed+=param.getMarginVertical()+view.getMeasuredHeight()+childoffset;
+					}
 				}
+				return;
 			}
-			return;
-		}
 		switch(gravity&Gravity.MASK_HORIZON){
 			case Gravity.RIGHT:{
 					for(int i=0;i<count;i++){
@@ -205,7 +204,7 @@ public class LinearLayout extends EdAbstractViewGroup
 				}break;
 		}
 	}
-	
+
 	@Override
 	protected void onLayout(boolean changed,float left,float top,float right,float bottom){
 		// TODO: Implement this method
@@ -215,7 +214,7 @@ public class LinearLayout extends EdAbstractViewGroup
 			layoutHorizon(left,top,right,bottom);
 		}
 	}
-	
+
 	protected void measureHorizon(long widthSpec,long heightSpec){
 		final int count=getChildrenCount();
 		float widthUsed=0;
@@ -262,10 +261,10 @@ public class LinearLayout extends EdAbstractViewGroup
 					break;
 			}
 		}
-		//Log.v("layout","measure LinearLayout Horizon, width used "+widthUsed+", set dimensition "+xd+";"+yd+" spec:"+EdMeasureSpec.toString(widthSpec)+":"+EdMeasureSpec.toString(heightSpec));
+		//Log.v("layout","measure LinearContainer Horizon, width used "+widthUsed+", set dimensition "+xd+";"+yd+" spec:"+EdMeasureSpec.toString(widthSpec)+":"+EdMeasureSpec.toString(heightSpec));
 		setMeasuredDimensition(xd,yd);
 	}
-	
+
 	protected void measureVertical(long widthSpec,long heightSpec){
 		final int count=getChildrenCount();
 		float heightUsed=0;
@@ -312,7 +311,7 @@ public class LinearLayout extends EdAbstractViewGroup
 					break;
 			}
 		}
-		//Log.v("layout","measure LinearLayout Vertical, height used "+heightUsed+", set dimensition "+xd+";"+yd+" spec:"+EdMeasureSpec.toString(widthSpec)+":"+EdMeasureSpec.toString(heightSpec));
+		//Log.v("layout","measure LinearContainer Vertical, height used "+heightUsed+", set dimensition "+xd+";"+yd+" spec:"+EdMeasureSpec.toString(widthSpec)+":"+EdMeasureSpec.toString(heightSpec));
 		setMeasuredDimensition(xd,yd);
 	}
 

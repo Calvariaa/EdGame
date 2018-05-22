@@ -18,11 +18,11 @@ import java.util.List;
 
 public class ViewRoot
 {
-	public static final int FLAG_INVALIDATE_MEASURE=1<<0;
-	
-	public static final int FLAG_INVALIDATE_LAYOUT=1<<1;
-	
-	public static final int FLAG_INVALIDATE_DRAW=1<<2;
+	public static final int FLAG_INVALIDATE_MEASURE=Invalidate.FLAG_INVALIDATE_MEASURE;
+
+	public static final int FLAG_INVALIDATE_LAYOUT=Invalidate.FLAG_INVALIDATE_LAYOUT;
+
+	public static final int FLAG_INVALIDATE_DRAW=Invalidate.FLAG_INVALIDATE_DRAW;
 	
 	private MContext context;
 	
@@ -78,9 +78,11 @@ public class ViewRoot
 	}
 	
 	public void onChange(int w,int h){
-		invalidateFlag|=FLAG_INVALIDATE_MEASURE;
-		invalidateFlag|=FLAG_INVALIDATE_LAYOUT;
-		invalidateFlag|=FLAG_INVALIDATE_DRAW;
+		invalidate(FLAG_INVALIDATE_DRAW|FLAG_INVALIDATE_MEASURE|FLAG_INVALIDATE_LAYOUT);
+	}
+	
+	public void invalidate(int flag){
+		invalidateFlag|=flag;
 	}
 	
 	protected void postMeasure(){
@@ -104,17 +106,17 @@ public class ViewRoot
 		if(alwaysInvalidateMeasure
 		   ||BitUtil.match(invalidateFlag,FLAG_INVALIDATE_MEASURE)
 		   ){
-			postMeasure();
 			invalidateFlag&=~FLAG_INVALIDATE_MEASURE;
 			frameInvalidateState|=FLAG_INVALIDATE_MEASURE;
+			postMeasure();
 		}
 
 		if(alwaysInvalidateLayout
 		   ||BitUtil.match(invalidateFlag,FLAG_INVALIDATE_LAYOUT)
 		   ){
-			postLayout();
 			invalidateFlag&=~FLAG_INVALIDATE_LAYOUT;
 			frameInvalidateState|=FLAG_INVALIDATE_LAYOUT;
+			postLayout();
 		}
 		Tracker.InvalidateMeasureAndLayout.end();
 	}

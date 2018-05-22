@@ -22,33 +22,36 @@ public class TestScroller extends EdView
 	public void onClickEvent(){
 		// TODO: Implement this method
 		super.onClickEvent();
-		getContext().toast("on click scroller");
+		//getContext().toast("on click scroller");
 	}
 
 	@Override
 	public void onClickEventCancel(){
 		// TODO: Implement this method
 		super.onClickEventCancel();
-		getContext().toast("cancel by scroller");
+		//getContext().toast("cancel by scroller");
 	}
 
 	@Override
 	public void onStartClick(){
 		// TODO: Implement this method
 		super.onStartClick();
-		getContext().toast("start click by scroller");
+		//getContext().toast("start click by scroller");
 	}
 	
 	@Override
 	public boolean onScroll(ScrollEvent event){
 		// TODO: Implement this method
 		scroll+=event.getScrollY();
+		setOffsetX(scroll*0.5f);
+		//scroll=ScrollContainer.MAIN_SCROLL;
 		return true;
 	}
 
 	@Override
 	public void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
+		//scroll=(ScrollContainer.MAIN_SCROLL)*getHeight()*0.999f;
 		float offset=(scroll>0)?(scroll%getHeight()):(getHeight()-((-scroll)%getHeight()));
 		GLPaint p=new GLPaint();
 		p.setFinalAlpha(0.7f);

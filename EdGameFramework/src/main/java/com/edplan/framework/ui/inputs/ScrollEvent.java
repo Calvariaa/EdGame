@@ -16,6 +16,24 @@ public class ScrollEvent
 	private int scrollFlag;
 	private float scrollX,scrollY;
 	private int state;
+	private double time;
+	private double deltaTime;
+
+	public void setDeltaTime(double deltaTime){
+		this.deltaTime=deltaTime;
+	}
+
+	public double getDeltaTime(){
+		return deltaTime;
+	}
+
+	public void setTime(double time){
+		this.time=time;
+	}
+
+	public double getTime(){
+		return time;
+	}
 
 
 	public void addScrollFlag(int scrollFlag){

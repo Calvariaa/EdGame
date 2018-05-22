@@ -20,28 +20,28 @@ public class TestButton extends EdView
 	public void onStartClick(){
 		// TODO: Implement this method
 		super.onStartClick();
-		getContext().toast("start click");
+		//getContext().toast("start click");
 	}
 
 	@Override
 	public void onLongClickEvent(){
 		// TODO: Implement this method
 		super.onLongClickEvent();
-		getContext().toast("onLongClick");
+		//getContext().toast("onLongClick");
 	}
 
 	@Override
 	public void onClickEvent(){
 		// TODO: Implement this method
 		super.onClickEvent();
-		getContext().toast("onClick");
+		//getContext().toast("onClick");
 	}
 
 	@Override
 	public void onClickEventCancel(){
 		// TODO: Implement this method
 		super.onClickEventCancel();
-		getContext().toast("onClickCancel");
+		//getContext().toast("onClickCancel");
 	}
 
 	@Override
