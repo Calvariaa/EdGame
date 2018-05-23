@@ -5,6 +5,7 @@ import com.edplan.framework.ui.animation.interpolate.ValueInterpolator;
 import com.edplan.framework.ui.animation.interpolate.Vec2Interpolator;
 import java.util.Stack;
 import com.edplan.framework.math.its.IVec2;
+import java.nio.FloatBuffer;
 
 public class Vec2 implements Interplateable<Vec2>,IVec2
 {
@@ -31,6 +32,15 @@ public class Vec2 implements Interplateable<Vec2>,IVec2
 	public Vec2(float v){
 		this(v,v);
 	}
+	
+	public void put2buffer(FloatBuffer b){
+		b.put(x).put(y);
+	}
+	
+	public void put2bufferAsVec3(FloatBuffer b){
+		b.put(x).put(y).put(0);
+	}
+	
 	
 	public void set(float x,float y){
 		this.x=x;

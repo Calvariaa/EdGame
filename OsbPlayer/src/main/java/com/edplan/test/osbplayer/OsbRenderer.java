@@ -89,6 +89,7 @@ public class OsbRenderer extends MainRenderer
 			param.yoffset=0;
 			layout.addView(button,param);
 		}
+		/*
 		{
 			RectDrawable drawable=new RectDrawable(c);
 			drawable.setColor(Color4.rgba(1,1,1,0.5f));
@@ -152,6 +153,7 @@ public class OsbRenderer extends MainRenderer
 				llayout.addView(button,param);
 			}
 		}
+		*/
 		return layout;
 	}
 }

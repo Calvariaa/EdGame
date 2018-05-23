@@ -110,6 +110,19 @@ public class CanvasData implements Recycleable,Copyable {
 		return this;
 	}
 	
+	public CanvasData rotate(float rotation){
+		getCurrentMaskMatrix().rotate2D(rotation,0,0,true);
+		freshMatrix();
+		return this;
+	}
+	
+	//可能导致部分运算误差（像素密度相关）
+	public CanvasData scale(float sx,float sy){
+		getCurrentMaskMatrix().scale(sx,sy,1);
+		freshMatrix();
+		return this;
+	}
+	
 	/**
 	 *对轴进行缩放，而不是对物件缩放，所以处理Matrix时用倒数
 	 */

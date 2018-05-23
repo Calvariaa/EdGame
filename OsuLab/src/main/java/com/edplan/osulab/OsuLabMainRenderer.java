@@ -15,6 +15,7 @@ import com.edplan.framework.ui.widget.LinearLayout;
 import com.edplan.framework.ui.widget.TestButton;
 import com.edplan.framework.ui.widget.TestScroller;
 import com.edplan.framework.ui.widget.ViewPage;
+import com.edplan.osulab.ui.opening.MainCircleView;
 
 public class OsuLabMainRenderer extends MainRenderer
 {
@@ -29,28 +30,24 @@ public class OsuLabMainRenderer extends MainRenderer
 		draw.setColor(Color4.rgba(1,1,1,0.6f));
 		
 		AbsoluteLayout mainLayout=new AbsoluteLayout(c);
-		mainLayout.setBackground(draw);
 		
 		FrameContainer mainFrameContainer=new FrameContainer(c);
 		EdLayoutParam mparam=new EdLayoutParam();
 		mparam.width=Param.MODE_MATCH_PARENT;
 		mparam.height=Param.MODE_MATCH_PARENT;
-		//mainLayout.addView(mainFrameContainer,mparam);
+		mainLayout.addView(mainFrameContainer,mparam);
 		{
 			ViewPage page=new ViewPage(c);
 			EdLayoutParam pparam=new EdLayoutParam();
 			pparam.width=Param.MODE_MATCH_PARENT;
 			pparam.height=Param.MODE_MATCH_PARENT;
-			//page.setLayoutParam(pparam);
-			mainLayout.addView(page,pparam);
-			/*
+			page.setLayoutParam(pparam);
 			mainFrameContainer.addPage(page);
 			mainFrameContainer.swapPage(page);
-			*/
 			{
 				LinearLayout llayout=new LinearLayout(c);
 				llayout.setChildoffset(50);
-				llayout.setBackground(draw);
+				//llayout.setBackground(draw);
 				llayout.setGravity(Gravity.Center);
 				llayout.setOrientation(Orientation.DIRECTION_T2B);
 				EdLayoutParam llparam=new EdLayoutParam();
@@ -58,31 +55,21 @@ public class OsuLabMainRenderer extends MainRenderer
 				llparam.height=Param.MODE_MATCH_PARENT;
 				page.addView(llayout,llparam);
 				{
-					TestButton button=new TestButton(c);
+					MainCircleView button=new MainCircleView(c);
+					button.setBackground(draw);
 					EdLayoutParam lllparam=new EdLayoutParam();
-					lllparam.width=Param.makeupParam(500);
-					lllparam.height=Param.makeupParam(300);
+					lllparam.width=Param.makeupParam(900);
+					lllparam.height=Param.makeupParam(900);
 					llayout.addView(button,lllparam);
 				}
 				{
 					TestButton button=new TestButton(c);
 					EdLayoutParam lllparam=new EdLayoutParam();
-					lllparam.width=Param.makeupParam(500);
-					lllparam.height=Param.makeupParam(300);
+					lllparam.width=Param.makeupParam(600);
+					lllparam.height=Param.makeupParam(100);
 					llayout.addView(button,lllparam);
 				}
 			}
-		}
-		
-		{
-			TestScroller button=new TestScroller(c);
-			button.setName("testScroller");
-			EdLayoutParam param=new EdLayoutParam();
-			param.width=Param.makeupParam(100);
-			param.height=Param.MODE_MATCH_PARENT;
-			param.xoffset=0;
-			param.yoffset=0;
-			mainLayout.addView(button,param);
 		}
 		
 		return mainLayout;

@@ -1,6 +1,7 @@
 package com.edplan.framework.graphics.opengl.objs;
 import com.edplan.framework.math.Vec4;
 import android.graphics.Color;
+import java.nio.FloatBuffer;
 
 public class Color4
 {
@@ -34,6 +35,10 @@ public class Color4
 
 	protected Color4(Color4 c){
 		set(c);
+	}
+	
+	public void put2buffer(FloatBuffer bf){
+		bf.put(r).put(g).put(b).put(a);
 	}
 	
 	public Color4 set(Color4 c){

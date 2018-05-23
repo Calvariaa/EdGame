@@ -336,8 +336,8 @@ public class TestOsbView extends EdView
 								// TODO: Implement this method
 								getContext().getUiLooper().addLoopableBeforeDraw(timeline);
 								audio.play();
-								audio.seekTo(20000);
-								timeline.onLoop(20000);
+								//audio.seekTo(20000);
+								//timeline.onLoop(20000);
 							}
 						},2000);
 				}

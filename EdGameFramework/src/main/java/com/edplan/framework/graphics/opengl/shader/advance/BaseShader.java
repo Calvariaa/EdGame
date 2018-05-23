@@ -9,6 +9,7 @@ import com.edplan.framework.graphics.opengl.shader.uniforms.UniformMat2;
 import com.edplan.framework.graphics.opengl.shader.uniforms.UniformMat4;
 import com.edplan.framework.graphics.opengl.shader.uniforms.UniformSample2D;
 import java.lang.reflect.Field;
+import com.edplan.framework.graphics.opengl.shader.uniforms.UniformVec2;
 
 public abstract class BaseShader extends GLProgram
 {
@@ -48,6 +49,8 @@ public abstract class BaseShader extends GLProgram
 						sampleIndex++;
 					}else if(f.getType().equals(UniformFloat.class)){
 						f.set(this,UniformFloat.findUniform(this,name));
+					}else if(f.getType().equals(UniformVec2.class)){
+						f.set(this,UniformVec2.findUniform(this,name));
 					}
 				}
 			}

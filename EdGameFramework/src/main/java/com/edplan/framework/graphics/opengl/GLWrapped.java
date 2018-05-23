@@ -21,6 +21,10 @@ public class GLWrapped
 {
 	public static int GL_VERSION;
 	
+	public static int GL_SHORT=GLES20.GL_SHORT;
+	
+	public static int GL_UNSIGNED_SHORT=GLES20.GL_UNSIGNED_SHORT;
+	
 	public static int GL_TRIANGLES=GLES20.GL_TRIANGLES;
 	
 	public static int GL_MAX_TEXTURE_SIZE;

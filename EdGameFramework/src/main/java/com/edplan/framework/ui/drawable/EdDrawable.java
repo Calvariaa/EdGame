@@ -4,6 +4,7 @@ import com.edplan.framework.math.Vec2;
 import com.edplan.framework.math.Mat4;
 import com.edplan.framework.MContext;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
+import java.lang.ref.WeakReference;
 
 /**
  *默认绘制在整个canvas上，
@@ -13,14 +14,14 @@ public abstract class EdDrawable
 {
 //	private Mat4 translationMatrix=Mat4.createIdentity();
 
-	private MContext context;
+	private WeakReference<MContext> context;
 
 	public EdDrawable(MContext context){
-		this.context=context;
+		this.context=new WeakReference<MContext>(context);
 	}
 
 	public MContext getContext() {
-		return context;
+		return context.get();
 	}
 
 	public abstract void draw(BaseCanvas canvas);

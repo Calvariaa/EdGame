@@ -92,6 +92,16 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 		getData().translate(tx,ty);
 		return this;
 	}
+	
+	public BaseCanvas rotate(float r){
+		getData().rotate(r);
+		return this;
+	}
+	
+	public BaseCanvas scale(float x,float y){
+		getData().scale(x,y);
+		return this;
+	}
 
 	public BaseCanvas scaleContent(float s){
 		getData().scaleContent(s);

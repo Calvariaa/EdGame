@@ -4,10 +4,7 @@ varying vec3 f_Position;
 varying vec4 f_VaryingColor;
 varying vec3 f_MaskPosition;
 
-uniform float u_FinalAlpha;
-uniform vec4 u_MixColor;
-
 void main(){
-	vec4 c=u_MixColor*f_VaryingColor;
+	vec4 c=f_VaryingColor;
 	@include <FragmentFinal>
 }
