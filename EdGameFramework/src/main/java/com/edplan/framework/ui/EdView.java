@@ -13,6 +13,7 @@ import com.edplan.superutils.classes.advance.IRunnableHandler;
 import com.edplan.framework.utils.BitUtil;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.ui.layout.MarginLayoutParam;
+import java.lang.ref.WeakReference;
 
 public class EdView implements IRunnableHandler
 {
@@ -42,7 +43,7 @@ public class EdView implements IRunnableHandler
 	//处理了事件，处理中产生了拦截
 	public static final int EVENT_FLAG_CANCELED=3;
 	
-	private EdAbstractViewGroup parent;
+	private WeakReference<EdAbstractViewGroup> parent;
 
 	private String name;
 
@@ -264,11 +265,11 @@ public class EdView implements IRunnableHandler
 	}
 
 	public void setParent(EdAbstractViewGroup parent){
-		this.parent=parent;
+		this.parent=new WeakReference<EdAbstractViewGroup>(parent);
 	}
 
 	public EdAbstractViewGroup getParent(){
-		return parent;
+		return parent!=null?parent.get():null;
 	}
 
 	public void setBackground(EdDrawable background){
@@ -365,6 +366,19 @@ public class EdView implements IRunnableHandler
 		return (background==null)?minHeight:Math.max(minHeight,background.getMinHeight());
 	}
 
+	public static float makeupMeasureSize(float size,long spec){
+		final int specMode=EdMeasureSpec.getMode(spec);
+		switch(specMode){
+			case EdMeasureSpec.MODE_AT_MOST:
+				return Math.min(size,EdMeasureSpec.getSize(spec));
+			case EdMeasureSpec.MODE_DEFINEDED:
+				return EdMeasureSpec.getSize(spec);
+			case EdMeasureSpec.MODE_NONE:
+			default:
+				return size;
+		}
+	}
+	
 	public static float getDefaultSize(float size,long spec){
 		float r=size;
 		int mode=EdMeasureSpec.getMode(spec);

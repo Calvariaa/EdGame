@@ -19,10 +19,6 @@ import com.edplan.framework.graphics.opengl.BaseCanvas;
 
 public class TextPrinter
 {
-	private static HashMap<String,BMFont> fonts=new HashMap<String,BMFont>();
-	
-	private static BMFont defaultFont;
-	
 	public static final char NO_PREVIOUS_CHAR=0;
 	/**
 	 *@field textSize:实际绘制时的大小
@@ -63,24 +59,14 @@ public class TextPrinter
 	}
 	
 	public TextPrinter(String font,float startX,float startY,GLPaint paint){
-		this(fonts.get(font),startX,startY,paint);
+		this(BMFont.getFont(font),startX,startY,paint);
 	}
 	
 	public TextPrinter(float startX,float startY){
-		this(defaultFont,startX,startX,new GLPaint());
+		this(BMFont.getDefaultFont(),startX,startX,new GLPaint());
 	}
 
-	public static void setDefaultFont(BMFont defaultFont){
-		TextPrinter.defaultFont=defaultFont;
-	}
-
-	public static BMFont getDefaultFont(){
-		return defaultFont;
-	}
 	
-	public static void addFont(BMFont font,String name){
-		fonts.put(name,font);
-	}
 	
 	public void initial(float startX,float startY){
 		batchs=new ArrayList<Texture3DBatch<TextureVertex3D>>();

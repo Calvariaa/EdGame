@@ -116,8 +116,8 @@ public class TestOsbView extends EdView
 		Test.get().setBoolean(Test.IS_RELEASE,false);
 		test=new TestData();
 		try {
-			AResource res=getContext().getAssetResource().subResource("font");
-			font=BMFont.loadFont(
+			font=BMFont.getFont(BMFont.Noto_Sans_CJK_JP_Medium);
+			/*.loadFont(
 				res,
 				//			"Exo2.0-Regular.fnt");
 
@@ -127,7 +127,7 @@ public class TestOsbView extends EdView
 			font.setErrCharacter('⊙');
 			TextPrinter.setDefaultFont(font);
 			TextPrinter.addFont(font,"default");
-
+			*/
 			cursor=getContext().getAssetResource().subResource("osu/skins/default").loadTexture("cursor.png");
 
 		} catch (IOException e) {

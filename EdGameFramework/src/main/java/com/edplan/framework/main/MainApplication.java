@@ -3,24 +3,35 @@ import android.app.Activity;
 import android.content.Context;
 import com.edplan.framework.graphics.opengl.BaseGLSurfaceView;
 import com.edplan.framework.graphics.opengl.MainRenderer;
+import com.edplan.framework.ui.text.font.bmfont.BMFont;
+import com.edplan.framework.ui.text.font.drawing.TextPrinter;
+import com.edplan.framework.MContext;
+import com.edplan.framework.resource.AResource;
+import java.io.IOException;
 
 public abstract class MainApplication
 {
 	protected Context context;
 	
-	public abstract MainRenderer createRenderer();
+	protected MContext mContext;
+	
+	protected BaseGLSurfaceView surface;
+	
+	public abstract MainRenderer createRenderer(MContext context);
 	
 	public Context getNativeContext(){
 		return context;
 	}
 	
 	public BaseGLSurfaceView createGLView(){
-		return new BaseGLSurfaceView(getNativeContext(),createRenderer());
+		return new BaseGLSurfaceView(getNativeContext(),createRenderer(mContext));
 	}
 	
 	public void setUpActivity(Activity act){
 		this.context=act;
-		act.setContentView(createGLView());
+		mContext=new MContext(context);
+		surface=createGLView();
+		act.setContentView(surface);
 		onApplicationCreate();
 	}
 	
@@ -35,6 +46,27 @@ public abstract class MainApplication
 	 *GL环境创建好了之后被调用
 	 */
 	public void onGLCreate(){
-		
+		AResource res=mContext.getAssetResource().subResource("font");
+		try{
+			{
+				BMFont font=BMFont.loadFont(
+					res,
+					"Noto-CJK-Basic.fnt");
+				font.addFont(res,"Noto-Basic.fnt");
+				font.setErrCharacter('⊙');
+				BMFont.addFont(font,font.getInfo().face);
+				BMFont.setDefaultFont(font);
+			}
+			{
+				BMFont font=BMFont.loadFont(
+					res,
+					"Exo2.0-Regular.fnt");
+				font.setErrCharacter(BMFont.CHAR_NOT_FOUND);
+				BMFont.addFont(font,font.getInfo().face);
+			}
+		}catch(IOException e){
+			e.printStackTrace();
+			mContext.toast("读取字体失败 msg="+e.getMessage());
+		}
 	}
 }

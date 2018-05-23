@@ -68,7 +68,7 @@ public class MeasureCore
 						rmode=EdMeasureSpec.MODE_DEFINEDED;
 						break;
 					case Param.WRAP_CONTENT:
-						rsize=Param.getSize(childDimension);
+						rsize=size;
 						rmode=EdMeasureSpec.MODE_AT_MOST;
 						break;
 					default:
@@ -80,6 +80,9 @@ public class MeasureCore
 			case EdMeasureSpec.MODE_AT_MOST:
 				switch(pmode){
 					case Param.MATCH_PARENT:
+						rsize=size;
+						rmode=EdMeasureSpec.MODE_DEFINEDED;
+						break;
 					case Param.WRAP_CONTENT:
 						rsize=size;
 						rmode=EdMeasureSpec.MODE_AT_MOST;
@@ -90,11 +93,12 @@ public class MeasureCore
 						break;
 				}
 				break;
+			case EdMeasureSpec.MODE_NONE:
 			default:
 				switch(pmode){
 					case Param.MATCH_PARENT:
 					case Param.WRAP_CONTENT:
-						rsize=0;
+						rsize=size;
 						rmode=EdMeasureSpec.MODE_NONE;
 						break;
 					default:

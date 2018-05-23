@@ -67,8 +67,8 @@ public class ViewRoot
 		this.contentView=contentView;
 		if(contentView.getLayoutParam()==null){
 			EdLayoutParam param=new EdLayoutParam();
-			param.width=Param.makeupParam(0,Param.MATCH_PARENT);
-			param.height=Param.makeupParam(0,Param.MATCH_PARENT);
+			param.width=Param.MODE_MATCH_PARENT;
+			param.height=Param.MODE_MATCH_PARENT;
 			contentView.setLayoutParam(param);
 		}
 	}

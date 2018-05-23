@@ -38,7 +38,7 @@ public class OsbRenderer extends MainRenderer
 {
 	JSONObject initialJson;
 
-	public OsbRenderer(Context con,MainApplication app,JSONObject initialJson){
+	public OsbRenderer(MContext con,MainApplication app,JSONObject initialJson){
 		super(con,app);
 		this.initialJson=initialJson;
 	}
@@ -137,13 +137,13 @@ public class OsbRenderer extends MainRenderer
 			
 			EdLayoutParam lparam=new EdLayoutParam();
 			lparam.width=Param.makeupParam(250);
-			lparam.height=Param.makeupParam(560);
+			lparam.height=Param.MODE_MATCH_PARENT;
 			lparam.xoffset=400;
-			lparam.yoffset=500;
+			lparam.yoffset=0;
 			
 			layout.addView(llayout,lparam);
 			
-			for(int i=0;i<20;i++){
+			for(int i=0;i<3;i++){
 				TestButton button=new TestButton(c);
 				button.setName("testButton");
 				MarginLayoutParam param=new MarginLayoutParam();

@@ -9,6 +9,7 @@ import com.edplan.framework.graphics.opengl.BaseGLSurfaceView;
 import com.squareup.leakcanary.LeakCanary;
 import com.edplan.framework.main.MainApplication;
 import com.edplan.framework.graphics.opengl.MainRenderer;
+import com.edplan.framework.MContext;
 
 public class GLActivity extends Activity 
 {
@@ -23,12 +24,12 @@ public class GLActivity extends Activity
 	public class OsbApplication extends MainApplication
 	{
 		@Override
-		public MainRenderer createRenderer(){
+		public MainRenderer createRenderer(MContext c){
 			// TODO: Implement this method
 			Bundle data=getIntent().getExtras();
 			try
 			{
-				return new OsbRenderer(GLActivity.this, this, new JSONObject(data.getString(StaticData.InitialJSON)));
+				return new OsbRenderer(c, this, new JSONObject(data.getString(StaticData.InitialJSON)));
 			}
 			catch (JSONException e)
 			{

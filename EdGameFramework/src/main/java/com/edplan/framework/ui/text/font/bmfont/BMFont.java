@@ -12,7 +12,29 @@ import java.util.Map;
  */
 public class BMFont
 {
+	public static final String Noto_Sans_CJK_JP_Medium="Noto Sans CJK JP Medium";
+	
+	private static HashMap<String,BMFont> fonts=new HashMap<String,BMFont>();
+
+	private static BMFont defaultFont;
+	
 	public static char CHAR_NOT_FOUND=8709;
+	
+	public static void setDefaultFont(BMFont defaultFont){
+		BMFont.defaultFont=defaultFont;
+	}
+
+	public static BMFont getDefaultFont(){
+		return defaultFont;
+	}
+
+	public static void addFont(BMFont font,String name){
+		fonts.put(name,font);
+	}
+	
+	public static BMFont getFont(String name){
+		return fonts.get(name);
+	}
 	
 	private String face;
 	

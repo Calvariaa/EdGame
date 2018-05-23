@@ -426,7 +426,7 @@ public class ScrollContainer extends EdContainer
 					break;
 				case EdMeasureSpec.MODE_NONE:
 				default:
-					yd=getPaddingHorizon()+heightUsed;
+					yd=Math.max(getPaddingHorizon()+heightUsed,EdMeasureSpec.getSize(heightSpec));
 					break;
 			}
 		}

@@ -37,8 +37,8 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 	
 	private int glVersion;
 	
-	public MainRenderer(Context con,MainApplication app){
-		context=new MContext(con);
+	public MainRenderer(MContext context,MainApplication app){
+		this.context=context;
 		this.app=app;
 		viewRoot=new ViewRoot(context);
 		context.setViewRoot(viewRoot);
