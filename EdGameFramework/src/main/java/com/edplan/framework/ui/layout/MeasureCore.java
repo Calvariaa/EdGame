@@ -16,21 +16,29 @@ public class MeasureCore
 			final long widthSpec=getChildMeasureSpec(
 				parentWidthSpec,
 				paddingHorizon+mparam.getMarginHorizon()+widthUsed,
-				param.width);
+				param.width,
+				parentHeightSpec,
+				paddingVertical);
 			final long heightSpec=getChildMeasureSpec(
 				parentHeightSpec,
 				paddingVertical+mparam.getMarginVertical()+heightUsed,
-				param.height);
+				param.height,
+				parentWidthSpec,
+				paddingHorizon);
 			view.measure(widthSpec,heightSpec);
 		}else{
 			final long widthSpec=getChildMeasureSpec(
 				parentWidthSpec,
 				paddingHorizon+widthUsed,
-				param.width);
+				param.width,
+				parentHeightSpec,
+				paddingVertical);
 			final long heightSpec=getChildMeasureSpec(
 				parentHeightSpec,
 				paddingVertical+heightUsed,
-				param.height);
+				param.height,
+				parentWidthSpec,
+				paddingHorizon);
 			view.measure(widthSpec,heightSpec);
 		}
 		
@@ -45,16 +53,20 @@ public class MeasureCore
 		final long widthSpec=getChildMeasureSpec(
 			parentWidthSpec,
 			paddingHorizon,
-			param.width);
+			param.width,
+			parentHeightSpec,
+			paddingVertical);
 		final long heightSpec=getChildMeasureSpec(
 			parentHeightSpec,
 			paddingVertical,
-			param.height);
+			param.height,
+			parentWidthSpec,
+			paddingHorizon);
 		view.measure(widthSpec,heightSpec);
 		//Log.v("measure","view:"+view.getName()+" "+EdMeasureSpec.toString(widthSpec)+" : "+EdMeasureSpec.toString(heightSpec));
 	}
 	
-	public static long getChildMeasureSpec(long spec,float padding,long childDimension){
+	public static long getChildMeasureSpec(long spec,float padding,long childDimension,long otherSpec,float otherPadding){
 		final int mode=EdMeasureSpec.getMode(spec);
 		final float size=Math.max(EdMeasureSpec.getSize(spec)-padding,0);
 		final int pmode=Param.getMode(childDimension);
@@ -70,6 +82,14 @@ public class MeasureCore
 					case Param.WRAP_CONTENT:
 						rsize=size;
 						rmode=EdMeasureSpec.MODE_AT_MOST;
+						break;
+					case Param.SCALE_OF_PARENT_OTHER:
+						rsize=Math.max(EdMeasureSpec.getSize(otherSpec)-otherPadding,0)*Param.getSize(childDimension);
+						rmode=EdMeasureSpec.MODE_DEFINEDED;
+						break;
+					case Param.SCALE_OF_PARENT:
+						rsize=size*Param.getSize(childDimension);
+						rmode=EdMeasureSpec.MODE_DEFINEDED;
 						break;
 					default:
 						rsize=Param.getSize(childDimension);
@@ -87,6 +107,14 @@ public class MeasureCore
 						rsize=size;
 						rmode=EdMeasureSpec.MODE_AT_MOST;
 						break;
+					case Param.SCALE_OF_PARENT_OTHER:
+						rsize=Math.max(EdMeasureSpec.getSize(otherSpec)-otherPadding,0)*Math.min(1,Param.getSize(childDimension));
+						rmode=EdMeasureSpec.MODE_DEFINEDED;
+						break;
+					case Param.SCALE_OF_PARENT:
+						rsize=size*Param.getSize(childDimension);
+						rmode=EdMeasureSpec.MODE_DEFINEDED;
+						break;
 					default:
 						rsize=Param.getSize(childDimension);
 						rmode=EdMeasureSpec.MODE_DEFINEDED;
@@ -99,6 +127,14 @@ public class MeasureCore
 					case Param.MATCH_PARENT:
 					case Param.WRAP_CONTENT:
 						rsize=size;
+						rmode=EdMeasureSpec.MODE_NONE;
+						break;
+					case Param.SCALE_OF_PARENT_OTHER:
+						rsize=Math.max(EdMeasureSpec.getSize(otherSpec)-otherPadding,0)*Param.getSize(childDimension);
+						rmode=EdMeasureSpec.MODE_NONE;
+						break;
+					case Param.SCALE_OF_PARENT:
+						rsize=size*Param.getSize(childDimension);
 						rmode=EdMeasureSpec.MODE_NONE;
 						break;
 					default:

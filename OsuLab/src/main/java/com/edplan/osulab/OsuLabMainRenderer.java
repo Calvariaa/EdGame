@@ -56,12 +56,13 @@ public class OsuLabMainRenderer extends MainRenderer
 				page.addView(llayout,llparam);
 				{
 					MainCircleView button=new MainCircleView(c);
-					button.setBackground(draw);
+					//button.setBackground(draw);
 					EdLayoutParam lllparam=new EdLayoutParam();
-					lllparam.width=Param.makeupParam(900);
-					lllparam.height=Param.makeupParam(900);
+					lllparam.width=Param.makeupScaleOfParentOtherParam(0.7f);
+					lllparam.height=Param.makeupScaleOfParentParam(0.7f);
 					llayout.addView(button,lllparam);
 				}
+				/*
 				{
 					TestButton button=new TestButton(c);
 					EdLayoutParam lllparam=new EdLayoutParam();
@@ -69,6 +70,7 @@ public class OsuLabMainRenderer extends MainRenderer
 					lllparam.height=Param.makeupParam(100);
 					llayout.addView(button,lllparam);
 				}
+				*/
 			}
 		}
 		

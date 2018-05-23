@@ -27,7 +27,7 @@ public class MainCircleView extends EdView
 		
 		ring.setPosition(canvas.getWidth()/2,canvas.getHeight()/2);
 		ring.setArea(RectF.ltrb(-canvas.getWidth()/2,-canvas.getHeight()/2,canvas.getWidth()/2,canvas.getHeight()/2));
-		ring.setInnerRadius(canvas.getWidth()/4);
+		ring.setInnerRadius(0);//canvas.getWidth()/4);
 		ring.setRadius(canvas.getWidth()/4*(1+time/dt));
 		ring.draw(canvas);
 	}
