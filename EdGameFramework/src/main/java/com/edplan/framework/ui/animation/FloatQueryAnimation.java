@@ -7,6 +7,7 @@ import com.edplan.framework.ui.animation.interpolate.ValueInterpolator;
 import com.edplan.framework.ui.animation.precise.BasePreciseAnimation;
 import java.util.ArrayList;
 import java.util.List;
+import com.edplan.framework.interfaces.FloatReflectionInvokeSetter;
 
 public class FloatQueryAnimation<T> extends BasePreciseAnimation
 {
@@ -25,6 +26,14 @@ public class FloatQueryAnimation<T> extends BasePreciseAnimation
 	private T target;
 	
 	private float currentValue=Float.MIN_VALUE;
+	
+	public FloatQueryAnimation(T target,String setter){
+		this(target,0,RawFloatInterpolator.Instance,new FloatReflectionInvokeSetter<T>(target,setter),true);
+	}
+	
+	public FloatQueryAnimation(T target,FloatInvokeSetter<T> setter){
+		this(target,0,RawFloatInterpolator.Instance,setter,true);
+	}
 
 	public FloatQueryAnimation(T target,double initialOffset,RawFloatInterpolator interpolator,FloatInvokeSetter<T> setter,boolean alwaysInitial){
 		this.target=target;
@@ -90,21 +99,11 @@ public class FloatQueryAnimation<T> extends BasePreciseAnimation
 	@Override
 	protected void seekToTime(double progressTime) {
 		// TODO: Implement this method
-		/*
-		 if(hasNode()){
-		 int idx=search(progressTime);
-		 if(idx==-1){
-		 if(alwaysInitial)setter.invoke(target,nodes.get(0).value);
-		 return;
-		 }else{
-		 if(idx==nodes.size()){
-		 setter.invoke(target,getEndNode().value);
-		 }else{
-		 currentNode=nodes.get(idx);
-		 currentNode.apply(currentTime());
-		 }
-		 }
-		 }*/
+		currentNode=nodes.get(0);
+		while(currentNode.next!=null&&currentNode.next.startTime<currentTime()){
+			currentNode=currentNode.next;
+		}
+		currentNode.apply(currentTime());
 	}
 
 	public boolean hasNode(){

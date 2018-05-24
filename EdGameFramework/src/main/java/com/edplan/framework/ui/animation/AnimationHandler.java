@@ -20,43 +20,48 @@ public class AnimationHandler extends Loopable
 		AbstractAnimation anim;
 		while(iter.hasNext()){
 			anim=iter.next();
-			switch(anim.getState()){
-				case Waiting:
-					break;
-				case Skip:
-					skipAnimation(anim);
-					onRemoveAnimation(anim);
-					iter.remove();
-					break;
-				case Stop:
-					stopAnimation(anim);
-					onRemoveAnimation(anim);
-					iter.remove();
-					break;
-				case Running:
-					if(postProgress(anim,deltaTime)){
-						finishAnimation(anim);
-						onRemoveAnimation(anim);
-						iter.remove();
-					}
-					break;
-				default:
-					MLog.test.vOnce("switch-err","???","什么鬼啊");
+			if(handleSingleAnima(anim,deltaTime)){
+				iter.remove();
 			}
 		}
 		animations.endIterate();
 	}
 	
+	public static boolean handleSingleAnima(AbstractAnimation anim,double deltaTime){
+		switch(anim.getState()){
+			case Waiting:
+				return false;
+			case Skip:
+				skipAnimation(anim);
+				onRemoveAnimation(anim);
+				return true;
+			case Stop:
+				stopAnimation(anim);
+				onRemoveAnimation(anim);
+				return true;
+			case Running:
+				if(postProgress(anim,deltaTime)){
+					finishAnimation(anim);
+					onRemoveAnimation(anim);
+					return true;
+				}
+				return false;
+			default:
+				MLog.test.vOnce("switch-err","???","什么鬼啊");
+				return false;
+		}
+	}
+	
 	/**
 	 *返回值代表此动画是否Finish
 	 */
-	private boolean postProgress(AbstractAnimation anim,double postTime){
+	private static boolean postProgress(AbstractAnimation anim,double postTime){
 		double p;
 		switch(anim.getLoopType()){
 			case None:
 				p=anim.getProgressTime()+postTime;
 				if(p<anim.getDuration()){
-					anim.setProgressTime(p);
+					anim.postProgressTime(postTime);
 					anim.onProgress(p);
 				}else{
 					p=anim.getDuration();
@@ -68,7 +73,7 @@ public class AnimationHandler extends Loopable
 			case Loop:
 				p=anim.getProgressTime()+postTime;
 				if(p<anim.getDuration()){
-					anim.setProgressTime(p);
+					anim.postProgressTime(postTime);
 					anim.onProgress(p);
 				}else{
 					p%=anim.getDuration();
@@ -103,7 +108,7 @@ public class AnimationHandler extends Loopable
 				}
 				break;
 			case Endless:
-				anim.setProgressTime(anim.getProgressTime()+postTime);
+				anim.postProgressTime(postTime);
 				break;
 			default:
 				MLog.test.vOnce("err-anim-postProgress","?--?","谁让你走到这里的？？( ✘_✘ )↯");
@@ -111,19 +116,19 @@ public class AnimationHandler extends Loopable
 		return false;
 	}
 	
-	private void finishAnimation(AbstractAnimation anim){
+	private static void finishAnimation(AbstractAnimation anim){
 		anim.onFinish();
 	}
 	
-	private void skipAnimation(AbstractAnimation anim){
+	private static void skipAnimation(AbstractAnimation anim){
 		anim.setProgressTime(anim.getDuration());
 	}
 	
-	private void stopAnimation(AbstractAnimation anim){
+	private static void stopAnimation(AbstractAnimation anim){
 		
 	}
 	
-	private void onRemoveAnimation(AbstractAnimation anim){
+	private static void onRemoveAnimation(AbstractAnimation anim){
 		anim.onEnd();
 	}
 }

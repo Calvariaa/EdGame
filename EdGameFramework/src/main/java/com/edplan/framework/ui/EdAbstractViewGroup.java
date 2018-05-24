@@ -97,6 +97,19 @@ public abstract class EdAbstractViewGroup extends EdView
 	public int getChildrenCount(){
 		return idx;
 	}
+
+	@Override
+	public void performAnimation(double deltaTime){
+		// TODO: Implement this method
+		super.performAnimation(deltaTime);
+		final int count=getChildrenCount();
+		for(int i=0;i<count;i++){
+			final EdView view=getChildAt(i);
+			if(view.getVisiblility()!=VISIBILITY_GONE){
+				view.performAnimation(deltaTime);
+			}
+		}
+	}
 	
 	@Override
 	public final void layout(float left,float top,float right,float bottom) {

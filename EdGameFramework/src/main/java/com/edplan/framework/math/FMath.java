@@ -80,10 +80,22 @@ public class FMath
 	}
 	
 	public static float linear(float progress,float bottom,float top){
-		return bottom*progress+top*(1-progress);
+		return bottom*(1-progress)+top*progress;
 	}
 	
 	public static boolean almostEqual(double v1,double v2,double t){
 		return Math.abs(v1-v2)<=t;
+	}
+	
+	public static float linearCut(float c,float c1,float c2,float c3,float v1,float v2,float v3){
+		if(c<c1){
+			return v1;
+		}else if(c<c2){
+			return linear((c-c1)/(c2-c1),v1,v2);
+		}else if(c<c3){
+			return linear((c-c2)/(c3-c2),v2,v3);
+		}else{
+			return v3;
+		}
 	}
 }

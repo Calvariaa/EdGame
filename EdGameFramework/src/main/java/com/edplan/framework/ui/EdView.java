@@ -14,6 +14,8 @@ import com.edplan.framework.utils.BitUtil;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.ui.layout.MarginLayoutParam;
 import java.lang.ref.WeakReference;
+import com.edplan.framework.ui.animation.AbstractAnimation;
+import com.edplan.framework.ui.animation.AnimationHandler;
 
 public class EdView implements IRunnableHandler
 {
@@ -93,12 +95,24 @@ public class EdView implements IRunnableHandler
 	 */
 	private float offsetX,offsetY;
 	
+	private AbstractAnimation animation;
+	
+	private boolean hasInitialLayouted=false;
+	
 	public EdView(MContext context){
 		this.context=context;
 		if(!checkCurrentThread()){
 			throw new RuntimeException("you can only create a view in main thread!");
 		}
 		initialName();
+	}
+
+	public void setAnimation(AbstractAnimation animation){
+		this.animation=animation;
+	}
+
+	public AbstractAnimation getAnimation(){
+		return animation;
 	}
 
 	public void setOffsetX(float offsetX){
@@ -324,6 +338,19 @@ public class EdView implements IRunnableHandler
 	public void onCreate(){
 		hasCreated=true;
 	}
+	
+	public void onRemoveAnimation(AbstractAnimation anim){
+		
+	}
+	
+	public void performAnimation(double deltaTime){
+		if(animation!=null){
+			if(AnimationHandler.handleSingleAnima(animation,deltaTime)){
+				onRemoveAnimation(animation);
+				animation=null;
+			}
+		}
+	}
 
 	public void onDraw(BaseCanvas canvas){
 		defaultDraw(canvas);
@@ -427,8 +454,16 @@ public class EdView implements IRunnableHandler
 			this.topToParent=top;
 			this.rightToParent=right;
 			this.bottomToParent=bottom;
+			if(!hasInitialLayouted){
+				hasInitialLayouted=true;
+				onInitialLayouted();
+			}
 		}
 		return hasChanged;
+	}
+	
+	public void onInitialLayouted(){
+		
 	}
 	
 	

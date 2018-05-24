@@ -47,7 +47,6 @@ public class OsuLabMainRenderer extends MainRenderer
 			{
 				LinearLayout llayout=new LinearLayout(c);
 				llayout.setChildoffset(50);
-				//llayout.setBackground(draw);
 				llayout.setGravity(Gravity.Center);
 				llayout.setOrientation(Orientation.DIRECTION_T2B);
 				EdLayoutParam llparam=new EdLayoutParam();
@@ -56,21 +55,20 @@ public class OsuLabMainRenderer extends MainRenderer
 				page.addView(llayout,llparam);
 				{
 					MainCircleView button=new MainCircleView(c);
-					//button.setBackground(draw);
 					EdLayoutParam lllparam=new EdLayoutParam();
-					lllparam.width=Param.makeupScaleOfParentOtherParam(0.7f);
-					lllparam.height=Param.makeupScaleOfParentParam(0.7f);
+					lllparam.width=Param.makeupScaleOfParentOtherParam(0.6f);
+					lllparam.height=Param.makeupScaleOfParentParam(0.6f);
 					llayout.addView(button,lllparam);
 				}
-				/*
-				{
-					TestButton button=new TestButton(c);
-					EdLayoutParam lllparam=new EdLayoutParam();
-					lllparam.width=Param.makeupParam(600);
-					lllparam.height=Param.makeupParam(100);
-					llayout.addView(button,lllparam);
-				}
-				*/
+			}
+			{
+				TestButton dpTest=new TestButton(c);
+				dpTest.setOffsetX(100);
+				dpTest.setOffsetY(100);
+				EdLayoutParam llparam=new EdLayoutParam();
+				llparam.width=Param.makeUpDP(100);
+				llparam.height=Param.makeUpDP(100);
+				page.addView(dpTest,llparam);
 			}
 		}
 		

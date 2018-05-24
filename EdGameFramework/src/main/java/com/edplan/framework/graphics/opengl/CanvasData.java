@@ -111,7 +111,7 @@ public class CanvasData implements Recycleable,Copyable {
 	}
 	
 	public CanvasData rotate(float rotation){
-		getCurrentMaskMatrix().rotate2D(rotation,0,0,true);
+		getCurrentMaskMatrix().rotate2D(0,0,rotation,true);
 		freshMatrix();
 		return this;
 	}

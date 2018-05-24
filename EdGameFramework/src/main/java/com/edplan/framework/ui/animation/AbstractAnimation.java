@@ -35,6 +35,8 @@ public abstract class AbstractAnimation implements AnimationCallback
 	
 	public abstract void dispos();
 	
+	public abstract void start();
+	
 	/**
 	 *对于循环的Animation，获取现在循环的次数。
 	 *初始值为0（对于不循环的一直为0）

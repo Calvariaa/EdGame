@@ -7,7 +7,7 @@ import com.edplan.framework.graphics.opengl.MainRenderer;
 import com.edplan.framework.MContext;
 import com.edplan.nso.OsuFilePart;
 
-public class OsuLabActivity extends Activity 
+public class LabActivity extends Activity 
 {
 	private OsuLabApplication app;
 	

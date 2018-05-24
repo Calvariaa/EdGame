@@ -121,10 +121,15 @@ public class ViewRoot
 		Tracker.InvalidateMeasureAndLayout.end();
 	}
 	
+	protected void handlerAnimation(){
+		contentView.performAnimation(context.getFrameDeltaTime());
+	}
+	
 	public void onNewFrame(BaseCanvas canvas,double deltaTime){
 		frameInvalidateState=0;
 		
 		checkInvalidate();
+		handlerAnimation();
 		handlerInputs();
 		checkInvalidate();
 		

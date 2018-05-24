@@ -12,12 +12,18 @@ public class Param{
 	public static final int SCALE_OF_PARENT=3;
 	//另一方向的父类大小的倍率
 	public static final int SCALE_OF_PARENT_OTHER=4;
+	
+	public static final int DP=5;
 
 	public static final long MODE_WRAP_CONTENT=((long)WRAP_CONTENT)<<SHIFT_SIZE;
 	public static final long MODE_MATCH_PARENT=((long)MATCH_PARENT)<<SHIFT_SIZE;
 
 	public static long intToLongMode(int mode){
 		return ((long)mode)<<SHIFT_SIZE;
+	}
+	
+	public static long makeUpDP(float dp){
+		return makeupParam(dp,DP);
 	}
 	
 	public static long makeupScaleOfParentParam(float s){

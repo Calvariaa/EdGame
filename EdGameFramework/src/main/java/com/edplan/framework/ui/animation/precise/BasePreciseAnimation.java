@@ -12,6 +12,11 @@ public class BasePreciseAnimation extends AbstractPreciseAnimation
 	
 	private AnimState state=AnimState.Waiting;
 	
+	public void start(){
+		state=AnimState.Running;
+		setProgressTime(0);
+	}
+	
 	public void post(PreciseTimeline timeline){
 		/*
 		double endTime=getEndTime();
@@ -23,9 +28,9 @@ public class BasePreciseAnimation extends AbstractPreciseAnimation
 			onEnd();
 		}else{
 			*/
-			state=AnimState.Running;
-			timeline.addAnimation(this);
-			setProgressTime(0);
+			
+		timeline.addAnimation(this);
+		start();
 		//}
 		//timeline.frameTime()-getStartTimeAtTimeline());
 	}

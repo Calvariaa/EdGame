@@ -1,6 +1,7 @@
 package com.edplan.framework.ui.layout;
 import com.edplan.framework.ui.EdView;
 import android.util.Log;
+import com.edplan.framework.ui.ViewConfiguration;
 
 public class MeasureCore
 {
@@ -91,6 +92,10 @@ public class MeasureCore
 						rsize=size*Param.getSize(childDimension);
 						rmode=EdMeasureSpec.MODE_DEFINEDED;
 						break;
+					case Param.DP:
+						rsize=Param.getSize(childDimension)*ViewConfiguration.UI_UNIT;
+						rmode=EdMeasureSpec.MODE_DEFINEDED;
+						break;
 					default:
 						rsize=Param.getSize(childDimension);
 						rmode=EdMeasureSpec.MODE_DEFINEDED;
@@ -115,6 +120,10 @@ public class MeasureCore
 						rsize=size*Param.getSize(childDimension);
 						rmode=EdMeasureSpec.MODE_DEFINEDED;
 						break;
+					case Param.DP:
+						rsize=Param.getSize(childDimension)*ViewConfiguration.UI_UNIT;
+						rmode=EdMeasureSpec.MODE_DEFINEDED;
+						break;
 					default:
 						rsize=Param.getSize(childDimension);
 						rmode=EdMeasureSpec.MODE_DEFINEDED;
@@ -135,6 +144,10 @@ public class MeasureCore
 						break;
 					case Param.SCALE_OF_PARENT:
 						rsize=size*Param.getSize(childDimension);
+						rmode=EdMeasureSpec.MODE_NONE;
+						break;
+					case Param.DP:
+						rsize=Param.getSize(childDimension)*ViewConfiguration.UI_UNIT;
 						rmode=EdMeasureSpec.MODE_NONE;
 						break;
 					default:

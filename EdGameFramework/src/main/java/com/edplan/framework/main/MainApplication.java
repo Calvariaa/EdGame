@@ -8,6 +8,8 @@ import com.edplan.framework.ui.text.font.drawing.TextPrinter;
 import com.edplan.framework.MContext;
 import com.edplan.framework.resource.AResource;
 import java.io.IOException;
+import com.edplan.framework.test.TestStaticData;
+import com.edplan.framework.ui.ViewConfiguration;
 
 public abstract class MainApplication
 {
@@ -30,6 +32,7 @@ public abstract class MainApplication
 	public void setUpActivity(Activity act){
 		this.context=act;
 		mContext=new MContext(context);
+		TestStaticData.context=mContext;
 		surface=createGLView();
 		act.setContentView(surface);
 		onApplicationCreate();
@@ -39,7 +42,7 @@ public abstract class MainApplication
 	 *应用被初始化时被调用，GL环境可能尚未搭建
 	 */
 	public void onApplicationCreate(){
-		
+		ViewConfiguration.loadContext(mContext);
 	}
 	
 	/**
