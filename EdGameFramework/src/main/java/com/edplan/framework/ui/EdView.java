@@ -16,8 +16,9 @@ import com.edplan.framework.ui.layout.MarginLayoutParam;
 import java.lang.ref.WeakReference;
 import com.edplan.framework.ui.animation.AbstractAnimation;
 import com.edplan.framework.ui.animation.AnimationHandler;
+import com.edplan.framework.main.MainCallBack;
 
-public class EdView implements IRunnableHandler
+public class EdView implements IRunnableHandler,MainCallBack
 {
 	protected static int CUSTOM_INDEX=0;
 	
@@ -552,6 +553,27 @@ public class EdView implements IRunnableHandler
 		return result;
 	}
 	
+	@Override
+	public void onPause(){
+		// TODO: Implement this method
+	}
+
+	@Override
+	public void onResume(){
+		// TODO: Implement this method
+	}
+
+	@Override
+	public void onLowMemory(){
+		// TODO: Implement this method
+	}
+
+	@Override
+	public boolean onBackPressed(){
+		// TODO: Implement this method
+		return false;
+	}
+	
 	/**
 	 *处理悬浮事件
 	 */
@@ -811,5 +833,9 @@ public class EdView implements IRunnableHandler
 			setPressed(false);
 			onClickEventCancel();
 		}
+	}
+	
+	public interface OnClickListener{
+		public void onClick(EdView view);
 	}
 }

@@ -30,7 +30,7 @@ public class AbsoluteLayout extends EdAbstractViewGroup
 					xd=EdMeasureSpec.getSize(widthSpec)+getPaddingHorizon();
 					break;
 				case EdMeasureSpec.MODE_AT_MOST:
-					xd=getPaddingHorizon()+Math.min(EdMeasureSpec.getSize(widthSpec),getDefaultMaxChildrenMeasuredWidth());
+					xd=Math.min(EdMeasureSpec.getSize(widthSpec),getPaddingHorizon()+getDefaultMaxChildrenMeasuredWidth());
 					break;
 				case EdMeasureSpec.MODE_NONE:
 				default:
@@ -45,7 +45,7 @@ public class AbsoluteLayout extends EdAbstractViewGroup
 					yd=getPaddingVertical()+EdMeasureSpec.getSize(heightSpec);
 					break;
 				case EdMeasureSpec.MODE_AT_MOST:
-					yd=getPaddingVertical()+Math.min(EdMeasureSpec.getSize(heightSpec),getDefaultMaxChildrenMeasuredHeight());
+					yd=Math.min(EdMeasureSpec.getSize(heightSpec),getPaddingVertical()+getDefaultMaxChildrenMeasuredHeight());
 					break;
 				case EdMeasureSpec.MODE_NONE:
 				default:

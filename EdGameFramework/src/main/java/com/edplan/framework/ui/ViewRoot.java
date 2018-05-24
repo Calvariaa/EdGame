@@ -15,8 +15,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import com.edplan.framework.main.MainCallBack;
 
-public class ViewRoot
+public class ViewRoot implements MainCallBack
 {
 	public static final int FLAG_INVALIDATE_MEASURE=Invalidate.FLAG_INVALIDATE_MEASURE;
 
@@ -138,6 +139,34 @@ public class ViewRoot
 			Tracker.DrawUI.watch();
 			contentView.onDraw(canvas);
 			Tracker.DrawUI.end();
+		}
+	}
+	
+	@Override
+	public void onPause(){
+		// TODO: Implement this method
+		if(contentView!=null)contentView.onPause();
+	}
+
+	@Override
+	public void onResume(){
+		// TODO: Implement this method
+		if(contentView!=null)contentView.onResume();
+	}
+
+	@Override
+	public void onLowMemory(){
+		// TODO: Implement this method
+		if(contentView!=null)contentView.onLowMemory();
+	}
+
+	@Override
+	public boolean onBackPressed(){
+		// TODO: Implement this method
+		if(contentView!=null){
+			return contentView.onBackPressed();
+		}else{
+			return false;
 		}
 	}
 	

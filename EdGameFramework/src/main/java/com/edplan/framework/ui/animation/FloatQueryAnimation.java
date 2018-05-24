@@ -44,7 +44,7 @@ public class FloatQueryAnimation<T> extends BasePreciseAnimation
 		setStartTime(initialOffset);
 	}
 
-	public void transform(float value,double duration,Easing easing){
+	public FloatQueryAnimation transform(float value,double duration,Easing easing){
 		if(hasNode()){
 			AnimNode pre=getEndNode();
 			AnimNode next=new AnimNode(value,pre.endTime,duration,easing);
@@ -54,9 +54,10 @@ public class FloatQueryAnimation<T> extends BasePreciseAnimation
 		}else{
 			nodes.add(new AnimNode(value,initialOffset,duration,easing));
 		}
+		return this;
 	}
 
-	public void transform(float value,double startTime,double duration,Easing easing){
+	public FloatQueryAnimation transform(float value,double startTime,double duration,Easing easing){
 		if(hasNode()){
 			AnimNode pre=getEndNode();
 			if(startTime<pre.endTime){
@@ -72,6 +73,7 @@ public class FloatQueryAnimation<T> extends BasePreciseAnimation
 			nodes.add(new AnimNode(value,initialOffset,0,Easing.None));
 			transform(value,startTime,duration,easing);
 		}
+		return this;
 	}
 
 	public void skip(double time){

@@ -10,10 +10,19 @@ import com.edplan.framework.graphics.opengl.objs.Color4;
 
 public class TestButton extends EdView
 {
+	private OnClickListener onClickListener;
+	
 	public TestButton(MContext c){
 		super(c);
 		setClickable(true);
-		setLongclickable(true);
+	}
+
+	public void setOnClickListener(OnClickListener onClickListener){
+		this.onClickListener=onClickListener;
+	}
+
+	public OnClickListener getOnClickListener(){
+		return onClickListener;
 	}
 
 	@Override
@@ -34,6 +43,7 @@ public class TestButton extends EdView
 	public void onClickEvent(){
 		// TODO: Implement this method
 		super.onClickEvent();
+		if(onClickListener!=null)onClickListener.onClick(this);
 		//getContext().toast("onClick");
 	}
 

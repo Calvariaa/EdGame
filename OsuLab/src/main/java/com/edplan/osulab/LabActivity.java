@@ -6,25 +6,28 @@ import com.edplan.framework.main.MainApplication;
 import com.edplan.framework.graphics.opengl.MainRenderer;
 import com.edplan.framework.MContext;
 import com.edplan.nso.OsuFilePart;
+import com.edplan.framework.main.MainActivity;
 
-public class LabActivity extends Activity 
+public class LabActivity extends MainActivity 
 {
-	private OsuLabApplication app;
+	private LabApplication app;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-		app=new OsuLabApplication();
+		app=new LabApplication();
 		app.setUpActivity(this);
     }
 	
-	public class OsuLabApplication extends MainApplication
+	
+	
+	public class LabApplication extends MainApplication
 	{
 		@Override
 		public MainRenderer createRenderer(MContext context){
 			// TODO: Implement this method
-			return new OsuLabMainRenderer(context,this);
+			return new LabMainRenderer(context,this);
 		}
 	}
 }

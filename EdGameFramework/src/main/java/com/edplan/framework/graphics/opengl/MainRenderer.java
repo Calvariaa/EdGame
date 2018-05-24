@@ -43,6 +43,10 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 		viewRoot=new ViewRoot(context);
 		context.setViewRoot(viewRoot);
 	}
+	
+	public ViewRoot getViewRoot(){
+		return viewRoot;
+	}
 
 	public void setGlVersion(int glVersion) {
 		this.glVersion=glVersion;

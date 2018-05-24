@@ -1,36 +1,42 @@
 package com.edplan.osulab;
 import com.edplan.framework.MContext;
-import com.edplan.framework.graphics.opengl.MainRenderer;
 import com.edplan.framework.graphics.opengl.objs.Color4;
-import com.edplan.framework.main.MainApplication;
 import com.edplan.framework.ui.EdView;
 import com.edplan.framework.ui.drawable.RectDrawable;
 import com.edplan.framework.ui.layout.EdLayoutParam;
 import com.edplan.framework.ui.layout.Gravity;
-import com.edplan.framework.ui.layout.Orientation;
 import com.edplan.framework.ui.layout.Param;
 import com.edplan.framework.ui.widget.AbsoluteLayout;
 import com.edplan.framework.ui.widget.FrameContainer;
-import com.edplan.framework.ui.widget.LinearLayout;
+import com.edplan.framework.ui.widget.RelativeLayout;
 import com.edplan.framework.ui.widget.TestButton;
-import com.edplan.framework.ui.widget.TestScroller;
 import com.edplan.framework.ui.widget.ViewPage;
 import com.edplan.osulab.ui.opening.MainCircleView;
+import com.edplan.osulab.ui.toolbar.LabToolbar;
 
-public class OsuLabMainRenderer extends MainRenderer
+/**
+ *全局的管理类
+ */
+public class LabGame
 {
-	public OsuLabMainRenderer(MContext c,MainApplication app){
-		super(c,app);
+	private static LabGame game;
+	
+	private LabToolbar toolBar;
+	
+	public static void createGame(){
+		game=new LabGame();
 	}
 	
-	@Override
+	public static LabGame get(){
+		return game;
+	}
+	
 	public EdView createContentView(MContext c){
-		// TODO: Implement this method
 		RectDrawable draw=new RectDrawable(c);
 		draw.setColor(Color4.rgba(1,1,1,0.6f));
-		
+
 		AbsoluteLayout mainLayout=new AbsoluteLayout(c);
-		
+
 		FrameContainer mainFrameContainer=new FrameContainer(c);
 		EdLayoutParam mparam=new EdLayoutParam();
 		mparam.width=Param.MODE_MATCH_PARENT;
@@ -44,21 +50,23 @@ public class OsuLabMainRenderer extends MainRenderer
 			page.setLayoutParam(pparam);
 			mainFrameContainer.addPage(page);
 			mainFrameContainer.swapPage(page);
+			final MainCircleView mainCircleView;
 			{
-				LinearLayout llayout=new LinearLayout(c);
-				llayout.setChildoffset(50);
+				RelativeLayout llayout=new RelativeLayout(c);
+				//llayout.setChildoffset(50);
 				llayout.setGravity(Gravity.Center);
-				llayout.setOrientation(Orientation.DIRECTION_T2B);
+				//llayout.setOrientation(Orientation.DIRECTION_T2B);
 				EdLayoutParam llparam=new EdLayoutParam();
 				llparam.width=Param.MODE_MATCH_PARENT;
 				llparam.height=Param.MODE_MATCH_PARENT;
 				page.addView(llayout,llparam);
 				{
-					MainCircleView button=new MainCircleView(c);
-					EdLayoutParam lllparam=new EdLayoutParam();
+					mainCircleView=new MainCircleView(c);
+					RelativeLayout.RelativeParam lllparam=new RelativeLayout.RelativeParam();
 					lllparam.width=Param.makeupScaleOfParentOtherParam(0.6f);
 					lllparam.height=Param.makeupScaleOfParentParam(0.6f);
-					llayout.addView(button,lllparam);
+					lllparam.gravity=Gravity.Center;
+					llayout.addView(mainCircleView,lllparam);
 				}
 			}
 			{
@@ -69,9 +77,21 @@ public class OsuLabMainRenderer extends MainRenderer
 				llparam.width=Param.makeUpDP(100);
 				llparam.height=Param.makeUpDP(100);
 				page.addView(dpTest,llparam);
+				dpTest.setOnClickListener(new EdView.OnClickListener(){
+						@Override
+						public void onClick(EdView view){
+							// TODO: Implement this method
+							view.post(new Runnable(){
+									@Override
+									public void run(){
+										// TODO: Implement this method
+										mainCircleView.startOpeningAnim();
+									}
+								},1000);
+						}
+					});
 			}
 		}
-		
 		return mainLayout;
 	}
 }

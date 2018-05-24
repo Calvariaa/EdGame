@@ -12,6 +12,7 @@ import com.edplan.framework.ui.layout.MeasureCore;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
 import com.edplan.framework.ui.inputs.EdMotionEvent;
 import com.edplan.framework.math.RectF;
+import com.edplan.framework.interfaces.Invoker;
 
 public abstract class EdAbstractViewGroup extends EdView
 {
@@ -81,6 +82,70 @@ public abstract class EdAbstractViewGroup extends EdView
 		for(int i=0;i<count;i++){
 			final EdView view=getChildAt(i);
 			if(!view.hasCreated())view.onCreate();
+		}
+	}
+
+	@Override
+	public void onPause(){
+		// TODO: Implement this method
+		super.onPause();
+		doForAvailableChildren(new Invoker<EdView>(){
+				@Override
+				public void invoke(EdView t){
+					// TODO: Implement this method
+					t.onPause();
+				}
+			});
+	}
+
+	@Override
+	public void onResume(){
+		// TODO: Implement this method
+		super.onResume();
+		doForAvailableChildren(new Invoker<EdView>(){
+				@Override
+				public void invoke(EdView t){
+					// TODO: Implement this method
+					t.onResume();
+				}
+			});
+	}
+
+	@Override
+	public boolean onBackPressed(){
+		// TODO: Implement this method
+		final int c=getChildrenCount();
+		for(int i=0;i<c;i++){
+			final EdView view=getChildAt(i);
+			if(view.getVisiblility()!=VISIBILITY_GONE){
+				if(view.onBackPressed()){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public void onLowMemory(){
+		// TODO: Implement this method
+		super.onLowMemory();
+		doForAvailableChildren(new Invoker<EdView>(){
+				@Override
+				public void invoke(EdView t){
+					// TODO: Implement this method
+					t.onLowMemory();
+				}
+			});
+	}
+	
+	public void doForAvailableChildren(Invoker<EdView> invoker){
+		final int c=getChildrenCount();
+		for(int i=0;i<c;i++){
+			final EdView view=getChildAt(i);
+			if(view.getVisiblility()!=VISIBILITY_GONE){
+				invoker.invoke(view);
+			}
 		}
 	}
 	

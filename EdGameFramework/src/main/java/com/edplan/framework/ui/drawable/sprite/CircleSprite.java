@@ -14,6 +14,11 @@ public class CircleSprite extends RectSprite<CircleShader>
 	public CircleSprite(MContext c){
 		super(c);
 	}
+	
+	public void resetRadius(){
+		setInnerRadius(0);
+		setRadius(0);
+	}
 
 	public void setInnerRadius(float innerRadius){
 		this.innerRadius=innerRadius;

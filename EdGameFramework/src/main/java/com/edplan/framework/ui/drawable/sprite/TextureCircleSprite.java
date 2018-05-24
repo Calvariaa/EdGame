@@ -13,6 +13,11 @@ public class TextureCircleSprite extends RectTextureSprite<TextureCircleShader>
 	public TextureCircleSprite(MContext c){
 		super(c);
 	}
+	
+	public void resetRadius(){
+		setInnerRadius(0);
+		setRadius(0);
+	}
 
 	public void setInnerRadius(float innerRadius){
 		this.innerRadius=innerRadius;

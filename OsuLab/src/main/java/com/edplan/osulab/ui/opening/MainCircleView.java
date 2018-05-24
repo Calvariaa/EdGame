@@ -18,7 +18,7 @@ import java.io.IOException;
 
 public class MainCircleView extends EdView
 {
-	private float PieceSize=0.3f;
+	private float PieceSize=0.4f;
 	
 	private CircleSprite ring;
 	private CircleSprite pinkCover;
@@ -65,6 +65,7 @@ public class MainCircleView extends EdView
 		p2.setAlpha(alpha);
 		p3.setAlpha(alpha);
 		p4.setAlpha(alpha);
+		pinkCover.setAlpha(Math.min(1,2*progress));
 		final float radius=getWidth()/2*PieceSize*FMath.linearCut(
 			progress,
 			0,0.7f,1,
@@ -77,13 +78,19 @@ public class MainCircleView extends EdView
 	
 	public void setInner(float w){
 		centerRing.setRadius(w);
+		pinkCover.setRadius(w);
 		ring.setInnerRadius(w);
 	}
 
-	@Override
-	public void onInitialLayouted(){
-		// TODO: Implement this method
-		super.onInitialLayouted();
+	public void startOpeningAnim(){
+		ring.resetRadius();
+		pinkCover.resetRadius();
+		centerRing.resetRadius();
+		p1.resetRadius();
+		p2.resetRadius();
+		p3.resetRadius();
+		p4.resetRadius();
+		
 		ring.setPosition(getWidth()/2,getHeight()/2);
 		ring.setArea(RectF.ltrb(-getWidth()/2,-getHeight()/2,getWidth()/2,getHeight()/2));
 		pinkCover.setPosition(getWidth()/2,getHeight()/2);
@@ -91,6 +98,7 @@ public class MainCircleView extends EdView
 		centerRing.setPosition(getWidth()/2,getHeight()/2);
 		centerRing.setArea(RectF.ltrb(-getWidth()/2,-getHeight()/2,getWidth()/2,getHeight()/2));
 		pinkCover.setAccentColor(Color4.rgb255(253,123,181));
+		pinkCover.setAlpha(1);
 		float unit=getWidth()/2*PieceSize;
 		p1.setArea(RectF.ltrb(-unit,-unit,unit,unit));
 		p1.setAccentColor(Color4.rgb255(255,125,183));
@@ -100,32 +108,40 @@ public class MainCircleView extends EdView
 		p3.setAccentColor(Color4.rgb255(252,243,106));
 		p4.setArea(RectF.ltrb(-unit,-unit,unit,unit));
 		p4.setAccentColor(Color4.rgb255(255,255,255));
+
+		float radius=getWidth()/2;
+		FloatQueryAnimation anim=new FloatQueryAnimation<CircleSprite>(ring,"radius");
+		anim.transform(0,0,Easing.None);
+		anim.transform(radius,500,Easing.OutQuad);
+		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(anim);
+		{
+			FloatQueryAnimation anim2=new FloatQueryAnimation<MainCircleView>(MainCircleView.this,"inner");
+			anim2.transform(0,200,Easing.None);
+			anim2.transform(radius*0.9f,300,Easing.OutQuad);
+			builder.together(anim2,0);
+		}
+		{
+			FloatQueryAnimation piecesAnim=new FloatQueryAnimation<MainCircleView>(MainCircleView.this,"pieceOriginOffset");
+			piecesAnim.transform(0,0,Easing.None);
+			piecesAnim.transform(radius,600,Easing.OutExpo);
+			builder.together(piecesAnim);
+		}
+
+		ComplexAnimation camin=builder.build();
+		camin.start();
+		setAnimation(camin);
+	}
+	
+	@Override
+	public void onInitialLayouted(){
+		// TODO: Implement this method
+		super.onInitialLayouted();
 		
 		post(new Runnable(){
 				@Override
 				public void run(){
 					// TODO: Implement this method
-					float radius=getWidth()/2;
-					FloatQueryAnimation anim=new FloatQueryAnimation<CircleSprite>(ring,"radius");
-					anim.transform(0,0,Easing.None);
-					anim.transform(radius*0.98f,700,Easing.OutQuad);
-					ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(anim);
-					{
-						FloatQueryAnimation anim2=new FloatQueryAnimation<MainCircleView>(MainCircleView.this,"inner");
-						anim2.transform(0,200,Easing.None);
-						anim2.transform(radius,500,Easing.OutQuad);
-						builder.together(anim2,0);
-					}
-					{
-						FloatQueryAnimation piecesAnim=new FloatQueryAnimation<MainCircleView>(MainCircleView.this,"pieceOriginOffset");
-						piecesAnim.transform(0,0,Easing.None);
-						piecesAnim.transform(radius,700,Easing.OutExpo);
-						builder.together(piecesAnim);
-					}
-					
-					ComplexAnimation camin=builder.build();
-					camin.start();
-					setAnimation(camin);
+					startOpeningAnim();
 					//getContext().toast("开始动画");
 				}
 			},1000);
@@ -139,8 +155,9 @@ public class MainCircleView extends EdView
 		p2.draw(canvas);
 		p3.draw(canvas);
 		p4.draw(canvas);
+		
+		//centerRing.draw(canvas);
 		pinkCover.draw(canvas);
-		centerRing.draw(canvas);
 		ring.draw(canvas);
 	}
 }

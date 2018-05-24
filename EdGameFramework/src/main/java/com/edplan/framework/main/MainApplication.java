@@ -11,13 +11,15 @@ import java.io.IOException;
 import com.edplan.framework.test.TestStaticData;
 import com.edplan.framework.ui.ViewConfiguration;
 
-public abstract class MainApplication
+public abstract class MainApplication implements MainCallBack
 {
 	protected Context context;
 	
 	protected MContext mContext;
 	
 	protected BaseGLSurfaceView surface;
+	
+	protected MainRenderer renderer;
 	
 	public abstract MainRenderer createRenderer(MContext context);
 	
@@ -26,11 +28,42 @@ public abstract class MainApplication
 	}
 	
 	public BaseGLSurfaceView createGLView(){
-		return new BaseGLSurfaceView(getNativeContext(),createRenderer(mContext));
+		return new BaseGLSurfaceView(getNativeContext(),renderer=createRenderer(mContext));
 	}
 	
-	public void setUpActivity(Activity act){
+	@Override
+	public void onPause(){
+		if(renderer!=null)renderer.getViewRoot().onPause();
+	}
+	
+	@Override
+	public void onResume(){
+		if(renderer!=null)renderer.getViewRoot().onPause();
+	}
+	
+	@Override
+	public void onLowMemory(){
+		if(renderer!=null)renderer.getViewRoot().onPause();
+	}
+	
+	@Override
+	public boolean onBackPressed(){
+		if(renderer!=null){
+			if(renderer.getViewRoot().onBackPressed()){
+				return true;
+			}
+		}
+		onExit();
+		return true;
+	}
+	
+	public void onExit(){
+		System.exit(0);
+	}
+	
+	public void setUpActivity(MainActivity act){
 		this.context=act;
+		act.register(this);
 		mContext=new MContext(context);
 		TestStaticData.context=mContext;
 		surface=createGLView();
