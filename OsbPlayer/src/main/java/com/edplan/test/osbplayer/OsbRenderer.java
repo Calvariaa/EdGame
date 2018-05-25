@@ -69,6 +69,7 @@ public class OsbRenderer extends MainRenderer
 			layout.addView(view,param);
 		}
 		*/
+		/*
 		{
 			TestButton button=new TestButton(c);
 			button.setName("testButton");
@@ -79,6 +80,8 @@ public class OsbRenderer extends MainRenderer
 			param.yoffset=100;
 			layout.addView(button,param);
 		}
+		*/
+		/*
 		{
 			TestScroller button=new TestScroller(c);
 			button.setName("testScroller");
@@ -89,6 +92,7 @@ public class OsbRenderer extends MainRenderer
 			param.yoffset=0;
 			layout.addView(button,param);
 		}
+		*/
 		/*
 		{
 			RectDrawable drawable=new RectDrawable(c);

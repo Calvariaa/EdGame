@@ -10,8 +10,9 @@ import com.squareup.leakcanary.LeakCanary;
 import com.edplan.framework.main.MainApplication;
 import com.edplan.framework.graphics.opengl.MainRenderer;
 import com.edplan.framework.MContext;
+import com.edplan.framework.main.MainActivity;
 
-public class GLActivity extends Activity 
+public class GLActivity extends MainActivity 
 {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -24,11 +24,13 @@ public class BackButton extends EdView implements Hideable
 	
 	private ShadowCircleSprite shadowCircle;
 	
+	private float baseAlpha=0.5f;
+	
 	private float shadowDp=7;
 	
 	private float pressScale=0.8f;
 	
-	private float alpha=1;
+	private float alpha=baseAlpha;
 	
 	public BackButton(MContext c){
 		super(c);
@@ -38,6 +40,14 @@ public class BackButton extends EdView implements Hideable
 		shadowCircle=new ShadowCircleSprite(c);
 		shadowCircle.setStartColor(Color4.rgba(0.1f,0.1f,0.1f,0.6f));
 		shadowCircle.setEndColor(Color4.rgba(0,0,0,0));
+		setAlpha(baseAlpha);
+	}
+
+	@Override
+	public void onInitialLayouted(){
+		// TODO: Implement this method
+		super.onInitialLayouted();
+		directHide();
 	}
 
 	public void setAlpha(float alpha){
@@ -66,7 +76,7 @@ public class BackButton extends EdView implements Hideable
 	public void performOffPressAnimation(){
 		FloatQueryAnimation anim=new FloatQueryAnimation<BackButton>(this,"scale");
 		anim.transform(circle.getScaleX(),0,Easing.None);
-		anim.transform(1,ViewConfiguration.DEFAULT_TRANSITION_TIME/2,Easing.OutBounce);
+		anim.transform(baseAlpha,ViewConfiguration.DEFAULT_TRANSITION_TIME/2,Easing.OutBounce);
 		anim.start();
 		setAnimation(anim);
 	}
@@ -89,6 +99,12 @@ public class BackButton extends EdView implements Hideable
 			});
 		anim.start();
 		setAnimation(anim);
+	}
+	
+	public void directHide(){
+		setVisiblility(VISIBILITY_GONE);
+		setOffsetX(-getWidth());
+		setAlpha(0);
 	}
 	
 	public void hideAndOffPress(){

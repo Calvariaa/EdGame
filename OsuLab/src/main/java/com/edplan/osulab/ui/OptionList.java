@@ -54,6 +54,13 @@ public class OptionList extends ScrollContainer implements Hideable
 			addView(b,param);
 		}
 	}
+
+	@Override
+	public void onInitialLayouted(){
+		// TODO: Implement this method
+		super.onInitialLayouted();
+		directHide();
+	}
 	
 	@Override
 	public void hide(){
@@ -74,6 +81,12 @@ public class OptionList extends ScrollContainer implements Hideable
 			});
 		anim.start();
 		setAnimation(anim);
+	}
+	
+	public void directHide(){
+		setVisiblility(VISIBILITY_GONE);
+		setOffsetX(-getWidth());
+		setAlpha(0);
 	}
 
 	@Override

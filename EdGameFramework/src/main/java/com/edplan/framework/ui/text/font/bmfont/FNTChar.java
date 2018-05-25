@@ -26,6 +26,8 @@ public class FNTChar
 	public final int y;
 	public final int width;
 	public final int height;
+	public final int xadded;
+	public final int yadded;
 	public final int xoffset;
 	public final int yoffset;
 	//与baseLine的距离
@@ -59,6 +61,8 @@ public class FNTChar
 		this.xadvance=xadvance;
 		this.page=page;
 		this.chnl=chnl;
+		this.xadded=xoffset+width;
+		this.yadded=yoffset+height;
 	}
 
 	@Override

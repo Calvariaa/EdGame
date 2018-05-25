@@ -74,8 +74,22 @@ public class BMFont
 		return charmap.get(c);
 	}
 	
+	public FNTChar getFNTCharSafe(char c){
+		final FNTChar cc=charmap.get(c);
+		if(cc!=null){
+			return cc;
+		}else{
+			return errCharacter;
+		}
+	}
+	
 	public FNTKerning getKerning(char first,char second){
 		return kerningmap.get(new KerningPair(first,second));
+	}
+	
+	public int getKerningAmount(char first,char second){
+		final FNTKerning k=getKerning(first,second);
+		return (k!=null)?k.amount:0;
 	}
 	
 	public LoadedPage getPage(int page){

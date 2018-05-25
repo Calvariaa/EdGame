@@ -90,7 +90,19 @@ public class MainCircleView extends EdView
 		p4.setAccentColor(Color4.rgb255(255,255,255));
 
 		float radius=getBaseSize();
-		LabGame.get().getJumpingCircle().startOpeningAnimation(null);
+		LabGame.get().getJumpingCircle().startOpeningAnimation(new OnFinishListener(){
+				@Override
+				public void onFinish(){
+					// TODO: Implement this method
+					post(new Runnable(){
+							@Override
+							public void run(){
+								// TODO: Implement this method
+								LabGame.get().getToolBar().show();
+							}
+						},500);
+				}
+			});
 		FloatQueryAnimation piecesAnim=new FloatQueryAnimation<MainCircleView>(MainCircleView.this,"pieceOriginOffset");
 		piecesAnim.transform(0,0,Easing.None);
 		piecesAnim.transform(radius,600,Easing.OutExpo);

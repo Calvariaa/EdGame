@@ -29,11 +29,11 @@ import com.edplan.framework.ui.widget.component.Hideable;
 
 public class LabToolbar extends RelativeContainer implements Hideable
 {
-	private float normalBaseAlpha=0.6f;
+	private float normalBaseAlpha=0.4f;
 	
 	private float highlightBaseAlpha=1;
 	
-	private float baseAlpha=0.6f;
+	private float baseAlpha=normalBaseAlpha;
 	
 	private float settedAlpha=1;
 	
@@ -156,6 +156,13 @@ public class LabToolbar extends RelativeContainer implements Hideable
 	}
 
 	@Override
+	public void onInitialLayouted(){
+		// TODO: Implement this method
+		super.onInitialLayouted();
+		directHide();
+	}
+
+	@Override
 	public boolean onMotionEvent(EdMotionEvent e){
 		// TODO: Implement this method
 		preTouchTime=Framework.relativePreciseTimeMillion();
@@ -191,6 +198,12 @@ public class LabToolbar extends RelativeContainer implements Hideable
 			});
 		anim.start();
 		setAnimation(anim);
+	}
+	
+	public void directHide(){
+		setVisiblility(VISIBILITY_GONE);
+		setOffsetY(-getHeight());
+		setAlpha(0);
 	}
 	
 	@Override

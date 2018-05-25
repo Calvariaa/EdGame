@@ -43,6 +43,7 @@ import com.edplan.nso.storyboard.PlayingStoryboardLayer;
 import com.edplan.framework.resource.MultipleResource;
 import com.edplan.framework.ui.inputs.EdMotionEvent;
 import com.edplan.framework.timing.AdjustableTimeline;
+import com.edplan.framework.ui.text.font.drawing.TextUtils;
 
 public class TestOsbView extends EdView
 {
@@ -89,6 +90,10 @@ public class TestOsbView extends EdView
 	
 	private Vec2 touchPosition=new Vec2();
 	
+	private String breakString;
+	
+	private String[] breaked;
+	
 	private static Tracker.TrackNode main;
 	static{
 		main=Tracker.register("main");
@@ -117,6 +122,14 @@ public class TestOsbView extends EdView
 		test=new TestData();
 		try {
 			font=BMFont.getFont(BMFont.Noto_Sans_CJK_JP_Medium);
+			try{
+				breakString=getContext().getAssetResource().loadText("text/ohzora naomi - DOKIDOKI For Chieri rearrange MIX (Edrows Luo).osb");
+				breaked=TextUtils.breakText(font,breakString,900);
+			}catch(IOException e){
+				e.printStackTrace();
+				getContext().toast(e.getMessage());
+			}
+			
 			/*.loadFont(
 				res,
 				//			"Exo2.0-Regular.fnt");
@@ -507,13 +520,24 @@ public class TestOsbView extends EdView
 
 		//canvas.drawTexture(cardPng,RectF.xywh(0,0,canvas.getWidth(),canvas.getHeight()),newPaint);
 
-
+		
 		canvas.setCanvasAlpha(1f);
 		float baseLine=150;
+		ntp.setMixColor(Color4.White);
+		ntp.setStrokeWidth(30);
+		canvas.drawLine(100,baseLine,100+900,baseLine,ntp);
 		GLPaint textPaint=new GLPaint();
 		textPaint.setMixColor(Color4.rgba(1,0,0,1));
 		TextPrinter printer=new TextPrinter(font,100,baseLine,textPaint);
-		printer.setTextSize(40);
+		//printer.setTextSize(40);
+		for(String s:breaked){
+			printer.printString(s);
+			printer.printString(" ");
+			printer.printString(TextUtils.calwidth(font,s)+"");
+			printer.toNextLine();
+		}
+		
+		/*
 		printer.printString("DEVELOPMENT BUILD\nosu!lab 2018.4.9");
 		printer.toNextLine();
 		printer.printString("fps: "+(int)(1000/avg)+"/"+(int)(1000/avg_nogc));
@@ -541,6 +565,7 @@ public class TestOsbView extends EdView
 		//printer.toNextLine();
 		//printer.toNextLine();
 		//printer.printString("D̨Á̶̢T̛͝͡AÈ̶R͢͢Ŕ͡0R͟͟");
+		*/
 		printer.draw(canvas);
 		GLPaint baseLinePaint=new GLPaint();
 		baseLinePaint.setMixColor(Color4.rgba(1,0,0,0.6f));

@@ -51,6 +51,13 @@ public class SceneOverlay extends RelativeContainer implements Hideable
 			addView(button,p);
 		}
 	}
+
+	@Override
+	public void onInitialLayouted(){
+		// TODO: Implement this method
+		super.onInitialLayouted();
+		directHide();
+	}
 	
 	@Override
 	public void hide(){
@@ -73,6 +80,12 @@ public class SceneOverlay extends RelativeContainer implements Hideable
 		setAnimation(anim);
 	}
 
+	public void directHide(){
+		setVisiblility(VISIBILITY_GONE);
+		setOffsetY(getHeight());
+		setAlpha(0);
+	}
+	
 	@Override
 	public void show(){
 		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<SceneOverlay>(this,"alpha")
