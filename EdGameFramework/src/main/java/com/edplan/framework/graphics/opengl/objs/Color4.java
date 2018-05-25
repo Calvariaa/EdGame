@@ -46,6 +46,11 @@ public class Color4
 		return this;
 	}
 
+	public Color4 setAlpha(float a){
+		this.a=a;
+		return this;
+	}
+	
 	public void set(int numberBit,boolean prem){
 		r=Color.red(numberBit)/255f;
 		g=Color.green(numberBit)/255f;

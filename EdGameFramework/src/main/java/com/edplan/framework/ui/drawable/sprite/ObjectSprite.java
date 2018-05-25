@@ -15,6 +15,11 @@ public abstract class ObjectSprite<S extends SpriteShader> extends Sprite<S>
 		super(c);
 	}
 
+	public void setScale(float s){
+		setScaleX(s);
+		setScaleY(s);
+	}
+	
 	public void setPosition(float x,float y){
 		this.position.set(x,y);
 	}

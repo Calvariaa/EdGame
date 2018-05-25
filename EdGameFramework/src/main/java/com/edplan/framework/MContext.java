@@ -1,6 +1,4 @@
 package com.edplan.framework;
-import com.edplan.superutils.classes.MLooperThread;
-import com.edplan.superutils.classes.MLooper;
 import com.edplan.superutils.MTimer;
 import android.content.Context;
 import com.edplan.framework.resource.AResource;
@@ -20,23 +18,13 @@ public class MContext
 {
 	private Thread mainThread;
 	
-	private MLooperThread loopThread;
-	
-	private MLooper looper;
-	
-	private RunnableHandler runnableHandler;
-	
 	private MTimer looperTimer;
-	
-	private ShaderManager shaderManager;
 	
 	private Context androidContext;
 	
 	private BaseGLSurfaceView holdingView;
 	
 	private ApplicationAssetResource assetResource;
-	
-	private int step;
 	
 	private UILooper uiLooper;
 	
@@ -160,19 +148,5 @@ public class MContext
 	
 	public double getFrameDeltaTime(){
 		return uiLooper.getTimer().getDeltaTime();
-	}
-	
-	public MLooper getLooper(){
-		return looper;
-	}
-	
-	public void setLoopThread(MLooperThread loopThread){
-		this.loopThread=loopThread;
-		looper=loopThread.getLooper();
-		looperTimer=looper.getTimer();
-	}
-
-	public MLooperThread getLoopThread(){
-		return loopThread;
 	}
 }

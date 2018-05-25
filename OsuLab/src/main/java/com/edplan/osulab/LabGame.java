@@ -16,6 +16,9 @@ import com.edplan.osulab.ui.SceneOverlay;
 import com.edplan.osulab.ui.UiConfig;
 import com.edplan.osulab.ui.opening.MainCircleView;
 import com.edplan.osulab.ui.toolbar.LabToolbar;
+import com.edplan.osulab.ui.pieces.JumpingCircle;
+import com.edplan.osulab.ui.MainBackground;
+import com.edplan.osulab.ui.pieces.BackButton;
 
 /**
  *全局的管理类
@@ -29,6 +32,38 @@ public class LabGame
 	private OptionList optionList;
 
 	private SceneOverlay sceneOverlay;
+	
+	private JumpingCircle jumpingCircle;
+	
+	private MainBackground mainBackground;
+	
+	private FrameContainer mainFrameContainer;
+	
+	private BackButton backButton;
+
+	public void setBackButton(BackButton backButton){
+		this.backButton=backButton;
+	}
+
+	public BackButton getBackButton(){
+		return backButton;
+	}
+
+	public void setMainBackground(MainBackground mainBackground){
+		this.mainBackground=mainBackground;
+	}
+
+	public MainBackground getMainBackground(){
+		return mainBackground;
+	}
+
+	public void setJumpingCircle(JumpingCircle jumpingCircle){
+		this.jumpingCircle=jumpingCircle;
+	}
+
+	public JumpingCircle getJumpingCircle(){
+		return jumpingCircle;
+	}
 
 	public void setSceneOverlay(SceneOverlay sceneOverlay){
 		this.sceneOverlay=sceneOverlay;
@@ -56,9 +91,18 @@ public class LabGame
 	
 	public EdView createContentView(MContext c){
 		RelativeLayout mainLayout=new RelativeLayout(c);
+		jumpingCircle=new JumpingCircle(c);
+		mainBackground=new MainBackground(c);
+		mainFrameContainer=new FrameContainer(c);
+		backButton=new BackButton(c);
 		mainLayout.setBackground(Color4.gray(0.2f));
 		{
-			FrameContainer mainFrameContainer=new FrameContainer(c);
+			RelativeLayout.RelativeParam mparam=new RelativeLayout.RelativeParam();
+			mparam.width=Param.MODE_MATCH_PARENT;
+			mparam.height=Param.MODE_MATCH_PARENT;
+			mainLayout.addView(mainBackground,mparam);
+		}
+		{
 			RelativeLayout.RelativeParam mparam=new RelativeLayout.RelativeParam();
 			mparam.width=Param.MODE_MATCH_PARENT;
 			mparam.height=Param.MODE_MATCH_PARENT;
@@ -89,35 +133,13 @@ public class LabGame
 						lllparam.gravity=Gravity.Center;
 						llayout.addView(mainCircleView,lllparam);
 					}
-				}
-				{
-					TestButton dpTest=new TestButton(c);
-					dpTest.setOffsetX(100);
-					dpTest.setOffsetY(200);
-					EdLayoutParam llparam=new EdLayoutParam();
-					llparam.width=Param.makeUpDP(100);
-					llparam.height=Param.makeUpDP(40);
-					page.addView(dpTest,llparam);
-					dpTest.setOnClickListener(new EdView.OnClickListener(){
-							@Override
-							public void onClick(EdView view){
-								// TODO: Implement this method
-								toolBar.hide();
-								view.post(new Runnable(){
-										@Override
-										public void run(){
-											// TODO: Implement this method
-											mainCircleView.startOpeningAnim(new OnFinishListener(){
-													@Override
-													public void onFinish(){
-														// TODO: Implement this method
-														toolBar.show();
-													}
-												});
-										}
-									},2000);
-							}
-						});
+					{
+						RelativeLayout.RelativeParam lllparam=new RelativeLayout.RelativeParam();
+						lllparam.width=Param.makeupScaleOfParentOtherParam(0.6f);
+						lllparam.height=Param.makeupScaleOfParentParam(0.6f);
+						lllparam.gravity=Gravity.Center;
+						llayout.addView(jumpingCircle,lllparam);
+					}
 				}
 			}
 		}
@@ -125,7 +147,7 @@ public class LabGame
 		{
 			optionList=new OptionList(c);
 			RelativeLayout.RelativeParam param=new RelativeLayout.RelativeParam();
-			param.width=Param.makeUpDP(250);
+			param.width=Param.makeUpDP(350);
 			param.height=Param.MODE_MATCH_PARENT;
 			param.marginTop=ViewConfiguration.dp(40);
 			mainLayout.addView(optionList,param);
@@ -133,7 +155,6 @@ public class LabGame
 		
 		{
 			toolBar=new LabToolbar(c);
-			//toolBar.setVisiblility(EdView.VISIBILITY_GONE);
 			RelativeLayout.RelativeParam param=new RelativeLayout.RelativeParam();
 			param.width=Param.MODE_MATCH_PARENT;
 			param.height=Param.makeUpDP(UiConfig.TOOLBAR_HEIGHT_DP);
@@ -142,13 +163,19 @@ public class LabGame
 		}
 		{
 			sceneOverlay=new SceneOverlay(c);
-			//toolBar.setVisiblility(EdView.VISIBILITY_GONE);
 			RelativeLayout.RelativeParam param=new RelativeLayout.RelativeParam();
 			param.width=Param.MODE_MATCH_PARENT;
 			param.height=Param.MODE_MATCH_PARENT;
 			param.marginTop=ViewConfiguration.dp(UiConfig.TOOLBAR_HEIGHT_DP);
 			param.gravity=Gravity.BottomCenter;
 			mainLayout.addView(sceneOverlay,param);
+		}
+		{
+			RelativeLayout.RelativeParam mparam=new RelativeLayout.RelativeParam();
+			mparam.width=Param.makeUpDP(50);
+			mparam.height=Param.makeUpDP(50);
+			mparam.gravity=Gravity.BottomLeft;
+			mainLayout.addView(backButton,mparam);
 		}
 		return mainLayout;
 	}

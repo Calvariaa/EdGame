@@ -17,8 +17,9 @@ import com.edplan.framework.ui.layout.Orientation;
 import com.edplan.framework.ui.layout.Param;
 import com.edplan.framework.ui.widget.ScrollContainer;
 import com.edplan.framework.ui.widget.TestButton;
+import com.edplan.framework.ui.widget.component.Hideable;
 
-public class OptionList extends ScrollContainer
+public class OptionList extends ScrollContainer implements Hideable
 {
 	private ColorRectSprite shadowSprite;
 	
@@ -54,6 +55,7 @@ public class OptionList extends ScrollContainer
 		}
 	}
 	
+	@Override
 	public void hide(){
 		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<OptionList>(this,"alpha")
 																	  .transform(getAlpha(),0,Easing.None)
@@ -67,12 +69,14 @@ public class OptionList extends ScrollContainer
 				public void onFinish(){
 					// TODO: Implement this method
 					setVisiblility(VISIBILITY_GONE);
+					BackQuery.get().unregist(OptionList.this);
 				}
 			});
 		anim.start();
 		setAnimation(anim);
 	}
 
+	@Override
 	public void show(){
 		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<OptionList>(this,"alpha")
 																	  .transform(getAlpha(),0,Easing.None)
@@ -84,6 +88,13 @@ public class OptionList extends ScrollContainer
 		anim.start();
 		setAnimation(anim);
 		setVisiblility(VISIBILITY_SHOW);
+		BackQuery.get().regist(this);
+	}
+
+	@Override
+	public boolean isHidden(){
+		// TODO: Implement this method
+		return getVisiblility()==VISIBILITY_GONE;
 	}
 
 	@Override

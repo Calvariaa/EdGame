@@ -35,6 +35,14 @@ public abstract class EdContainer extends EdAbstractViewGroup
 		return postPaint.getFinalAlpha();
 	}
 	
+	public void setAccentColor(Color4 c){
+		postPaint.setMixColor(c);
+	}
+	
+	public Color4 getAccentColor(){
+		return postPaint.getMixColor();
+	}
+	
 	public Vec2 getBufferSize(){
 		return new Vec2(layer.getWidth(),layer.getHeight());
 	}
@@ -57,14 +65,20 @@ public abstract class EdContainer extends EdAbstractViewGroup
 	@Override
 	protected void dispatchDraw(BaseCanvas canvas){
 		// TODO: Implement this method
-		
 		updateLayerSize(canvas);
 		updateCanvas(canvas);
 		layerCanvas.prepare();
 		layerCanvas.drawColor(Color4.Alpha);
 		layerCanvas.clearBuffer();
+		drawBackground(layerCanvas);
 		drawContainer(layerCanvas);
 		layerCanvas.unprepare();
 		canvas.drawTexture(layer.getTexture(),RectF.xywh(0,0,getWidth(),getHeight()),postPaint);
+	}
+
+	@Override
+	public void onDraw(BaseCanvas canvas){
+		// TODO: Implement this method
+		dispatchDraw(canvas);
 	}
 }

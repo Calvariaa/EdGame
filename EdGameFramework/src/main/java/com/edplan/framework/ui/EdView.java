@@ -797,6 +797,7 @@ public class EdView implements IRunnableHandler,MainCallBack
 		
 		public void down(EdMotionEvent event){
 			setPressed(true);
+			onStartClick();
 			clickPointer=event.getPointerId();
 			downX=event.getX();
 			downY=event.getY();

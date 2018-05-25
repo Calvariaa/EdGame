@@ -53,8 +53,14 @@ public abstract class MainApplication implements MainCallBack
 				return true;
 			}
 		}
-		onExit();
+		if(!onBackPressNotHandled()){
+			onExit();
+		}
 		return true;
+	}
+	
+	public boolean onBackPressNotHandled(){
+		return false;
 	}
 	
 	public void onExit(){

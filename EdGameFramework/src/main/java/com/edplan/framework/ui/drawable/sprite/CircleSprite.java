@@ -1,10 +1,9 @@
 package com.edplan.framework.ui.drawable.sprite;
 import com.edplan.framework.MContext;
-import com.edplan.framework.graphics.opengl.shader.uniforms.UniformFloat;
-import android.icu.text.UnicodeFilter;
-import com.edplan.framework.utils.StringUtil;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
+import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.shader.uniforms.UniformVec2;
+import com.edplan.framework.utils.StringUtil;
 
 public class CircleSprite extends RectSprite<CircleShader>
 {
@@ -72,7 +71,7 @@ class CircleShader extends SpriteShader{
 									  "uniform vec2 u_Radius;",
 									  "void main(){",
 									  "    float v=length(f_Position);",
-									  //"    vec2 radius=u_Radius;",
+									  
 									  "    float a=min(",
 									  "        smoothstep(u_Radius.x-1.0,u_Radius.x,v),",
 									  "        1.0-smoothstep(u_Radius.y-1.0,u_Radius.y,v));",
@@ -86,6 +85,10 @@ class CircleShader extends SpriteShader{
 	
 	@PointerName
 	public UniformVec2 uRadius;
+	
+	public CircleShader(String vs,String fs){
+		super(vs,fs);
+	}
 	
 	public CircleShader(){
 		super(VERTEX_SHADER,FRAGMENT_SHADER);

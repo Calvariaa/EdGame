@@ -25,14 +25,15 @@ import com.edplan.osulab.ui.OptionList;
 import com.edplan.osulab.LabGame;
 import com.edplan.framework.Framework;
 import com.edplan.framework.ui.inputs.EdMotionEvent;
+import com.edplan.framework.ui.widget.component.Hideable;
 
-public class LabToolbar extends RelativeContainer
+public class LabToolbar extends RelativeContainer implements Hideable
 {
-	private float normalBaseAlpha=0.3f;
+	private float normalBaseAlpha=0.6f;
 	
 	private float highlightBaseAlpha=1;
 	
-	private float baseAlpha=0.3f;
+	private float baseAlpha=0.6f;
 	
 	private float settedAlpha=1;
 	
@@ -55,11 +56,12 @@ public class LabToolbar extends RelativeContainer
 	public LabToolbar(MContext c){
 		super(c);
 		setClickable(true);
+		setAccentColor(Color4.rgba(1,1,1,1f));
 		ColorDrawable cd=new ColorDrawable(c);
 		cd.setColor(Color4.rgba(0,0,0,0.9f),
 					Color4.rgba(0,0,0,0.9f),
-					Color4.rgba(0,0,0,0.3f),
-					Color4.rgba(0,0,0,0.3f));
+					Color4.rgba(0,0,0,0.5f),
+					Color4.rgba(0,0,0,0.5f));
 		setBackground(cd);
 		shadowSprite=new ColorRectSprite(c);
 		float gr=0f;
@@ -101,6 +103,19 @@ public class LabToolbar extends RelativeContainer
 				lparam.height=Param.MODE_MATCH_PARENT;
 				lparam.marginLeft=ViewConfiguration.dp(1);
 				leftLayout.addView(msgShowButton,lparam);
+				
+				msgShowButton.setOnClickListener(new OnClickListener(){
+						@Override
+						public void onClick(EdView view){
+							// TODO: Implement this method
+							if(LabGame.get().getBackButton().isHidden()){
+								LabGame.get().getBackButton().show();
+							}else{
+								LabGame.get().getBackButton().hide();
+							}
+						}
+					});
+				
 			}
 		}
 		{
@@ -158,6 +173,7 @@ public class LabToolbar extends RelativeContainer
 		return shadowHeight;
 	}
 	
+	@Override
 	public void hide(){
 		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<LabToolbar>(this,"alpha")
 																	  .transform(getAlpha(),0,Easing.None)
@@ -177,6 +193,7 @@ public class LabToolbar extends RelativeContainer
 		setAnimation(anim);
 	}
 	
+	@Override
 	public void show(){
 		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<LabToolbar>(this,"alpha")
 																	  .transform(getAlpha(),0,Easing.None)
@@ -266,6 +283,12 @@ public class LabToolbar extends RelativeContainer
 	public float getAlpha(){
 		// TODO: Implement this method
 		return settedAlpha;
+	}
+	
+	@Override
+	public boolean isHidden(){
+		// TODO: Implement this method
+		return getVisiblility()==VISIBILITY_GONE;
 	}
 	
 	protected void updateAlpha(){

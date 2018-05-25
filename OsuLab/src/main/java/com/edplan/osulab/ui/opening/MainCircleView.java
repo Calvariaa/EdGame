@@ -16,41 +16,28 @@ import com.edplan.framework.ui.drawable.sprite.TextureCircleSprite;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import java.io.IOException;
 import com.edplan.framework.ui.animation.callback.OnFinishListener;
+import com.edplan.osulab.LabGame;
 
 public class MainCircleView extends EdView
 {
 	private float PieceSize=0.4f;
 	
-	private CircleSprite ring;
-	private CircleSprite pinkCover;
-	private TextureCircleSprite centerRing;
+	
 	private CircleSprite p1,p2,p3,p4;
-	private GLTexture logo;
+	
 	
 	public MainCircleView(MContext c){
 		super(c);
-		ring=new CircleSprite(c);
-		centerRing=new TextureCircleSprite(c);
-		pinkCover=new CircleSprite(c);
-		pinkCover.setColor(Color4.rgba(1,1,1,1f),
-						   Color4.rgba(1,1,1,1f),
-						   Color4.gray(0.9f),
-						   Color4.gray(0.9f));
+		
 		p1=new CircleSprite(c);
 		p2=new CircleSprite(c);
 		p3=new CircleSprite(c);
 		p4=new CircleSprite(c);
-		try{
-			logo=getContext().getAssetResource().loadTexture("osu/ui/logo.png");
-			centerRing.setTexture(logo,null);
-		}catch(IOException e){
-			e.printStackTrace();
-			getContext().toast("err");
-		}
+		
 	}
 	
 	public float getBaseSize(){
-		return getWidth()/2*0.9f;
+		return getWidth()/2;
 	}
 	
 	public void setPieceOriginOffset(float length){
@@ -74,7 +61,6 @@ public class MainCircleView extends EdView
 		p2.setAlpha(alpha);
 		p3.setAlpha(alpha);
 		p4.setAlpha(alpha);
-		pinkCover.setAlpha(Math.min(1,2*progress));
 		final float radius=getBaseSize()*PieceSize*FMath.linearCut(
 			progress,
 			0,0.7f,1,
@@ -84,30 +70,15 @@ public class MainCircleView extends EdView
 		p3.setRadius(radius);
 		p4.setRadius(radius);
 	}
-	
-	public void setInner(float w){
-		centerRing.setRadius(w);
-		pinkCover.setRadius(w);
-		ring.setInnerRadius(w);
-	}
 
 	public void startOpeningAnim(OnFinishListener l){
-		ring.resetRadius();
-		pinkCover.resetRadius();
-		centerRing.resetRadius();
+		
 		p1.resetRadius();
 		p2.resetRadius();
 		p3.resetRadius();
 		p4.resetRadius();
+
 		
-		ring.setPosition(getWidth()/2,getHeight()/2);
-		ring.setArea(RectF.ltrb(-getWidth()/2,-getHeight()/2,getWidth()/2,getHeight()/2));
-		pinkCover.setPosition(getWidth()/2,getHeight()/2);
-		pinkCover.setArea(RectF.ltrb(-getWidth()/2,-getHeight()/2,getWidth()/2,getHeight()/2));
-		centerRing.setPosition(getWidth()/2,getHeight()/2);
-		centerRing.setArea(RectF.ltrb(-getWidth()/2,-getHeight()/2,getWidth()/2,getHeight()/2));
-		pinkCover.setAccentColor(Color4.rgb255(253,123,181));
-		pinkCover.setAlpha(1);
 		float unit=getBaseSize()*PieceSize;
 		p1.setArea(RectF.ltrb(-unit,-unit,unit,unit));
 		p1.setAccentColor(Color4.rgb255(255,125,183));
@@ -119,23 +90,11 @@ public class MainCircleView extends EdView
 		p4.setAccentColor(Color4.rgb255(255,255,255));
 
 		float radius=getBaseSize();
-		FloatQueryAnimation anim=new FloatQueryAnimation<CircleSprite>(ring,"radius");
-		anim.transform(0,0,Easing.None);
-		anim.transform(radius,500,Easing.OutQuad);
-		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(anim);
-		{
-			FloatQueryAnimation anim2=new FloatQueryAnimation<MainCircleView>(MainCircleView.this,"inner");
-			anim2.transform(0,200,Easing.None);
-			anim2.transform(radius*0.9f,300,Easing.OutQuad);
-			builder.together(anim2,0);
-		}
-		{
-			FloatQueryAnimation piecesAnim=new FloatQueryAnimation<MainCircleView>(MainCircleView.this,"pieceOriginOffset");
-			piecesAnim.transform(0,0,Easing.None);
-			piecesAnim.transform(radius,600,Easing.OutExpo);
-			builder.together(piecesAnim);
-		}
-
+		LabGame.get().getJumpingCircle().startOpeningAnimation(null);
+		FloatQueryAnimation piecesAnim=new FloatQueryAnimation<MainCircleView>(MainCircleView.this,"pieceOriginOffset");
+		piecesAnim.transform(0,0,Easing.None);
+		piecesAnim.transform(radius,600,Easing.OutExpo);
+		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(piecesAnim);
 		ComplexAnimation camin=builder.build();
 		camin.setOnFinishListener(l);
 		camin.start();
@@ -165,9 +124,5 @@ public class MainCircleView extends EdView
 		p2.draw(canvas);
 		p3.draw(canvas);
 		p4.draw(canvas);
-		
-		//centerRing.draw(canvas);
-		pinkCover.draw(canvas);
-		ring.draw(canvas);
 	}
 }

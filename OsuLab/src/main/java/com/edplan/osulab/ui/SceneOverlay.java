@@ -15,11 +15,12 @@ import com.edplan.framework.ui.widget.RelativeLayout;
 import com.edplan.framework.ui.layout.Param;
 import com.edplan.framework.ui.layout.Gravity;
 import com.edplan.framework.ui.EdView;
+import com.edplan.framework.ui.widget.component.Hideable;
 
 /**
  *
  */
-public class SceneOverlay extends RelativeContainer
+public class SceneOverlay extends RelativeContainer implements Hideable
 {
 	public SceneOverlay(MContext c){
 		super(c);
@@ -51,6 +52,7 @@ public class SceneOverlay extends RelativeContainer
 		}
 	}
 	
+	@Override
 	public void hide(){
 		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<SceneOverlay>(this,"alpha")
 																	  .transform(getAlpha(),0,Easing.None)
@@ -64,12 +66,14 @@ public class SceneOverlay extends RelativeContainer
 				public void onFinish(){
 					// TODO: Implement this method
 					setVisiblility(VISIBILITY_GONE);
+					BackQuery.get().unregist(SceneOverlay.this);
 				}
 			});
 		anim.start();
 		setAnimation(anim);
 	}
 
+	@Override
 	public void show(){
 		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<SceneOverlay>(this,"alpha")
 																	  .transform(getAlpha(),0,Easing.None)
@@ -81,6 +85,12 @@ public class SceneOverlay extends RelativeContainer
 		anim.start();
 		setAnimation(anim);
 		setVisiblility(VISIBILITY_SHOW);
+		BackQuery.get().regist(this);
 	}
 	
+	@Override
+	public boolean isHidden(){
+		// TODO: Implement this method
+		return getVisiblility()==VISIBILITY_GONE;
+	}
 }
