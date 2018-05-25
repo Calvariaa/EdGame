@@ -1,18 +1,18 @@
 package com.edplan.framework.ui.widget;
 import com.edplan.framework.MContext;
-import com.edplan.framework.ui.EdAbstractViewGroup;
+import com.edplan.framework.ui.EdContainer;
 import com.edplan.framework.ui.EdView;
 import com.edplan.framework.ui.layout.EdLayoutParam;
 import com.edplan.framework.ui.layout.EdMeasureSpec;
 import com.edplan.framework.ui.layout.Gravity;
-import com.edplan.framework.ui.layout.MarginLayoutParam;
+import com.edplan.framework.ui.widget.RelativeLayout.*;
 
-public class RelativeLayout extends EdAbstractViewGroup
+public class RelativeContainer extends EdContainer
 {
-	public RelativeLayout(MContext c){
+	public RelativeContainer(MContext c){
 		super(c);
 	}
-
+	
 	@Override
 	public EdLayoutParam getDefaultParam(EdView view){
 		// TODO: Implement this method
@@ -38,10 +38,10 @@ public class RelativeLayout extends EdAbstractViewGroup
 		final float parentTop=getPaddingTop();
 		final float parentBottom=bottom-top-getPaddingBottom();
 		final float parentRight=right-left-getPaddingRight();
-		
+
 		final float parentCenterHorizon=(parentLeft+parentRight)/2;
 		final float parentCenterVertical=(parentTop+parentBottom)/2;
-		
+
 		for(int i=0;i<count;i++){
 			final EdView view=getChildAt(i);
 			if(view.getVisiblility()!=VISIBILITY_GONE){
@@ -49,7 +49,7 @@ public class RelativeLayout extends EdAbstractViewGroup
 				final float ox;
 				final float oy;
 				switch(param.gravity&Gravity.MASK_HORIZON){
-					
+
 					case Gravity.CENTER_HORIZON:
 						ox=param.xoffset+parentCenterHorizon-view.getMeasuredWidth()/2;
 						break;
@@ -123,16 +123,4 @@ public class RelativeLayout extends EdAbstractViewGroup
 		setMeasuredDimensition(xd,yd);
 	}
 	
-	public static class RelativeParam extends MarginLayoutParam{
-		public int gravity;
-		
-		public RelativeParam(EdLayoutParam p){
-			super(p);
-			gravity=Gravity.TopLeft;
-		}
-		
-		public RelativeParam(){
-			gravity=Gravity.TopLeft;
-		}
-	}
 }

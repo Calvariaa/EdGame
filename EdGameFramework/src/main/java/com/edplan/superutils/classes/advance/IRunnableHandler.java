@@ -4,5 +4,5 @@ public interface IRunnableHandler
 {
 	public void post(Runnable r);
 	
-	public void post(Runnable r,int delayMS);
+	public void post(Runnable r,double delayMS);
 }

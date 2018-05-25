@@ -15,6 +15,7 @@ import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.ui.drawable.sprite.TextureCircleSprite;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import java.io.IOException;
+import com.edplan.framework.ui.animation.callback.OnFinishListener;
 
 public class MainCircleView extends EdView
 {
@@ -31,6 +32,10 @@ public class MainCircleView extends EdView
 		ring=new CircleSprite(c);
 		centerRing=new TextureCircleSprite(c);
 		pinkCover=new CircleSprite(c);
+		pinkCover.setColor(Color4.rgba(1,1,1,1f),
+						   Color4.rgba(1,1,1,1f),
+						   Color4.gray(0.9f),
+						   Color4.gray(0.9f));
 		p1=new CircleSprite(c);
 		p2=new CircleSprite(c);
 		p3=new CircleSprite(c);
@@ -44,11 +49,15 @@ public class MainCircleView extends EdView
 		}
 	}
 	
+	public float getBaseSize(){
+		return getWidth()/2*0.9f;
+	}
+	
 	public void setPieceOriginOffset(float length){
-		Vec2 pos=new Vec2(getWidth()/2,getHeight()/2);
+		Vec2 pos=new Vec2(getBaseSize(),getHeight()/2);
 		Vec2 org=pos.copy();
 		pos.move(length,0);
-		final float progress=length/(getWidth()/2);
+		final float progress=length/(getBaseSize());
 		pos.rotate(org,FMath.Pi*progress);
 		p1.setPosition(pos.x,pos.y);
 		pos.rotate(org,FMath.PiHalf);
@@ -66,7 +75,7 @@ public class MainCircleView extends EdView
 		p3.setAlpha(alpha);
 		p4.setAlpha(alpha);
 		pinkCover.setAlpha(Math.min(1,2*progress));
-		final float radius=getWidth()/2*PieceSize*FMath.linearCut(
+		final float radius=getBaseSize()*PieceSize*FMath.linearCut(
 			progress,
 			0,0.7f,1,
 			0,1,0);
@@ -82,7 +91,7 @@ public class MainCircleView extends EdView
 		ring.setInnerRadius(w);
 	}
 
-	public void startOpeningAnim(){
+	public void startOpeningAnim(OnFinishListener l){
 		ring.resetRadius();
 		pinkCover.resetRadius();
 		centerRing.resetRadius();
@@ -99,7 +108,7 @@ public class MainCircleView extends EdView
 		centerRing.setArea(RectF.ltrb(-getWidth()/2,-getHeight()/2,getWidth()/2,getHeight()/2));
 		pinkCover.setAccentColor(Color4.rgb255(253,123,181));
 		pinkCover.setAlpha(1);
-		float unit=getWidth()/2*PieceSize;
+		float unit=getBaseSize()*PieceSize;
 		p1.setArea(RectF.ltrb(-unit,-unit,unit,unit));
 		p1.setAccentColor(Color4.rgb255(255,125,183));
 		p2.setArea(RectF.ltrb(-unit,-unit,unit,unit));
@@ -109,7 +118,7 @@ public class MainCircleView extends EdView
 		p4.setArea(RectF.ltrb(-unit,-unit,unit,unit));
 		p4.setAccentColor(Color4.rgb255(255,255,255));
 
-		float radius=getWidth()/2;
+		float radius=getBaseSize();
 		FloatQueryAnimation anim=new FloatQueryAnimation<CircleSprite>(ring,"radius");
 		anim.transform(0,0,Easing.None);
 		anim.transform(radius,500,Easing.OutQuad);
@@ -128,6 +137,7 @@ public class MainCircleView extends EdView
 		}
 
 		ComplexAnimation camin=builder.build();
+		camin.setOnFinishListener(l);
 		camin.start();
 		setAnimation(camin);
 	}
@@ -141,7 +151,7 @@ public class MainCircleView extends EdView
 				@Override
 				public void run(){
 					// TODO: Implement this method
-					startOpeningAnim();
+					startOpeningAnim(null);
 					//getContext().toast("开始动画");
 				}
 			},1000);

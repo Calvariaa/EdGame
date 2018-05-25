@@ -64,7 +64,7 @@ public class UILooper extends StepLooper implements IRunnableHandler
 	}
 
 	@Override
-	public void post(Runnable r,int delayMS) {
+	public void post(Runnable r,double delayMS) {
 		// TODO: Implement this method
 		runnableHandler.post(r,delayMS);
 	}

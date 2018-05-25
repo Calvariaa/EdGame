@@ -18,7 +18,7 @@ public class RunnableHandler extends Loopable implements IRunnableHandler
 	}
 	
 	@Override
-	public void post(Runnable r,int delayMS){
+	public void post(Runnable r,double delayMS){
 		bufferedRunnables.add(new DelayedRunnable(r,delayMS));
 	}
 	
@@ -73,9 +73,9 @@ public class RunnableHandler extends Loopable implements IRunnableHandler
 	
 	private class DelayedRunnable{
 		public Runnable r;
-		public int delay;
+		public double delay;
 		
-		public DelayedRunnable(Runnable r,int delay){
+		public DelayedRunnable(Runnable r,double delay){
 			this.r=r;
 			this.delay=delay;
 		}

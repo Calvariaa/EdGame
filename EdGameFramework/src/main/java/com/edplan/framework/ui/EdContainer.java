@@ -27,6 +27,14 @@ public abstract class EdContainer extends EdAbstractViewGroup
 		postPaint=new GLPaint();
 	}
 	
+	public void setAlpha(float alpha){
+		postPaint.setFinalAlpha(alpha);
+	}
+	
+	public float getAlpha(){
+		return postPaint.getFinalAlpha();
+	}
+	
 	public Vec2 getBufferSize(){
 		return new Vec2(layer.getWidth(),layer.getHeight());
 	}

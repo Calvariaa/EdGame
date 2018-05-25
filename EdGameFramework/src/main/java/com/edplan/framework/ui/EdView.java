@@ -17,6 +17,8 @@ import java.lang.ref.WeakReference;
 import com.edplan.framework.ui.animation.AbstractAnimation;
 import com.edplan.framework.ui.animation.AnimationHandler;
 import com.edplan.framework.main.MainCallBack;
+import com.edplan.framework.graphics.opengl.objs.Color4;
+import com.edplan.framework.ui.drawable.ColorDrawable;
 
 public class EdView implements IRunnableHandler,MainCallBack
 {
@@ -286,6 +288,12 @@ public class EdView implements IRunnableHandler,MainCallBack
 	public EdAbstractViewGroup getParent(){
 		return parent!=null?parent.get():null;
 	}
+	
+	public void setBackground(Color4 c){
+		ColorDrawable cd=new ColorDrawable(getContext());
+		cd.setColor(c);
+		setBackground(cd);
+	}
 
 	public void setBackground(EdDrawable background){
 		this.background=background;
@@ -302,7 +310,7 @@ public class EdView implements IRunnableHandler,MainCallBack
 	}
 
 	@Override
-	public void post(Runnable r,int delayMS){
+	public void post(Runnable r,double delayMS){
 		// TODO: Implement this method
 		getContext().runOnUIThread(r,delayMS);
 	}

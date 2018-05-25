@@ -112,7 +112,7 @@ public class MContext
 		}
 	}
 	
-	public void runOnUIThread(Runnable r,int delayMs){
+	public void runOnUIThread(Runnable r,double delayMs){
 		getUiLooper().post(r,delayMs);
 	}
 
