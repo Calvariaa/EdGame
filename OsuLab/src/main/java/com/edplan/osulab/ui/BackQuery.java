@@ -13,29 +13,31 @@ public class BackQuery
 		return instance;
 	}
 	
-	public void onBecomeEmpty(){
-		LabGame.get().getBackButton().hide();
+	public void onChange(){
+		if(remind()==0){
+			LabGame.get().getBackButton().hide();
+		}else{
+			if(LabGame.get().getBackButton().isHidden()){
+				LabGame.get().getBackButton().show();
+			}
+		}
 	}
 	
 	public void regist(Hideable obj){
-		if(remind()==0){
-			LabGame.get().getBackButton().show();
-		}
 		if(!query.contains(obj)){
 			query.add(obj);
 		}else{
 			unregist(obj);
 			query.add(obj);
 		}
+		onChange();
 	}
 	
 	public void unregist(Hideable h){
 		final int pre=remind();
 		query.remove(h);
-		if(pre!=0){
-			if(remind()==0){
-				onBecomeEmpty();
-			}
+		if(pre!=remind()){
+			onChange();
 		}
 	}
 	

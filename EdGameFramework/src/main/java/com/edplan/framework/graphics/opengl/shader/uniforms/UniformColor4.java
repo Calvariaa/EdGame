@@ -25,6 +25,12 @@ public class UniformColor4 extends DataUniform<Color4>
 	public void loadRect(RectF rect,Vec4 padding){
 		loadRect(rect.copy().padding(padding));
 	}
+	
+	public void loadData(float r,float g,float b,float a){
+		if(available){
+			GLES20.glUniform4f(getHandle(),r,g,b,a);
+		}
+	}
 
 	@Override
 	public void loadData(Color4 t) {

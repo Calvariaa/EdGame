@@ -14,9 +14,9 @@ import com.edplan.framework.graphics.opengl.objs.Color4;
 
 public class FastShader extends BaseShader
 {
-	private static final String VertexShader;
+	public static final String VertexShader;
 	
-	private static final String FragmentShader;
+	public static final String FragmentShader;
 	
 	public static final int STEP=9*4;
 	

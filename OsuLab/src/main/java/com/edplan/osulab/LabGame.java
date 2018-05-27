@@ -19,6 +19,7 @@ import com.edplan.osulab.ui.toolbar.LabToolbar;
 import com.edplan.osulab.ui.pieces.JumpingCircle;
 import com.edplan.osulab.ui.MainBackground;
 import com.edplan.osulab.ui.pieces.BackButton;
+import com.edplan.osulab.ui.MessageList;
 
 /**
  *全局的管理类
@@ -30,6 +31,8 @@ public class LabGame
 	private LabToolbar toolBar;
 
 	private OptionList optionList;
+	
+	private MessageList messageList;
 
 	private SceneOverlay sceneOverlay;
 	
@@ -40,6 +43,14 @@ public class LabGame
 	private FrameContainer mainFrameContainer;
 	
 	private BackButton backButton;
+
+	public void setMessageList(MessageList messageList){
+		this.messageList=messageList;
+	}
+
+	public MessageList getMessageList(){
+		return messageList;
+	}
 
 	public void setBackButton(BackButton backButton){
 		this.backButton=backButton;
@@ -95,7 +106,6 @@ public class LabGame
 		mainBackground=new MainBackground(c);
 		mainFrameContainer=new FrameContainer(c);
 		backButton=new BackButton(c);
-		mainLayout.setBackground(Color4.gray(0.2f));
 		{
 			RelativeLayout.RelativeParam mparam=new RelativeLayout.RelativeParam();
 			mparam.width=Param.MODE_MATCH_PARENT;
@@ -118,9 +128,7 @@ public class LabGame
 				final MainCircleView mainCircleView;
 				{
 					RelativeLayout llayout=new RelativeLayout(c);
-					//llayout.setChildoffset(50);
 					llayout.setGravity(Gravity.Center);
-					//llayout.setOrientation(Orientation.DIRECTION_T2B);
 					EdLayoutParam llparam=new EdLayoutParam();
 					llparam.width=Param.MODE_MATCH_PARENT;
 					llparam.height=Param.MODE_MATCH_PARENT;
@@ -145,6 +153,15 @@ public class LabGame
 		}
 		
 		{
+			toolBar=new LabToolbar(c);
+			RelativeLayout.RelativeParam param=new RelativeLayout.RelativeParam();
+			param.width=Param.MODE_MATCH_PARENT;
+			param.height=Param.makeUpDP(UiConfig.TOOLBAR_HEIGHT_DP);
+			param.gravity=Gravity.TopCenter;
+			mainLayout.addView(toolBar,param);
+		}
+		
+		{
 			optionList=new OptionList(c);
 			RelativeLayout.RelativeParam param=new RelativeLayout.RelativeParam();
 			param.width=Param.makeUpDP(350);
@@ -154,13 +171,15 @@ public class LabGame
 		}
 		
 		{
-			toolBar=new LabToolbar(c);
+			messageList=new MessageList(c);
 			RelativeLayout.RelativeParam param=new RelativeLayout.RelativeParam();
-			param.width=Param.MODE_MATCH_PARENT;
-			param.height=Param.makeUpDP(UiConfig.TOOLBAR_HEIGHT_DP);
-			param.gravity=Gravity.TopCenter;
-			mainLayout.addView(toolBar,param);
+			param.width=Param.makeUpDP(350);
+			param.height=Param.MODE_MATCH_PARENT;
+			param.marginTop=ViewConfiguration.dp(40);
+			param.gravity=Gravity.BottomRight;
+			mainLayout.addView(messageList,param);
 		}
+		
 		{
 			sceneOverlay=new SceneOverlay(c);
 			RelativeLayout.RelativeParam param=new RelativeLayout.RelativeParam();

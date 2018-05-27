@@ -123,9 +123,10 @@ public class TestOsbView extends EdView
 		try {
 			font=BMFont.getFont(BMFont.Noto_Sans_CJK_JP_Medium);
 			try{
-				breakString=getContext().getAssetResource().loadText("text/ohzora naomi - DOKIDOKI For Chieri rearrange MIX (Edrows Luo).osb");
+				breakString="BUTTON";
+				//getContext().getAssetResource().loadText("text/ohzora naomi - DOKIDOKI For Chieri rearrange MIX (Edrows Luo).osb");
 				breaked=TextUtils.breakText(font,breakString,900);
-			}catch(IOException e){
+			}catch(Exception e){
 				e.printStackTrace();
 				getContext().toast(e.getMessage());
 			}
@@ -523,13 +524,13 @@ public class TestOsbView extends EdView
 		
 		canvas.setCanvasAlpha(1f);
 		float baseLine=150;
-		ntp.setMixColor(Color4.White);
+		ntp.setMixColor(Color4.Black);
 		ntp.setStrokeWidth(30);
 		canvas.drawLine(100,baseLine,100+900,baseLine,ntp);
 		GLPaint textPaint=new GLPaint();
-		textPaint.setMixColor(Color4.rgba(1,0,0,1));
+		textPaint.setMixColor(Color4.rgba(1,1,1,1));
 		TextPrinter printer=new TextPrinter(font,100,baseLine,textPaint);
-		//printer.setTextSize(40);
+		printer.setTextSize(40);
 		for(String s:breaked){
 			printer.printString(s);
 			printer.printString(" ");

@@ -5,7 +5,7 @@ import com.edplan.framework.graphics.opengl.BaseCanvas;
 import com.edplan.framework.graphics.opengl.shader.uniforms.UniformVec2;
 import com.edplan.framework.utils.StringUtil;
 
-public class TextureCircleSprite extends RectTextureSprite<TextureCircleShader>
+public class TextureCircleSprite extends BaseRectTextureSprite<TextureCircleShader>
 {
 	private float innerRadius;
 	private float radius;

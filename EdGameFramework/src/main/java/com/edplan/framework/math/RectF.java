@@ -63,6 +63,14 @@ public class RectF implements Copyable,Area2D,IQuad
 		getBasePoint().set(x,y);
 	}
 	
+	public float getCenterHorizon(){
+		return basePoint.x+width/2;
+	}
+	
+	public float getCenterVertical(){
+		return basePoint.y+height/2;
+	}
+	
 	@Override
 	public Vec2 getTopLeft(){
 		return new Vec2(getLeft(),getTop());

@@ -14,6 +14,12 @@ public class BMFont
 {
 	public static final String Noto_Sans_CJK_JP_Medium="Noto Sans CJK JP Medium";
 	
+	public static final String FontAwesome="FontAwesome";
+	
+	public static final String Exo_20="Exo 2.0";
+	
+	public static final String Exo_20_Semi_Bold="Exo 2.0 Semi Bold";
+	
 	private static HashMap<String,BMFont> fonts=new HashMap<String,BMFont>();
 
 	private static BMFont defaultFont;
@@ -109,9 +115,9 @@ public class BMFont
 	}
 	
 	public void addFont(AResource res,BMFontDescription description){
-		if(!face.equals(description.getInfo().face)){
+		/*if(!face.equals(description.getInfo().face)){
 			throw new BMFontException("only font with the same face can be added"); 
-		}
+		}*/
 		int pageOffset=pages.size();
 		for(FNTPage page:description.getPages()){
 			LoadedPage loadedPage=new LoadedPage();

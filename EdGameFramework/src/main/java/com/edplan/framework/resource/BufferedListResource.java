@@ -39,7 +39,6 @@ public class BufferedListResource extends AResource
 			e.printStackTrace();
 			System.out.println("err: "+e.getMessage());
 		}
-		System.out.println("root: "+root);
 	}
 	
 	public void printDetails(FileNode node){

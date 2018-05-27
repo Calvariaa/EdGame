@@ -16,6 +16,11 @@ import com.edplan.framework.ui.layout.Param;
 import com.edplan.framework.ui.layout.Gravity;
 import com.edplan.framework.ui.EdView;
 import com.edplan.framework.ui.widget.component.Hideable;
+import com.edplan.framework.ui.widget.TextView;
+import com.edplan.framework.ui.drawable.sprite.CircleShader;
+import com.edplan.framework.graphics.opengl.fast.FastShader;
+import com.edplan.framework.ui.widget.ScrollContainer;
+import com.edplan.framework.ui.layout.Orientation;
 
 /**
  *
@@ -24,32 +29,35 @@ public class SceneOverlay extends RelativeContainer implements Hideable
 {
 	public SceneOverlay(MContext c){
 		super(c);
+		setClickable(true);
 		ColorDrawable cd=new ColorDrawable(c);
 		cd.setColor(Color4.rgba(0,0,0,0.8f),
 					Color4.rgba(0,0,0,0.8f),
 					Color4.rgba(0,0,0,0.5f),
 					Color4.rgba(0,0,0,0.5f));
 		setBackground(cd);
-		
 		{
-			TestButton button=new TestButton(c);
-			button.setOnClickListener(new OnClickListener(){
-					@Override
-					public void onClick(EdView view){
-						// TODO: Implement this method
-						if(getVisiblility()!=VISIBILITY_GONE){
-							hide();
-						}else{
-							show();
-						}
-					}
-				});
-			RelativeLayout.RelativeParam p=new RelativeLayout.RelativeParam();
-			p.width=Param.MODE_MATCH_PARENT;
-			p.height=Param.makeUpDP(30);
-			p.gravity=Gravity.TopCenter;
-			addView(button,p);
+			ScrollContainer sc=new ScrollContainer(c);
+			sc.setOrientation(Orientation.DIRECTION_T2B);
+			RelativeLayout.RelativeParam p1=new RelativeLayout.RelativeParam();
+			p1.width=Param.MODE_MATCH_PARENT;
+			p1.height=Param.MODE_MATCH_PARENT;
+			//p1.marginTop=ViewConfiguration.dp(30);
+			addView(sc,p1);
+			{
+				TextView button=new TextView(c);
+				button.setText("[SceneOverlay]");
+				button.setGravity(Gravity.Center);
+				button.setTextSize(ViewConfiguration.dp(40));
+				RelativeLayout.RelativeParam p=new RelativeLayout.RelativeParam();
+				p.width=Param.MODE_MATCH_PARENT;
+				p.height=Param.MODE_MATCH_PARENT;
+				//p.marginTop=ViewConfiguration.dp(30);
+				p.gravity=Gravity.TopCenter;
+				sc.addView(button,p);
+			}
 		}
+		
 	}
 
 	@Override

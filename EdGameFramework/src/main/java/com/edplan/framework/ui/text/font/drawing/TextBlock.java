@@ -7,10 +7,16 @@ import com.edplan.framework.ui.text.font.bmfont.BMFont;
 public class TextBlock
 {
 	//datas:存放对应的数据，以ltrb为一组
-	private final int[] datas;
-	private final FNTChar[] chars;
+	public final int[] datas;
+	public final FNTChar[] chars;
 	
-	private final int width;
+	public final int width;
+	
+	public TextBlock(){
+		datas=new int[0];
+		chars=new FNTChar[0];
+		width=0;
+	}
 	
 	public TextBlock(BMFont font,char[] block,int offset,int length){
 		chars=new FNTChar[length];

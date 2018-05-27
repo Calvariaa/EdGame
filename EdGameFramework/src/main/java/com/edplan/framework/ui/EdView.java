@@ -19,6 +19,7 @@ import com.edplan.framework.ui.animation.AnimationHandler;
 import com.edplan.framework.main.MainCallBack;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.ui.drawable.ColorDrawable;
+import com.edplan.framework.ui.layout.Gravity;
 
 public class EdView implements IRunnableHandler,MainCallBack
 {
@@ -91,7 +92,7 @@ public class EdView implements IRunnableHandler,MainCallBack
 	 */
 	private int scrollableFlag;
 	
-	private int gravity;
+	private int gravity=Gravity.Center;
 	
 	/**
 	 *用于在完成layout后的动态位置变换
@@ -102,12 +103,22 @@ public class EdView implements IRunnableHandler,MainCallBack
 	
 	private boolean hasInitialLayouted=false;
 	
+	private boolean outsideTouchable=false;
+	
 	public EdView(MContext context){
 		this.context=context;
 		if(!checkCurrentThread()){
 			throw new RuntimeException("you can only create a view in main thread!");
 		}
 		initialName();
+	}
+
+	public void setOutsideTouchable(boolean outsideTouchable){
+		this.outsideTouchable=outsideTouchable;
+	}
+
+	public boolean isOutsideTouchable(){
+		return outsideTouchable;
 	}
 
 	public void setAnimation(AbstractAnimation animation){
@@ -559,6 +570,10 @@ public class EdView implements IRunnableHandler,MainCallBack
 				break;
 		}
 		return result;
+	}
+	
+	public boolean onOutsideTouch(EdMotionEvent e){
+		return false;
 	}
 	
 	@Override

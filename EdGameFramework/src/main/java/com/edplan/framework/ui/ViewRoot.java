@@ -16,6 +16,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import com.edplan.framework.main.MainCallBack;
+import com.edplan.framework.ui.widget.AbsoluteLayout;
+import com.edplan.framework.ui.additions.RootContainer;
+import com.edplan.framework.ui.additions.PopupViewLayer;
 
 public class ViewRoot implements MainCallBack
 {
@@ -28,6 +31,8 @@ public class ViewRoot implements MainCallBack
 	private MContext context;
 	
 	private EdView contentView;
+	
+	private RootContainer rootContainer;
 	
 	private int invalidateFlag;
 	
@@ -55,6 +60,10 @@ public class ViewRoot implements MainCallBack
 		return focus;
 	}
 	
+	public PopupViewLayer getPopupViewLayer(){
+		return rootContainer.getPopupViewLayer();
+	}
+	
 	public void postNativeEvent(MotionEvent event){
 		nativeInputQuery.postEvent(event);
 	}
@@ -72,12 +81,17 @@ public class ViewRoot implements MainCallBack
 			param.height=Param.MODE_MATCH_PARENT;
 			contentView.setLayoutParam(param);
 		}
-	}
-
-	public EdView getContentView() {
-		return contentView;
+		
+		if(rootContainer==null){
+			rootContainer=new RootContainer(context);
+		}
+		rootContainer.setContent(contentView);
 	}
 	
+	public void onCreate(){
+		rootContainer.onCreate();
+	}
+
 	public void onChange(int w,int h){
 		invalidate(FLAG_INVALIDATE_DRAW|FLAG_INVALIDATE_MEASURE|FLAG_INVALIDATE_LAYOUT);
 	}
@@ -95,11 +109,11 @@ public class ViewRoot implements MainCallBack
 			EdMeasureSpec.makeupMeasureSpec(
 				context.getDisplayHeight(),
 				EdMeasureSpec.MODE_AT_MOST);
-		MeasureCore.measureChild(contentView,0,0,wm,hm);
+		MeasureCore.measureChild(rootContainer,0,0,wm,hm);
 	}
 	
 	protected void postLayout(){
-		contentView.layout(0,0,contentView.getMeasuredWidth(),contentView.getMeasuredHeight());
+		rootContainer.layout(0,0,rootContainer.getMeasuredWidth(),rootContainer.getMeasuredHeight());
 	}
 	
 	protected void checkInvalidate(){
@@ -123,21 +137,21 @@ public class ViewRoot implements MainCallBack
 	}
 	
 	protected void handlerAnimation(){
-		contentView.performAnimation(context.getFrameDeltaTime());
+		rootContainer.performAnimation(context.getFrameDeltaTime());
 	}
 	
 	public void onNewFrame(BaseCanvas canvas,double deltaTime){
 		frameInvalidateState=0;
-		
+		rootContainer.onFrameStart();
 		checkInvalidate();
 		handlerAnimation();
 		handlerInputs();
 		checkInvalidate();
 		
 		
-		if(contentView!=null){
+		if(rootContainer!=null){
 			Tracker.DrawUI.watch();
-			contentView.onDraw(canvas);
+			rootContainer.onDraw(canvas);
 			Tracker.DrawUI.end();
 		}
 	}
@@ -145,26 +159,26 @@ public class ViewRoot implements MainCallBack
 	@Override
 	public void onPause(){
 		// TODO: Implement this method
-		if(contentView!=null)contentView.onPause();
+		if(rootContainer!=null)rootContainer.onPause();
 	}
 
 	@Override
 	public void onResume(){
 		// TODO: Implement this method
-		if(contentView!=null)contentView.onResume();
+		if(rootContainer!=null)rootContainer.onResume();
 	}
 
 	@Override
 	public void onLowMemory(){
 		// TODO: Implement this method
-		if(contentView!=null)contentView.onLowMemory();
+		if(rootContainer!=null)rootContainer.onLowMemory();
 	}
 
 	@Override
 	public boolean onBackPressed(){
 		// TODO: Implement this method
-		if(contentView!=null){
-			return contentView.onBackPressed();
+		if(rootContainer!=null){
+			return rootContainer.onBackPressed();
 		}else{
 			return false;
 		}
@@ -187,10 +201,10 @@ public class ViewRoot implements MainCallBack
 		}
 
 		public void postSingleEvent(EdMotionEvent event){
-			if(contentView==null)return;
+			if(rootContainer==null)return;
 			//context.toast(event.toString());
 			//System.out.println(event.toString());
-			if(contentView.onMotionEvent(event)){
+			if(rootContainer.onMotionEvent(event)){
 				//事件被直接拦截，直接交给内容view处理
 			}
 			

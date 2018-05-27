@@ -1,31 +1,33 @@
 package com.edplan.osulab.ui.toolbar;
-import com.edplan.framework.ui.widget.LinearLayout;
+import com.edplan.framework.Framework;
 import com.edplan.framework.MContext;
-import com.edplan.framework.ui.layout.Orientation;
-import com.edplan.framework.ui.widget.RelativeLayout;
-import com.edplan.framework.ui.layout.Gravity;
-import com.edplan.framework.ui.layout.Param;
-import com.edplan.framework.ui.widget.TestButton;
-import com.edplan.framework.ui.layout.MarginLayoutParam;
-import com.edplan.framework.ui.ViewConfiguration;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
 import com.edplan.framework.graphics.opengl.objs.Color4;
-import com.edplan.framework.ui.widget.RelativeContainer;
-import com.edplan.framework.ui.widget.RelativeLayout.RelativeParam;
+import com.edplan.framework.math.RectF;
+import com.edplan.framework.ui.EdView;
+import com.edplan.framework.ui.ViewConfiguration;
+import com.edplan.framework.ui.animation.ComplexAnimation;
+import com.edplan.framework.ui.animation.ComplexAnimationBuilder;
+import com.edplan.framework.ui.animation.Easing;
+import com.edplan.framework.ui.animation.FloatQueryAnimation;
+import com.edplan.framework.ui.animation.callback.OnFinishListener;
 import com.edplan.framework.ui.drawable.ColorDrawable;
 import com.edplan.framework.ui.drawable.sprite.ColorRectSprite;
-import com.edplan.framework.graphics.opengl.BaseCanvas;
-import com.edplan.framework.math.RectF;
-import com.edplan.framework.ui.animation.ComplexAnimationBuilder;
-import com.edplan.framework.ui.animation.FloatQueryAnimation;
-import com.edplan.framework.ui.animation.Easing;
-import com.edplan.framework.ui.animation.ComplexAnimation;
-import com.edplan.framework.ui.animation.callback.OnFinishListener;
-import com.edplan.framework.ui.EdView;
-import com.edplan.osulab.ui.OptionList;
-import com.edplan.osulab.LabGame;
-import com.edplan.framework.Framework;
 import com.edplan.framework.ui.inputs.EdMotionEvent;
+import com.edplan.framework.ui.layout.Gravity;
+import com.edplan.framework.ui.layout.MarginLayoutParam;
+import com.edplan.framework.ui.layout.Orientation;
+import com.edplan.framework.ui.layout.Param;
+import com.edplan.framework.ui.text.font.FontAwesome;
+import com.edplan.framework.ui.widget.FontAwesomeTextView;
+import com.edplan.framework.ui.widget.LinearLayout;
+import com.edplan.framework.ui.widget.RelativeContainer;
+import com.edplan.framework.ui.widget.RelativeLayout.RelativeParam;
+import com.edplan.framework.ui.widget.TestButton;
 import com.edplan.framework.ui.widget.component.Hideable;
+import com.edplan.osulab.LabGame;
+import com.edplan.osulab.ui.OptionList;
+import com.edplan.osulab.ui.pieces.TextButton;
 
 public class LabToolbar extends RelativeContainer implements Hideable
 {
@@ -71,16 +73,20 @@ public class LabToolbar extends RelativeContainer implements Hideable
 							  Color4.rgba(0,0,0,0f));
 		{
 			leftLayout=new LinearLayout(c);
+			leftLayout.setGravity(Gravity.CenterLeft);
 			leftLayout.setOrientation(Orientation.DIRECTION_L2R);
 			RelativeParam param=new RelativeParam();
 			param.gravity=Gravity.CenterLeft;
 			param.width=Param.MODE_WRAP_CONTENT;
 			param.height=Param.MODE_MATCH_PARENT;
 			addView(leftLayout,param);
+			
 			{
-				TestButton msgShowButton=new TestButton(c);
+				ToolBarButton msgShowButton=new ToolBarButton(c);
+				msgShowButton.setIcon(FontAwesome.fa_cog.getTexture());
+				msgShowButton.setGravity(Gravity.Center);
 				MarginLayoutParam lparam=new MarginLayoutParam();
-				lparam.width=Param.makeupScaleOfParentOtherParam(1);
+				lparam.width=Param.makeupScaleOfParentOtherParam(1.6f);
 				lparam.height=Param.MODE_MATCH_PARENT;
 				msgShowButton.setOnClickListener(new OnClickListener(){
 						@Override
@@ -97,25 +103,14 @@ public class LabToolbar extends RelativeContainer implements Hideable
 				leftLayout.addView(msgShowButton,lparam);
 			}
 			{
-				TestButton msgShowButton=new TestButton(c);
+				EdView divider=new EdView(c);
+				divider.setBackground(Color4.gray(0.5f).setAlpha(0.4f));
 				MarginLayoutParam lparam=new MarginLayoutParam();
-				lparam.width=Param.makeUpDP(70);
+				lparam.width=Param.makeUpDP(2f);
 				lparam.height=Param.MODE_MATCH_PARENT;
-				lparam.marginLeft=ViewConfiguration.dp(1);
-				leftLayout.addView(msgShowButton,lparam);
-				
-				msgShowButton.setOnClickListener(new OnClickListener(){
-						@Override
-						public void onClick(EdView view){
-							// TODO: Implement this method
-							if(LabGame.get().getBackButton().isHidden()){
-								LabGame.get().getBackButton().show();
-							}else{
-								LabGame.get().getBackButton().hide();
-							}
-						}
-					});
-				
+				lparam.marginBottom=ViewConfiguration.dp(2);
+				lparam.marginTop=ViewConfiguration.dp(2);
+				leftLayout.addView(divider,lparam);
 			}
 		}
 		{
@@ -150,6 +145,17 @@ public class LabToolbar extends RelativeContainer implements Hideable
 				lparam.width=Param.makeUpDP(50);
 				lparam.height=Param.MODE_MATCH_PARENT;
 				rightLayout.addView(msgShowButton,lparam);
+				msgShowButton.setOnClickListener(new OnClickListener(){
+						@Override
+						public void onClick(EdView view){
+							// TODO: Implement this method
+							if(!LabGame.get().getMessageList().isHidden()){
+								LabGame.get().getMessageList().hide();
+							}else{
+								LabGame.get().getMessageList().show();
+							}
+						}
+					});
 			}
 		}
 		setAlpha(1);

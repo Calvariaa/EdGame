@@ -25,10 +25,10 @@ public abstract class RectSprite<S extends SpriteShader> extends ObjectSprite<S>
 	public void setColor(Color4 tl,Color4 tr,Color4 bl,Color4 br){
 		if(colorBuffer==null)colorBuffer=BufferUtil.createFloatBuffer(4*4);
 		colorBuffer.position(0);
-		bl.put2buffer(colorBuffer);
-		br.put2buffer(colorBuffer);
-		tr.put2buffer(colorBuffer);
-		tl.put2buffer(colorBuffer);
+		bl.toPremultipled().put2buffer(colorBuffer);
+		br.toPremultipled().put2buffer(colorBuffer);
+		tr.toPremultipled().put2buffer(colorBuffer);
+		tl.toPremultipled().put2buffer(colorBuffer);
 		colorBuffer.position(0);
 	}
 

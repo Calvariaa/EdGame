@@ -7,10 +7,44 @@ import com.edplan.framework.ui.EdView;
 
 public class FrameRenderMonitor extends EdView
 {
-	public float[] timelist=new float[40];
+	public static float[] timelist=new float[40];
+	
+	public static float avg;
+	
+	public static float getFPS(){
+		return (avg!=0)?(1/avg):0;
+	}
 	
 	public FrameRenderMonitor(MContext context){
 		super(context);
+	}
+	
+	public static void update(MContext c){
+		float deltaTime=(float)c.getFrameDeltaTime();
+		for(int i=timelist.length-1;i>0;i--){
+			timelist[i]=timelist[i-1];
+		}
+		timelist[0]=deltaTime;
+		avg=0;
+		float max=0;
+		float min=99999;
+		float avg_nogc=0;
+		int count_nogc=0;
+		for(float t:timelist){
+			avg+=t;
+			if(t<min){
+				min=t;
+			}
+			if(t>max){
+				max=t;
+			}
+			if(t<400){
+				avg_nogc+=t;
+				count_nogc++;
+			}
+		}
+		avg_nogc/=count_nogc;
+		avg/=timelist.length;
 	}
 
 	@Override

@@ -22,6 +22,7 @@ import com.edplan.framework.ui.ViewRoot;
 import com.edplan.framework.main.MainApplication;
 import com.edplan.framework.Framework;
 import android.opengl.GLES20;
+import com.edplan.framework.test.performance.ui.FrameRenderMonitor;
 
 public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchListener
 {
@@ -115,7 +116,7 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 				BufferedLayer.DEF_FBOPOOL.saveFBO(FrameBufferObject.create(1000,1000,true));
 			}
 			viewRoot.setContentView(createContentView(context));
-			viewRoot.getContentView().onCreate();
+			viewRoot.onCreate();
 		}
 		
 		//Log.v("ini-log","ini-scr: "+width+":"+heigth);
@@ -126,7 +127,7 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 	boolean debugUi=true;
 	MTimer tmer=new MTimer();
 	@Override
-	public void onDrawFrame(GL10 p1) {
+	public final void onDrawFrame(GL10 p1) {
 		// TODO: Implement this method
 		MLog.test.vOnce("thread","thread","draw-thread: "+Thread.currentThread());
 		tmer.refresh();
@@ -154,7 +155,7 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 			catch (InterruptedException e)
 			{}
 		}
-		//context.getHoldingView().forceRequestDraw();
+		FrameRenderMonitor.update(context);
 	}
 	
 	

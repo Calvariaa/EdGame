@@ -16,14 +16,14 @@ public class TextUtils
 		if(length<=0){
 			return 0;
 		}else if(length==1){
-			return font.getFNTChar(block[offset]).xadvance;
+			return font.getFNTCharSafe(block[offset]).xadvance;
 		}else{
-			int width=font.getFNTChar(block[offset]).xadvance;
+			int width=font.getFNTCharSafe(block[offset]).xadvance;
 			final int end=offset+length;
 			char pre=block[offset];
 			for(int i=offset+1;i<end;i++){
 				final char rc=block[i];
-				final FNTChar c=font.getFNTChar(rc);
+				final FNTChar c=font.getFNTCharSafe(rc);
 				width+=c.xadvance+font.getKerningAmount(pre,rc);
 				pre=rc;
 			}
@@ -59,7 +59,7 @@ public class TextUtils
 		char pre=block[idx];
 		if(pre=='\n')return idx;
 		int breakOffset=offset;
-		int width=font.getFNTChar(block[offset]).xadvance;
+		int width=font.getFNTCharSafe(block[offset]).xadvance;
 		idx++;
 		int breakLevel=getBreakLevel(pre);
 		final int end=block.length;
@@ -72,7 +72,7 @@ public class TextUtils
 				breakOffset=idx;
 				breakLevel=l;
 			}
-			final FNTChar c=font.getFNTChar(rc);
+			final FNTChar c=font.getFNTCharSafe(rc);
 			width+=c.xadvance+font.getKerningAmount(pre,rc);
 			if(width>=max){
 				return breakOffset;
@@ -81,6 +81,49 @@ public class TextUtils
 			breakLevel--;
 			idx++;
 		}
+	}
+	
+	public static TextBlock[] breakTextAsBlock(BMFont font,String text,int max){
+		char[] block=new char[text.length()];
+		text.getChars(0,text.length(),block,0);
+		ArrayList<TextBlock> list=new ArrayList<TextBlock>(2);
+		int offset=0;
+		final int end=block.length;
+		while(true){
+			final int o=breakText(font,block,offset,max);
+			if(o==end){
+				if(o>offset)list.add(new TextBlock(font,block,offset,o-offset));
+				break;
+			}
+			if(o==offset){
+				//offset无法前进，可能是到达了换行符
+				if(block[o]=='\n'){
+					//list.add(new TextBlock());
+					offset++;
+					continue;
+				}else{
+					//到达的不是换行符，强行breakText
+					final int oo=forceBreakText(font,block,offset,max);
+					if(oo==offset){
+						//无解，可能是长度太小无法装载下一个字符，直接返回
+						TextBlock[] l=new TextBlock[list.size()];
+						list.toArray(l);
+						return l;
+						//throw new RuntimeException("breakText你妹啊，死循环了老哥");
+					}else{
+						list.add(new TextBlock(font,block,offset,oo-offset/*+((block[oo]=='\n')?-1:0)*/));
+						offset=oo;
+						continue;
+					}
+				}
+			}else{
+				list.add(new TextBlock(font,block,offset,o-offset));
+				offset=o;
+			}
+		}
+		TextBlock[] l=new TextBlock[list.size()];
+		list.toArray(l);
+		return l;
 	}
 	
 	public static String[] breakText(BMFont font,String text,int max){
@@ -98,7 +141,6 @@ public class TextUtils
 			if(o==offset){
 				//offset无法前进，可能是到达了换行符
 				if(block[o]=='\n'){
-					list.add("");
 					offset++;
 					continue;
 				}else{

@@ -88,9 +88,6 @@ public class ComplexAnimation extends BaseAnimation
 								return t.endTime;
 							}
 						}));
-		for(Node n:nodes){
-			System.out.println(n.startTime+":"+n.duration+":"+n.endTime);
-		}
 	}
 	
 	public static class Node implements Comparable<Node>{

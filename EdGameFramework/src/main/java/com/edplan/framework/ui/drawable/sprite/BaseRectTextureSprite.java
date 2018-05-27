@@ -6,15 +6,19 @@ import java.nio.FloatBuffer;
 import com.edplan.framework.graphics.opengl.buffer.BufferUtil;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
 
-public abstract class RectTextureSprite<S extends TextureSpriteShader> extends RectSprite<S>
+public abstract class BaseRectTextureSprite<S extends TextureSpriteShader> extends RectSprite<S>
 {
 	private AbstractTexture texture;
 	
 	private FloatBuffer textureCoordBuffer;
 	
-	public RectTextureSprite(MContext c){
+	public BaseRectTextureSprite(MContext c){
 		super(c);
 		textureCoordBuffer=BufferUtil.createFloatBuffer(2*4);
+	}
+	
+	public void setTexture(AbstractTexture t){
+		setTexture(t,null);
 	}
 
 	public void setTexture(AbstractTexture texture,IQuad area){

@@ -18,6 +18,8 @@ import com.edplan.framework.ui.layout.Param;
 import com.edplan.framework.ui.widget.ScrollContainer;
 import com.edplan.framework.ui.widget.TestButton;
 import com.edplan.framework.ui.widget.component.Hideable;
+import com.edplan.framework.ui.inputs.EdMotionEvent;
+import com.edplan.framework.ui.widget.TextView;
 
 public class OptionList extends ScrollContainer implements Hideable
 {
@@ -25,6 +27,7 @@ public class OptionList extends ScrollContainer implements Hideable
 	
 	public OptionList(MContext c){
 		super(c);
+		setOutsideTouchable(true);
 		setChildoffset(ViewConfiguration.dp(1));
 		setBackground(Color4.rgba(0,0,0,0.7f));
 		setOrientation(Orientation.DIRECTION_T2B);
@@ -40,17 +43,12 @@ public class OptionList extends ScrollContainer implements Hideable
 		
 		
 		{
-			TestButton b=new TestButton(c);
+			TextView b=new TextView(c);
+			b.setTextSize(ViewConfiguration.dp(40));
+			b.setText("[Option]");
 			MarginLayoutParam param=new MarginLayoutParam();
 			param.width=Param.MODE_MATCH_PARENT;
-			param.height=Param.makeUpDP(30);
-			b.setOnClickListener(new OnClickListener(){
-					@Override
-					public void onClick(EdView view){
-						// TODO: Implement this method
-						hide();
-					}
-				});
+			param.height=Param.MODE_MATCH_PARENT;
 			addView(b,param);
 		}
 	}
@@ -90,6 +88,22 @@ public class OptionList extends ScrollContainer implements Hideable
 	}
 
 	@Override
+	public boolean onOutsideTouch(EdMotionEvent e){
+		// TODO: Implement this method
+		if(e.getEventType()==EdMotionEvent.EventType.Down){
+			if(!isHidden())hide();
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean isOutsideTouchable(){
+		// TODO: Implement this method
+		return super.isOutsideTouchable()&&!isHidden();
+	}
+
+	@Override
 	public void show(){
 		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<OptionList>(this,"alpha")
 																	  .transform(getAlpha(),0,Easing.None)
@@ -121,7 +135,7 @@ public class OptionList extends ScrollContainer implements Hideable
 	public void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		super.onDraw(canvas);
-		shadowSprite.setArea(RectF.xywh(canvas.getWidth(),0,ViewConfiguration.dp(5),canvas.getHeight()));
+		shadowSprite.setArea(RectF.xywh(canvas.getWidth(),0,ViewConfiguration.dp(9),canvas.getHeight()));
 		shadowSprite.draw(canvas);
 	}
 }

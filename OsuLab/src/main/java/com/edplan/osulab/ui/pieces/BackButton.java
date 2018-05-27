@@ -17,6 +17,9 @@ import com.edplan.framework.ui.widget.component.Hideable;
 import com.edplan.osulab.ui.SceneOverlay;
 import com.edplan.osulab.ui.UiConfig;
 import com.edplan.osulab.ui.BackQuery;
+import com.edplan.framework.ui.drawable.sprite.TextureSprite;
+import com.edplan.framework.graphics.opengl.objs.AbstractTexture;
+import com.edplan.framework.ui.text.font.FontAwesome;
 
 public class BackButton extends EdView implements Hideable
 {
@@ -24,7 +27,11 @@ public class BackButton extends EdView implements Hideable
 	
 	private ShadowCircleSprite shadowCircle;
 	
-	private float baseAlpha=0.5f;
+	private TextureSprite backSprite;
+	
+	private AbstractTexture backTexture;
+	
+	private float baseAlpha=0.7f;
 	
 	private float shadowDp=7;
 	
@@ -36,11 +43,15 @@ public class BackButton extends EdView implements Hideable
 		super(c);
 		setClickable(true);
 		circle=new CircleSprite(c);
-		circle.setAccentColor(UiConfig.Color.PINK);
+		circle.setColor(UiConfig.Color.PINK,UiConfig.Color.PINK,
+						UiConfig.Color.PINK,
+						UiConfig.Color.PINK);
 		shadowCircle=new ShadowCircleSprite(c);
+		backSprite=new TextureSprite(c);
+		backTexture=FontAwesome.fa_chevron_left.getTexture();
+		backSprite.setTexture(backTexture);
 		shadowCircle.setStartColor(Color4.rgba(0.1f,0.1f,0.1f,0.6f));
 		shadowCircle.setEndColor(Color4.rgba(0,0,0,0));
-		setAlpha(baseAlpha);
 	}
 
 	@Override
@@ -52,8 +63,9 @@ public class BackButton extends EdView implements Hideable
 
 	public void setAlpha(float alpha){
 		this.alpha=alpha;
-		circle.setAlpha(alpha);
-		shadowCircle.setAlpha(alpha);
+		circle.setAlpha(alpha*baseAlpha);
+		shadowCircle.setAlpha(alpha*baseAlpha);
+		backSprite.setAlpha(alpha*baseAlpha);
 	}
 
 	public float getAlpha(){
@@ -63,6 +75,7 @@ public class BackButton extends EdView implements Hideable
 	public void setScale(float s){
 		circle.setScale(s);
 		shadowCircle.setScale(s);
+		backSprite.setScale(s);
 	}
 	
 	public void performOnPressAnimation(){
@@ -76,7 +89,7 @@ public class BackButton extends EdView implements Hideable
 	public void performOffPressAnimation(){
 		FloatQueryAnimation anim=new FloatQueryAnimation<BackButton>(this,"scale");
 		anim.transform(circle.getScaleX(),0,Easing.None);
-		anim.transform(baseAlpha,ViewConfiguration.DEFAULT_TRANSITION_TIME/2,Easing.OutBounce);
+		anim.transform(1,ViewConfiguration.DEFAULT_TRANSITION_TIME/2,Easing.OutBounce);
 		anim.start();
 		setAnimation(anim);
 	}
@@ -191,8 +204,16 @@ public class BackButton extends EdView implements Hideable
 		shadowCircle.setInnerRadius(r);
 		shadowCircle.setRadius(r+shadowWidth);
 		
+		float h=canvas.getWidth()*0.45f;
+		backSprite.setPosition(0,canvas.getHeight());
+		backSprite.setArea(RectF.xywh(
+			 canvas.getWidth()*0.15f,
+			 -canvas.getHeight()*0.6f,
+			 h*backTexture.getWidth()/backTexture.getHeight(),
+			 h));
 		shadowCircle.draw(canvas);
 		circle.draw(canvas);
+		backSprite.draw(canvas);
 	}
 
 	@Override

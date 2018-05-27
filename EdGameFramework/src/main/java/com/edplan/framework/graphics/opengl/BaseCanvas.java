@@ -238,7 +238,7 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 	}
 	*/
 	
-	private TextureVertex3D[] createBaseVertexs(IQuad textureQuad,IQuad dst,Color4 color,float z){
+	public static TextureVertex3D[] createBaseVertexs(IQuad textureQuad,IQuad dst,Color4 color,float z){
 		//  3          2
 		//   ┌────┐
 		//   └────┘
@@ -263,7 +263,7 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 	}
 
 	
-	private RectVertex[] createRectVertexs(AbstractTexture texture,IQuad res,IQuad dst,Color4 color,float z){
+	public static RectVertex[] createRectVertexs(AbstractTexture texture,IQuad res,IQuad dst,Color4 color,float z){
 		//  3          2
 		//   ┌────┐
 		//   └────┘
@@ -482,8 +482,12 @@ public abstract class BaseCanvas extends AbstractSRable<CanvasData>
 
 
 
-	public Vertex3D[] rectToTriangles(Vertex3D[] v){
+	public static Vertex3D[] rectToTriangles(Vertex3D[] v){
 		return new Vertex3D[]{v[0],v[1],v[3],v[0],v[3],v[2]};
+	}
+	
+	public static TextureVertex3D[] rectToTriangles(TextureVertex3D[] v){
+		return new TextureVertex3D[]{v[0],v[1],v[3],v[0],v[3],v[2]};
 	}
 
 	public Vertex3D[] createLineRectVertexTriangles(Vec2 start,Vec2 end,float w,Color4 color){

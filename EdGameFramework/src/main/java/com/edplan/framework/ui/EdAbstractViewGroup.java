@@ -254,14 +254,23 @@ public abstract class EdAbstractViewGroup extends EdView
 					if(view.inViewBound(event.getX(),event.getY())){
 						if(view.onMotionEvent(event)){
 							useevent=true;
-							holder.setHoldingView(event,view);
+							holder.setHoldingView(event,view,false);
 							break;
+						}
+					}else{
+						if(view.isOutsideTouchable()){
+							if(view.onOutsideTouch(event)){
+								useevent=true;
+								holder.setHoldingView(event,view,true);
+								break;
+							}
 						}
 					}
 				}
 				break;
 			case Move:
 				useevent=viewUsingPointer.onMotionEvent(event);
+				if(!useevent)holder.clearPointerInfo(event);
 				break;
 			case Up:
 				useevent=viewUsingPointer.onMotionEvent(event);
@@ -462,14 +471,16 @@ public abstract class EdAbstractViewGroup extends EdView
 	
 	public class PointerHolder{
 		public EdView[] holdingView=new EdView[EdMotionEvent.MAX_POINTER];
+		public boolean[] isOutside=new boolean[EdMotionEvent.MAX_POINTER];
 		//public boolean[] handlePointer=new boolean[EdMotionEvent.MAX_POINTER];
 		
 		public PointerHolder(){
 			//Arrays.fill(handlePointer,false);
 		}
 		
-		public void setHoldingView(EdMotionEvent e,EdView view){
+		public void setHoldingView(EdMotionEvent e,EdView view,boolean isout){
 			holdingView[e.getPointerId()]=view;
+			isOutside[e.getPointerId()]=isout;
 		}
 		
 		public boolean ifIgnore(EdMotionEvent e){
@@ -483,6 +494,10 @@ public abstract class EdAbstractViewGroup extends EdView
 		
 		public EdView getHoldingView(EdMotionEvent e){
 			return holdingView[e.getPointerId()];
+		}
+		
+		public boolean isOutside(EdMotionEvent e){
+			return isOutside[e.getPointerId()];
 		}
 		
 		public void clearPointerInfo(EdMotionEvent e){

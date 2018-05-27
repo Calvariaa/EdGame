@@ -10,6 +10,7 @@ import com.edplan.framework.resource.AResource;
 import java.io.IOException;
 import com.edplan.framework.test.TestStaticData;
 import com.edplan.framework.ui.ViewConfiguration;
+import com.edplan.framework.ui.text.font.FontAwesome;
 
 public abstract class MainApplication implements MainCallBack
 {
@@ -106,6 +107,21 @@ public abstract class MainApplication implements MainCallBack
 				font.setErrCharacter(BMFont.CHAR_NOT_FOUND);
 				BMFont.addFont(font,font.getInfo().face);
 			}
+			{
+				BMFont font=BMFont.loadFont(
+					res,
+					"Exo2.0-SemiBold.fnt");
+				font.setErrCharacter(BMFont.CHAR_NOT_FOUND);
+				BMFont.addFont(font,font.getInfo().face);
+			}
+			{
+				BMFont font=BMFont.loadFont(
+					res,
+					"FontAwesome.fnt");
+				font.setErrCharacter(FontAwesome.fa_ban.charvalue);
+				BMFont.addFont(font,font.getInfo().face);
+			}
+			
 		}catch(IOException e){
 			e.printStackTrace();
 			mContext.toast("读取字体失败 msg="+e.getMessage());

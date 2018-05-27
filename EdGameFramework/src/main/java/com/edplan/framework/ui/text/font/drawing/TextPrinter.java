@@ -50,6 +50,8 @@ public class TextPrinter
 	
 	private BMFont font;
 	
+	private boolean singleline=true;
+	
 	public TextPrinter(BMFont font,float startX,float startY,GLPaint paint){
 		this.font=font;
 		this.paint=paint;
@@ -64,6 +66,30 @@ public class TextPrinter
 	
 	public TextPrinter(float startX,float startY){
 		this(BMFont.getDefaultFont(),startX,startX,new GLPaint());
+	}
+
+	public void setSingleline(boolean singleline){
+		this.singleline=singleline;
+	}
+
+	public boolean isSingleline(){
+		return singleline;
+	}
+
+	public void setCurrentBaseY(float currentBaseY){
+		this.currentBaseY=currentBaseY;
+	}
+
+	public float getCurrentBaseY(){
+		return currentBaseY;
+	}
+
+	public void setCurrentX(float currentX){
+		this.currentX=currentX;
+	}
+
+	public float getCurrentX(){
+		return currentX;
 	}
 
 	
@@ -107,7 +133,7 @@ public class TextPrinter
 	
 	public void toNextLine(){
 		currentX=startX;
-		currentBaseY+=lineHeight*scale;
+		currentBaseY+=textSize;
 	}
 	
 	//移动当前光标
@@ -116,9 +142,33 @@ public class TextPrinter
 		currentBaseY+=y;
 	}
 	
+	public void addOffsetRaw(float x,float y){
+		currentX+=x*scale;
+		currentBaseY+=y*scale;
+	}
+	
+	public void printLineCenter(String text,float cx){
+		currentX=cx-TextUtils.calwidth(font,text)*scale/2;
+		printString(text);
+	}
+	
+	public void printLineLeft(String text,float x){
+		currentX=x;
+		printString(text);
+	}
+	
+	public void printLineRight(String text,float r){
+		currentX=r-TextUtils.calwidth(font,text)*scale;
+		printString(text);
+	}
+	
 	public void printChar(char c){
-		if(c=='\n'){
+		if((!singleline)&&c=='\n'){
 			toNextLine();
+			return;
+		}
+		if(c=='	'){
+			printString("    ");
 			return;
 		}
 		FNTChar fntc=font.getFNTChar(c);
@@ -128,8 +178,8 @@ public class TextPrinter
 			if(preChar!=NO_PREVIOUS_CHAR){
 				FNTKerning kerning=font.getKerning(preChar,c);
 				if(kerning!=null){
-					area.move(kerning.amount,0);
-					xadvance+=kerning.amount;
+					//area.move(kerning.amount,0);
+					//xadvance+=kerning.amount;
 				}
 			}
 			xadvance*=scale;

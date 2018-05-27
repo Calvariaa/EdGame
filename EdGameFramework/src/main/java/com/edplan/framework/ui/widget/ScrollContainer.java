@@ -338,7 +338,7 @@ public class ScrollContainer extends EdContainer
 	protected void measureHorizon(long widthSpec,long heightSpec){
 		final int count=getChildrenCount();
 		float widthUsed=0;
-		final long adjustedSpec=EdMeasureSpec.makeupMeasureSpec(maxChildrenSize,EdMeasureSpec.MODE_AT_MOST);
+		final long adjustedSpec=EdMeasureSpec.makeupMeasureSpec(Math.max(EdMeasureSpec.getSize(widthSpec),maxChildrenSize),EdMeasureSpec.MODE_AT_MOST);
 		for(int i=0;i<count;i++){
 			final EdView view=getChildAt(i);
 			if(view.getVisiblility()!=VISIBILITY_GONE){
@@ -386,7 +386,7 @@ public class ScrollContainer extends EdContainer
 	protected void measureVertical(long widthSpec,long heightSpec){
 		final int count=getChildrenCount();
 		float heightUsed=0;
-		final long adjustedSpec=EdMeasureSpec.makeupMeasureSpec(maxChildrenSize,EdMeasureSpec.MODE_AT_MOST);
+		final long adjustedSpec=EdMeasureSpec.makeupMeasureSpec(Math.max(EdMeasureSpec.getSize(heightSpec),maxChildrenSize),EdMeasureSpec.MODE_AT_MOST);
 		for(int i=0;i<count;i++){
 			final EdView view=getChildAt(i);
 			final EdLayoutParam param=view.getLayoutParam();

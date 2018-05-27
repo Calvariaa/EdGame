@@ -53,7 +53,6 @@ public abstract class AResource
 	
 	public ByteBuffer loadBuffer(String path) throws IOException{
 		InputStream in=openInput(path);
-		System.out.println(in.available());
 		if(in==null)return null;
 		ByteBuffer buffer=ByteBuffer.allocateDirect(in.available());
 		buffer.order(ByteOrder.nativeOrder());

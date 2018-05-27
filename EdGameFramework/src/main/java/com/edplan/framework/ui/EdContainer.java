@@ -20,6 +20,8 @@ public abstract class EdContainer extends EdAbstractViewGroup
 	
 	private GLPaint postPaint;
 	
+	
+	
 	public EdContainer(MContext c){
 		super(c);
 		layer=new BufferedLayer(c);
@@ -73,7 +75,11 @@ public abstract class EdContainer extends EdAbstractViewGroup
 		drawBackground(layerCanvas);
 		drawContainer(layerCanvas);
 		layerCanvas.unprepare();
-		canvas.drawTexture(layer.getTexture(),RectF.xywh(0,0,getWidth(),getHeight()),postPaint);
+		postLayer(canvas,layer,RectF.xywh(0,0,getWidth(),getHeight()),postPaint);
+	}
+	
+	protected void postLayer(BaseCanvas canvas,BufferedLayer layer,RectF area,GLPaint paint){
+		canvas.drawTexture(layer.getTexture(),area,paint);
 	}
 
 	@Override
