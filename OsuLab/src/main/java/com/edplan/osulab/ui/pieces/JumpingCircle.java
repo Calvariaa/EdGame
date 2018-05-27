@@ -19,12 +19,13 @@ import com.edplan.framework.ui.drawable.sprite.ShadowCircleSprite;
 import com.edplan.framework.ui.ViewConfiguration;
 import com.edplan.framework.graphics.opengl.BlendType;
 import com.edplan.framework.math.Vec2;
+import com.edplan.osulab.LabGame;
 
 public class JumpingCircle extends EdView
 {
-	private float maxShadowWidth=9;
+	private float maxShadowWidth=12;
 	
-	private float shadowWidth;
+	private float shadowWidth=maxShadowWidth;
 	
 	private CircleSprite ring;
 	private CircleSprite pinkCover;
@@ -32,6 +33,11 @@ public class JumpingCircle extends EdView
 	private TextureCircleSprite centerRing;
 	
 	private GLTexture logo;
+	
+	private BoundOverlay boundOverlay;
+	private BaseBoundOverlay initialBound;
+	
+	private boolean performingOpeningAnim=true;
 	
 	public JumpingCircle(MContext c){
 		super(c);
@@ -63,6 +69,96 @@ public class JumpingCircle extends EdView
 			getContext().toast("err");
 		}
 	}
+
+	@Override
+	public void onInitialLayouted(){
+		// TODO: Implement this method
+		super.onInitialLayouted();
+		BaseBoundOverlay b=new BaseBoundOverlay();
+		initialBound=b;
+		b.setLeft(getLeft());
+		b.setTop(getTop());
+		b.setRight(getRight());
+		b.setBottom(getBottom());
+		boundOverlay=b;
+	}
+	
+	private void performBoundOverlayChangeAnim(float pl,float pt,float pr,float pb,final BoundOverlay next){
+		BaseBoundOverlay tmp=new BaseBoundOverlay();
+		tmp.setLeft(pl);
+		tmp.setTop(pt);
+		tmp.setRight(pr);
+		tmp.setBottom(pb);
+		boundOverlay=tmp;
+		
+		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<BoundOverlay>(tmp,"left")
+															 .transform(pl,0,Easing.None)
+															 .transform(next.getLeft(),ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.OutQuad));
+		builder.together(new FloatQueryAnimation<BoundOverlay>(tmp,"top")
+						 .transform(pt,0,Easing.None)
+						 .transform(next.getTop(),ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.OutQuad));
+		builder.together(new FloatQueryAnimation<BoundOverlay>(tmp,"right")
+						 .transform(pr,0,Easing.None)
+						 .transform(next.getRight(),ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.OutQuad));													 
+		builder.together(new FloatQueryAnimation<BoundOverlay>(tmp,"bottom")
+						 .transform(pb,0,Easing.None)
+						 .transform(next.getBottom(),ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.OutQuad));
+		ComplexAnimation anim=builder.build();
+		anim.start();
+		anim.setOnFinishListener(new OnFinishListener(){
+				@Override
+				public void onFinish(){
+					// TODO: Implement this method
+					boundOverlay=next;
+				}
+			});
+		setAnimation(anim);
+	}
+
+	public void setBoundOverlay(BoundOverlay boundOverlay){
+		if(boundOverlay==null)boundOverlay=initialBound;
+		performBoundOverlayChangeAnim(getLeft(),getTop(),getRight(),getBottom(),boundOverlay);
+	}
+
+	public BoundOverlay getBoundOverlay(){
+		return boundOverlay;
+	}
+
+	@Override
+	public float getLeft(){
+		// TODO: Implement this method
+		if(boundOverlay!=null){
+			return boundOverlay.getLeft()+getOffsetX();
+		}
+		return super.getLeft();
+	}
+
+	@Override
+	public float getTop(){
+		// TODO: Implement this method
+		if(boundOverlay!=null){
+			return boundOverlay.getTop()+getOffsetY();
+		}
+		return super.getTop();
+	}
+
+	@Override
+	public float getRight(){
+		// TODO: Implement this method
+		if(boundOverlay!=null){
+			return boundOverlay.getRight()+getOffsetX();
+		}
+		return super.getRight();
+	}
+
+	@Override
+	public float getBottom(){
+		// TODO: Implement this method
+		if(boundOverlay!=null){
+			return boundOverlay.getBottom()+getOffsetY();
+		}
+		return super.getBottom();
+	}
 	
 	public void setInner(float w){
 		centerRing.setRadius(w);
@@ -77,7 +173,9 @@ public class JumpingCircle extends EdView
 		shadow.setInnerRadius(r-2);
 	}
 	
-	public void startOpeningAnimation(OnFinishListener l){
+	public void startOpeningAnimation(final OnFinishListener l){
+		setClickable(false);
+		performingOpeningAnim=true;
 		ring.resetRadius();
 		pinkCover.resetRadius();
 		centerRing.resetRadius();
@@ -115,20 +213,71 @@ public class JumpingCircle extends EdView
 		}
 
 		ComplexAnimation camin=builder.build();
-		camin.setOnFinishListener(l);
+		camin.setOnFinishListener(new OnFinishListener(){
+				@Override
+				public void onFinish(){
+					// TODO: Implement this method
+					performingOpeningAnim=false;
+					setClickable(true);
+					if(l!=null)l.onFinish();
+				}
+			});
 		camin.start();
 		setAnimation(camin);
 	}
 
+	@Override
+	public void onClickEvent(){
+		// TODO: Implement this method
+		super.onClickEvent();
+		
+		if(LabGame.get().getSceneSelectButtonBar().isHidden()){
+			LabGame.get().getSceneSelectButtonBar().show();
+		}else{
+			LabGame.get().getSceneSelectButtonBar().update();
+		}
+		
+	}
+
 	double glowDuration=800;
-	double shadowClock;
+	public static double shadowClock;
+	public static float glowProgress;
 	@Override
 	public void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		super.onDraw(canvas);
+		
+		if(!performingOpeningAnim){
+			final float radius=getWidth()/2;
+
+			ring.setPosition(getWidth()/2,getHeight()/2);
+			ring.setArea(RectF.ltrb(-getWidth()/2,-getHeight()/2,getWidth()/2,getHeight()/2));
+			pinkCover.setPosition(getWidth()/2,getHeight()/2);
+			pinkCover.setArea(RectF.ltrb(-getWidth()/2,-getHeight()/2,getWidth()/2,getHeight()/2));
+			centerRing.setPosition(getWidth()/2,getHeight()/2);
+			centerRing.setArea(RectF.ltrb(-getWidth()/2,-getHeight()/2,getWidth()/2,getHeight()/2));
+
+			float shadowWidthPx=ViewConfiguration.dp(maxShadowWidth);
+			shadow.setPosition(getWidth()/2,getHeight()/2);
+			shadow.setArea(RectF.ltrb(-getWidth()/2-shadowWidthPx,-getHeight()/2-shadowWidthPx,getWidth()/2+shadowWidthPx,getHeight()/2+shadowWidthPx));
+
+			shadowInner.setPosition(getWidth()/2,getHeight()/2);
+			shadowInner.setArea(RectF.ltrb(-getWidth()/2,-getHeight()/2,getWidth()/2,getHeight()/2));
+			final float w=radius*0.9f;
+			centerRing.setRadius(w);
+			pinkCover.setRadius(w);
+			ring.setInnerRadius(w);
+			shadowInner.setRadius(w);
+			shadowInner.setInnerRadius(w-ViewConfiguration.dp(5));
+			ring.setRadius(radius);
+			shadow.setInnerRadius(radius-2);
+		}
+		
+		
 		shadowClock+=getContext().getFrameDeltaTime();
 		shadowClock%=glowDuration*2;
-		float p=(float)Math.sqrt(Math.abs(shadowClock/glowDuration-1));
+		glowProgress=(float)Math.sqrt(Math.abs(shadowClock/glowDuration-1));
+		float p=glowProgress;
 		shadowWidth=p*maxShadowWidth;
 		shadow.setRadius(shadow.getInnerRadius()+ViewConfiguration.dp(shadowWidth));
 		shadow.draw(canvas);

@@ -20,6 +20,8 @@ import com.edplan.osulab.ui.pieces.JumpingCircle;
 import com.edplan.osulab.ui.MainBackground;
 import com.edplan.osulab.ui.pieces.BackButton;
 import com.edplan.osulab.ui.MessageList;
+import com.edplan.osulab.ui.scenes.Scenes;
+import com.edplan.osulab.ui.scenes.SceneSelectButtonBar;
 
 /**
  *全局的管理类
@@ -40,9 +42,27 @@ public class LabGame
 	
 	private MainBackground mainBackground;
 	
-	private FrameContainer mainFrameContainer;
+	private SceneSelectButtonBar sceneSelectButtonBar;
+	
+	private Scenes scenes;
 	
 	private BackButton backButton;
+
+	public void setSceneSelectButtonBar(SceneSelectButtonBar sceneSelectButtonBar){
+		this.sceneSelectButtonBar=sceneSelectButtonBar;
+	}
+
+	public SceneSelectButtonBar getSceneSelectButtonBar(){
+		return sceneSelectButtonBar;
+	}
+
+	public void setScenes(Scenes scenes){
+		this.scenes=scenes;
+	}
+
+	public Scenes getScenes(){
+		return scenes;
+	}
 
 	public void setMessageList(MessageList messageList){
 		this.messageList=messageList;
@@ -100,11 +120,15 @@ public class LabGame
 		return optionList;
 	}
 	
+	public void exit(){
+		System.exit(0);
+	}
+	
 	public EdView createContentView(MContext c){
 		RelativeLayout mainLayout=new RelativeLayout(c);
 		jumpingCircle=new JumpingCircle(c);
 		mainBackground=new MainBackground(c);
-		mainFrameContainer=new FrameContainer(c);
+		scenes=new Scenes(c);
 		backButton=new BackButton(c);
 		{
 			RelativeLayout.RelativeParam mparam=new RelativeLayout.RelativeParam();
@@ -116,15 +140,15 @@ public class LabGame
 			RelativeLayout.RelativeParam mparam=new RelativeLayout.RelativeParam();
 			mparam.width=Param.MODE_MATCH_PARENT;
 			mparam.height=Param.MODE_MATCH_PARENT;
-			mainLayout.addView(mainFrameContainer,mparam);
+			mainLayout.addView(scenes,mparam);
 			{
 				ViewPage page=new ViewPage(c);
 				EdLayoutParam pparam=new EdLayoutParam();
 				pparam.width=Param.MODE_MATCH_PARENT;
 				pparam.height=Param.MODE_MATCH_PARENT;
 				page.setLayoutParam(pparam);
-				mainFrameContainer.addPage(page);
-				mainFrameContainer.swapPage(page);
+				scenes.addPage(page);
+				scenes.swapPage(page);
 				final MainCircleView mainCircleView;
 				{
 					RelativeLayout llayout=new RelativeLayout(c);
@@ -141,15 +165,25 @@ public class LabGame
 						lllparam.gravity=Gravity.Center;
 						llayout.addView(mainCircleView,lllparam);
 					}
-					{
-						RelativeLayout.RelativeParam lllparam=new RelativeLayout.RelativeParam();
-						lllparam.width=Param.makeupScaleOfParentOtherParam(0.6f);
-						lllparam.height=Param.makeupScaleOfParentParam(0.6f);
-						lllparam.gravity=Gravity.Center;
-						llayout.addView(jumpingCircle,lllparam);
-					}
 				}
 			}
+		}
+		
+		{
+			sceneSelectButtonBar=new SceneSelectButtonBar(c);
+			RelativeLayout.RelativeParam param=new RelativeLayout.RelativeParam();
+			param.width=Param.MODE_MATCH_PARENT;
+			param.height=Param.makeUpDP(UiConfig.SCENE_SELECT_BUTTON_BAR_HEIGHT);
+			param.gravity=Gravity.Center;
+			mainLayout.addView(sceneSelectButtonBar,param);
+		}
+		
+		{
+			RelativeLayout.RelativeParam lllparam=new RelativeLayout.RelativeParam();
+			lllparam.width=Param.makeupScaleOfParentOtherParam(0.6f);
+			lllparam.height=Param.makeupScaleOfParentParam(0.6f);
+			lllparam.gravity=Gravity.Center;
+			mainLayout.addView(jumpingCircle,lllparam);
 		}
 		
 		{
@@ -167,7 +201,7 @@ public class LabGame
 			RelativeLayout.RelativeParam param=new RelativeLayout.RelativeParam();
 			param.width=Param.makeUpDP(350);
 			param.height=Param.MODE_MATCH_PARENT;
-			param.marginTop=ViewConfiguration.dp(40);
+			param.marginTop=ViewConfiguration.dp(UiConfig.TOOLBAR_HEIGHT_DP);
 			mainLayout.addView(optionList,param);
 		}
 		
@@ -176,7 +210,7 @@ public class LabGame
 			RelativeLayout.RelativeParam param=new RelativeLayout.RelativeParam();
 			param.width=Param.makeUpDP(350);
 			param.height=Param.MODE_MATCH_PARENT;
-			param.marginTop=ViewConfiguration.dp(40);
+			param.marginTop=ViewConfiguration.dp(UiConfig.TOOLBAR_HEIGHT_DP);
 			param.gravity=Gravity.BottomRight;
 			mainLayout.addView(messageList,param);
 		}

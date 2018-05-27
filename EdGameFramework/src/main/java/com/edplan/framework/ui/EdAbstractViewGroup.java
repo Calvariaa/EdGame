@@ -13,23 +13,41 @@ import com.edplan.framework.graphics.opengl.BaseCanvas;
 import com.edplan.framework.ui.inputs.EdMotionEvent;
 import com.edplan.framework.math.RectF;
 import com.edplan.framework.interfaces.Invoker;
+import java.util.Iterator;
 
 public abstract class EdAbstractViewGroup extends EdView
 {
-	private EdView[] children;
-	private int idx;
+	private ChildrenWrapper childrenWrapper=new ChildrenWrapper();
 	
 	private LayoutTransition transition;
 	
+	private boolean backwardsDraw=false;
+	
 	public EdAbstractViewGroup(MContext context){
 		super(context);
-		children=new EdView[1];
 	}
 
 	private float paddingLeft,paddingTop,paddingRight,paddingBottom;
 
+	public void setBackwardsDraw(boolean backwardsDraw){
+		this.backwardsDraw=backwardsDraw;
+	}
+
+	public boolean isBackwardsDraw(){
+		return backwardsDraw;
+	}
+
 	public void setPaddingLeft(float paddingLeft){
 		this.paddingLeft=paddingLeft;
+	}
+	
+	public ChildrenWrapper getChildrenWrapper(){
+		return childrenWrapper;
+	}
+	
+	public void setChildrenWrapper(ChildrenWrapper w){
+		childrenWrapper=w;
+		invalidate(FLAG_INVALIDATE_LAYOUT|FLAG_INVALIDATE_MEASURE);
 	}
 
 	@Override
@@ -156,11 +174,11 @@ public abstract class EdAbstractViewGroup extends EdView
 	protected abstract void onMeasure(long widthSpec, long heightSpec);
 	
 	public EdView getChildAt(int i){
-		return children[i];
+		return childrenWrapper.children[i];
 	}
 	
 	public int getChildrenCount(){
-		return idx;
+		return childrenWrapper.idx;
 	}
 
 	@Override
@@ -191,19 +209,36 @@ public abstract class EdAbstractViewGroup extends EdView
 	
 	protected void dispatchDraw(BaseCanvas canvas){
 		final int count=getChildrenCount();
-		for(int i=0;i<count;i++){
-			final EdView view=getChildAt(i);
-			if(view.getVisiblility()==VISIBILITY_SHOW){
-				final int savedcount=canvas.save();
-				try{
-					canvas.translate(view.getLeft(),view.getTop());
-					canvas.clip(view.getWidth(),view.getHeight());
-					view.onDraw(canvas);
-				}finally{
-					canvas.restoreToCount(savedcount);
+		if(backwardsDraw){
+			for(int i=count-1;i>=0;i--){
+				final EdView view=getChildAt(i);
+				if(view.getVisiblility()==VISIBILITY_SHOW){
+					final int savedcount=canvas.save();
+					try{
+						canvas.translate(view.getLeft(),view.getTop());
+						canvas.clip(view.getWidth(),view.getHeight());
+						view.onDraw(canvas);
+					}finally{
+						canvas.restoreToCount(savedcount);
+					}
+				}
+			}
+		}else{
+			for(int i=0;i<count;i++){
+				final EdView view=getChildAt(i);
+				if(view.getVisiblility()==VISIBILITY_SHOW){
+					final int savedcount=canvas.save();
+					try{
+						canvas.translate(view.getLeft(),view.getTop());
+						canvas.clip(view.getWidth(),view.getHeight());
+						view.onDraw(canvas);
+					}finally{
+						canvas.restoreToCount(savedcount);
+					}
 				}
 			}
 		}
+		
 	}
 
 	@Override
@@ -443,11 +478,11 @@ public abstract class EdAbstractViewGroup extends EdView
 	
 	protected void addToList(EdView v){
 		v.setParent(this);
-		if(idx>=children.length){
-			children=Arrays.copyOf(children,children.length*3/2+1);
+		if(childrenWrapper.idx>=childrenWrapper.children.length){
+			childrenWrapper.children=Arrays.copyOf(childrenWrapper.children,childrenWrapper.children.length*3/2+1);
 		}
-		children[idx]=v;
-		idx++;
+		childrenWrapper.children[childrenWrapper.idx]=v;
+		childrenWrapper.idx++;
 		if(hasCreated()){
 			if(!v.hasCreated())v.onCreate();
 		}
@@ -502,6 +537,44 @@ public abstract class EdAbstractViewGroup extends EdView
 		
 		public void clearPointerInfo(EdMotionEvent e){
 			holdingView[e.getPointerId()]=null;
+		}
+	}
+	
+	public static class ChildrenWrapper implements Iterable<EdView>{
+		public EdView[] children=new EdView[1];
+		public int idx;
+
+		
+		public static ChildrenWrapper combine(ChildrenWrapper w1,ChildrenWrapper w2){
+			ChildrenWrapper w=new ChildrenWrapper();
+			w.idx=w1.idx+w2.idx;
+			w.children=new EdView[w.idx];
+			
+			return w;
+		}
+		
+		@Override
+		public Iterator<EdView> iterator(){
+			// TODO: Implement this method
+			return new Iterator<EdView>(){
+				int i=0;
+				@Override
+				public boolean hasNext(){
+					// TODO: Implement this method
+					return i<idx;
+				}
+
+				@Override
+				public EdView next(){
+					// TODO: Implement this method
+					return children[i++];
+				}
+
+				@Override
+				public void remove(){
+					// TODO: Implement this method
+				}
+			};
 		}
 	}
 }

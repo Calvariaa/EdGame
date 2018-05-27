@@ -859,7 +859,63 @@ public class EdView implements IRunnableHandler,MainCallBack
 		}
 	}
 	
+	public static abstract class BoundOverlay{
+		public abstract float getLeft();
+		public abstract float getTop();
+		public abstract float getBottom();
+		public abstract float getRight();
+		
+		public float getWidth(){
+			return getRight()-getLeft();
+		}
+		
+		public float getHeight(){
+			return getBottom()-getTop();
+		}
+	}
+	
+	public static class BaseBoundOverlay extends BoundOverlay{
+		float left,top,right,bottom;
+
+		public void setLeft(float left){
+			this.left=left;
+		}
+
+		public float getLeft(){
+			return left;
+		}
+
+		public void setTop(float top){
+			this.top=top;
+		}
+
+		public float getTop(){
+			return top;
+		}
+
+		public void setRight(float right){
+			this.right=right;
+		}
+
+		public float getRight(){
+			return right;
+		}
+
+		public void setBottom(float bottom){
+			this.bottom=bottom;
+		}
+
+		public float getBottom(){
+			return bottom;
+		}
+	}
+	
+	
 	public interface OnClickListener{
 		public void onClick(EdView view);
+	}
+	
+	public interface OnScrollListener{
+		public void onScroll(ScrollEvent event,EdView view);
 	}
 }

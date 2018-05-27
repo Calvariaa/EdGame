@@ -18,7 +18,7 @@ public class LinearContainer extends EdContainer
 
 	protected float startOffset;
 
-	protected boolean enableGravityCenter;
+	protected boolean enableGravityCenter=true;
 
 	public LinearContainer(MContext c){
 		super(c);

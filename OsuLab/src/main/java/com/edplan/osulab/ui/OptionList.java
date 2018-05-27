@@ -29,7 +29,7 @@ public class OptionList extends ScrollContainer implements Hideable
 		super(c);
 		setOutsideTouchable(true);
 		setChildoffset(ViewConfiguration.dp(1));
-		setBackground(Color4.rgba(0,0,0,0.7f));
+		setBackground(Color4.rgba(0,0,0,0.75f));
 		setOrientation(Orientation.DIRECTION_T2B);
 		setPaddingLeft(ViewConfiguration.dp(2));
 		setPaddingRight(ViewConfiguration.dp(2));
@@ -105,6 +105,7 @@ public class OptionList extends ScrollContainer implements Hideable
 
 	@Override
 	public void show(){
+		if(!isHidden())return;
 		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<OptionList>(this,"alpha")
 																	  .transform(getAlpha(),0,Easing.None)
 																	  .transform(1,ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.None));

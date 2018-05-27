@@ -19,6 +19,14 @@ public class FrameContainer extends EdContainer
 	public FrameContainer(MContext c){
 		super(c);
 	}
+
+	public void setCurrentPage(ViewPage currentPage){
+		this.currentPage=currentPage;
+	}
+
+	public ViewPage getCurrentPage(){
+		return currentPage;
+	}
 	
 	public void swapToNaxtPage(){
 		if(currentPage==null){

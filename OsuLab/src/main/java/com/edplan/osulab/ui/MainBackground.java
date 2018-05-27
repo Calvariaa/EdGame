@@ -10,7 +10,7 @@ public class MainBackground extends RelativeContainer
 	public MainBackground(MContext c){
 		super(c);
 		ColorDrawable cd=new ColorDrawable(c);
-		float t=0.2f,b=0.15f;
+		float t=0.1f,b=0.25f;
 		cd.setColor(Color4.gray(t),Color4.gray(t),
 					Color4.gray(b),Color4.gray(b));
 		setBackground(cd);

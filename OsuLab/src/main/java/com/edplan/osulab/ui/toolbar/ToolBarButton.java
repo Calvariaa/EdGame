@@ -46,7 +46,7 @@ public class ToolBarButton extends EdView
 		return onClickListener;
 	}
 	
-	public void onPressAnim(){
+	private void onPressAnim(){
 		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<ColorRectSprite>(backlight,"alpha")
 										 .transform(backlight.getAlpha(),0,Easing.None)
 										 .transform(1,40,Easing.None));
@@ -55,7 +55,7 @@ public class ToolBarButton extends EdView
 		setAnimation(anim);
 	}
 	
-	public void offPressAnim(){
+	private void offPressAnim(){
 		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<ColorRectSprite>(backlight,"alpha")
 																	  .transform(backlight.getAlpha(),0,Easing.None)
 																	  .transform(0,250,Easing.None));

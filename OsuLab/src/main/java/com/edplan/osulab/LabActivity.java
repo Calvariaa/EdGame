@@ -8,6 +8,9 @@ import com.edplan.framework.MContext;
 import com.edplan.nso.OsuFilePart;
 import com.edplan.framework.main.MainActivity;
 import com.edplan.osulab.ui.BackQuery;
+import com.edplan.framework.ui.text.font.bmfont.BMFont;
+import java.io.IOException;
+import com.edplan.framework.ui.text.font.FontAwesome;
 
 public class LabActivity extends MainActivity 
 {
@@ -35,6 +38,30 @@ public class LabActivity extends MainActivity
 		public boolean onBackPressNotHandled(){
 			// TODO: Implement this method
 			return BackQuery.get().back();
+		}
+
+		@Override
+		public void onGLCreate(){
+			// TODO: Implement this method
+			super.onGLCreate();
+			try{
+				{
+					BMFont font=BMFont.loadFont(
+						mContext.getAssetResource().subResource("font"),
+						"osuFont.fnt");
+					font.setErrCharacter(FontAwesome.fa_osu_heart1_break.charvalue);
+					BMFont.addFont(font,font.getInfo().face);
+				}
+				{
+					BMFont f=BMFont.getFont(BMFont.FontAwesome);
+					f.addFont(
+						mContext.getAssetResource().subResource("font"),
+						"osuFont.fnt");
+				}
+			}catch(IOException e){
+				e.printStackTrace();
+				mContext.toast("读取字体osuFont失败："+e.getMessage());
+			}
 		}
 	}
 }

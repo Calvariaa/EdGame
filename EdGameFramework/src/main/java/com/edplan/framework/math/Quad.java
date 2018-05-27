@@ -12,6 +12,11 @@ public class Quad implements IQuad
 	
 	public final Vec2[] savedAnchor=new Vec2[Anchor.SPECIAL_ANCHOR_COUNT];
 
+	public Quad(Vec2 v1,Vec2 v2,Vec2 v3,Vec2 v4){
+		set(v1,v2,v3,v4);
+		vertexs=new Vec2[]{topLeft,topRight,bottomRight,bottomLeft};
+	}
+	
 	public Quad(){
 		vertexs=new Vec2[]{topLeft,topRight,bottomRight,bottomLeft};
 	}

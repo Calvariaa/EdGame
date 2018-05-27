@@ -19,6 +19,7 @@ public class FMath
 	static{
 		SIN=new float[SC_SIZE];
 		COS=new float[SC_SIZE];
+		
 		Delta_Angle=Math.PI*2/SC_SIZE;
 		for(int i=0;i<SC_SIZE;i++){
 			SIN[i]=(float)Math.sin(Delta_Angle*i);

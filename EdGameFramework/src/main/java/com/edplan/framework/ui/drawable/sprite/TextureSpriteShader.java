@@ -27,7 +27,7 @@ public class TextureSpriteShader extends SpriteShader
 											"@include <TextureSpriteBase.fs>",
 											"void main(){",
 											"    vec4 c=f_Color*getTextureColor();",
-											"    if(c.a<0.001)discard;",
+											"    if(c.a<0.0001)discard;",
 											"    gl_FragColor=c;",
 											"}"
 										});
