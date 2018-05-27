@@ -153,12 +153,13 @@ public class LabGame
 		}
 		
 		{
-			toolBar=new LabToolbar(c);
+			sceneOverlay=new SceneOverlay(c);
 			RelativeLayout.RelativeParam param=new RelativeLayout.RelativeParam();
 			param.width=Param.MODE_MATCH_PARENT;
-			param.height=Param.makeUpDP(UiConfig.TOOLBAR_HEIGHT_DP);
-			param.gravity=Gravity.TopCenter;
-			mainLayout.addView(toolBar,param);
+			param.height=Param.MODE_MATCH_PARENT;
+			param.marginTop=ViewConfiguration.dp(UiConfig.TOOLBAR_HEIGHT_DP);
+			param.gravity=Gravity.BottomCenter;
+			mainLayout.addView(sceneOverlay,param);
 		}
 		
 		{
@@ -181,18 +182,18 @@ public class LabGame
 		}
 		
 		{
-			sceneOverlay=new SceneOverlay(c);
+			toolBar=new LabToolbar(c);
 			RelativeLayout.RelativeParam param=new RelativeLayout.RelativeParam();
 			param.width=Param.MODE_MATCH_PARENT;
-			param.height=Param.MODE_MATCH_PARENT;
-			param.marginTop=ViewConfiguration.dp(UiConfig.TOOLBAR_HEIGHT_DP);
-			param.gravity=Gravity.BottomCenter;
-			mainLayout.addView(sceneOverlay,param);
+			param.height=Param.makeUpDP(UiConfig.TOOLBAR_HEIGHT_DP);
+			param.gravity=Gravity.TopCenter;
+			mainLayout.addView(toolBar,param);
 		}
+		
 		{
 			RelativeLayout.RelativeParam mparam=new RelativeLayout.RelativeParam();
-			mparam.width=Param.makeUpDP(50);
-			mparam.height=Param.makeUpDP(50);
+			mparam.width=Param.makeUpDP(40);
+			mparam.height=Param.makeUpDP(40);
 			mparam.gravity=Gravity.BottomLeft;
 			mainLayout.addView(backButton,mparam);
 		}

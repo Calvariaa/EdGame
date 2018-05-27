@@ -83,7 +83,7 @@ public class LabToolbar extends RelativeContainer implements Hideable
 			
 			{
 				ToolBarButton msgShowButton=new ToolBarButton(c);
-				msgShowButton.setIcon(FontAwesome.fa_cog.getTexture());
+				msgShowButton.setIcon(FontAwesome.fa_navicon.getTexture());
 				msgShowButton.setGravity(Gravity.Center);
 				MarginLayoutParam lparam=new MarginLayoutParam();
 				lparam.width=Param.makeupScaleOfParentOtherParam(1.6f);
@@ -122,7 +122,9 @@ public class LabToolbar extends RelativeContainer implements Hideable
 			param.height=Param.MODE_MATCH_PARENT;
 			addView(rightLayout,param);
 			{
-				TestButton msgShowButton=new TestButton(c);
+				ToolBarButton msgShowButton=new ToolBarButton(c);
+				msgShowButton.setGravity(Gravity.Center);
+				msgShowButton.setIcon(FontAwesome.fa_angle_double_down.getTexture());
 				msgShowButton.setOnClickListener(new OnClickListener(){
 						@Override
 						public void onClick(EdView view){
@@ -140,9 +142,21 @@ public class LabToolbar extends RelativeContainer implements Hideable
 				rightLayout.addView(msgShowButton,lparam);
 			}
 			{
-				TestButton msgShowButton=new TestButton(c);
+				EdView divider=new EdView(c);
+				divider.setBackground(Color4.gray(0.5f).setAlpha(0.4f));
 				MarginLayoutParam lparam=new MarginLayoutParam();
-				lparam.width=Param.makeUpDP(50);
+				lparam.width=Param.makeUpDP(2f);
+				lparam.height=Param.MODE_MATCH_PARENT;
+				lparam.marginBottom=ViewConfiguration.dp(2);
+				lparam.marginTop=ViewConfiguration.dp(2);
+				rightLayout.addView(divider,lparam);
+			}
+			{
+				ToolBarButton msgShowButton=new ToolBarButton(c);
+				msgShowButton.setGravity(Gravity.Center);
+				msgShowButton.setIcon(FontAwesome.fa_genderless.getTexture());
+				MarginLayoutParam lparam=new MarginLayoutParam();
+				lparam.width=Param.makeUpDP(40);
 				lparam.height=Param.MODE_MATCH_PARENT;
 				rightLayout.addView(msgShowButton,lparam);
 				msgShowButton.setOnClickListener(new OnClickListener(){

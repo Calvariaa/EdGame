@@ -18,6 +18,7 @@ import com.edplan.osulab.ui.UiConfig;
 import com.edplan.framework.ui.drawable.sprite.ShadowCircleSprite;
 import com.edplan.framework.ui.ViewConfiguration;
 import com.edplan.framework.graphics.opengl.BlendType;
+import com.edplan.framework.math.Vec2;
 
 public class JumpingCircle extends EdView
 {
@@ -134,5 +135,11 @@ public class JumpingCircle extends EdView
 		pinkCover.draw(canvas);
 		shadowInner.draw(canvas);
 		ring.draw(canvas);
+	}
+
+	@Override
+	public boolean inViewBound(float x,float y){
+		// TODO: Implement this method
+		return Vec2.length(x-(getLeft()+getRight())/2,y-(getTop()+getBottom())/2)<Math.min(getWidth(),getHeight())/2;
 	}
 }
