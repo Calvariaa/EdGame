@@ -7,12 +7,13 @@ import com.edplan.framework.graphics.opengl.GLPaint;
 import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.graphics.opengl.objs.Color4;
+import com.edplan.framework.ui.animation.interfaces.IHasAlpha;
 
 
 /**
  *单独绘制一个FBO，然后再绘制到父View上，可以附加边缘效果
  */
-public abstract class EdContainer extends EdAbstractViewGroup
+public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlpha
 {
 	private BufferedLayer layer;
 	

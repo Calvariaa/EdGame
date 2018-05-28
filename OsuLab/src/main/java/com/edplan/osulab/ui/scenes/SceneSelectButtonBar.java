@@ -26,8 +26,11 @@ import com.edplan.osulab.ui.UiConfig;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
 import com.edplan.framework.ui.text.font.FontAwesome;
 import java.util.HashMap;
+import com.edplan.osulab.ui.BackQuery;
+import com.edplan.osulab.ui.pieces.JumpingCircle;
+import com.edplan.osulab.ScenesName;
 
-public class SceneSelectButtonBar extends RelativeContainer implements Hideable
+public class SceneSelectButtonBar extends RelativeContainer implements Hideable,BackQuery.BackHandler
 {
 	public static final String GROUP_MAIN="main";
 	
@@ -52,6 +55,8 @@ public class SceneSelectButtonBar extends RelativeContainer implements Hideable
 	private ColorRectSprite shadowSpriteTop,shadowSpriteBottom;
 	
 	private String currentGroupName=GROUP_MAIN;
+	
+	private OnClickListener soloClicker;
 	
 	public SceneSelectButtonBar(MContext c){
 		super(c);
@@ -199,6 +204,14 @@ public class SceneSelectButtonBar extends RelativeContainer implements Hideable
 						button.setBackgroundColor(UiConfig.Color.BLUE_DEEP_DARK);
 						button.setTexture(FontAwesome.fa_osu_logo.getTexture());
 						button.setText("Solo");
+						button.setOnClickListener(soloClicker=new OnClickListener(){
+								@Override
+								public void onClick(EdView view){
+									// TODO: Implement this method
+									hide();
+									LabGame.get().getScenes().swapScene(ScenesName.SongSelect);
+								}
+							});
 						MarginLayoutParam p=new MarginLayoutParam();
 						p.height=Param.MODE_MATCH_PARENT;
 						p.width=Param.makeUpDP(buttonSize);
@@ -219,6 +232,14 @@ public class SceneSelectButtonBar extends RelativeContainer implements Hideable
 						button.setBackgroundColor(UiConfig.Color.BLUE_LIGHT);
 						button.setTexture(FontAwesome.fa_osu_edit_o.getTexture());
 						button.setText("Edit");
+						button.setOnClickListener(new OnClickListener(){
+								@Override
+								public void onClick(EdView view){
+									// TODO: Implement this method
+									hide();
+									LabGame.get().getScenes().swapScene(ScenesName.Edit);
+								}
+							});
 						MarginLayoutParam p=new MarginLayoutParam();
 						p.height=Param.MODE_MATCH_PARENT;
 						p.width=Param.makeUpDP(buttonSize);
@@ -229,6 +250,10 @@ public class SceneSelectButtonBar extends RelativeContainer implements Hideable
 			groups.put(GROUP_PLAY,currentGroup);
 		}
 		applyGroup(getGroup(GROUP_MAIN));
+	}
+
+	public OnClickListener getSoloClicker(){
+		return soloClicker;
 	}
 
 	public String getCurrentGroupName(){
@@ -243,6 +268,11 @@ public class SceneSelectButtonBar extends RelativeContainer implements Hideable
 		leftLayout.setChildrenWrapper(g.leftWrapper);
 		rightLayout.setChildrenWrapper(g.rightWrapper);
 		currentGroup=g;
+	}
+	
+	protected void directSwap(String name){
+		currentGroupName=name;
+		applyGroup(getGroup(name));
 	}
 	
 	public void swapGroup(final String name){
@@ -260,17 +290,23 @@ public class SceneSelectButtonBar extends RelativeContainer implements Hideable
 				@Override
 				public void run(){
 					// TODO: Implement this method
-					currentGroupName=name;
-					applyGroup(g);
-					for(EdView v:currentGroup.leftWrapper){
-						((SceneSelectButton)v).show();
-					}
-
-					for(EdView v:currentGroup.rightWrapper){
-						((SceneSelectButton)v).show();
-					}
+					directSwap(name);
+					currentGroup.show();
 				}
-			},ViewConfiguration.DEFAULT_TRANSITION_TIME+20);
+			},SceneSelectButton.ANIM_DURATION+20);
+	}
+
+	@Override
+	public boolean onBack(){
+		// TODO: Implement this method
+		switch(currentGroupName){
+			case GROUP_MAIN:
+				return false;
+			case GROUP_PLAY:
+				swapGroup(GROUP_MAIN);
+				return true;
+		}
+		return false;
 	}
 	
 
@@ -290,6 +326,7 @@ public class SceneSelectButtonBar extends RelativeContainer implements Hideable
 	@Override
 	public void hide(){
 		// TODO: Implement this method
+		BackQuery.get().unregist(this);
 		LabGame.get().getJumpingCircle().setBoundOverlay(null);
 		
 		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<SceneSelectButtonBar>(this,"alpha")
@@ -306,19 +343,15 @@ public class SceneSelectButtonBar extends RelativeContainer implements Hideable
 		anim.start();
 		setAnimation(anim);
 		
-		for(EdView v:currentGroup.leftWrapper){
-			((SceneSelectButton)v).hide();
-		}
-
-		for(EdView v:currentGroup.rightWrapper){
-			((SceneSelectButton)v).hide();
-		}
+		currentGroup.hide();
 		
 	}
 
 	@Override
 	public void show(){
 		// TODO: Implement this method
+		BackQuery.get().registNoBackButton(this);
+		directSwap(GROUP_MAIN);
 		BaseBoundOverlay bound=new BaseBoundOverlay();
 		RectF area=RectF.anchorOWH(Anchor.Center,
 								   getLeft()+getWidth()*dividePoint,
@@ -347,13 +380,7 @@ public class SceneSelectButtonBar extends RelativeContainer implements Hideable
 		anim.start();
 		setAnimation(anim);
 		
-		for(EdView v:currentGroup.leftWrapper){
-			((SceneSelectButton)v).show();
-		}
-		
-		for(EdView v:currentGroup.rightWrapper){
-			((SceneSelectButton)v).show();
-		}
+		currentGroup.show();
 		
 		setVisiblility(VISIBILITY_SHOW);
 	}
@@ -394,17 +421,54 @@ public class SceneSelectButtonBar extends RelativeContainer implements Hideable
 	public void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		
-		shadowSpriteTop.setArea(RectF.anchorOWH(Anchor.BottomLeft,0,0,canvas.getWidth(),ViewConfiguration.dp(shadowDp)));
+		float shadowScale=0.5f+JumpingCircle.glowProgress/2;
+		
+		shadowSpriteTop.setArea(RectF.anchorOWH(Anchor.BottomLeft,0,0,canvas.getWidth(),ViewConfiguration.dp(shadowDp*shadowScale)));
 		shadowSpriteTop.draw(canvas);
 		
-		shadowSpriteBottom.setArea(RectF.anchorOWH(Anchor.TopLeft,0,canvas.getHeight(),canvas.getWidth(),ViewConfiguration.dp(shadowDp)));
+		shadowSpriteBottom.setArea(RectF.anchorOWH(Anchor.TopLeft,0,canvas.getHeight(),canvas.getWidth(),ViewConfiguration.dp(shadowDp*shadowScale)));
 		shadowSpriteBottom.draw(canvas);
 		
 		
 		super.onDraw(canvas);
 	}
 	
-	private class ButtonGroup{
+	private class ButtonGroup implements Hideable
+	{
 		public ChildrenWrapper leftWrapper,rightWrapper;
+		public Runnable onHide;
+		public Runnable onShow;
+		
+		@Override
+		public void hide(){
+			// TODO: Implement this method
+			if(onHide!=null)onHide.run();
+			for(EdView v:leftWrapper){
+				((SceneSelectButton)v).hide();
+			}
+
+			for(EdView v:rightWrapper){
+				((SceneSelectButton)v).hide();
+			}
+		}
+
+		@Override
+		public void show(){
+			// TODO: Implement this method
+			if(onShow!=null)onShow.run();
+			for(EdView v:leftWrapper){
+				((SceneSelectButton)v).show();
+			}
+
+			for(EdView v:rightWrapper){
+				((SceneSelectButton)v).show();
+			}
+		}
+
+		@Override
+		public boolean isHidden(){
+			// TODO: Implement this method
+			return currentGroup!=this;
+		}
 	}
 }

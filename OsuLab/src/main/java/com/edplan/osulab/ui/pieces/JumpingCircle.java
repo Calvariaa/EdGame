@@ -20,6 +20,9 @@ import com.edplan.framework.ui.ViewConfiguration;
 import com.edplan.framework.graphics.opengl.BlendType;
 import com.edplan.framework.math.Vec2;
 import com.edplan.osulab.LabGame;
+import com.edplan.osulab.ui.scenes.SceneSelectButtonBar;
+import com.edplan.osulab.ui.scenes.BaseScene;
+import com.edplan.osulab.ScenesName;
 
 public class JumpingCircle extends EdView
 {
@@ -37,7 +40,7 @@ public class JumpingCircle extends EdView
 	private BoundOverlay boundOverlay;
 	private BaseBoundOverlay initialBound;
 	
-	private boolean performingOpeningAnim=true;
+	private boolean performingAnim=true;
 	
 	public JumpingCircle(MContext c){
 		super(c);
@@ -81,6 +84,51 @@ public class JumpingCircle extends EdView
 		b.setRight(getRight());
 		b.setBottom(getBottom());
 		boundOverlay=b;
+	}
+	
+	public void exitAnimation(){
+		setClickable(false);
+		performingAnim=true;
+		final float radius=getWidth()/2;
+
+		ring.setPosition(getWidth()/2,getHeight()/2);
+		ring.setArea(RectF.ltrb(-getWidth()/2,-getHeight()/2,getWidth()/2,getHeight()/2));
+		pinkCover.setPosition(getWidth()/2,getHeight()/2);
+		pinkCover.setArea(RectF.ltrb(-getWidth()/2,-getHeight()/2,getWidth()/2,getHeight()/2));
+		centerRing.setPosition(getWidth()/2,getHeight()/2);
+		centerRing.setArea(RectF.ltrb(-getWidth()/2,-getHeight()/2,getWidth()/2,getHeight()/2));
+
+		float shadowWidthPx=ViewConfiguration.dp(maxShadowWidth);
+		shadow.setPosition(getWidth()/2,getHeight()/2);
+		shadow.setArea(RectF.ltrb(-getWidth()/2-shadowWidthPx,-getHeight()/2-shadowWidthPx,getWidth()/2+shadowWidthPx,getHeight()/2+shadowWidthPx));
+
+		shadowInner.setPosition(getWidth()/2,getHeight()/2);
+		shadowInner.setArea(RectF.ltrb(-getWidth()/2,-getHeight()/2,getWidth()/2,getHeight()/2));
+
+		pinkCover.setAccentColor(UiConfig.Color.PINK);
+		pinkCover.setAlpha(1);
+
+		FloatQueryAnimation anim=new FloatQueryAnimation<JumpingCircle>(this,"radius");
+		anim.transform(radius,0,Easing.None);
+		anim.transform(0,500,Easing.InQuad);
+		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(anim);
+		{
+			FloatQueryAnimation anim2=new FloatQueryAnimation<JumpingCircle>(JumpingCircle.this,"inner");
+			anim2.transform(radius*0.9f,0,Easing.None);
+			anim2.transform(0,500,Easing.InQuad);
+			builder.together(anim2,0);
+		}
+
+		ComplexAnimation camin=builder.build();
+		camin.setOnFinishListener(new OnFinishListener(){
+				@Override
+				public void onFinish(){
+					// TODO: Implement this method
+					System.exit(0);
+				}
+			});
+		camin.start();
+		setAnimation(camin);
 	}
 	
 	private void performBoundOverlayChangeAnim(float pl,float pt,float pr,float pb,final BoundOverlay next){
@@ -175,7 +223,7 @@ public class JumpingCircle extends EdView
 	
 	public void startOpeningAnimation(final OnFinishListener l){
 		setClickable(false);
-		performingOpeningAnim=true;
+		performingAnim=true;
 		ring.resetRadius();
 		pinkCover.resetRadius();
 		centerRing.resetRadius();
@@ -217,7 +265,7 @@ public class JumpingCircle extends EdView
 				@Override
 				public void onFinish(){
 					// TODO: Implement this method
-					performingOpeningAnim=false;
+					performingAnim=false;
 					setClickable(true);
 					if(l!=null)l.onFinish();
 				}
@@ -231,10 +279,31 @@ public class JumpingCircle extends EdView
 		// TODO: Implement this method
 		super.onClickEvent();
 		
+		BaseScene s=LabGame.get().getScenes().getCurrentScene();
+		if(s!=null){
+			switch(s.getSceneName()){
+				case ScenesName.SongSelect:
+					
+					return;
+				case ScenesName.Edit:
+					
+					return;
+			}
+		}
+		
 		if(LabGame.get().getSceneSelectButtonBar().isHidden()){
 			LabGame.get().getSceneSelectButtonBar().show();
 		}else{
 			LabGame.get().getSceneSelectButtonBar().update();
+			switch(LabGame.get().getSceneSelectButtonBar().getCurrentGroupName()){
+				case SceneSelectButtonBar.GROUP_MAIN:
+					LabGame.get().getSceneSelectButtonBar().swapGroup(SceneSelectButtonBar.GROUP_PLAY);
+					break;
+				case SceneSelectButtonBar.GROUP_PLAY:
+					LabGame.get().getSceneSelectButtonBar().getSoloClicker().onClick(null);
+					break;
+			}
+			
 		}
 		
 	}
@@ -247,7 +316,7 @@ public class JumpingCircle extends EdView
 		// TODO: Implement this method
 		super.onDraw(canvas);
 		
-		if(!performingOpeningAnim){
+		if(!performingAnim){
 			final float radius=getWidth()/2;
 
 			ring.setPosition(getWidth()/2,getHeight()/2);

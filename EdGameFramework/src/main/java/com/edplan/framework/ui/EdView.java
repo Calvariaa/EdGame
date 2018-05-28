@@ -20,6 +20,7 @@ import com.edplan.framework.main.MainCallBack;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.ui.drawable.ColorDrawable;
 import com.edplan.framework.ui.layout.Gravity;
+import com.edplan.framework.ui.animation.callback.OnFinishListener;
 
 public class EdView implements IRunnableHandler,MainCallBack
 {
@@ -910,12 +911,21 @@ public class EdView implements IRunnableHandler,MainCallBack
 		}
 	}
 	
-	
 	public interface OnClickListener{
 		public void onClick(EdView view);
 	}
 	
 	public interface OnScrollListener{
 		public void onScroll(ScrollEvent event,EdView view);
+	}
+	
+	public OnFinishListener setVisibilityWhenFinish(final int code){
+		return new OnFinishListener(){
+			@Override
+			public void onFinish(){
+				// TODO: Implement this method
+				setVisiblility(code);
+			}
+		};
 	}
 }

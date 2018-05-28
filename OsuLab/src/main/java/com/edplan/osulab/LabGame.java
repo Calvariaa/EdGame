@@ -120,8 +120,13 @@ public class LabGame
 		return optionList;
 	}
 	
+	
 	public void exit(){
-		System.exit(0);
+		toolBar.hide();
+		optionList.hide();
+		sceneOverlay.hide();
+		sceneSelectButtonBar.hide();
+		jumpingCircle.exitAnimation();
 	}
 	
 	public EdView createContentView(MContext c){
@@ -141,32 +146,6 @@ public class LabGame
 			mparam.width=Param.MODE_MATCH_PARENT;
 			mparam.height=Param.MODE_MATCH_PARENT;
 			mainLayout.addView(scenes,mparam);
-			{
-				ViewPage page=new ViewPage(c);
-				EdLayoutParam pparam=new EdLayoutParam();
-				pparam.width=Param.MODE_MATCH_PARENT;
-				pparam.height=Param.MODE_MATCH_PARENT;
-				page.setLayoutParam(pparam);
-				scenes.addPage(page);
-				scenes.swapPage(page);
-				final MainCircleView mainCircleView;
-				{
-					RelativeLayout llayout=new RelativeLayout(c);
-					llayout.setGravity(Gravity.Center);
-					EdLayoutParam llparam=new EdLayoutParam();
-					llparam.width=Param.MODE_MATCH_PARENT;
-					llparam.height=Param.MODE_MATCH_PARENT;
-					page.addView(llayout,llparam);
-					{
-						mainCircleView=new MainCircleView(c);
-						RelativeLayout.RelativeParam lllparam=new RelativeLayout.RelativeParam();
-						lllparam.width=Param.makeupScaleOfParentOtherParam(0.6f);
-						lllparam.height=Param.makeupScaleOfParentParam(0.6f);
-						lllparam.gravity=Gravity.Center;
-						llayout.addView(mainCircleView,lllparam);
-					}
-				}
-			}
 		}
 		
 		{
@@ -176,6 +155,16 @@ public class LabGame
 			param.height=Param.makeUpDP(UiConfig.SCENE_SELECT_BUTTON_BAR_HEIGHT);
 			param.gravity=Gravity.Center;
 			mainLayout.addView(sceneSelectButtonBar,param);
+		}
+		
+		{
+			final MainCircleView mainCircleView;
+			mainCircleView=new MainCircleView(c);
+			RelativeLayout.RelativeParam lllparam=new RelativeLayout.RelativeParam();
+			lllparam.width=Param.makeupScaleOfParentOtherParam(0.6f);
+			lllparam.height=Param.makeupScaleOfParentParam(0.6f);
+			lllparam.gravity=Gravity.Center;
+			mainLayout.addView(mainCircleView,lllparam);
 		}
 		
 		{

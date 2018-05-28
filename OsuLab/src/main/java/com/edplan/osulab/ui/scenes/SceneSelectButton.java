@@ -7,6 +7,8 @@ import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.math.RectF;
 import com.edplan.framework.ui.Anchor;
 import com.edplan.framework.ui.ViewConfiguration;
+import com.edplan.framework.ui.animation.AbstractAnimation;
+import com.edplan.framework.ui.animation.AnimationHandler;
 import com.edplan.framework.ui.animation.ComplexAnimation;
 import com.edplan.framework.ui.animation.ComplexAnimationBuilder;
 import com.edplan.framework.ui.animation.Easing;
@@ -22,11 +24,11 @@ import com.edplan.framework.ui.widget.TextView;
 import com.edplan.framework.ui.widget.TextureView;
 import com.edplan.framework.ui.widget.component.Hideable;
 import com.edplan.osulab.ui.UiConfig;
-import com.edplan.framework.ui.animation.AbstractAnimation;
-import com.edplan.framework.ui.animation.AnimationHandler;
 
 public class SceneSelectButton extends LinearContainer implements Hideable
 {
+	public static double ANIM_DURATION=ViewConfiguration.DEFAULT_TRANSITION_TIME*0.7f;
+	
 	private ColorRectSprite bg;
 	
 	private ColorRectSprite shadow;
@@ -216,10 +218,10 @@ public class SceneSelectButton extends LinearContainer implements Hideable
 		// TODO: Implement this method
 		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<SceneSelectButton>(this,"offsetX")
 																	  .transform(getOffsetX(),0,Easing.None)
-																	  .transform(leftShadow?-showOffset:showOffset,ViewConfiguration.DEFAULT_TRANSITION_TIME/2,Easing.OutQuad));
+																	  .transform(leftShadow?-showOffset:showOffset,ANIM_DURATION,Easing.OutExpo));
 		builder.together(new FloatQueryAnimation<SceneSelectButton>(this,"alpha")
 						 .transform(getAlpha(),0,Easing.None)
-						 .transform(0,ViewConfiguration.DEFAULT_TRANSITION_TIME/2,Easing.None));
+						 .transform(0,ANIM_DURATION,Easing.None));
 		ComplexAnimation anim=builder.build();
 		anim.start();
 		setAnimation(anim);
@@ -230,10 +232,10 @@ public class SceneSelectButton extends LinearContainer implements Hideable
 		// TODO: Implement this method
 		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<SceneSelectButton>(this,"offsetX")
 																	  .transform(leftShadow?-showOffset:showOffset,0,Easing.None)
-																	  .transform(0,ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.OutQuad));
+																	  .transform(0,ANIM_DURATION,Easing.OutExpo));
 		builder.together(new FloatQueryAnimation<SceneSelectButton>(this,"alpha")
 						 .transform(0,0,Easing.None)
-						 .transform(1,ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.None));
+						 .transform(1,ANIM_DURATION,Easing.None));
 		ComplexAnimation anim=builder.build();
 		anim.start();
 		setAnimation(anim);

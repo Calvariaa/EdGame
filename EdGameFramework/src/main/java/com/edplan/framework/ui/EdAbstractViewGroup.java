@@ -274,7 +274,7 @@ public abstract class EdAbstractViewGroup extends EdView
 		final float x=event.getX(),y=event.getY();
 		final EdView viewUsingPointer=holder.getHoldingView(event);
 		if(viewUsingPointer!=null){
-			if(viewUsingPointer.getParent()!=this){
+			if(viewUsingPointer.getParent()!=this||viewUsingPointer.getVisiblility()==VISIBILITY_GONE){
 				//已经不在这个ViewGroup中了
 				holder.clearPointerInfo(event);
 				return false;
@@ -286,6 +286,7 @@ public abstract class EdAbstractViewGroup extends EdView
 				final int count=getChildrenCount();
 				for(int i=count-1;i>=0;i--){
 					final EdView view=getChildAt(i);
+					if(view.getVisiblility()==VISIBILITY_GONE)continue;
 					if(view.inViewBound(event.getX(),event.getY())){
 						if(view.onMotionEvent(event)){
 							useevent=true;

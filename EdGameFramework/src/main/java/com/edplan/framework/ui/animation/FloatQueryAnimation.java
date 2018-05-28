@@ -8,6 +8,7 @@ import com.edplan.framework.ui.animation.precise.BasePreciseAnimation;
 import java.util.ArrayList;
 import java.util.List;
 import com.edplan.framework.interfaces.FloatReflectionInvokeSetter;
+import com.edplan.framework.ui.animation.interfaces.IHasAlpha;
 
 public class FloatQueryAnimation<T> extends BasePreciseAnimation
 {
@@ -220,6 +221,21 @@ public class FloatQueryAnimation<T> extends BasePreciseAnimation
 				.append(")\n");
 		}
 		return sb.toString();
+	}
+	
+	
+	public static FloatQueryAnimation alpha(IHasAlpha target){
+		return new FloatQueryAnimation<IHasAlpha>(target,new FloatInvokeSetter<IHasAlpha>(){
+				@Override
+				public void invoke(IHasAlpha target,float v){
+					// TODO: Implement this method
+					target.setAlpha(v);
+				}
+			});
+	}
+	
+	public static FloatQueryAnimation fadeTo(IHasAlpha t,float a,double duration,Easing e){
+		return alpha(t).transform(t.getAlpha(),0,Easing.None).transform(a,duration,e);
 	}
 
 }

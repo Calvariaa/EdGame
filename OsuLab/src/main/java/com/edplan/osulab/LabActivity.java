@@ -41,6 +41,12 @@ public class LabActivity extends MainActivity
 		}
 
 		@Override
+		public void onExit(){
+			// TODO: Implement this method
+			LabGame.get().exit();
+		}
+
+		@Override
 		public void onGLCreate(){
 			// TODO: Implement this method
 			super.onGLCreate();

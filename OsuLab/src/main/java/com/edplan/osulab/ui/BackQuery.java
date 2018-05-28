@@ -9,18 +9,34 @@ public class BackQuery
 	
 	private ArrayList<Hideable> query=new ArrayList<Hideable>();
 	
+	private ArrayList<Hideable> noButtonQuery=new ArrayList<Hideable>();
+	
 	public static BackQuery get(){
 		return instance;
 	}
 	
 	public void onChange(){
 		if(remind()==0){
-			LabGame.get().getBackButton().hide();
+			if(!LabGame.get().getBackButton().isHidden()){
+				LabGame.get().getBackButton().hide();
+			}
 		}else{
 			if(LabGame.get().getBackButton().isHidden()){
 				LabGame.get().getBackButton().show();
 			}
 		}
+	}
+	
+	public void registNoBackButton(Hideable h){
+		if(!query.contains(h)){
+			query.add(h);
+			noButtonQuery.add(h);
+		}else{
+			unregist(h);
+			query.add(h);
+			noButtonQuery.add(h);
+		}
+		onChange();
 	}
 	
 	public void regist(Hideable obj){
@@ -36,6 +52,7 @@ public class BackQuery
 	public void unregist(Hideable h){
 		final int pre=remind();
 		query.remove(h);
+		noButtonQuery.remove(h);
 		if(pre!=remind()){
 			onChange();
 		}
@@ -44,6 +61,13 @@ public class BackQuery
 	public boolean back(){
 		for(int i=query.size()-1;i>=0;i--){
 			final Hideable h=query.get(i);
+			if(h!=null&&!h.isHidden()){
+				if(h instanceof BackHandler){
+					if(((BackHandler)h).onBack()){
+						return true;
+					}
+				}
+			}
 			unregist(h);
 			if(h!=null&&!h.isHidden()){
 				h.hide();
@@ -54,6 +78,10 @@ public class BackQuery
 	}
 	
 	public int remind(){
-		return query.size();
+		return query.size()-noButtonQuery.size();
+	}
+	
+	public interface BackHandler{
+		public boolean onBack();
 	}
 }

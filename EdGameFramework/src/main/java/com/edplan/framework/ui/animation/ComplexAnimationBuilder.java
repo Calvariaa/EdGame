@@ -85,4 +85,10 @@ public class ComplexAnimationBuilder
 		target.build();
 		return target;
 	}
+	
+	public ComplexAnimation buildAndStart(){
+		target.build();
+		target.start();
+		return target;
+	}
 }
