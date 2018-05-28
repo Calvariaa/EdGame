@@ -60,8 +60,8 @@ public class LabToolbar extends RelativeContainer implements Hideable
 		setClickable(true);
 		setAccentColor(Color4.rgba(1,1,1,1f));
 		ColorDrawable cd=new ColorDrawable(c);
-		cd.setColor(Color4.rgba(0,0,0,0.9f),
-					Color4.rgba(0,0,0,0.9f),
+		cd.setColor(Color4.rgba(0,0,0,0.5f),
+					Color4.rgba(0,0,0,0.5f),
 					Color4.rgba(0,0,0,0.5f),
 					Color4.rgba(0,0,0,0.5f));
 		setBackground(cd);
@@ -121,6 +121,27 @@ public class LabToolbar extends RelativeContainer implements Hideable
 			param.width=Param.MODE_WRAP_CONTENT;
 			param.height=Param.MODE_MATCH_PARENT;
 			addView(rightLayout,param);
+			
+			{
+				ToolBarButton msgShowButton=new ToolBarButton(c);
+				msgShowButton.setGravity(Gravity.Center);
+				msgShowButton.setIcon(FontAwesome.fa_music.getTexture());
+				
+				MarginLayoutParam lparam=new MarginLayoutParam();
+				lparam.width=Param.makeUpDP(50);
+				lparam.height=Param.MODE_MATCH_PARENT;
+				rightLayout.addView(msgShowButton,lparam);
+			}
+			{
+				EdView divider=new EdView(c);
+				divider.setBackground(Color4.gray(0.5f).setAlpha(0.4f));
+				MarginLayoutParam lparam=new MarginLayoutParam();
+				lparam.width=Param.makeUpDP(2f);
+				lparam.height=Param.MODE_MATCH_PARENT;
+				lparam.marginBottom=ViewConfiguration.dp(2);
+				lparam.marginTop=ViewConfiguration.dp(2);
+				rightLayout.addView(divider,lparam);
+			}
 			{
 				ToolBarButton msgShowButton=new ToolBarButton(c);
 				msgShowButton.setGravity(Gravity.Center);

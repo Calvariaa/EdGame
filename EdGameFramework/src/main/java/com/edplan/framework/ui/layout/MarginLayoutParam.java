@@ -23,6 +23,13 @@ public class MarginLayoutParam extends EdLayoutParam
 		marginBottom=l.marginBottom;
 	}
 	
+	public void postMargin(float m){
+		marginBottom=Math.max(m,marginBottom);
+		marginLeft=Math.max(m,marginLeft);
+		marginRight=Math.max(m,marginRight);
+		marginTop=Math.max(m,marginTop);
+	}
+	
 	public float getMarginHorizon(){
 		return marginRight+marginLeft;
 	}

@@ -21,6 +21,7 @@ import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.ui.drawable.ColorDrawable;
 import com.edplan.framework.ui.layout.Gravity;
 import com.edplan.framework.ui.animation.callback.OnFinishListener;
+import com.edplan.framework.ui.drawable.RoundedRectDrawable;
 
 public class EdView implements IRunnableHandler,MainCallBack
 {
@@ -305,6 +306,13 @@ public class EdView implements IRunnableHandler,MainCallBack
 		ColorDrawable cd=new ColorDrawable(getContext());
 		cd.setColor(c);
 		setBackground(cd);
+	}
+	
+	public void setBackgroundRoundedRect(Color4 c,float radius){
+		RoundedRectDrawable rd=new RoundedRectDrawable(getContext());
+		rd.setColor(c);
+		rd.setRadius(radius);
+		setBackground(rd);
 	}
 
 	public void setBackground(EdDrawable background){

@@ -8,6 +8,8 @@ import com.edplan.framework.math.RectF;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.ui.animation.interfaces.IHasAlpha;
+import com.edplan.framework.ui.drawable.sprite.RoundedRectSprite;
+import com.edplan.framework.graphics.opengl.objs.GLTexture;
 
 
 /**
@@ -21,13 +23,21 @@ public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlp
 	
 	private GLPaint postPaint;
 	
-	
+	private LayerPoster layerPoster;
 	
 	public EdContainer(MContext c){
 		super(c);
 		layer=new BufferedLayer(c);
 		layerCanvas=new GLCanvas2D(layer);
 		postPaint=new GLPaint();
+	}
+
+	public void setLayerPoster(LayerPoster layerPoster){
+		this.layerPoster=layerPoster;
+	}
+
+	public LayerPoster getLayerPoster(){
+		return layerPoster;
 	}
 	
 	public void setAlpha(float alpha){
@@ -80,12 +90,51 @@ public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlp
 	}
 	
 	protected void postLayer(BaseCanvas canvas,BufferedLayer layer,RectF area,GLPaint paint){
+		if(layerPoster!=null){
+			layerPoster.postLayer(canvas,layer,area,paint);
+			return;
+		}
 		canvas.drawTexture(layer.getTexture(),area,paint);
+	}
+	
+	public void setRounded(float radius){
+		RoundedLayerPoster p=new RoundedLayerPoster(getContext());
+		p.setRoundedRadius(radius);
+		layerPoster=p;
 	}
 
 	@Override
 	public void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		dispatchDraw(canvas);
+	}
+	
+	public interface LayerPoster{
+		public void postLayer(BaseCanvas canvas,BufferedLayer layer,RectF area,GLPaint paint);
+	}
+	
+	public static class RoundedLayerPoster implements LayerPoster
+	{
+		private RoundedRectSprite sprite;
+		
+		public RoundedLayerPoster(MContext c){
+			sprite=new RoundedRectSprite(c);
+		}
+		
+		public void setRoundedRadius(float r){
+			sprite.setRoundedRadius(r);
+		}
+
+		@Override
+		public void postLayer(BaseCanvas canvas,BufferedLayer layer,RectF area,GLPaint paint){
+			// TODO: Implement this method
+			sprite.setTexture(layer.getTexture());
+			sprite.setAccentColor(paint.getMixColor());
+			sprite.setAlpha(paint.getFinalAlpha());
+			sprite.setArea(area);
+			sprite.setRect(area);
+			sprite.draw(canvas);
+		}
+		
 	}
 }

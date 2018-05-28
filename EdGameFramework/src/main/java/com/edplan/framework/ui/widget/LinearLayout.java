@@ -91,7 +91,7 @@ public class LinearLayout extends EdAbstractViewGroup
 				if(view.getVisiblility()!=VISIBILITY_GONE){
 					final MarginLayoutParam param=(MarginLayoutParam)view.getLayoutParam();
 					final float dx=param.xoffset+widthUsed+param.marginLeft;
-					final float dy=param.yoffset+cy-view.getMeasuredHeight()/2+param.marginTop;
+					final float dy=param.yoffset+cy-view.getMeasuredHeight()/2+(param.marginTop-param.marginBottom)/2;
 					view.layout(dx,dy,view.getMeasuredWidth()+dx,view.getMeasuredHeight()+dy);
 					widthUsed+=param.getMarginHorizon()+view.getMeasuredWidth()+childoffset;
 				}

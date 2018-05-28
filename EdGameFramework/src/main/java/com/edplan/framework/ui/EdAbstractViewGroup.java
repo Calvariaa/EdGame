@@ -133,7 +133,7 @@ public abstract class EdAbstractViewGroup extends EdView
 	public boolean onBackPressed(){
 		// TODO: Implement this method
 		final int c=getChildrenCount();
-		for(int i=0;i<c;i++){
+		for(int i=c-1;i>=0;i--){
 			final EdView view=getChildAt(i);
 			if(view.getVisiblility()!=VISIBILITY_GONE){
 				if(view.onBackPressed()){

@@ -29,7 +29,7 @@ public class ToolBarButton extends EdView
 		setClickable(true);
 		backlight=new ColorRectSprite(c);
 		//backlight.setBlendType(BlendType.Additive);
-		float gr=0.7f;
+		float gr=1f;
 		backlight.setColor(Color4.rgba(gr,gr,gr,0.3f),
 						   Color4.rgba(gr,gr,gr,0.3f),
 						   Color4.rgba(1,1,1,0.5f),
@@ -58,7 +58,7 @@ public class ToolBarButton extends EdView
 	private void offPressAnim(){
 		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<ColorRectSprite>(backlight,"alpha")
 																	  .transform(backlight.getAlpha(),0,Easing.None)
-																	  .transform(0,250,Easing.None));
+																	  .transform(0,150,Easing.None));
 		ComplexAnimation anim=builder.build();
 		anim.start();
 		setAnimation(anim);

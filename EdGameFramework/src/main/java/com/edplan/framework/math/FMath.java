@@ -8,8 +8,13 @@ public class FMath
 	
 	public static final float Pi2=(float)(Math.PI*2);
 	
+	public static final float SQRT2=(float)Math.sqrt(2);
 
 	public static final float PiHalf=(float)(Math.PI*0.5);
+	
+	public static final float SIN30=(float)Math.sin(Math.PI/6);
+	
+	public static final float SIN60=(float)Math.sin(Math.PI/3);
 	
 	public static final float[] SIN;
 	public static final float[] COS;
@@ -27,7 +32,13 @@ public class FMath
 		}
 	}
 	
+	public static float toDegrees(float r){
+		return (float)Math.toDegrees(r);
+	}
 	
+	public static float toRadians(float ang){
+		return (float)Math.toRadians(ang);
+	}
 	
 	public static boolean inInterval(float x1,float x2,float t){
 		return t>x1&&t<x2;

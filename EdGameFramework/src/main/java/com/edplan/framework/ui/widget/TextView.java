@@ -22,7 +22,7 @@ public class TextView extends EdView
 	
 	private String text="";
 	
-	protected float textSize=40;//ViewConfiguration.dp(30);
+	protected float textSize=ViewConfiguration.dp(15);
 	
 	private float scale,ascale;
 	
@@ -122,7 +122,7 @@ public class TextView extends EdView
 	}
 	
 	protected void rebuildTextBuffer(float maxWidth,float maxHeight){
-		final int lineHeight=font.getCommon().base;
+		final int lineHeight=font.getCommon().lineHeight;
 		ascale=lineHeight/textSize;
 		scale=textSize/lineHeight;
 		int fw=(int)(maxWidth*ascale-1);
@@ -244,10 +244,10 @@ public class TextView extends EdView
 
 		switch(EdMeasureSpec.getMode(heightSpec)){
 			case EdMeasureSpec.MODE_NONE:
-				mheight=mheight*scale;
+				mheight=textHeight*scale;
 				break;
 			case EdMeasureSpec.MODE_AT_MOST:
-				mheight=Math.min(mheight*scale,EdMeasureSpec.getSize(heightSpec)-getPaddingVertical());
+				mheight=Math.min(textHeight*scale,EdMeasureSpec.getSize(heightSpec)-getPaddingVertical());
 				break;
 			case EdMeasureSpec.MODE_DEFINEDED:
 			default:

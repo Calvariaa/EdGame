@@ -23,6 +23,10 @@ import com.edplan.osulab.LabGame;
 import com.edplan.osulab.ui.scenes.SceneSelectButtonBar;
 import com.edplan.osulab.ui.scenes.BaseScene;
 import com.edplan.osulab.ScenesName;
+import com.edplan.framework.math.FMath;
+import com.edplan.framework.math.Quad;
+import java.util.Random;
+import com.edplan.framework.interfaces.FloatInvokeSetter;
 
 public class JumpingCircle extends EdView
 {
@@ -40,10 +44,44 @@ public class JumpingCircle extends EdView
 	private BoundOverlay boundOverlay;
 	private BaseBoundOverlay initialBound;
 	
+	private int ringCount=60;
+	private PartRing[] rings;
+	private float minSpeed=FMath.Pi2/13000;
+	private float maxSpeed=FMath.Pi2/6000;
+	private float maxAngle=FMath.Pi*0.6f;
+	private float minAngle=FMath.Pi/4;
+	private float ringRadius=0.2f;
+	private Color4[] colors={
+		Color4.rgb255(255,125,183),
+		Color4.rgb255(245,115,173),
+		Color4.rgb255(251,121,179),
+		Color4.rgb255(253,123,181),
+		Color4.rgb255(230,100,158),
+		Color4.rgb255(227,96,154),
+		UiConfig.Color.PINK
+	};
+	
 	private boolean performingAnim=true;
 	
 	public JumpingCircle(MContext c){
 		super(c);
+		
+		rings=new PartRing[ringCount];
+		Random r=new Random();
+		for(int i=0;i<rings.length;i++){
+			final Color4 color=colors[r.nextInt(colors.length)];
+			final float innerRadius=(0.9f-ringRadius)*r.nextFloat();
+			final float radius=innerRadius+ringRadius*(0.4f+0.6f*r.nextFloat());
+			final float angle=FMath.linear(r.nextFloat(),minAngle,maxAngle);
+			final float speed=(r.nextBoolean()?1:-1)*FMath.linear(r.nextFloat(),minSpeed,maxSpeed);
+			rings[i]=new PartRing(angle,speed,innerRadius,radius,FMath.Pi2*r.nextFloat(),color);
+		}
+		
+		for(PartRing rr:rings){
+			rr.sprite.setAlpha(0);
+		}
+		
+		
 		ring=new CircleSprite(c);
 		centerRing=new TextureCircleSprite(c);
 		
@@ -60,10 +98,12 @@ public class JumpingCircle extends EdView
 		shadowInner.setBlendType(BlendType.Additive);
 		
 		pinkCover=new CircleSprite(c);
+		pinkCover.setAccentColor(UiConfig.Color.PINK);
+		/*
 		pinkCover.setColor(Color4.rgba(1,1,1,1f),
 						   Color4.rgba(1,1,1,1f),
 						   Color4.gray(0.9f),
-						   Color4.gray(0.9f));
+						   Color4.gray(0.9f));*/
 		try{
 			logo=getContext().getAssetResource().loadTexture("osu/ui/logo.png");
 			centerRing.setTexture(logo,null);
@@ -119,6 +159,20 @@ public class JumpingCircle extends EdView
 			builder.together(anim2,0);
 		}
 
+		
+		builder.together(new FloatQueryAnimation<JumpingCircle>(this,new FloatInvokeSetter<JumpingCircle>(){
+								 @Override
+								 public void invoke(JumpingCircle target,float v){
+									 // TODO: Implement this method
+									 for(PartRing r:rings){
+										 r.sprite.setScale(v);
+									 }
+								 }
+							 })
+						 .transform(1,0,Easing.None)
+						 .transform(0,500,Easing.None)
+						 );
+		
 		ComplexAnimation camin=builder.build();
 		camin.setOnFinishListener(new OnFinishListener(){
 				@Override
@@ -214,6 +268,13 @@ public class JumpingCircle extends EdView
 		ring.setInnerRadius(w);
 		shadowInner.setRadius(w);
 		shadowInner.setInnerRadius(w-ViewConfiguration.dp(5));
+		
+		/*
+		float p=w/(getWidth()/2*0.9f);
+		for(PartRing r:rings){
+			r.sprite.setScale(p);
+		}
+		*/
 	}
 	
 	public void setRadius(float r){
@@ -246,7 +307,6 @@ public class JumpingCircle extends EdView
 		shadowInner.setPosition(getWidth()/2,getHeight()/2);
 		shadowInner.setArea(RectF.ltrb(-getWidth()/2,-getHeight()/2,getWidth()/2,getHeight()/2));
 		
-		pinkCover.setAccentColor(UiConfig.Color.PINK);
 		pinkCover.setAlpha(1);
 		
 		FloatQueryAnimation anim=new FloatQueryAnimation<JumpingCircle>(this,"radius");
@@ -259,6 +319,19 @@ public class JumpingCircle extends EdView
 			anim2.transform(radius*0.9f,300,Easing.OutQuad);
 			builder.together(anim2,0);
 		}
+		
+		builder.together(new FloatQueryAnimation<JumpingCircle>(this,new FloatInvokeSetter<JumpingCircle>(){
+								 @Override
+								 public void invoke(JumpingCircle target,float v){
+									 // TODO: Implement this method
+									 for(PartRing r:rings){
+										 r.sprite.setAlpha(v);
+									 }
+								 }
+							 })
+							 .transform(0,0,Easing.None)
+							 .transform(1,500,Easing.None)
+							 );
 
 		ComplexAnimation camin=builder.build();
 		camin.setOnFinishListener(new OnFinishListener(){
@@ -268,6 +341,7 @@ public class JumpingCircle extends EdView
 					performingAnim=false;
 					setClickable(true);
 					if(l!=null)l.onFinish();
+					
 				}
 			});
 		camin.start();
@@ -342,6 +416,12 @@ public class JumpingCircle extends EdView
 			shadow.setInnerRadius(radius-2);
 		}
 		
+		RectF rt=RectF.xywh(0,0,canvas.getWidth(),canvas.getHeight());
+		double deltaTime=getContext().getFrameDeltaTime();
+		for(PartRing r:rings){
+			r.setArea(rt);
+			r.updateTime(deltaTime);
+		}
 		
 		shadowClock+=getContext().getFrameDeltaTime();
 		shadowClock%=glowDuration*2;
@@ -351,6 +431,11 @@ public class JumpingCircle extends EdView
 		shadow.setRadius(shadow.getInnerRadius()+ViewConfiguration.dp(shadowWidth));
 		shadow.draw(canvas);
 		pinkCover.draw(canvas);
+		
+		for(PartRing r:rings){
+			r.sprite.draw(canvas);
+		}
+		
 		shadowInner.draw(canvas);
 		ring.draw(canvas);
 	}
@@ -359,5 +444,61 @@ public class JumpingCircle extends EdView
 	public boolean inViewBound(float x,float y){
 		// TODO: Implement this method
 		return Vec2.length(x-(getLeft()+getRight())/2,y-(getTop()+getBottom())/2)<Math.min(getWidth(),getHeight())/2;
+	}
+	
+	
+	public class PartRing{
+		
+		public CircleSprite sprite;
+		
+		public float angle;
+		
+		public float innerRadius;
+		
+		public float radius;
+		
+		public float rotateSpeed;
+		
+		public float duration;
+		
+		public double time;
+		
+		public float iniAng;
+		
+		public float rate;
+		
+		public PartRing(float ang,float speed,float inner,float radius,float initialAng,Color4 color){
+			this.innerRadius=inner;
+			this.radius=radius;
+			this.angle=ang;
+			this.rotateSpeed=speed;
+			this.rate=(rotateSpeed>0)?1:-1;
+			this.duration=FMath.Pi2/Math.abs(rotateSpeed);
+			this.iniAng=initialAng;
+			sprite=new CircleSprite(getContext());
+			sprite.setAccentColor(color);
+		}
+		
+		/**
+		 *一种支持0～120º的区域设置方法
+		 */
+		public void setArea(RectF r){
+			float rd=r.getWidth()/2;
+			sprite.setPosition(r.getLeft()+r.getWidth()/2,r.getTop()+r.getHeight()/2);
+			Vec2 v1=new Vec2(rd/FMath.SIN60,0);
+			Vec2 v2=v1.copy().rotate(angle);
+			Vec2 v3=v1.copy().add(v2);
+			sprite.setArea(new Quad(v2,v3,new Vec2(0,0),v1));
+			
+			sprite.setInnerRadius(rd*innerRadius);
+			sprite.setRadius(rd*radius);
+		}
+		
+		
+		
+		public void updateTime(double deltaTime){
+			time=(deltaTime+time);
+			sprite.setRotation(rate*(float)time/duration*FMath.Pi2+iniAng);
+		}
 	}
 }

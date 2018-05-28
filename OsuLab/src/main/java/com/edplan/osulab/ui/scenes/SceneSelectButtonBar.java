@@ -29,6 +29,7 @@ import java.util.HashMap;
 import com.edplan.osulab.ui.BackQuery;
 import com.edplan.osulab.ui.pieces.JumpingCircle;
 import com.edplan.osulab.ScenesName;
+import com.edplan.osulab.ui.popup.PopupToast;
 
 public class SceneSelectButtonBar extends RelativeContainer implements Hideable,BackQuery.BackHandler
 {
@@ -144,6 +145,13 @@ public class SceneSelectButtonBar extends RelativeContainer implements Hideable,
 						button.setBackgroundColor(UiConfig.Color.YELLOW);
 						button.setTexture(FontAwesome.fa_osu_chevron_down_o.getTexture());
 						button.setText("Download");
+						button.setOnClickListener(new OnClickListener(){
+								@Override
+								public void onClick(EdView view){
+									// TODO: Implement this method
+									PopupToast.toast(getContext(),"working").show();
+								}
+							});
 						MarginLayoutParam p=new MarginLayoutParam();
 						p.height=Param.MODE_MATCH_PARENT;
 						p.width=Param.makeUpDP(buttonSize);
@@ -222,6 +230,13 @@ public class SceneSelectButtonBar extends RelativeContainer implements Hideable,
 						button.setBackgroundColor(UiConfig.Color.BLUE_DARK);
 						button.setTexture(FontAwesome.fa_osu_multi.getTexture());
 						button.setText("Multiple");
+						button.setOnClickListener(new OnClickListener(){
+								@Override
+								public void onClick(EdView view){
+									// TODO: Implement this method
+									PopupToast.toast(getContext(),"working").show();
+								}
+							});
 						MarginLayoutParam p=new MarginLayoutParam();
 						p.height=Param.MODE_MATCH_PARENT;
 						p.width=Param.makeUpDP(buttonSize);
@@ -236,8 +251,9 @@ public class SceneSelectButtonBar extends RelativeContainer implements Hideable,
 								@Override
 								public void onClick(EdView view){
 									// TODO: Implement this method
-									hide();
-									LabGame.get().getScenes().swapScene(ScenesName.Edit);
+									PopupToast.toast(getContext(),"working").show();
+									//hide();
+									//LabGame.get().getScenes().swapScene(ScenesName.Edit);
 								}
 							});
 						MarginLayoutParam p=new MarginLayoutParam();
