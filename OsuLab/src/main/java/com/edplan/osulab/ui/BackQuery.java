@@ -11,11 +11,23 @@ public class BackQuery
 	
 	private ArrayList<Hideable> noButtonQuery=new ArrayList<Hideable>();
 	
+	private boolean forceHideBackButton=false;
+
+	public void setForceHideBackButton(boolean forceHideBackButton){
+		this.forceHideBackButton=forceHideBackButton;
+		onChange();
+	}
+
+	public boolean isForceHideBackButton(){
+		return forceHideBackButton;
+	}
+	
 	public static BackQuery get(){
 		return instance;
 	}
 	
 	public void onChange(){
+		if(forceHideBackButton)return;
 		if(remind()==0){
 			if(!LabGame.get().getBackButton().isHidden()){
 				LabGame.get().getBackButton().hide();

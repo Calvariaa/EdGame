@@ -147,7 +147,7 @@ public class SceneSelectButton extends LinearContainer implements Hideable
 	public void onPressAnim(){
 		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<SceneSelectButton>(this,"widthAddition")
 																	  .transform(getWidthAddition(),0,Easing.None)
-																	  .transform(maxWidthAddition,100,Easing.None));
+																	  .transform(maxWidthAddition,100,Easing.OutQuad));
 		ComplexAnimation anim=builder.build();
 		anim.start();
 		pressAnim=anim;

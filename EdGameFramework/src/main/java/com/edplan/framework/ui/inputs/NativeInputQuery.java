@@ -43,7 +43,7 @@ public class NativeInputQuery
 		}
 		List<EdMotionEvent> events=new ArrayList<EdMotionEvent>();
 		EdMotionEvent.EventType eventType=EdMotionEvent.parseType(raw.getActionMasked());
-		if(eventType==EdMotionEvent.EventType.Move){
+		if(eventType==EdMotionEvent.EventType.Move||eventType==EdMotionEvent.EventType.Cancel){
 			for(int idx=0;idx<raw.getPointerCount();idx++){
 				final EdMotionEvent event=new EdMotionEvent();
 				final int id=raw.getPointerId(idx);

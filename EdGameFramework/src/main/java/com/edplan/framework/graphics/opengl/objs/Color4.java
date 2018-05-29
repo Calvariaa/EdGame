@@ -37,6 +37,13 @@ public class Color4
 		set(c);
 	}
 	
+	public Color4 multipleColor(float c){
+		this.r*=c;
+		this.g*=c;
+		this.b*=c;
+		return this;
+	}
+	
 	public void put2buffer(FloatBuffer bf){
 		bf.put(r).put(g).put(b).put(a);
 	}

@@ -131,6 +131,12 @@ public class LabGame
 	
 	public EdView createContentView(MContext c){
 		RelativeLayout mainLayout=new RelativeLayout(c);
+		RelativeLayout.RelativeParam mp=new RelativeLayout.RelativeParam();
+		mp.gravity=Gravity.Center;
+		mp.width=Param.MODE_MATCH_PARENT;
+		mp.height=Param.makeupScaleOfParentParam(1f);
+		mainLayout.setLayoutParam(mp);
+		
 		jumpingCircle=new JumpingCircle(c);
 		mainBackground=new MainBackground(c);
 		scenes=new Scenes(c);

@@ -27,6 +27,8 @@ import com.edplan.framework.math.FMath;
 import com.edplan.framework.math.Quad;
 import java.util.Random;
 import com.edplan.framework.interfaces.FloatInvokeSetter;
+import com.edplan.framework.ui.animation.AbstractAnimation;
+import com.edplan.framework.ui.animation.AnimationHandler;
 
 public class JumpingCircle extends EdView
 {
@@ -44,13 +46,15 @@ public class JumpingCircle extends EdView
 	private BoundOverlay boundOverlay;
 	private BaseBoundOverlay initialBound;
 	
-	private int ringCount=60;
+	private int ringCount=50;
 	private PartRing[] rings;
-	private float minSpeed=FMath.Pi2/13000;
-	private float maxSpeed=FMath.Pi2/6000;
+	private float minSpeed=FMath.Pi2/25000;
+	private float maxSpeed=FMath.Pi2/13000;
 	private float maxAngle=FMath.Pi*0.6f;
 	private float minAngle=FMath.Pi/4;
-	private float ringRadius=0.2f;
+	private int steps=20;
+	private int radiusSteps=3;
+	private float ringRadius=0.9f/steps*radiusSteps;
 	private Color4[] colors={
 		Color4.rgb255(255,125,183),
 		Color4.rgb255(245,115,173),
@@ -58,10 +62,13 @@ public class JumpingCircle extends EdView
 		Color4.rgb255(253,123,181),
 		Color4.rgb255(230,100,158),
 		Color4.rgb255(227,96,154),
+		Color4.rgb255(253,123,181),
 		UiConfig.Color.PINK
 	};
 	
 	private boolean performingAnim=true;
+	
+	private AbstractAnimation boundAnim;
 	
 	public JumpingCircle(MContext c){
 		super(c);
@@ -70,15 +77,15 @@ public class JumpingCircle extends EdView
 		Random r=new Random();
 		for(int i=0;i<rings.length;i++){
 			final Color4 color=colors[r.nextInt(colors.length)];
-			final float innerRadius=(0.9f-ringRadius)*r.nextFloat();
-			final float radius=innerRadius+ringRadius*(0.4f+0.6f*r.nextFloat());
+			final float innerRadius=0.9f*r.nextInt(steps)/steps;
+			final float radius=Math.min(0.9f,innerRadius+ringRadius*((r.nextInt(radiusSteps)+1)/(float)radiusSteps));
 			final float angle=FMath.linear(r.nextFloat(),minAngle,maxAngle);
 			final float speed=(r.nextBoolean()?1:-1)*FMath.linear(r.nextFloat(),minSpeed,maxSpeed);
 			rings[i]=new PartRing(angle,speed,innerRadius,radius,FMath.Pi2*r.nextFloat(),color);
 		}
 		
 		for(PartRing rr:rings){
-			rr.sprite.setAlpha(0);
+			rr.sprite.setScale(0);
 		}
 		
 		
@@ -113,6 +120,17 @@ public class JumpingCircle extends EdView
 		}
 	}
 
+	@Override
+	public void performAnimation(double deltaTime){
+		// TODO: Implement this method
+		super.performAnimation(deltaTime);
+		if(boundAnim!=null){
+			if(AnimationHandler.handleSingleAnima(boundAnim,deltaTime)){
+				boundAnim=null;
+			}
+		}
+	}
+	
 	@Override
 	public void onInitialLayouted(){
 		// TODO: Implement this method
@@ -183,6 +201,7 @@ public class JumpingCircle extends EdView
 			});
 		camin.start();
 		setAnimation(camin);
+		boundAnim=null;
 	}
 	
 	private void performBoundOverlayChangeAnim(float pl,float pt,float pr,float pb,final BoundOverlay next){
@@ -214,7 +233,7 @@ public class JumpingCircle extends EdView
 					boundOverlay=next;
 				}
 			});
-		setAnimation(anim);
+		boundAnim=anim;
 	}
 
 	public void setBoundOverlay(BoundOverlay boundOverlay){
@@ -319,7 +338,7 @@ public class JumpingCircle extends EdView
 			anim2.transform(radius*0.9f,300,Easing.OutQuad);
 			builder.together(anim2,0);
 		}
-		
+		/*
 		builder.together(new FloatQueryAnimation<JumpingCircle>(this,new FloatInvokeSetter<JumpingCircle>(){
 								 @Override
 								 public void invoke(JumpingCircle target,float v){
@@ -331,7 +350,20 @@ public class JumpingCircle extends EdView
 							 })
 							 .transform(0,0,Easing.None)
 							 .transform(1,500,Easing.None)
-							 );
+							 );*/
+		
+		builder.together(new FloatQueryAnimation<JumpingCircle>(this,new FloatInvokeSetter<JumpingCircle>(){
+								 @Override
+								 public void invoke(JumpingCircle target,float v){
+									 // TODO: Implement this method
+									 for(PartRing r:rings){
+										 r.sprite.setScale(v);
+									 }
+								 }
+							 })
+						 .transform(0,0,Easing.None)
+						 .transform(1,500,Easing.OutQuad)
+						 );
 
 		ComplexAnimation camin=builder.build();
 		camin.setOnFinishListener(new OnFinishListener(){
