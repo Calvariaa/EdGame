@@ -17,6 +17,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import com.edplan.osulab.LabGame;
+import com.edplan.osulab.ui.scenes.songs.SongsScene;
 
 public class Scenes extends RelativeContainer implements Hideable,BackQuery.BackHandler
 {
@@ -41,7 +42,7 @@ public class Scenes extends RelativeContainer implements Hideable,BackQuery.Back
 	
 	public void initialRegister(){
 		register(WorkingScene.class,ScenesName.Edit,true);
-		register(WorkingScene.class,ScenesName.SongSelect,true);
+		register(SongsScene.class);
 	}
 	
 	public void register(Class<? extends BaseScene> klass){
@@ -167,6 +168,8 @@ public class Scenes extends RelativeContainer implements Hideable,BackQuery.Back
 	@Override
 	public boolean onBack(){
 		// TODO: Implement this method
+		if(currentScene.onBackPressed())return true;
+		
 		if(scenesStack.size()>0){
 			currentScene.hide();
 			post(new Runnable(){

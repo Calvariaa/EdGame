@@ -2,6 +2,14 @@ package com.edplan.framework;
 
 public class Framework
 {
+	
+	private static final int frameworkVersion=1;
+	
+	public static int getFrameworkVersion(){
+		return frameworkVersion;
+	}
+	
+	
 	/**
 	 *获取相对的精确时间
 	 */

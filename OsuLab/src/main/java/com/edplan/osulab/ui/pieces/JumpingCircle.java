@@ -48,7 +48,7 @@ public class JumpingCircle extends EdView
 	
 	private int ringCount=50;
 	private PartRing[] rings;
-	private float minSpeed=FMath.Pi2/25000;
+	private float minSpeed=FMath.Pi2/40000;
 	private float maxSpeed=FMath.Pi2/13000;
 	private float maxAngle=FMath.Pi*0.6f;
 	private float minAngle=FMath.Pi/4;

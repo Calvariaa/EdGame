@@ -10,6 +10,9 @@ import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.ui.animation.interfaces.IHasAlpha;
 import com.edplan.framework.ui.drawable.sprite.RoundedRectSprite;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
+import com.edplan.framework.ui.drawable.sprite.RoundedShadowSprite;
+import com.edplan.framework.ui.drawable.sprite.RoundedShadowShader;
+import com.edplan.framework.graphics.opengl.BlendType;
 
 
 /**
@@ -97,10 +100,11 @@ public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlp
 		canvas.drawTexture(layer.getTexture(),area,paint);
 	}
 	
-	public void setRounded(float radius){
+	public RoundedLayerPoster setRounded(float radius){
 		RoundedLayerPoster p=new RoundedLayerPoster(getContext());
 		p.setRoundedRadius(radius);
 		layerPoster=p;
+		return p;
 	}
 
 	@Override
@@ -117,17 +121,43 @@ public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlp
 	{
 		private RoundedRectSprite sprite;
 		
+		private RoundedShadowSprite shadow;
+		
+		private MContext context;
+		
 		public RoundedLayerPoster(MContext c){
+			this.context=c;
 			sprite=new RoundedRectSprite(c);
 		}
 		
 		public void setRoundedRadius(float r){
 			sprite.setRoundedRadius(r);
+			if(shadow!=null)shadow.setRoundedRadius(r);
+		}
+		
+		public void setShadow(float width,Color4 start,Color4 end){
+			if(shadow==null){
+				shadow=new RoundedShadowSprite(context);
+				shadow.setRoundedRadius(sprite.getRoundedRadius());
+			}
+			shadow.setShadowWidth(width);
+			shadow.setShadowColor(start,end);
+			shadow.setBlendType(BlendType.Additive);
 		}
 
 		@Override
 		public void postLayer(BaseCanvas canvas,BufferedLayer layer,RectF area,GLPaint paint){
 			// TODO: Implement this method
+			
+			if(shadow!=null){
+				shadow.setTexture(GLTexture.White);
+				shadow.setAccentColor(paint.getMixColor());
+				shadow.setAlpha(paint.getFinalAlpha());
+				shadow.setArea(RectF.anchorOWH(Anchor.Center,area.getLeft()+area.getWidth()/2,area.getTop()+area.getHeight()/2,area.getWidth()+shadow.getShadowWidth()*2,area.getHeight()+shadow.getShadowWidth()*2));
+				shadow.setRect(area);
+				shadow.draw(canvas);
+			}
+			
 			sprite.setTexture(layer.getTexture());
 			sprite.setAccentColor(paint.getMixColor());
 			sprite.setAlpha(paint.getFinalAlpha());
@@ -135,6 +165,5 @@ public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlp
 			sprite.setRect(area);
 			sprite.draw(canvas);
 		}
-		
 	}
 }

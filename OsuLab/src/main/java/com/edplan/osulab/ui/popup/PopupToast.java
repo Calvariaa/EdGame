@@ -24,7 +24,7 @@ public class PopupToast extends PopupView
 	
 	public PopupToast(MContext c){
 		super(c);
-		setRounded(ViewConfiguration.dp(5));
+		setRounded(ViewConfiguration.dp(4)).setShadow(ViewConfiguration.dp(5),Color4.rgba(0.7f,0.7f,0.7f,0.4f),Color4.Alpha);
 		LinearLayout l=new LinearLayout(c);
 		l.setGravity(Gravity.Center);
 		l.setBackground(Color4.rgba(0,0,0,0.6f));
