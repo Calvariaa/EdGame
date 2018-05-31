@@ -2,7 +2,7 @@ package com.edplan.nso.ruleset.std.playing.drawable;
 import com.edplan.framework.MContext;
 import com.edplan.framework.graphics.line.LinePath;
 import com.edplan.framework.math.Vec2;
-import com.edplan.nso.ruleset.amodel.playing.PlayingBeatmap;
+import com.edplan.nso.ruleset.base.playing.PlayingBeatmap;
 import com.edplan.nso.ruleset.std.objects.StdSlider;
 import com.edplan.nso.ruleset.std.objects.drawables.StdSliderPathMaker;
 import com.edplan.nso.ruleset.std.playing.drawable.piece.SliderBody;

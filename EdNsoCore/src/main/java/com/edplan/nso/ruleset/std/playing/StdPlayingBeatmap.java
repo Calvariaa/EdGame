@@ -5,7 +5,7 @@ import com.edplan.framework.math.Vec2;
 import com.edplan.framework.timing.PreciseTimeline;
 import com.edplan.nso.filepart.PartDifficulty;
 import com.edplan.nso.resource.OsuSkin;
-import com.edplan.nso.ruleset.amodel.playing.PlayingBeatmap;
+import com.edplan.nso.ruleset.base.playing.PlayingBeatmap;
 import com.edplan.nso.ruleset.std.StdBeatmap;
 import com.edplan.nso.ruleset.std.objects.StdHitCircle;
 import com.edplan.nso.ruleset.std.objects.StdHitObject;

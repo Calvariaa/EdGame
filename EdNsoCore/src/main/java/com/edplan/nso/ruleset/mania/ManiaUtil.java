@@ -1,5 +1,5 @@
 package com.edplan.nso.ruleset.mania;
-import com.edplan.nso.ruleset.amodel.playing.PlayField;
+import com.edplan.nso.ruleset.base.playing.PlayField;
 
 public class ManiaUtil
 {

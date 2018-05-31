@@ -12,7 +12,7 @@ public class TexturePool
 {
 	protected HashMap<String,AbstractTexture> pool=new HashMap<String,AbstractTexture>();
 	
-	private TextureLoader loader;
+	protected TextureLoader loader;
 	
 	public TexturePool(TextureLoader loader){
 		this.loader=loader;

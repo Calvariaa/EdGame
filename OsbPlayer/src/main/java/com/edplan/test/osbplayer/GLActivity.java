@@ -10,17 +10,20 @@ import com.squareup.leakcanary.LeakCanary;
 import com.edplan.framework.main.MainApplication;
 import com.edplan.framework.graphics.opengl.MainRenderer;
 import com.edplan.framework.MContext;
-import com.edplan.framework.main.MainActivity;
+import com.edplan.framework.main.EdMainActivity;
 
-public class GLActivity extends MainActivity 
+public class GLActivity extends EdMainActivity 
 {
+
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void createGame(){
 		// TODO: Implement this method
-		super.onCreate(savedInstanceState);
 		OsbApplication app=new OsbApplication();
 		app.setUpActivity(this);
+		register(app);
 	}
+	
+	
 	
 	public class OsbApplication extends MainApplication
 	{

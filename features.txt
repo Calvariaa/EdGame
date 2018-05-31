@@ -1,0 +1,16 @@
+先列一下引擎的特性：
+①基于Opengl ES 2.0（未来会换成3.0，不过现在没影响）
+②基础的view框架，可以处理布局和用户触摸事件
+③跨平台的话还是可以搞的，只有少部分代码是直接和android产生了关系的
+④支持动画，并通过Easing（）可以方便的设置动画的过渡方式
+⑤基于Canvas进行绘制，有一大批绘制材质的函数，你也可以创建Sprite然后绘制到Canvas上。
+⑥文字绘制使用AngelCode BMFont，框架内置了字体文件解析和加载，并默认添加了一个包含中
+文的字体
+⑦对资源文件进行了封装，你可以用统一的方式操作Asset和文件夹里的资源
+⑧在曲线绘制方面包含了对几种曲线的解析：Bezier，Circle，Catmull，还有直线，这些都是解析成线段近似解，绘制的时候是通过近似解的线段集合来绘制的
+⑨在时间控制方面提供了MContext.getFrameDeltaTime()函数，同时还提供获取纳秒级别时间的函数（简单的对System.nanoxxxx的封装）
+(11)：对于材质管理，支持一键创建内存纹理和读取纹理，平常使用的基本上都是AbstractTexture抽象类，通过这层抽象使得对纹理的使用和纹理坐标获取变得异常方便
+(12)对于批量材质的管理有TexturePool类，进阶的有AutoPackTexturePool，这个类可以将很多纹理打包进同一个纹理里，用来减少drawcall的次数
+(12)：其实这一点算是蛮重要的，通过简单的方式实现了各种buffer的自动解绑和绑定，脱离Opengl烦琐的各种绑定
+(13)：Shader方面，一键编译和绑定Shader，通过Reflection来自动注入Shader的各种handler
+(14)：这个也是Shader相关的，通过预编译支持了在Shader里使用@include  <xxxx>来引用一段文本，减少了编写Shader时的重复工作

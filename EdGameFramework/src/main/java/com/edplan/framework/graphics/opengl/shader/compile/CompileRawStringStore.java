@@ -29,7 +29,7 @@ public class CompileRawStringStore
 				+"use \"name <@String/name>\" to set name");
 		}
 		if(map.containsKey(comp.getProgramName())){
-			throw new PreCompileException("program@"+comp.getProgramName()+" already exists");
+			throw new PreCompileException("program @"+comp.getProgramName()+" already exists");
 		}
 		map.put(comp.getProgramName(),new ProgramNode(comp.getProgramName(),comp.getResult().split(StringUtil.LINE_BREAK)));
 	}

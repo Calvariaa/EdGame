@@ -6,25 +6,28 @@ import com.edplan.framework.main.MainApplication;
 import com.edplan.framework.graphics.opengl.MainRenderer;
 import com.edplan.framework.MContext;
 import com.edplan.nso.OsuFilePart;
-import com.edplan.framework.main.MainActivity;
+import com.edplan.framework.main.EdMainActivity;
 import com.edplan.osulab.ui.BackQuery;
 import com.edplan.framework.ui.text.font.bmfont.BMFont;
 import java.io.IOException;
 import com.edplan.framework.ui.text.font.FontAwesome;
+import com.edplan.framework.database.DatabaseTable;
+import com.edplan.framework.database.TestDBLine;
 
-public class LabActivity extends MainActivity 
+public class LabActivity extends EdMainActivity 
 {
 	private LabApplication app;
-	
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
+
+	@Override
+	protected void createGame(){
+		// TODO: Implement this method
 		app=new LabApplication();
 		app.setUpActivity(this);
-    }
-	
-	
+		
+		DatabaseTable table=new DatabaseTable();
+		table.initial(TestDBLine.class);
+		
+	}
 	
 	public class LabApplication extends MainApplication
 	{

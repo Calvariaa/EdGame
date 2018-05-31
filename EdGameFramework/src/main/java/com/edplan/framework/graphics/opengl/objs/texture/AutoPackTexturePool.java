@@ -23,9 +23,13 @@ import java.io.IOException;
 import com.edplan.framework.graphics.opengl.GLWrapped;
 import com.edplan.framework.graphics.opengl.ShaderManager;
 import com.edplan.framework.interfaces.Function;
+import com.edplan.framework.ui.looper.ExpensiveTask;
+import java.util.Collection;
 
 public class AutoPackTexturePool extends TexturePool
 {
+	public static String LOADING=null;
+	
 	private int packWidth=2000;
 	private int packHeight=2000;
 	private int maxWidth=900;
@@ -47,6 +51,8 @@ public class AutoPackTexturePool extends TexturePool
 	
 	private MContext context;
 	
+	private boolean lock=false;
+	
 	public AutoPackTexturePool(TextureLoader loader,MContext context){
 		super(loader);
 		this.context=context;
@@ -55,6 +61,14 @@ public class AutoPackTexturePool extends TexturePool
 		maxWidth=packWidth*3/4;
 		maxHeight=packHeight/2;
 		toNewPack();
+	}
+
+	public void setLock(boolean lock){
+		this.lock=lock;
+	}
+
+	public boolean isLock(){
+		return lock;
 	}
 
 	@Override
@@ -81,6 +95,97 @@ public class AutoPackTexturePool extends TexturePool
 			t.texture=testAddRaw(t.texture,t.msg);
 			directPut(t.msg,t.texture);
 		}
+	}
+	
+	public void addAllSynchronized(final List<MsgTexture> list){
+		Collections.sort(list, new Comparator<MsgTexture>(){
+				@Override
+				public int compare(TexturePool.MsgTexture p1,TexturePool.MsgTexture p2) {
+					// TODO: Implement this method
+					if(p1.texture.getHeight()==p2.texture.getHeight()){
+						return p1.texture.getWidth()-p2.texture.getWidth();
+					}else{
+						return p1.texture.getHeight()-p2.texture.getHeight();
+					}
+				}
+			});
+		ExpensiveTask loadTask=new ExpensiveTask(context,new Runnable(){
+				@Override
+				public void run(){
+					// TODO: Implement this method
+					for(MsgTexture t:list){
+						final MsgTexture ft=t;
+						LOADING="mtt:"+ft.msg;
+						ft.texture=testAddRaw(ft.texture,ft.msg);
+						directPut(ft.msg,ft.texture);
+					}
+
+				}
+			});
+		try{
+			loadTask.startAndWait();
+		}catch(InterruptedException e){
+			e.printStackTrace();
+		}
+
+	}
+	
+	public void addAllSynchronized(Collection<String> names){
+		final List<MsgTexture> list=new ArrayList<MsgTexture>();
+		
+		for(String name:names){
+			LOADING=name;
+			final MsgTexture t=new MsgTexture();
+			t.msg=name;
+			final String fn=name;
+			ExpensiveTask loadTask=new ExpensiveTask(context,new Runnable(){
+					@Override
+					public void run(){
+						// TODO: Implement this method
+						t.texture=loader.load(fn);
+					}
+				});
+			try{
+				loadTask.startAndWait();
+				list.add(t);
+			}catch(InterruptedException e){
+				e.printStackTrace();
+				if(t.texture==null){
+					throw new RuntimeException("err load Texture, syncerr");
+				}
+			}
+		}
+		
+		Collections.sort(list, new Comparator<MsgTexture>(){
+				@Override
+				public int compare(TexturePool.MsgTexture p1,TexturePool.MsgTexture p2) {
+					// TODO: Implement this method
+					if(p1.texture.getHeight()==p2.texture.getHeight()){
+						return p1.texture.getWidth()-p2.texture.getWidth();
+					}else{
+						return p1.texture.getHeight()-p2.texture.getHeight();
+					}
+				}
+			});
+		ExpensiveTask loadTask=new ExpensiveTask(context,new Runnable(){
+				@Override
+				public void run(){
+					// TODO: Implement this method
+					for(MsgTexture t:list){
+						final MsgTexture ft=t;
+						LOADING="mtt:"+ft.msg;
+						ft.texture=testAddRaw(ft.texture,ft.msg);
+						directPut(ft.msg,ft.texture);
+					}
+					
+				}
+			});
+		try{
+			loadTask.startAndWait();
+		}catch(InterruptedException e){
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public int packedCount(){
@@ -212,6 +317,17 @@ public class AutoPackTexturePool extends TexturePool
 		// TODO: Implement this method
 		AbstractTexture raw=super.loadTexture(msg);
 		return testAddRaw(raw,msg);
+	}
+
+	@Override
+	public AbstractTexture getTexture(String msg){
+		// TODO: Implement this method
+		if(lock){
+			if(!pool.containsKey(msg)){
+				throw new RuntimeException("lock pool called Texture "+msg);
+			}
+		}
+		return super.getTexture(msg);
 	}
 	
 	public class PackNode{

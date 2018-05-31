@@ -11,6 +11,7 @@ import java.io.IOException;
 import com.edplan.framework.test.TestStaticData;
 import com.edplan.framework.ui.ViewConfiguration;
 import com.edplan.framework.ui.text.font.FontAwesome;
+import com.edplan.framework.Framework;
 
 public abstract class MainApplication implements MainCallBack
 {
@@ -68,7 +69,7 @@ public abstract class MainApplication implements MainCallBack
 		System.exit(0);
 	}
 	
-	public void setUpActivity(MainActivity act){
+	public void setUpActivity(EdMainActivity act){
 		this.context=act;
 		act.register(this);
 		mContext=new MContext(context);
@@ -91,6 +92,7 @@ public abstract class MainApplication implements MainCallBack
 	public void onGLCreate(){
 		AResource res=mContext.getAssetResource().subResource("font");
 		try{
+			long t=Framework.absoluteTimeMillion();
 			{
 				BMFont font=BMFont.loadFont(
 					res,
@@ -121,7 +123,7 @@ public abstract class MainApplication implements MainCallBack
 				font.setErrCharacter(FontAwesome.fa_ban.charvalue);
 				BMFont.addFont(font,font.getInfo().face);
 			}
-			
+			System.out.println("load font cost "+(Framework.absoluteTimeMillion()-t)+"ms");
 		}catch(IOException e){
 			e.printStackTrace();
 			mContext.toast("读取字体失败 msg="+e.getMessage());

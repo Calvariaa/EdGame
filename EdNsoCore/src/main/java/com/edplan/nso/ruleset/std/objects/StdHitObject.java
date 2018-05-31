@@ -1,5 +1,5 @@
 package com.edplan.nso.ruleset.std.objects;
-import com.edplan.nso.ruleset.amodel.object.HitObject;
+import com.edplan.nso.ruleset.base.object.HitObject;
 
 public abstract class StdHitObject extends HitObject
 {

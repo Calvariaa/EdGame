@@ -31,7 +31,7 @@ import com.edplan.osulab.ui.pieces.TextButton;
 
 public class LabToolbar extends RelativeContainer implements Hideable
 {
-	private float normalBaseAlpha=0.4f;
+	private float normalBaseAlpha=0.7f;
 	
 	private float highlightBaseAlpha=1;
 	

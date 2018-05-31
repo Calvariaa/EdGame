@@ -5,9 +5,14 @@ import com.edplan.superutils.classes.advance.IRunnableHandler;
 import com.edplan.superutils.classes.advance.RunnableHandler;
 import com.edplan.superutils.interfaces.Loopable;
 import android.os.SystemClock;
+import com.edplan.framework.utils.ThreadSafeLinkQuery;
+import com.edplan.framework.Framework;
 
 public class UILooper extends StepLooper implements IRunnableHandler 
 {
+	private int expensiveTaskTime=5;
+	
+	private ThreadSafeLinkQuery<ExpensiveTask> taskQuery=new ThreadSafeLinkQuery<ExpensiveTask>();
 	
 	/**
 	 *循环开始时最先执行，处理各种post的预处理
@@ -30,6 +35,7 @@ public class UILooper extends StepLooper implements IRunnableHandler
 
 	private long frameUptimeMillions;
 	
+	
 	public UILooper(){
 		runnableHandler=new RunnableHandler();
 		otherLoopableHandler=new LooperLoopable<Loopable>();
@@ -37,6 +43,10 @@ public class UILooper extends StepLooper implements IRunnableHandler
 		addLoopable(runnableHandler,UIStep.HANDLE_RUNNABLES);
 		addLoopable(otherLoopableHandler,UIStep.HANDLE_OTHER_LOOPABLE);
 		addLoopable(animaHandler,UIStep.HANDLE_ANIMATION);
+	}
+
+	public ThreadSafeLinkQuery<ExpensiveTask> getTaskQuery(){
+		return taskQuery;
 	}
 	
 	public void addLoopableBeforeDraw(Loopable l){
@@ -49,6 +59,30 @@ public class UILooper extends StepLooper implements IRunnableHandler
 	
 	public double calTimeOverThread(long uptimeRelative){
 		return getTimer().runnedTime+(uptimeRelative-SystemClock.uptimeMillis());
+	}
+	
+	public void addExpensiveTask(ExpensiveTask task){
+		taskQuery.add(task);
+	}
+	
+	public int getExpensiveTaskCount(){
+		return taskQuery.getCount();
+	}
+	
+	public void handlerExpensiveTask(){
+		long startTime=Framework.absoluteTimeMillion();
+		ExpensiveTask t;
+		while((t=taskQuery.next())!=null){
+			synchronized(t){
+				t.getTask().run();
+				if(t.isNeedNotify()){
+					t.notify();
+				}
+			}
+			if(Framework.absoluteTimeMillion()-startTime>expensiveTaskTime){
+				break;
+			}
+		}
 	}
 
 	@Override

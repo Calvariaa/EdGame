@@ -3,7 +3,7 @@ import android.util.Log;
 import com.edplan.framework.math.Vec2;
 import com.edplan.nso.NsoException;
 import com.edplan.nso.ParsingBeatmap;
-import com.edplan.nso.ruleset.amodel.parser.HitObjectParser;
+import com.edplan.nso.ruleset.base.parser.HitObjectParser;
 import com.edplan.nso.ruleset.mania.objects.ManiaHolder;
 import com.edplan.nso.ruleset.std.objects.HitObjectAddition;
 import com.edplan.nso.ruleset.std.objects.StdHitCircle;

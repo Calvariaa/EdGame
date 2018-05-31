@@ -1,6 +1,6 @@
 package com.edplan.nso.ruleset.std.objects;
-import com.edplan.nso.ruleset.amodel.object.HitObject;
-import com.edplan.nso.ruleset.amodel.object.HitObjects;
+import com.edplan.nso.ruleset.base.object.HitObject;
+import com.edplan.nso.ruleset.base.object.HitObjects;
 import java.util.ArrayList;
 import java.util.List;
 

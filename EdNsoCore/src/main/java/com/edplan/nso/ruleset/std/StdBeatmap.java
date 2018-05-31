@@ -8,7 +8,6 @@ import com.edplan.nso.filepart.PartGeneral;
 import com.edplan.nso.filepart.PartHitObjects;
 import com.edplan.nso.filepart.PartMetadata;
 import com.edplan.nso.filepart.PartTimingPoints;
-import com.edplan.nso.beatmap.StdBeatmapBindingData;
 import com.edplan.nso.ruleset.std.objects.StdHitObjects;
 import com.edplan.nso.ruleset.std.objects.StdHitObject;
 import com.edplan.nso.ruleset.std.objects.StdSpinner;
@@ -31,16 +30,6 @@ public class StdBeatmap extends OsuBeatmap
 
 	public StdBeatmap(){
 		
-	}
-	
-	public StdBeatmap(StdBeatmapBindingData bd){
-		setVersion(bd.getVersion());
-		setGeneral(bd.getGeneral());
-		setEditor(bd.getEditor());
-		setMetadata(bd.getMetadata());
-		setDifficulty(bd.getDifficulty());
-		setEvent(bd.getEvent());
-		setColours(bd.getColours());
 	}
 
 	public void setHitObjects(StdHitObjects<StdHitObject> hitObjects){

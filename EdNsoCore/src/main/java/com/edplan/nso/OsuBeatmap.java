@@ -13,10 +13,4 @@ public abstract class OsuBeatmap
 	public Storyboard getStoryboard() {
 		return storyboard;
 	}
-	
-	//public boolean hasStoryboard(){}
-	
-	public void getRuleset(){
-		
-	}
 }

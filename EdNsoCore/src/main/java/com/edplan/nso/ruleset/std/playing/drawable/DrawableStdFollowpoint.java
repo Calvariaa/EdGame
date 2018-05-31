@@ -4,7 +4,7 @@ import com.edplan.framework.graphics.opengl.GLCanvas2D;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.math.Vec2;
 import com.edplan.framework.ui.animation.precise.BasePreciseAnimation;
-import com.edplan.nso.ruleset.amodel.playing.PlayingBeatmap;
+import com.edplan.nso.ruleset.base.playing.PlayingBeatmap;
 import com.edplan.nso.ruleset.std.playing.drawable.piece.FollowpointPiece;
 import com.edplan.framework.ui.animation.AnimationHelper;
 import com.edplan.framework.graphics.opengl.BaseCanvas;

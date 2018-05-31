@@ -24,7 +24,8 @@ public class PopupToast extends PopupView
 	
 	public PopupToast(MContext c){
 		super(c);
-		setRounded(ViewConfiguration.dp(4)).setShadow(ViewConfiguration.dp(5),Color4.rgba(0.7f,0.7f,0.7f,0.4f),Color4.Alpha);
+		setRounded(ViewConfiguration.dp(5));
+		//.setShadow(ViewConfiguration.dp(3),Color4.rgba(0.5f,0.5f,0.5f,0.3f),Color4.Alpha);
 		LinearLayout l=new LinearLayout(c);
 		l.setGravity(Gravity.Center);
 		l.setBackground(Color4.rgba(0,0,0,0.6f));
@@ -47,9 +48,9 @@ public class PopupToast extends PopupView
 			MarginLayoutParam pl=new MarginLayoutParam();
 			pl.width=Param.MODE_WRAP_CONTENT;
 			pl.height=Param.MODE_WRAP_CONTENT;
-			pl.postMargin(ViewConfiguration.dp(10));
-			pl.marginLeft=ViewConfiguration.dp(14);
-			pl.marginRight=ViewConfiguration.dp(14);
+			pl.postMargin(ViewConfiguration.dp(6));
+			pl.marginLeft=ViewConfiguration.dp(10);
+			pl.marginRight=ViewConfiguration.dp(10);
 			l.addView(text,pl);
 		}
 	}

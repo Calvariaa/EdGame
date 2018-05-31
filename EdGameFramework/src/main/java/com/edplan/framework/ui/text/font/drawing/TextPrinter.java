@@ -50,7 +50,7 @@ public class TextPrinter
 	
 	private BMFont font;
 	
-	private boolean singleline=true;
+	private boolean singleline=false;
 	
 	public TextPrinter(BMFont font,float startX,float startY,GLPaint paint){
 		this.font=font;

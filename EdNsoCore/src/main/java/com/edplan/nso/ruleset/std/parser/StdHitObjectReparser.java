@@ -1,5 +1,5 @@
 package com.edplan.nso.ruleset.std.parser;
-import com.edplan.nso.ruleset.amodel.parser.HitObjectReparser;
+import com.edplan.nso.ruleset.base.parser.HitObjectReparser;
 import com.edplan.nso.ruleset.std.objects.StdHitObject;
 import com.edplan.nso.NsoException;
 import com.edplan.nso.ruleset.std.objects.StdHitCircle;

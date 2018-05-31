@@ -261,7 +261,6 @@ public class TextView extends EdView
 	public void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		super.onDraw(canvas);
-		canvas.save();
 		printer.draw(canvas);
 		/*
 		GLPaint p=new GLPaint();

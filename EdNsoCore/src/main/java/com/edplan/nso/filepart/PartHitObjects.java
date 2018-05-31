@@ -1,12 +1,12 @@
 package com.edplan.nso.filepart;
 import com.edplan.nso.OsuFilePart;
-import com.edplan.nso.ruleset.amodel.parser.HitObjectParser;
-import com.edplan.nso.ruleset.amodel.object.HitObjects;
+import com.edplan.nso.ruleset.base.parser.HitObjectParser;
+import com.edplan.nso.ruleset.base.object.HitObjects;
 import com.edplan.nso.ruleset.ModeManager;
 import com.edplan.nso.NsoException;
 import com.edplan.nso.ruleset.std.objects.StdHitObjects;
-import com.edplan.nso.ruleset.amodel.object.HitObject;
-import com.edplan.nso.ruleset.amodel.parser.HitObjectReparser;
+import com.edplan.nso.ruleset.base.object.HitObject;
+import com.edplan.nso.ruleset.base.parser.HitObjectReparser;
 import com.edplan.nso.ruleset.std.parser.StdHitObjectReparser;
 import android.util.Log;
 import com.edplan.superutils.U;

@@ -1,5 +1,5 @@
 package com.edplan.nso.ruleset.mania.objects;
-import com.edplan.nso.ruleset.amodel.object.HitObject;
+import com.edplan.nso.ruleset.base.object.HitObject;
 import com.edplan.nso.ruleset.mania.objects.ManiaHolder;
 import com.edplan.nso.ruleset.std.objects.StdHitObject;
 import com.edplan.nso.ruleset.std.objects.StdHitObjects;

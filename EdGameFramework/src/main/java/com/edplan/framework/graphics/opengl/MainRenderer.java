@@ -38,6 +38,10 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 	
 	private int glVersion;
 	
+	/**
+	 *如果使用自定义的Renderer并通过initialWithRenderer模式初始化，
+	 *请保证有一个和下面的一样的参数的构造器
+	 */
 	public MainRenderer(MContext context,MainApplication app){
 		this.context=context;
 		this.app=app;
@@ -138,10 +142,11 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 		GLCanvas2D canvas=new GLCanvas2D(rootLayer);
 		canvas.prepare();
 		canvas.getMProjMatrix().setOrtho(0,canvas.getWidth(),canvas.getHeight(),0,-100,100);
-		if(debugUi){
+		//if(debugUi){
+			context.getUiLooper().handlerExpensiveTask();
 			canvas.drawColor(Color4.gray(0.0f));
 			viewRoot.onNewFrame(canvas,tmer.getDeltaTime());
-		}
+		//}
 		canvas.unprepare();
 		GLES20.glFlush();
 		

@@ -29,6 +29,8 @@ import java.util.Random;
 import com.edplan.framework.interfaces.FloatInvokeSetter;
 import com.edplan.framework.ui.animation.AbstractAnimation;
 import com.edplan.framework.ui.animation.AnimationHandler;
+import com.edplan.framework.database.TestDBLine;
+import com.edplan.osulab.ui.popup.PopupToast;
 
 public class JumpingCircle extends EdView
 {
@@ -378,6 +380,7 @@ public class JumpingCircle extends EdView
 			});
 		camin.start();
 		setAnimation(camin);
+		
 	}
 
 	@Override

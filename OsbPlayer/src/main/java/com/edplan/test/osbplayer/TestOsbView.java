@@ -26,7 +26,7 @@ import com.edplan.framework.utils.MLog;
 import com.edplan.nso.parser.StdBeatmapDecoder;
 import com.edplan.nso.parser.StoryboardDecoder;
 import com.edplan.nso.resource.OsuSkin;
-import com.edplan.nso.ruleset.amodel.playing.PlayField;
+import com.edplan.nso.ruleset.base.playing.PlayField;
 import com.edplan.nso.ruleset.std.StdBeatmap;
 import com.edplan.nso.ruleset.std.playing.StdPlayField;
 import com.edplan.nso.ruleset.std.playing.StdPlayingBeatmap;
@@ -44,8 +44,14 @@ import com.edplan.framework.resource.MultipleResource;
 import com.edplan.framework.ui.inputs.EdMotionEvent;
 import com.edplan.framework.timing.AdjustableTimeline;
 import com.edplan.framework.ui.text.font.drawing.TextUtils;
+import com.edplan.framework.ui.EdContainer;
+import com.edplan.framework.ui.widget.RelativeContainer;
+import com.edplan.framework.ui.widget.TextView;
+import com.edplan.framework.ui.widget.RelativeLayout;
+import com.edplan.framework.ui.layout.Gravity;
+import com.edplan.framework.ui.layout.Param;
 
-public class TestOsbView extends EdView
+public class TestOsbView extends RelativeContainer
 {
 	private StdPlayField playField;
 
@@ -68,6 +74,8 @@ public class TestOsbView extends EdView
 	//private DrawableStdSlider sld2;
 
 	private BufferedLayer newLayer;
+	
+	private TextView text;
 
 	float a=0;
 	long lt=0;
@@ -110,6 +118,16 @@ public class TestOsbView extends EdView
 			osuPath=obj.getString("osuPath");
 		} catch (JSONException e) {
 			e.printStackTrace();
+		}
+		{
+			text=new TextView(context);
+			text.setTextSize(200);
+			text.setText("loading!");
+			RelativeLayout.RelativeParam p=new RelativeLayout.RelativeParam();
+			p.gravity=Gravity.Center;
+			p.width=Param.MODE_MATCH_PARENT;
+			p.height=Param.MODE_MATCH_PARENT;
+			addView(text,p);
 		}
 	}
 
@@ -282,6 +300,26 @@ public class TestOsbView extends EdView
 																res,skin);
 						//test.testFloder().subResource(test.testBeatmapFloder+""));
 						//new DirResource(osb.getParentFile()));
+						//playingStoryboard.load();
+						playingStoryboard.loadUnsync(new Runnable(){
+								@Override
+								public void run()
+								{
+									// TODO: Implement this method
+									post(new Runnable(){
+											@Override
+											public void run()
+											{
+												// TODO: Implement this method
+												getContext().getUiLooper().addLoopableBeforeDraw(timeline);
+												audio.play();
+												//text.setVisiblility(VISIBILITY_GONE);
+												//audio.seekTo(20000);
+												//timeline.onLoop(20000);
+											}
+										},2000);
+								}
+							});
 						System.out.println("end transform to playing state");
 						System.out.println("storyboard parse done in: "+(System.currentTimeMillis()-s)+"ms");
 
@@ -319,6 +357,18 @@ public class TestOsbView extends EdView
 
 	boolean ifend=false;
 	double renderTime=0;
+
+	/*
+	@Override
+	protected void drawContainer(BaseCanvas canvas){
+		// TODO: Implement this method
+		text.setText("loading!\n"+AutoPackTexturePool.LOADING+"\n"+getContext().getUiLooper().getExpensiveTaskCount()+"\n"+getContext().getUiLooper().getTaskQuery().getCurrentMsg());
+		myDraw(canvas);
+		super.drawContainer(canvas);
+	}
+	*/
+	
+	
 	@Override
 	public void onDraw(BaseCanvas canvas) {
 		// TODO: Implement this method
@@ -338,6 +388,7 @@ public class TestOsbView extends EdView
 		a+=0.005;
 		float c=Math.abs(a%2-1);
 
+		/*
 		MLog.test.runOnce("test-play", new Runnable(){
 				@Override
 				public void run()
@@ -356,7 +407,7 @@ public class TestOsbView extends EdView
 						},2000);
 				}
 			});
-
+		*/
 
 
 		canvas.drawColor(Color4.gray(0.0f));
@@ -538,7 +589,7 @@ public class TestOsbView extends EdView
 			printer.toNextLine();
 		}
 		
-		/*
+		
 		printer.printString("DEVELOPMENT BUILD\nosu!lab 2018.4.9");
 		printer.toNextLine();
 		printer.printString("fps: "+(int)(1000/avg)+"/"+(int)(1000/avg_nogc));
@@ -554,7 +605,7 @@ public class TestOsbView extends EdView
 			printer.printString("new: "+playingStoryboard.newApply()+"");
 		}
 		printer.toNextLine();
-		printer.printString("osu: "+enableOsu+" osb: "+enableOsb+" msg: "+msg);
+		printer.printString("osu: "+enableOsu+" osb: "+(enableOsb&&playingStoryboard.isLoaded())+" msg: "+msg);
 		printer.toNextLine();
 		printer.printString(PlayingStoryboardLayer.PrepareTime.toString());
 		printer.toNextLine();
@@ -566,7 +617,7 @@ public class TestOsbView extends EdView
 		//printer.toNextLine();
 		//printer.toNextLine();
 		//printer.printString("D̨Á̶̢T̛͝͡AÈ̶R͢͢Ŕ͡0R͟͟");
-		*/
+		
 		printer.draw(canvas);
 		GLPaint baseLinePaint=new GLPaint();
 		baseLinePaint.setMixColor(Color4.rgba(1,0,0,0.6f));

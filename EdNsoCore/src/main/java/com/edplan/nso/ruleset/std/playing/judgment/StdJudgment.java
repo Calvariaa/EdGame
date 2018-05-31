@@ -1,5 +1,5 @@
 package com.edplan.nso.ruleset.std.playing.judgment;
-import com.edplan.nso.ruleset.amodel.playing.Judgment;
+import com.edplan.nso.ruleset.base.playing.Judgment;
 
 public class StdJudgment extends Judgment
 {

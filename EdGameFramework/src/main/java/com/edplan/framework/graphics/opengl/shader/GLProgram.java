@@ -85,7 +85,7 @@ public class GLProgram implements Recycleable
 				throw new GLException("err link GLProgram");
             }
         }else{
-			Log.e("ES20_ERROR", GLES20.glGetProgramInfoLog(program));
+			Log.e("ES20_ERROR","log:"+ GLES20.glGetProgramInfoLog(program));
 			throw new GLException("err create GLProgram");
 		}
 		
