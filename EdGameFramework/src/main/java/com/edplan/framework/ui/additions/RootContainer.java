@@ -5,6 +5,7 @@ import com.edplan.framework.ui.EdView;
 import com.edplan.framework.ui.layout.EdLayoutParam;
 import com.edplan.framework.ui.layout.Param;
 import com.edplan.framework.ui.layout.EdMeasureSpec;
+import java.util.ArrayList;
 
 public class RootContainer extends EdContainer implements FrameListener
 {
@@ -18,6 +19,8 @@ public class RootContainer extends EdContainer implements FrameListener
 	 */
 	private PopupViewLayer popupViewLayer;
 	
+	private ArrayList<FrameListener> listeners=new ArrayList<FrameListener>();
+	
 	public RootContainer(MContext c){
 		super(c);
 		{
@@ -28,10 +31,19 @@ public class RootContainer extends EdContainer implements FrameListener
 		}
 		popupViewLayer=new PopupViewLayer(c);
 		popupViewLayer.setParent(this);
+		registerFrameListener(popupViewLayer);
 		EdLayoutParam p=new EdLayoutParam();
 		p.width=Param.MODE_MATCH_PARENT;
 		p.height=Param.MODE_MATCH_PARENT;
 		popupViewLayer.setLayoutParam(p);
+	}
+	
+	public void registerFrameListener(FrameListener l){
+		listeners.add(l);
+	}
+	
+	public void unregisterFrameListener(FrameListener l){
+		listeners.remove(l);
 	}
 
 	public void setPopupViewLayer(PopupViewLayer popupViewLayer){
@@ -72,7 +84,9 @@ public class RootContainer extends EdContainer implements FrameListener
 	@Override
 	public void onFrameStart(){
 		// TODO: Implement this method
-		popupViewLayer.onFrameStart();
+		for(FrameListener l:listeners){
+			l.onFrameStart();
+		}
 	}
 	
 	@Override

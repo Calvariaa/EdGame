@@ -15,7 +15,7 @@ import com.edplan.osulab.ui.OptionList;
 import com.edplan.osulab.ui.SceneOverlay;
 import com.edplan.osulab.ui.UiConfig;
 import com.edplan.osulab.ui.opening.MainCircleView;
-import com.edplan.osulab.ui.toolbar.LabToolbar;
+import com.edplan.osulab.ui.toolbar.Toolbar;
 import com.edplan.osulab.ui.pieces.JumpingCircle;
 import com.edplan.osulab.ui.MainBackground;
 import com.edplan.osulab.ui.pieces.BackButton;
@@ -30,7 +30,7 @@ public class LabGame
 {
 	private static LabGame game;
 	
-	private LabToolbar toolBar;
+	private Toolbar toolBar;
 
 	private OptionList optionList;
 	
@@ -104,11 +104,11 @@ public class LabGame
 		return sceneOverlay;
 	}
 
-	public void setToolBar(LabToolbar toolBar){
+	public void setToolBar(Toolbar toolBar){
 		this.toolBar=toolBar;
 	}
 
-	public LabToolbar getToolBar(){
+	public Toolbar getToolBar(){
 		return toolBar;
 	}
 
@@ -211,7 +211,7 @@ public class LabGame
 		}
 		
 		{
-			toolBar=new LabToolbar(c);
+			toolBar=new Toolbar(c);
 			RelativeLayout.RelativeParam param=new RelativeLayout.RelativeParam();
 			param.width=Param.MODE_MATCH_PARENT;
 			param.height=Param.makeUpDP(UiConfig.TOOLBAR_HEIGHT_DP);

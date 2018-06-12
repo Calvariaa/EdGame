@@ -9,8 +9,18 @@ import com.edplan.framework.graphics.opengl.BaseCanvas;
  */
 public abstract class AbstractSprite extends EdDrawable
 {
+	private boolean visible=true;
+	
 	public AbstractSprite(MContext c){
 		super(c);
+	}
+
+	public void setVisible(boolean visible){
+		this.visible=visible;
+	}
+
+	public boolean isVisible(){
+		return visible;
 	}
 	
 	protected abstract void startDraw(BaseCanvas canvas);
@@ -21,8 +31,9 @@ public abstract class AbstractSprite extends EdDrawable
 	
 	
 	@Override
-	public void draw(BaseCanvas canvas) {
+	public final void draw(BaseCanvas canvas) {
 		// TODO: Implement this method
+		if(!visible)return;
 		startDraw(canvas);
 		prepareShader(canvas);
 		loadVertexs(canvas);

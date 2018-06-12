@@ -125,9 +125,47 @@ public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlp
 		
 		private MContext context;
 		
+		private Anchor anchor=Anchor.Center;
+		
+		private float rotation=0;
+		
+		private float scaleX=1,scaleY=1;
+		
 		public RoundedLayerPoster(MContext c){
 			this.context=c;
 			sprite=new RoundedRectSprite(c);
+		}
+
+		public void setAnchor(Anchor anchor){
+			this.anchor=anchor;
+		}
+
+		public Anchor getAnchor(){
+			return anchor;
+		}
+
+		public void setRotation(float rotation){
+			this.rotation=rotation;
+		}
+
+		public float getRotation(){
+			return rotation;
+		}
+
+		public void setScaleX(float scaleX){
+			this.scaleX=scaleX;
+		}
+
+		public float getScaleX(){
+			return scaleX;
+		}
+
+		public void setScaleY(float scaleY){
+			this.scaleY=scaleY;
+		}
+
+		public float getScaleY(){
+			return scaleY;
 		}
 		
 		public void setRoundedRadius(float r){
@@ -148,12 +186,12 @@ public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlp
 		@Override
 		public void postLayer(BaseCanvas canvas,BufferedLayer layer,RectF area,GLPaint paint){
 			// TODO: Implement this method
-			
+			Vec2 org=new Vec2(area.getLeft()+area.getWidth()*anchor.x(),area.getTop()+area.getHeight()*anchor.y());
 			if(shadow!=null){
 				shadow.setTexture(GLTexture.White);
 				shadow.setAccentColor(paint.getMixColor());
 				shadow.setAlpha(paint.getFinalAlpha());
-				shadow.setArea(RectF.anchorOWH(Anchor.Center,area.getLeft()+area.getWidth()/2,area.getTop()+area.getHeight()/2,area.getWidth()+shadow.getShadowWidth()*2,area.getHeight()+shadow.getShadowWidth()*2));
+				shadow.setArea(RectF.anchorOWH(anchor,org.x,org.y,(area.getWidth()+shadow.getShadowWidth()*2)*scaleX,(area.getHeight()+shadow.getShadowWidth()*2)*scaleY));
 				shadow.setRect(area);
 				shadow.draw(canvas);
 			}
@@ -162,8 +200,14 @@ public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlp
 			sprite.setAccentColor(paint.getMixColor());
 			sprite.setAlpha(paint.getFinalAlpha());
 			sprite.setArea(area);
-			sprite.setRect(area);
+			
+			sprite.setRect(
+				RectF.anchorOWH(anchor,org.x,org.y,area.getWidth()*scaleX,area.getHeight()*scaleY)
+			);
+			canvas.save();
+			canvas.rotate(org.x,org.y,rotation);
 			sprite.draw(canvas);
+			canvas.restore();
 		}
 	}
 }

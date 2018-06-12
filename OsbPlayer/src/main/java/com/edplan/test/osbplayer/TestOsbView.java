@@ -23,7 +23,7 @@ import com.edplan.framework.ui.EdView;
 import com.edplan.framework.ui.text.font.bmfont.BMFont;
 import com.edplan.framework.ui.text.font.drawing.TextPrinter;
 import com.edplan.framework.utils.MLog;
-import com.edplan.nso.parser.StdBeatmapDecoder;
+import com.edplan.nso.parser.BeatmapDecoder;
 import com.edplan.nso.parser.StoryboardDecoder;
 import com.edplan.nso.resource.OsuSkin;
 import com.edplan.nso.ruleset.base.playing.PlayField;
@@ -228,7 +228,7 @@ public class TestOsbView extends RelativeContainer
 
 			if(enableOsu){
 				try{
-					StdBeatmapDecoder bparser=new StdBeatmapDecoder(osu);
+					BeatmapDecoder bparser=new BeatmapDecoder(osu);
 					//getContext()
 					//.getAssetResource()
 					//.subResource("osu/test/beatmap")
@@ -296,6 +296,7 @@ public class TestOsbView extends RelativeContainer
 						//	}
 						//}
 						System.out.println("end edcode osb: "+storyboard.getObjectCount());
+						if(enableOsu)storyboard.applyBeatmap(beatmap);
 						playingStoryboard=new PlayingStoryboard(getContext(),timeline,storyboard,
 																res,skin);
 						//test.testFloder().subResource(test.testBeatmapFloder+""));

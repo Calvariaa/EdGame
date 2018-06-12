@@ -138,6 +138,10 @@ public class MContext
 		ShaderManager.initStatic(this);
 	}
 	
+	public boolean checkThread(){
+		return Thread.currentThread()==mainThread;
+	}
+	
 	public Context getNativeContext(){
 		return androidContext;
 	}

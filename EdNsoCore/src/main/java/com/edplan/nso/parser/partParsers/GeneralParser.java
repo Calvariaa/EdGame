@@ -69,6 +69,12 @@ public class GeneralParser extends PartParser<PartGeneral>
 					case PartGeneral.EpilepsyWarning:
 						part.setEpilepsyWarning(U.toBool(entry[1]));
 						return true;
+					case PartGeneral.StoryFireInFront:
+						part.setStoryFireInFront(U.toBool(entry[1]));
+						return true;
+					case PartGeneral.CountdownOffset:
+						part.setCountdownOffset(U.toInt(entry[1]));
+						return true;
 					default:
 						//handler err post
 						return false;

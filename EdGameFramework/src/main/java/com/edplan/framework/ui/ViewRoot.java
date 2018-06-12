@@ -56,6 +56,10 @@ public class ViewRoot implements MainCallBack
 		inputManager=new InputManager();
 	}
 
+	public RootContainer getRootContainer(){
+		return rootContainer;
+	}
+
 	public Focus getFocus(){
 		return focus;
 	}

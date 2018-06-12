@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import com.edplan.framework.ui.looper.ExpensiveTask;
+import com.edplan.framework.MContext;
 
 /**
  *单个字体，包含所有face相同的字体文件
@@ -56,8 +58,11 @@ public class BMFont
 
 	private FNTChar errCharacter;
 
-	BMFont(){
 
+	private MContext context;
+
+	protected BMFont(MContext context){
+		this.context=context;
 	}
 
 	public void setErrCharacter(char c) {
@@ -123,7 +128,8 @@ public class BMFont
 			LoadedPage loadedPage=new LoadedPage();
 			loadedPage.id=pageOffset+page.id;
 			try {
-				loadedPage.texture=res.loadTexture(page.file);
+				loadedPage.texture=ExpensiveTask.loadTextureSync(context,res,page.file);
+				//res.loadTexture(page.file);
 				pages.add(loadedPage);
 			} catch (IOException e) {
 				throw new BMFontException("err io: "+e.getMessage(),e);
@@ -151,15 +157,15 @@ public class BMFont
 		face=info.face;
 	}
 	
-	public static BMFont loadFont(AResource res,String fontFile) throws IOException{
-		return loadFont(res,fontFile,CHAR_NOT_FOUND);
+	public static BMFont loadFont(MContext c,AResource res,String fontFile) throws IOException{
+		return loadFont(c,res,fontFile,CHAR_NOT_FOUND);
 	}
 
 	/**
 	 *
 	 */
-	public static BMFont loadFont(AResource res,String fontFile,char errCharId) throws IOException{
-		BMFont font=new BMFont();
+	public static BMFont loadFont(MContext c,AResource res,String fontFile,char errCharId) throws IOException{
+		BMFont font=new BMFont(c);
 		BMFontDescription desc=BMFontDescription.fromStream(res.openInput(fontFile));
 		font.initialFont(desc);
 		font.addFont(res,desc);

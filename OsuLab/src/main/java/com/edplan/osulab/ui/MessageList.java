@@ -31,7 +31,7 @@ public class MessageList extends ScrollContainer implements Hideable
 		super(c);
 		setOutsideTouchable(true);
 		setChildoffset(ViewConfiguration.dp(1));
-		setBackground(Color4.rgba(0,0,0,0.75f));
+		setBackground(Color4.rgba(0,0,0,0.5f));
 		setOrientation(Orientation.DIRECTION_T2B);
 		setPaddingLeft(ViewConfiguration.dp(2));
 		setPaddingRight(ViewConfiguration.dp(2));
@@ -39,9 +39,9 @@ public class MessageList extends ScrollContainer implements Hideable
 
 		shadowSprite=new ColorRectSprite(c);
 		shadowSprite.setColor(Color4.rgba(0,0,0,0f),
-							  Color4.rgba(0,0,0,0.5f),
+							  Color4.rgba(0,0,0,0.6f),
 							  Color4.rgba(0,0,0,0f),
-							  Color4.rgba(0,0,0,0.5f));
+							  Color4.rgba(0,0,0,0.6f));
 
 
 		{

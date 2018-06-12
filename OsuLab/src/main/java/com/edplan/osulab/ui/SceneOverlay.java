@@ -9,7 +9,7 @@ import com.edplan.framework.ui.animation.FloatQueryAnimation;
 import com.edplan.framework.ui.animation.callback.OnFinishListener;
 import com.edplan.framework.ui.drawable.ColorDrawable;
 import com.edplan.framework.ui.widget.RelativeContainer;
-import com.edplan.osulab.ui.toolbar.LabToolbar;
+import com.edplan.osulab.ui.toolbar.Toolbar;
 import com.edplan.framework.ui.widget.TestButton;
 import com.edplan.framework.ui.widget.RelativeLayout;
 import com.edplan.framework.ui.layout.Param;
@@ -31,10 +31,10 @@ public class SceneOverlay extends RelativeContainer implements Hideable
 		super(c);
 		setClickable(true);
 		ColorDrawable cd=new ColorDrawable(c);
-		cd.setColor(Color4.rgba(0,0,0,0.8f),
-					Color4.rgba(0,0,0,0.8f),
-					Color4.rgba(0,0,0,0.5f),
-					Color4.rgba(0,0,0,0.5f));
+		cd.setColor(Color4.rgba(0,0,0,0.6f),
+					Color4.rgba(0,0,0,0.6f),
+					Color4.rgba(0,0,0,0.4f),
+					Color4.rgba(0,0,0,0.4f));
 		setBackground(cd);
 		{
 			ScrollContainer sc=new ScrollContainer(c);

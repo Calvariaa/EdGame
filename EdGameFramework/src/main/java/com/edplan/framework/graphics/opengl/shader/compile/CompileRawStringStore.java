@@ -21,7 +21,7 @@ public class CompileRawStringStore
 	}
 	
 	public void addToStore(String program){
-		PreCompiler comp=new PreCompiler(program,this);
+		Preprocessor comp=new Preprocessor(program,this);
 		comp.compile();
 		if(comp.getProgramName()==null){
 			throw new PreCompileException(

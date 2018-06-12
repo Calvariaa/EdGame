@@ -74,7 +74,7 @@ public class UILooper extends StepLooper implements IRunnableHandler
 		ExpensiveTask t;
 		while((t=taskQuery.next())!=null){
 			synchronized(t){
-				t.getTask().run();
+				t.run();
 				if(t.isNeedNotify()){
 					t.notify();
 				}

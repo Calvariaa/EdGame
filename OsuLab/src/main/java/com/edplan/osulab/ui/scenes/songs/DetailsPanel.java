@@ -1,5 +1,5 @@
 package com.edplan.osulab.ui.scenes.songs;
 
-public class BeatmapMetadataView
+public class DetailsPanel
 {
 }

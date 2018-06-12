@@ -95,6 +95,7 @@ public abstract class MainApplication implements MainCallBack
 			long t=Framework.absoluteTimeMillion();
 			{
 				BMFont font=BMFont.loadFont(
+					mContext,
 					res,
 					"Noto-CJK-Basic.fnt");
 				font.addFont(res,"Noto-Basic.fnt");
@@ -104,6 +105,7 @@ public abstract class MainApplication implements MainCallBack
 			}
 			{
 				BMFont font=BMFont.loadFont(
+					mContext,
 					res,
 					"Exo2.0-Regular.fnt");
 				font.setErrCharacter(BMFont.CHAR_NOT_FOUND);
@@ -111,6 +113,7 @@ public abstract class MainApplication implements MainCallBack
 			}
 			{
 				BMFont font=BMFont.loadFont(
+					mContext,
 					res,
 					"Exo2.0-SemiBold.fnt");
 				font.setErrCharacter(BMFont.CHAR_NOT_FOUND);
@@ -118,6 +121,7 @@ public abstract class MainApplication implements MainCallBack
 			}
 			{
 				BMFont font=BMFont.loadFont(
+					mContext,
 					res,
 					"FontAwesome.fnt");
 				font.setErrCharacter(FontAwesome.fa_ban.charvalue);

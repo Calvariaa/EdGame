@@ -21,7 +21,7 @@ import com.edplan.framework.utils.StringUtil;
  *
  *
  */
-public class PreCompiler
+public class Preprocessor
 {
 	public static final String TYPE_NAME="name";
 	
@@ -39,12 +39,12 @@ public class PreCompiler
 	
 	private boolean hasChange=false;
 	
-	public PreCompiler(String res,CompileRawStringStore store){
+	public Preprocessor(String res,CompileRawStringStore store){
 		this.res=res;
 		this.store=store;
 	}
 	
-	public PreCompiler(String res){
+	public Preprocessor(String res){
 		this.res=res;
 		store=CompileRawStringStore.get();
 	}
@@ -57,7 +57,7 @@ public class PreCompiler
 		return programName;
 	}
 	
-	public PreCompiler compile(){
+	public Preprocessor compile(){
 		lines=res.split(StringUtil.LINE_BREAK);
 		boolean isHandlingBlock=false;
 		StringBuilder sb=new StringBuilder();

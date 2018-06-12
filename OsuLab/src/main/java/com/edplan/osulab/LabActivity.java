@@ -56,6 +56,7 @@ public class LabActivity extends EdMainActivity
 			try{
 				{
 					BMFont font=BMFont.loadFont(
+						mContext,
 						mContext.getAssetResource().subResource("font"),
 						"osuFont.fnt");
 					font.setErrCharacter(FontAwesome.fa_osu_heart1_break.charvalue);

@@ -65,8 +65,8 @@ public class SceneSelectButtonBar extends RelativeContainer implements Hideable,
 		shadowSpriteTop=new ColorRectSprite(c);
 		shadowSpriteTop.setColor(Color4.rgba(0,0,0,0),
 							  Color4.rgba(0,0,0,0),
-							  Color4.rgba(0,0,0,0.5f),
-							  Color4.rgba(0,0,0,0.5f));
+							  Color4.rgba(0,0,0,0.2f),
+							  Color4.rgba(0,0,0,0.2f));
 		shadowSpriteBottom=new ColorRectSprite(c);
 		shadowSpriteBottom.setColor(Color4.rgba(0,0,0,0.5f),
 								 Color4.rgba(0,0,0,0.5f),
@@ -439,7 +439,7 @@ public class SceneSelectButtonBar extends RelativeContainer implements Hideable,
 		
 		float shadowScale=0.5f+JumpingCircle.glowProgress/2;
 		
-		shadowSpriteTop.setArea(RectF.anchorOWH(Anchor.BottomLeft,0,0,canvas.getWidth(),ViewConfiguration.dp(shadowDp*shadowScale)));
+		shadowSpriteTop.setArea(RectF.anchorOWH(Anchor.BottomLeft,0,0,canvas.getWidth(),ViewConfiguration.dp(shadowDp*shadowScale)*0.5f));
 		shadowSpriteTop.draw(canvas);
 		
 		shadowSpriteBottom.setArea(RectF.anchorOWH(Anchor.TopLeft,0,canvas.getHeight(),canvas.getWidth(),ViewConfiguration.dp(shadowDp*shadowScale)));

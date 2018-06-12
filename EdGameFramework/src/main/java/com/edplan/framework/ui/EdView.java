@@ -73,9 +73,6 @@ public class EdView implements IRunnableHandler,MainCallBack
 	
 	private boolean pressed=false;
 	
-	/**
-	 *当前view是否是焦点view，焦点view会在处理滚动，点击等事件时有较高的优先级
-	 */
 	private boolean focus=false;
 	
 	/**
@@ -106,6 +103,8 @@ public class EdView implements IRunnableHandler,MainCallBack
 	private boolean hasInitialLayouted=false;
 	
 	private boolean outsideTouchable=false;
+	
+	private int initialId;
 	
 	public EdView(MContext context){
 		this.context=context;
@@ -345,6 +344,7 @@ public class EdView implements IRunnableHandler,MainCallBack
 
 	private void initialName(){
 		name="@index/"+CUSTOM_INDEX;
+		initialId=CUSTOM_INDEX;
 		CUSTOM_INDEX++;
 	}
 

@@ -4,7 +4,7 @@ import android.util.Log;
 import com.edplan.framework.graphics.opengl.GLWrapped;
 import com.edplan.framework.graphics.opengl.GLException;
 import com.edplan.framework.interfaces.Recycleable;
-import com.edplan.framework.graphics.opengl.shader.compile.PreCompiler;
+import com.edplan.framework.graphics.opengl.shader.compile.Preprocessor;
 
 public class GLProgram implements Recycleable
 {
@@ -93,8 +93,8 @@ public class GLProgram implements Recycleable
 	}
 	
 	public static GLProgram createProgram(String vs,String fs){
-		PreCompiler vsc=new PreCompiler(vs).compile();
-		PreCompiler fsc=new PreCompiler(fs).compile();
+		Preprocessor vsc=new Preprocessor(vs).compile();
+		Preprocessor fsc=new Preprocessor(fs).compile();
 		vs=vsc.getResult();
 		fs=fsc.getResult();
 		//if(vsc.hasChange())Log.v("shader","vs:\n"+vs);

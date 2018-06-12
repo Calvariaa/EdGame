@@ -18,14 +18,16 @@ public class PartGeneral implements OsuFilePart
 	public static final String WidescreenStoryboard="WidescreenStoryboard";
 	public static final String SpecialStyle="SpecialStyle";
 	public static final String UseSkinSprites="UseSkinSprites";
+	public static final String StoryFireInFront="StoryFireInFront";
 	public static final String EpilepsyWarning="EpilepsyWarning";
-	
+	public static final String CountdownOffset="CountdownOffset";
 	public static final String TAG="General";
 	
 	private String audioFilename="";
 	private int audioLeadIn=0;
 	private int previewTime=0;
 	private boolean countdown=false;
+	private int countdownOffset=0;
 	private SampleSet sampleSet=null;
 	private int sampleVolume=100;
 	private float stackLeniency=0.7f;
@@ -34,10 +36,27 @@ public class PartGeneral implements OsuFilePart
 	private boolean widescreenStoryboard=false;
 	private boolean specialStyle=false;
 	private boolean useSkinSprites=false;
+	private boolean storyFireInFront=false;
 	private boolean epilepsyWarning=false;
 	
 	public PartGeneral(){
 		//Map<String,Object> map=U.makeMap(String.class,Object.class,);
+	}
+
+	public void setCountdownOffset(int countdownOffset){
+		this.countdownOffset=countdownOffset;
+	}
+
+	public int getCountdownOffset(){
+		return countdownOffset;
+	}
+
+	public void setStoryFireInFront(boolean storyFireInFront){
+		this.storyFireInFront=storyFireInFront;
+	}
+
+	public boolean isStoryFireInFront(){
+		return storyFireInFront;
 	}
 
 	public void setUseSkinSprites(boolean useSkinSprites) {

@@ -29,7 +29,7 @@ import com.edplan.osulab.LabGame;
 import com.edplan.osulab.ui.OptionList;
 import com.edplan.osulab.ui.pieces.TextButton;
 
-public class LabToolbar extends RelativeContainer implements Hideable
+public class Toolbar extends RelativeContainer implements Hideable
 {
 	private float normalBaseAlpha=0.7f;
 	
@@ -55,7 +55,7 @@ public class LabToolbar extends RelativeContainer implements Hideable
 	
 	private double preTouchTime;
 	
-	public LabToolbar(MContext c){
+	public Toolbar(MContext c){
 		super(c);
 		setClickable(true);
 		setAccentColor(Color4.rgba(1,1,1,1f));
@@ -67,8 +67,9 @@ public class LabToolbar extends RelativeContainer implements Hideable
 		setBackground(cd);
 		shadowSprite=new ColorRectSprite(c);
 		float gr=0f;
-		shadowSprite.setColor(Color4.rgba(gr,gr,gr,0.7f),
-							  Color4.rgba(gr,gr,gr,0.7f),
+		Color4 dividerColor=Color4.rgba(1,1,1,0.4f);
+		shadowSprite.setColor(Color4.rgba(gr,gr,gr,0.6f),
+							  Color4.rgba(gr,gr,gr,0.6f),
 							  Color4.rgba(0,0,0,0f),
 							  Color4.rgba(0,0,0,0f));
 		{
@@ -104,12 +105,12 @@ public class LabToolbar extends RelativeContainer implements Hideable
 			}
 			{
 				EdView divider=new EdView(c);
-				divider.setBackground(Color4.gray(0.5f).setAlpha(0.4f));
+				divider.setBackground(dividerColor);
 				MarginLayoutParam lparam=new MarginLayoutParam();
 				lparam.width=Param.makeUpDP(2f);
 				lparam.height=Param.MODE_MATCH_PARENT;
-				lparam.marginBottom=ViewConfiguration.dp(2);
-				lparam.marginTop=ViewConfiguration.dp(2);
+				lparam.marginBottom=ViewConfiguration.dp(4);
+				lparam.marginTop=ViewConfiguration.dp(4);
 				leftLayout.addView(divider,lparam);
 			}
 		}
@@ -134,12 +135,12 @@ public class LabToolbar extends RelativeContainer implements Hideable
 			}
 			{
 				EdView divider=new EdView(c);
-				divider.setBackground(Color4.gray(0.5f).setAlpha(0.4f));
+				divider.setBackground(dividerColor);
 				MarginLayoutParam lparam=new MarginLayoutParam();
 				lparam.width=Param.makeUpDP(2f);
 				lparam.height=Param.MODE_MATCH_PARENT;
-				lparam.marginBottom=ViewConfiguration.dp(2);
-				lparam.marginTop=ViewConfiguration.dp(2);
+				lparam.marginBottom=ViewConfiguration.dp(4);
+				lparam.marginTop=ViewConfiguration.dp(4);
 				rightLayout.addView(divider,lparam);
 			}
 			{
@@ -164,12 +165,12 @@ public class LabToolbar extends RelativeContainer implements Hideable
 			}
 			{
 				EdView divider=new EdView(c);
-				divider.setBackground(Color4.gray(0.5f).setAlpha(0.4f));
+				divider.setBackground(dividerColor);
 				MarginLayoutParam lparam=new MarginLayoutParam();
 				lparam.width=Param.makeUpDP(2f);
 				lparam.height=Param.MODE_MATCH_PARENT;
-				lparam.marginBottom=ViewConfiguration.dp(2);
-				lparam.marginTop=ViewConfiguration.dp(2);
+				lparam.marginBottom=ViewConfiguration.dp(4);
+				lparam.marginTop=ViewConfiguration.dp(4);
 				rightLayout.addView(divider,lparam);
 			}
 			{
@@ -223,10 +224,10 @@ public class LabToolbar extends RelativeContainer implements Hideable
 	
 	@Override
 	public void hide(){
-		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<LabToolbar>(this,"alpha")
+		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<Toolbar>(this,"alpha")
 																	  .transform(getAlpha(),0,Easing.None)
 																	  .transform(0,ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.None));
-		builder.together(new FloatQueryAnimation<LabToolbar>(this,"offsetY")
+		builder.together(new FloatQueryAnimation<Toolbar>(this,"offsetY")
 						 .transform(getOffsetY(),0,Easing.None)
 						 .transform(-getHeight(),ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.InQuad));
 		ComplexAnimation anim=builder.build();
@@ -249,10 +250,10 @@ public class LabToolbar extends RelativeContainer implements Hideable
 	
 	@Override
 	public void show(){
-		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<LabToolbar>(this,"alpha")
+		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<Toolbar>(this,"alpha")
 																	  .transform(getAlpha(),0,Easing.None)
 																	  .transform(1,ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.None));
-		builder.together(new FloatQueryAnimation<LabToolbar>(this,"offsetY")
+		builder.together(new FloatQueryAnimation<Toolbar>(this,"offsetY")
 						 .transform(getOffsetY(),0,Easing.None)
 						 .transform(0,ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.OutQuad));
 		ComplexAnimation anim=builder.build();
@@ -276,10 +277,10 @@ public class LabToolbar extends RelativeContainer implements Hideable
 	}
 	
 	public void highlightOn(){
-		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<LabToolbar>(this,"baseAlpha")
+		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<Toolbar>(this,"baseAlpha")
 																	  .transform(getBaseAlpha(),0,Easing.None)
 																	  .transform(highlightBaseAlpha,ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.None));
-		builder.together(new FloatQueryAnimation<LabToolbar>(this,"shadowHeight")
+		builder.together(new FloatQueryAnimation<Toolbar>(this,"shadowHeight")
 						. transform(getShadowHeight(),0,Easing.None)
 						. transform(highlightShadowHeight,ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.OutQuad));
 		ComplexAnimation anim=builder.build();
@@ -296,10 +297,10 @@ public class LabToolbar extends RelativeContainer implements Hideable
 	}
 	
 	public void highlightOff(){
-		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<LabToolbar>(this,"baseAlpha")
+		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<Toolbar>(this,"baseAlpha")
 																	  .transform(getBaseAlpha(),0,Easing.None)
 																	  .transform(normalBaseAlpha,ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.None));
-		builder.together(new FloatQueryAnimation<LabToolbar>(this,"shadowHeight")
+		builder.together(new FloatQueryAnimation<Toolbar>(this,"shadowHeight")
 						 . transform(getShadowHeight(),0,Easing.None)
 						 . transform(normalShadowHeight,ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.InQuad));
 		ComplexAnimation anim=builder.build();
