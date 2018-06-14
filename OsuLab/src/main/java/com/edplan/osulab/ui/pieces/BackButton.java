@@ -102,6 +102,9 @@ public class BackButton extends EdView implements Hideable
 		builder.together(new FloatQueryAnimation<BackButton>(this,"offsetX")
 						 .transform(getOffsetX(),0,Easing.None)
 						 .transform(-getWidth(),ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.InQuad));
+		builder.together(new FloatQueryAnimation<BackButton>(this,"offsetY")
+						 .transform(getOffsetX(),0,Easing.None)
+						 .transform(getHeight(),ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.InQuad));
 		ComplexAnimation anim=builder.build();
 		anim.setOnFinishListener(new OnFinishListener(){
 				@Override
@@ -127,6 +130,9 @@ public class BackButton extends EdView implements Hideable
 		builder.together(new FloatQueryAnimation<BackButton>(this,"offsetX")
 						 .transform(getOffsetX(),0,Easing.None)
 						 .transform(-getWidth(),ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.InQuad));
+		builder.together(new FloatQueryAnimation<BackButton>(this,"offsetY")
+						 .transform(getOffsetX(),0,Easing.None)
+						 .transform(getHeight(),ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.InQuad));
 		FloatQueryAnimation animo=new FloatQueryAnimation<BackButton>(this,"scale");
 		animo.transform(circle.getScaleX(),0,Easing.None);
 		animo.transform(1,ViewConfiguration.DEFAULT_TRANSITION_TIME/2,Easing.OutBounce);
@@ -150,6 +156,9 @@ public class BackButton extends EdView implements Hideable
 																	  .transform(1,ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.None));
 		builder.together(new FloatQueryAnimation<BackButton>(this,"offsetX")
 						 .transform(getOffsetX(),0,Easing.None)
+						 .transform(0,ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.OutQuad));
+		builder.together(new FloatQueryAnimation<BackButton>(this,"offsetY")
+						 .transform(getOffsetY(),0,Easing.None)
 						 .transform(0,ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.OutQuad));
 		ComplexAnimation anim=builder.build();
 		anim.start();

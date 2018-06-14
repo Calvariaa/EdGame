@@ -11,7 +11,7 @@ public class ViewConfiguration
 	
 	public static float UI_UNIT=1;
 	
-	public static float DEFAULT_TRANSITION_TIME=160;
+	public static float DEFAULT_TRANSITION_TIME=100;
 	
 	public static void loadContext(MContext context){
 		UI_UNIT=TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,1, context.getNativeContext().getResources().getDisplayMetrics());

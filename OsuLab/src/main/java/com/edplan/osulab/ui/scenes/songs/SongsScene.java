@@ -20,6 +20,12 @@ public class SongsScene extends BaseScene
 	public static boolean isSingleInstanceStatic(){
 		return true;
 	}
+
+	@Override
+	public double getHideDuration(){
+		// TODO: Implement this method
+		return 0;
+	}
 	
 	@Override
 	public void hide(){

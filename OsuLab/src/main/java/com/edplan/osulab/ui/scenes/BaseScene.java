@@ -21,6 +21,10 @@ public abstract class BaseScene extends RelativeContainer implements Hideable
 	}
 	
 	public abstract String getSceneName();
+	
+	public double getHideDuration(){
+		return Scenes.SCENE_TRANSITION_DURATION;
+	}
 
 	@Override
 	public boolean isHidden(){

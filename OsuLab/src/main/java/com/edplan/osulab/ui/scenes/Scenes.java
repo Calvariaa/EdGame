@@ -125,7 +125,7 @@ public class Scenes extends RelativeContainer implements Hideable,BackQuery.Back
 						currentScene=s;
 						s.show();
 					}
-				},SCENE_TRANSITION_DURATION+20);
+				},currentScene.getHideDuration()+20);
 		}
 	}
 	
@@ -184,7 +184,7 @@ public class Scenes extends RelativeContainer implements Hideable,BackQuery.Back
 							currentScene.show();
 						}
 					}
-				},SCENE_TRANSITION_DURATION+20);
+				},currentScene.getHideDuration()+20);
 			return true;
 		}
 		return false;
