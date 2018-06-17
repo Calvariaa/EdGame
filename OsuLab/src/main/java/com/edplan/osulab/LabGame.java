@@ -22,6 +22,7 @@ import com.edplan.osulab.ui.pieces.BackButton;
 import com.edplan.osulab.ui.MessageList;
 import com.edplan.osulab.ui.scenes.Scenes;
 import com.edplan.osulab.ui.scenes.SceneSelectButtonBar;
+import com.edplan.osulab.ui.popup.PopupButtonGroup;
 
 /**
  *全局的管理类
@@ -47,6 +48,8 @@ public class LabGame
 	private Scenes scenes;
 	
 	private BackButton backButton;
+	
+	private MContext context;
 
 	public void setSceneSelectButtonBar(SceneSelectButtonBar sceneSelectButtonBar){
 		this.sceneSelectButtonBar=sceneSelectButtonBar;
@@ -122,6 +125,26 @@ public class LabGame
 	
 	
 	public void exit(){
+		final PopupButtonGroup p=new PopupButtonGroup(context);
+		p.addButton("BACK TO GAME",new EdView.OnClickListener(){
+				@Override
+				public void onClick(EdView view){
+					// TODO: Implement this method
+					p.hide();
+				}
+			});
+		p.addButton("EXIT",new EdView.OnClickListener(){
+				@Override
+				public void onClick(EdView view){
+					// TODO: Implement this method
+					directExit();
+					p.hide();
+				}
+			});
+		p.show();
+	}
+	
+	private void directExit(){
 		toolBar.hide();
 		optionList.hide();
 		sceneOverlay.hide();
@@ -130,10 +153,11 @@ public class LabGame
 	}
 	
 	public EdView createContentView(MContext c){
+		this.context=c;
 		RelativeLayout mainLayout=new RelativeLayout(c);
 		RelativeLayout.RelativeParam mp=new RelativeLayout.RelativeParam();
-		mp.gravity=Gravity.Center;
-		mp.width=Param.MODE_MATCH_PARENT;
+		mp.gravity=Gravity.TopLeft;
+		mp.width=Param.makeupScaleOfParentParam(1f);
 		mp.height=Param.makeupScaleOfParentParam(1f);
 		mainLayout.setLayoutParam(mp);
 		
@@ -226,6 +250,7 @@ public class LabGame
 			mparam.gravity=Gravity.BottomLeft;
 			mainLayout.addView(backButton,mparam);
 		}
+		c.getViewRoot().getRootContainer().setAlpha(0);
 		return mainLayout;
 	}
 	

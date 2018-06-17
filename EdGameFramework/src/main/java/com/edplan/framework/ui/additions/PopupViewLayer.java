@@ -19,6 +19,7 @@ public class PopupViewLayer extends RelativeContainer implements FrameListener
 	
 	public void register(PopupView v){
 		popupViews.add(v);
+		v.setParent(this);
 		if(v.getLayoutParam()==null){
 			RelativeLayout.RelativeParam p=new RelativeLayout.RelativeParam();
 			p.width=Param.MODE_MATCH_PARENT;
@@ -46,6 +47,7 @@ public class PopupViewLayer extends RelativeContainer implements FrameListener
 		while(iter.hasNext()){
 			final PopupView v=iter.next();
 			if(v.getVisiblility()==VISIBILITY_GONE){
+				v.setParent(null);
 				iter.remove();
 			}
 		}

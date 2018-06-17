@@ -1,18 +1,18 @@
 package com.edplan.osulab;
 
-import android.app.*;
-import android.os.*;
-import com.edplan.framework.main.MainApplication;
-import com.edplan.framework.graphics.opengl.MainRenderer;
+import android.os.Environment;
+import android.util.Log;
 import com.edplan.framework.MContext;
-import com.edplan.nso.OsuFilePart;
-import com.edplan.framework.main.EdMainActivity;
-import com.edplan.osulab.ui.BackQuery;
-import com.edplan.framework.ui.text.font.bmfont.BMFont;
-import java.io.IOException;
-import com.edplan.framework.ui.text.font.FontAwesome;
 import com.edplan.framework.database.DatabaseTable;
 import com.edplan.framework.database.TestDBLine;
+import com.edplan.framework.graphics.opengl.MainRenderer;
+import com.edplan.framework.main.EdMainActivity;
+import com.edplan.framework.main.MainApplication;
+import com.edplan.framework.ui.text.font.FontAwesome;
+import com.edplan.framework.ui.text.font.bmfont.BMFont;
+import com.edplan.osulab.ui.BackQuery;
+import java.io.File;
+import java.io.IOException;
 
 public class LabActivity extends EdMainActivity 
 {
@@ -21,12 +21,24 @@ public class LabActivity extends EdMainActivity
 	@Override
 	protected void createGame(){
 		// TODO: Implement this method
+		try {
+			File f=new File(Environment.getExternalStorageDirectory(),"osu!lab/logs/log.txt");
+			if(f.exists()){
+				f.delete();
+			}
+			File dir=f.getParentFile();
+			if(!dir.exists())dir.mkdirs();
+			Runtime.getRuntime().exec("logcat -f "+f.getAbsolutePath());
+		} catch(IOException e) {
+			e.printStackTrace();
+			Log.e("log out!","err out put log!",e);
+		}
+		
 		app=new LabApplication();
 		app.setUpActivity(this);
 		
 		DatabaseTable table=new DatabaseTable();
 		table.initial(TestDBLine.class);
-		
 	}
 	
 	public class LabApplication extends MainApplication

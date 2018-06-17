@@ -57,6 +57,10 @@ public class ViewRoot implements MainCallBack
 	}
 
 	public RootContainer getRootContainer(){
+		if(rootContainer==null){
+			rootContainer=new RootContainer(context);
+			
+		}
 		return rootContainer;
 	}
 
@@ -85,7 +89,6 @@ public class ViewRoot implements MainCallBack
 			param.height=Param.MODE_MATCH_PARENT;
 			contentView.setLayoutParam(param);
 		}
-		
 		if(rootContainer==null){
 			rootContainer=new RootContainer(context);
 		}

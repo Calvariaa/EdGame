@@ -82,7 +82,7 @@ class RoundedShader extends TextureSpriteShader{
 											"    float v=distanceFromRoundedRect(f_Position.xy,inner,r);",
 											"    float a=1.0-smoothstep(0.0,1.0,v);",
 											"    vec4 c=f_Color*getTextureColor()*a;",
-											"    if(c.a<0.001)discard;",
+											"    @include <discard>",
 											"    gl_FragColor=c;",
 											"}"
 										});

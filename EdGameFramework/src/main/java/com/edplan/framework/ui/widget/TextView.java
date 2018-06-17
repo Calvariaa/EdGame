@@ -130,7 +130,7 @@ public class TextView extends EdView
 		breaked=TextUtils.breakText(font,text,fw);
 		textWidth=0;
 		for(String b:breaked){
-			textWidth=TextUtils.calwidth(font,b);// Math.max(textWidth,b.width);
+			textWidth=Math.max(textWidth,TextUtils.calwidth(font,b));// Math.max(textWidth,b.width);
 		}
 		textHeight=breaked.length*lineHeight;
 	}

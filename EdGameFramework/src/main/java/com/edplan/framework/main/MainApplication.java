@@ -22,6 +22,14 @@ public abstract class MainApplication implements MainCallBack
 	protected BaseGLSurfaceView surface;
 	
 	protected MainRenderer renderer;
+
+	public void setMContext(MContext mContext){
+		this.mContext=mContext;
+	}
+
+	public MContext getMContext(){
+		return mContext;
+	}
 	
 	public abstract MainRenderer createRenderer(MContext context);
 	

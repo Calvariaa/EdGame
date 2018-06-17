@@ -94,7 +94,7 @@ public class RelativeContainer extends EdContainer
 			final int mode=EdMeasureSpec.getMode(widthSpec);
 			switch(mode){
 				case EdMeasureSpec.MODE_DEFINEDED:
-					xd=EdMeasureSpec.getSize(widthSpec)+getPaddingHorizon();
+					xd=EdMeasureSpec.getSize(widthSpec);
 					break;
 				case EdMeasureSpec.MODE_AT_MOST:
 					xd=Math.min(EdMeasureSpec.getSize(widthSpec),getPaddingHorizon()+getDefaultMaxChildrenMeasuredWidthWithMargin());
@@ -109,7 +109,7 @@ public class RelativeContainer extends EdContainer
 			final int mode=EdMeasureSpec.getMode(heightSpec);
 			switch(mode){
 				case EdMeasureSpec.MODE_DEFINEDED:
-					yd=getPaddingVertical()+EdMeasureSpec.getSize(heightSpec);
+					yd=EdMeasureSpec.getSize(heightSpec);
 					break;
 				case EdMeasureSpec.MODE_AT_MOST:
 					yd=Math.min(EdMeasureSpec.getSize(heightSpec),getPaddingVertical()+getDefaultMaxChildrenMeasuredHeightWithMargin());

@@ -15,7 +15,7 @@ public class ColorSpriteShader extends SpriteShader
 											"precision highp float;",
 											"@include <SpriteBase.fs>",
 											"void main(){",
-											"    if(f_Color.a<0.001)discard;",
+											//"    @include <discard>",
 											"    gl_FragColor=f_Color;",
 											"}"
 										});

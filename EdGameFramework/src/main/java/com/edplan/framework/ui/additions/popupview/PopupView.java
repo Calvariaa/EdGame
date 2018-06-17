@@ -33,7 +33,7 @@ public class PopupView extends RelativeContainer implements Hideable
 		if(isHideWhenBackpress()){
 			hide();
 		}
-		return true;
+		return false;
 	}
 	
 	protected void onHide(){

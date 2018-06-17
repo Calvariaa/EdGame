@@ -28,11 +28,21 @@ public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlp
 	
 	private LayerPoster layerPoster;
 	
+	private float pixelScale=1;
+	
 	public EdContainer(MContext c){
 		super(c);
 		layer=new BufferedLayer(c);
 		layerCanvas=new GLCanvas2D(layer);
 		postPaint=new GLPaint();
+	}
+
+	public void setPixelScale(float pixelScale){
+		this.pixelScale=pixelScale;
+	}
+
+	public float getPixelScale(){
+		return pixelScale;
 	}
 
 	public void setLayerPoster(LayerPoster layerPoster){
@@ -64,13 +74,13 @@ public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlp
 	}
 	
 	protected void updateLayerSize(BaseCanvas canvas){
-		layer.setWidth((int)(getWidth()/canvas.getPixelDensity()));
-		layer.setHeight((int)(getHeight()/canvas.getPixelDensity()));
+		layer.setWidth((int)(pixelScale*getWidth()/canvas.getPixelDensity()));
+		layer.setHeight((int)(pixelScale*getHeight()/canvas.getPixelDensity()));
 	}
 	
 	protected void updateCanvas(BaseCanvas canvas){
 		layerCanvas.reinitial();
-		layerCanvas.scaleContent(canvas.getPixelDensity());
+		layerCanvas.scaleContent(canvas.getPixelDensity()/pixelScale);
 		layerCanvas.clip(getWidth(),getHeight());
 	}
 	
@@ -81,6 +91,9 @@ public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlp
 	@Override
 	protected void dispatchDraw(BaseCanvas canvas){
 		// TODO: Implement this method
+		drawBackground(canvas);
+		drawContainer(canvas);
+		/*
 		updateLayerSize(canvas);
 		updateCanvas(canvas);
 		layerCanvas.prepare();
@@ -90,6 +103,7 @@ public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlp
 		drawContainer(layerCanvas);
 		layerCanvas.unprepare();
 		postLayer(canvas,layer,RectF.xywh(0,0,getWidth(),getHeight()),postPaint);
+		*/
 	}
 	
 	protected void postLayer(BaseCanvas canvas,BufferedLayer layer,RectF area,GLPaint paint){
@@ -151,6 +165,11 @@ public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlp
 		public float getRotation(){
 			return rotation;
 		}
+		
+		public void setScale(float s){
+			setScaleX(s);
+			setScaleY(s);
+		}
 
 		public void setScaleX(float scaleX){
 			this.scaleX=scaleX;
@@ -171,6 +190,10 @@ public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlp
 		public void setRoundedRadius(float r){
 			sprite.setRoundedRadius(r);
 			if(shadow!=null)shadow.setRoundedRadius(r);
+		}
+		
+		public float getRoundedRadius(){
+			return sprite.getRoundedRadius();
 		}
 		
 		public void setShadow(float width,Color4 start,Color4 end){

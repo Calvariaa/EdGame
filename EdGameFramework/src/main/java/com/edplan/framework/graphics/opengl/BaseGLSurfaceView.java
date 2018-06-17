@@ -52,6 +52,35 @@ public class BaseGLSurfaceView extends GLSurfaceView
 		@Override
 		public EGLConfig chooseConfig(EGL10 egl,EGLDisplay display) {
 			// TODO: Implement this method
+			EGLConfig cof;
+			if ((cof=chooseMSAA(egl,display))==null) {
+				Log.w("egl-choose","msaa config not found");
+				return chooseDefault(egl,display);
+			} else {
+				return cof;
+			}
+		}
+		
+		public EGLConfig chooseDefault(EGL10 egl,EGLDisplay display){
+			int attribs[] = {
+				EGL10.EGL_RED_SIZE, 8,
+				EGL10.EGL_GREEN_SIZE, 8,
+				EGL10.EGL_BLUE_SIZE, 8,
+				EGL10.EGL_DEPTH_SIZE, 16,
+				//EGL10.EGL_SAMPLES, 4,  // This is for 4x MSAA.
+				EGL10.EGL_NONE
+			};
+			EGLConfig[] configs = new EGLConfig[1];
+			int[] configCounts = new int[1];
+			egl.eglChooseConfig(display, attribs, configs, 1, configCounts);
+			if(configCounts[0]==0){
+				return null;
+			}else{
+				return configs[0];
+			}
+		}
+		
+		public EGLConfig chooseMSAA(EGL10 egl,EGLDisplay display){
 			int attribs[] = {
 				EGL10.EGL_LEVEL, 0,
 				EGL10.EGL_RENDERABLE_TYPE, 4,  // EGL_OPENGL_ES2_BIT
@@ -67,12 +96,9 @@ public class BaseGLSurfaceView extends GLSurfaceView
 			EGLConfig[] configs = new EGLConfig[1];
 			int[] configCounts = new int[1];
 			egl.eglChooseConfig(display, attribs, configs, 1, configCounts);
-
-			if (configCounts[0] == 0) {
-				// Failed! Error handling.
-				throw new RuntimeException("err choose comfig");
-				//return null;
-			} else {
+			if(configCounts[0]==0){
+				return null;
+			}else{
 				return configs[0];
 			}
 		}

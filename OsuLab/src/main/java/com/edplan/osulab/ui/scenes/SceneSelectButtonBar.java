@@ -166,6 +166,7 @@ public class SceneSelectButtonBar extends RelativeContainer implements Hideable,
 								@Override
 								public void onClick(EdView view){
 									// TODO: Implement this method
+									hide();
 									LabGame.get().exit();
 								}
 							});

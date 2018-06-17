@@ -23,6 +23,7 @@ public class RootContainer extends EdContainer implements FrameListener
 	
 	public RootContainer(MContext c){
 		super(c);
+		//setPixelScale(2);
 		{
 			EdLayoutParam p=new EdLayoutParam();
 			p.width=Param.MODE_MATCH_PARENT;

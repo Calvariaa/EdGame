@@ -49,6 +49,10 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 		context.setViewRoot(viewRoot);
 	}
 	
+	protected void onCreate(){
+		
+	}
+	
 	public ViewRoot getViewRoot(){
 		return viewRoot;
 	}
@@ -76,7 +80,7 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 		// TODO: Implement this method
 		//Log.v("thread","touch-thread: "+Thread.currentThread());
 		TestStaticData.touchPosition.set(e.getX(),e.getY());
-		viewRoot.postNativeEvent(e);
+		if(hasCreate)viewRoot.postNativeEvent(e);
 		return true;
 	}
 
@@ -93,6 +97,7 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 			context.setUiLooper(uiLooper);
 			tmer.initial();
 			initialCount++;
+			onCreate();
 			Log.v("gl_initial","initial id: "+initialCount);
 			//context.toast("SurfaceCreate");
 		} catch (Exception e) {
@@ -151,6 +156,7 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 		GLES20.glFlush();
 		
 		Tracker.TotalFrameTime.end();
+		/*
 		if(Tracker.TotalFrameTime.totalTimeMS<14.5){
 			try
 			{
@@ -160,6 +166,7 @@ public abstract class MainRenderer implements GLSurfaceView.Renderer,OnTouchList
 			catch (InterruptedException e)
 			{}
 		}
+		*/
 		FrameRenderMonitor.update(context);
 	}
 	

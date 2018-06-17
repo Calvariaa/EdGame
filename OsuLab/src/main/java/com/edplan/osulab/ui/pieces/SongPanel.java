@@ -7,11 +7,11 @@ import com.edplan.framework.ui.widget.TextureView;
 import com.edplan.framework.ui.widget.RelativeLayout;
 import com.edplan.framework.ui.layout.Param;
 
-public class SongsPanel extends PopupView
+public class SongPanel extends PopupView
 {
 	private TextureView background;
 	
-	public SongsPanel(MContext c){
+	public SongPanel(MContext c){
 		super(c);
 		setBackground(Color4.Black);
 		setRounded(ViewConfiguration.dp(5))

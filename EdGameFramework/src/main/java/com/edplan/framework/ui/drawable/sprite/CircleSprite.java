@@ -76,7 +76,7 @@ class CircleShader extends SpriteShader{
 									  "        smoothstep(u_Radius.x-1.0,u_Radius.x,v),",
 									  "        1.0-smoothstep(u_Radius.y-1.0,u_Radius.y,v));",
 									  "    vec4 c=f_Color*a;",
-									  "    if(c.a<0.001)discard;",
+									  "    @include <discard>",
 									  "    gl_FragColor=c;",
 									  "}"
 									  });

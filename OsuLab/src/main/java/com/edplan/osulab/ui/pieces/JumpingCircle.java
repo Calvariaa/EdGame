@@ -31,6 +31,8 @@ import com.edplan.framework.ui.animation.AbstractAnimation;
 import com.edplan.framework.ui.animation.AnimationHandler;
 import com.edplan.framework.database.TestDBLine;
 import com.edplan.osulab.ui.popup.PopupToast;
+import com.edplan.framework.ui.EdContainer;
+import com.edplan.osulab.ui.popup.RenderStatePopupView;
 
 public class JumpingCircle extends EdView
 {
@@ -48,7 +50,7 @@ public class JumpingCircle extends EdView
 	private BoundOverlay boundOverlay;
 	private BaseBoundOverlay initialBound;
 	
-	private int ringCount=50;
+	private int ringCount=1;
 	private PartRing[] rings;
 	private float minSpeed=FMath.Pi2/40000;
 	private float maxSpeed=FMath.Pi2/13000;
@@ -202,6 +204,9 @@ public class JumpingCircle extends EdView
 				}
 			});
 		camin.start();
+		ComplexAnimationBuilder builder2=ComplexAnimationBuilder.start(
+			FloatQueryAnimation.fadeTo(getContext().getViewRoot().getRootContainer(),0,500,Easing.OutQuad));
+		getContext().getViewRoot().getRootContainer().setAnimation(builder2.buildAndStart());
 		setAnimation(camin);
 		boundAnim=null;
 	}
@@ -381,6 +386,14 @@ public class JumpingCircle extends EdView
 		camin.start();
 		setAnimation(camin);
 		
+		
+		ComplexAnimationBuilder builder2=ComplexAnimationBuilder.start(
+			new FloatQueryAnimation<EdContainer>(getContext().getViewRoot().getRootContainer(),"alpha")
+			.transform(0,0,Easing.None)
+			.transform(1,300,Easing.InQuad));
+		getContext().getViewRoot().getRootContainer().setAnimation(builder2.buildAndStart());
+		
+		(new RenderStatePopupView(getContext())).show();
 	}
 
 	@Override

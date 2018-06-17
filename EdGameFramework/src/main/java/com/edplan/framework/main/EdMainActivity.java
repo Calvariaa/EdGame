@@ -85,6 +85,12 @@ public abstract class EdMainActivity extends Activity
 	@Override
 	public void onBackPressed(){
 		// TODO: Implement this method
-		app.onBackPressed();
+		app.getMContext().getUiLooper().post(new Runnable(){
+				@Override
+				public void run(){
+					// TODO: Implement this method
+					app.onBackPressed();
+				}
+			});
 	}
 }

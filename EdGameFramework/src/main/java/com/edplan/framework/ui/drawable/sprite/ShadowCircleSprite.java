@@ -83,7 +83,7 @@ class ShadowCircleShader extends CircleShader{
 									  "        smoothstep(u_Radius.x-1.0,u_Radius.x,v),",
 									  "        1.0-smoothstep(u_Radius.y-1.0,u_Radius.y,v));",
 									  "    vec4 c=f_Color*mix(u_StartColor,u_EndColor,pow(p,0.5))*a;",
-									  "    if(c.a<0.0001)discard;",
+									  "    @include <discard>",
 									  "    gl_FragColor=c;",
 									  "}"
 									  });
