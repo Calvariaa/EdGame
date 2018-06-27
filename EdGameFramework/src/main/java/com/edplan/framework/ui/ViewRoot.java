@@ -19,6 +19,7 @@ import com.edplan.framework.main.MainCallBack;
 import com.edplan.framework.ui.widget.AbsoluteLayout;
 import com.edplan.framework.ui.additions.RootContainer;
 import com.edplan.framework.ui.additions.PopupViewLayer;
+import com.edplan.framework.utils.StringUtil;
 
 public class ViewRoot implements MainCallBack
 {
@@ -59,7 +60,6 @@ public class ViewRoot implements MainCallBack
 	public RootContainer getRootContainer(){
 		if(rootContainer==null){
 			rootContainer=new RootContainer(context);
-			
 		}
 		return rootContainer;
 	}
@@ -69,7 +69,7 @@ public class ViewRoot implements MainCallBack
 	}
 	
 	public PopupViewLayer getPopupViewLayer(){
-		return rootContainer.getPopupViewLayer();
+		return getRootContainer().getPopupViewLayer();
 	}
 	
 	public void postNativeEvent(MotionEvent event){
@@ -189,6 +189,49 @@ public class ViewRoot implements MainCallBack
 		}else{
 			return false;
 		}
+	}
+	
+	public String loadViewTreeStruct(){
+		if(rootContainer==null){
+			return "null";
+		}
+		StringBuilder sb=new StringBuilder();
+		loadGroup(rootContainer,sb,0);
+		return sb.toString();
+	}
+	
+	private void loadGroup(EdAbstractViewGroup c,StringBuilder sb,int step){
+		appendStep(sb,step);
+		appendGroup(c,sb);
+		sb.append(StringUtil.LINE_BREAK);
+		final int count=c.getChildrenCount();
+		for(int i=0;i<count;i++){
+			final EdView v=c.getChildAt(i);
+			if(v instanceof EdAbstractViewGroup){
+				loadGroup((EdAbstractViewGroup)v,sb,step+1);
+			}else{
+				loadView(v,sb,step+1);
+			}
+		}
+	}
+	
+	private void loadView(EdView view,StringBuilder sb,int step){
+		appendStep(sb,step);
+		sb.append("V::").append(view.getClass().getSimpleName())
+		 .append(" ").append((int)view.getWidth()).append("x").append((int)view.getHeight())
+		 .append(StringUtil.LINE_BREAK);
+	}
+	
+	private void appendStep(StringBuilder sb,int step){
+		for(int i=0;i<step;i++){
+			sb.append("|     ");
+		}
+	}
+	
+	private void appendGroup(EdAbstractViewGroup c,StringBuilder sb){
+		sb.append((c instanceof EdContainer)?"C::":"G::").append(c.getClass().getSimpleName())
+			. append(" ").append((int)c.getWidth()).append("x").append((int)c.getHeight());
+		
 	}
 	
 	public class InputManager

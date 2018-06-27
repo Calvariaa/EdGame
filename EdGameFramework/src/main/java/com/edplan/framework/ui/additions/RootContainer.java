@@ -6,6 +6,8 @@ import com.edplan.framework.ui.layout.EdLayoutParam;
 import com.edplan.framework.ui.layout.Param;
 import com.edplan.framework.ui.layout.EdMeasureSpec;
 import java.util.ArrayList;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
+import com.edplan.framework.graphics.opengl.GLWrapped;
 
 public class RootContainer extends EdContainer implements FrameListener
 {
@@ -19,11 +21,13 @@ public class RootContainer extends EdContainer implements FrameListener
 	 */
 	private PopupViewLayer popupViewLayer;
 	
+	
 	private ArrayList<FrameListener> listeners=new ArrayList<FrameListener>();
 	
 	public RootContainer(MContext c){
 		super(c);
-		//setPixelScale(2);
+		//setPixelScale(1);
+		setAlwaysRefresh(true);
 		{
 			EdLayoutParam p=new EdLayoutParam();
 			p.width=Param.MODE_MATCH_PARENT;
@@ -37,6 +41,18 @@ public class RootContainer extends EdContainer implements FrameListener
 		p.width=Param.MODE_MATCH_PARENT;
 		p.height=Param.MODE_MATCH_PARENT;
 		popupViewLayer.setLayoutParam(p);
+	}
+
+	@Override
+	public void invalidateDraw(){
+		// TODO: Implement this method
+		super.invalidateDraw();
+	}
+
+	@Override
+	public void invalidate(int flag){
+		// TODO: Implement this method
+		getContent().getViewRoot().invalidate(flag);
 	}
 	
 	public void registerFrameListener(FrameListener l){
@@ -62,6 +78,39 @@ public class RootContainer extends EdContainer implements FrameListener
 
 	public EdView getContent(){
 		return content;
+	}
+
+	@Override
+	protected void drawContainer(BaseCanvas canvas){
+		// TODO: Implement this method
+		c:{
+			final EdView view=content;
+			if(view==null)break c;
+			if(view.getVisiblility()==VISIBILITY_SHOW){
+				final int savedcount=canvas.save();
+				try{
+					canvas.translate(view.getLeft(),view.getTop());
+					canvas.clip(view.getWidth(),view.getHeight());
+					view.onDraw(canvas);
+				}finally{
+					canvas.restoreToCount(savedcount);
+				}
+			}
+		}
+		p:{
+			final EdView view=popupViewLayer;
+			if(view==null)break p;
+			if(view.getVisiblility()==VISIBILITY_SHOW){
+				final int savedcount=canvas.save();
+				try{
+					canvas.translate(view.getLeft(),view.getTop());
+					canvas.clip(view.getWidth(),view.getHeight());
+					view.onDraw(canvas);
+				}finally{
+					canvas.restoreToCount(savedcount);
+				}
+			}
+		}
 	}
 
 	@Override

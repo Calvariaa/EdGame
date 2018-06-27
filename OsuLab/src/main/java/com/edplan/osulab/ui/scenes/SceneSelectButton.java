@@ -24,10 +24,11 @@ import com.edplan.framework.ui.widget.TextView;
 import com.edplan.framework.ui.widget.TextureView;
 import com.edplan.framework.ui.widget.component.Hideable;
 import com.edplan.osulab.ui.UiConfig;
+import com.edplan.framework.ui.widget.LinearLayout;
 
-public class SceneSelectButton extends LinearContainer implements Hideable
+public class SceneSelectButton extends LinearLayout implements Hideable
 {
-	public static double ANIM_DURATION=ViewConfiguration.DEFAULT_TRANSITION_TIME*0.7f;
+	public static double ANIM_DURATION=ViewConfiguration.DEFAULT_TRANSITION_TIME*0.7;
 	
 	private ColorRectSprite bg;
 	
@@ -94,6 +95,7 @@ public class SceneSelectButton extends LinearContainer implements Hideable
 
 	public void setWidthAddition(float widthAddition){
 		this.widthAddition=widthAddition;
+		invalidateDraw();
 	}
 
 	public float getWidthAddition(){
@@ -125,12 +127,14 @@ public class SceneSelectButton extends LinearContainer implements Hideable
 		textView.setText(text);
 	}
 
+	/*
 	@Override
 	public void setAlpha(float alpha){
 		// TODO: Implement this method
 		super.setAlpha(alpha);
 		bg.setAlpha(alpha);
 	}
+	*/
 	
 	public void setHideX(float hideX){
 		this.hideX=hideX;
@@ -216,12 +220,13 @@ public class SceneSelectButton extends LinearContainer implements Hideable
 	@Override
 	public void hide(){
 		// TODO: Implement this method
+		showOffset=getParent().getWidth()+getWidth();
 		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<SceneSelectButton>(this,"offsetX")
 																	  .transform(getOffsetX(),0,Easing.None)
 																	  .transform(leftShadow?-showOffset:showOffset,ANIM_DURATION,Easing.OutExpo));
-		builder.together(new FloatQueryAnimation<SceneSelectButton>(this,"alpha")
+		/*builder.together(new FloatQueryAnimation<SceneSelectButton>(this,"alpha")
 						 .transform(getAlpha(),0,Easing.None)
-						 .transform(0,ANIM_DURATION,Easing.None));
+						 .transform(0,ANIM_DURATION,Easing.None));*/
 		ComplexAnimation anim=builder.build();
 		anim.start();
 		setAnimation(anim);
@@ -230,12 +235,13 @@ public class SceneSelectButton extends LinearContainer implements Hideable
 	@Override
 	public void show(){
 		// TODO: Implement this method
+		showOffset=getParent().getWidth()+getWidth();
 		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<SceneSelectButton>(this,"offsetX")
 																	  .transform(leftShadow?-showOffset:showOffset,0,Easing.None)
 																	  .transform(0,ANIM_DURATION,Easing.OutExpo));
-		builder.together(new FloatQueryAnimation<SceneSelectButton>(this,"alpha")
+		/*builder.together(new FloatQueryAnimation<SceneSelectButton>(this,"alpha")
 						 .transform(0,0,Easing.None)
-						 .transform(1,ANIM_DURATION,Easing.None));
+						 .transform(1,ANIM_DURATION,Easing.None));*/
 		ComplexAnimation anim=builder.build();
 		anim.start();
 		setAnimation(anim);

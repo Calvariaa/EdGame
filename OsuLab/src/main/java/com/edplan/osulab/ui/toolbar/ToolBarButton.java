@@ -15,6 +15,7 @@ import com.edplan.framework.ui.animation.FloatQueryAnimation;
 import com.edplan.framework.ui.animation.Easing;
 import com.edplan.osulab.ui.UiConfig;
 import com.edplan.framework.ui.animation.ComplexAnimation;
+import com.edplan.framework.ui.animation.callback.OnProgressListener;
 
 public class ToolBarButton extends EdView
 {
@@ -51,6 +52,7 @@ public class ToolBarButton extends EdView
 										 .transform(backlight.getAlpha(),0,Easing.None)
 										 .transform(1,40,Easing.None));
 		ComplexAnimation anim=builder.build();
+		anim.setOnProgressListener(invalideDrawDuringAnimation());
 		anim.start();
 		setAnimation(anim);
 	}
@@ -60,6 +62,7 @@ public class ToolBarButton extends EdView
 																	  .transform(backlight.getAlpha(),0,Easing.None)
 																	  .transform(0,150,Easing.None));
 		ComplexAnimation anim=builder.build();
+		anim.setOnProgressListener(invalideDrawDuringAnimation());
 		anim.start();
 		setAnimation(anim);
 	}

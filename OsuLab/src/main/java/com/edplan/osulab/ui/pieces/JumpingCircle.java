@@ -1,38 +1,35 @@
 package com.edplan.osulab.ui.pieces;
 import com.edplan.framework.MContext;
+import com.edplan.framework.graphics.opengl.BaseCanvas;
+import com.edplan.framework.graphics.opengl.BlendType;
 import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
+import com.edplan.framework.interfaces.FloatInvokeSetter;
+import com.edplan.framework.math.FMath;
+import com.edplan.framework.math.Quad;
 import com.edplan.framework.math.RectF;
+import com.edplan.framework.math.Vec2;
+import com.edplan.framework.ui.EdContainer;
 import com.edplan.framework.ui.EdView;
+import com.edplan.framework.ui.ViewConfiguration;
+import com.edplan.framework.ui.animation.AbstractAnimation;
+import com.edplan.framework.ui.animation.AnimationHandler;
 import com.edplan.framework.ui.animation.ComplexAnimation;
 import com.edplan.framework.ui.animation.ComplexAnimationBuilder;
 import com.edplan.framework.ui.animation.Easing;
 import com.edplan.framework.ui.animation.FloatQueryAnimation;
-import com.edplan.framework.ui.drawable.sprite.CircleSprite;
-import com.edplan.framework.ui.drawable.sprite.TextureCircleSprite;
-import com.edplan.osulab.ui.opening.MainCircleView;
-import java.io.IOException;
 import com.edplan.framework.ui.animation.callback.OnFinishListener;
-import com.edplan.framework.graphics.opengl.BaseCanvas;
-import com.edplan.osulab.ui.UiConfig;
+import com.edplan.framework.ui.drawable.sprite.CircleSprite;
 import com.edplan.framework.ui.drawable.sprite.ShadowCircleSprite;
-import com.edplan.framework.ui.ViewConfiguration;
-import com.edplan.framework.graphics.opengl.BlendType;
-import com.edplan.framework.math.Vec2;
+import com.edplan.framework.ui.drawable.sprite.TextureCircleSprite;
 import com.edplan.osulab.LabGame;
-import com.edplan.osulab.ui.scenes.SceneSelectButtonBar;
-import com.edplan.osulab.ui.scenes.BaseScene;
 import com.edplan.osulab.ScenesName;
-import com.edplan.framework.math.FMath;
-import com.edplan.framework.math.Quad;
-import java.util.Random;
-import com.edplan.framework.interfaces.FloatInvokeSetter;
-import com.edplan.framework.ui.animation.AbstractAnimation;
-import com.edplan.framework.ui.animation.AnimationHandler;
-import com.edplan.framework.database.TestDBLine;
-import com.edplan.osulab.ui.popup.PopupToast;
-import com.edplan.framework.ui.EdContainer;
+import com.edplan.osulab.ui.UiConfig;
 import com.edplan.osulab.ui.popup.RenderStatePopupView;
+import com.edplan.osulab.ui.scenes.BaseScene;
+import com.edplan.osulab.ui.scenes.SceneSelectButtonBar;
+import java.io.IOException;
+import java.util.Random;
 
 public class JumpingCircle extends EdView
 {
@@ -50,7 +47,7 @@ public class JumpingCircle extends EdView
 	private BoundOverlay boundOverlay;
 	private BaseBoundOverlay initialBound;
 	
-	private int ringCount=1;
+	private int ringCount=0;
 	private PartRing[] rings;
 	private float minSpeed=FMath.Pi2/40000;
 	private float maxSpeed=FMath.Pi2/13000;
@@ -246,6 +243,7 @@ public class JumpingCircle extends EdView
 	public void setBoundOverlay(BoundOverlay boundOverlay){
 		if(boundOverlay==null)boundOverlay=initialBound;
 		performBoundOverlayChangeAnim(getLeft(),getTop(),getRight(),getBottom(),boundOverlay);
+		invalidateDraw();
 	}
 
 	public BoundOverlay getBoundOverlay(){
@@ -392,7 +390,6 @@ public class JumpingCircle extends EdView
 			.transform(0,0,Easing.None)
 			.transform(1,300,Easing.InQuad));
 		getContext().getViewRoot().getRootContainer().setAnimation(builder2.buildAndStart());
-		
 		(new RenderStatePopupView(getContext())).show();
 	}
 
@@ -466,6 +463,7 @@ public class JumpingCircle extends EdView
 		
 		RectF rt=RectF.xywh(0,0,canvas.getWidth(),canvas.getHeight());
 		double deltaTime=getContext().getFrameDeltaTime();
+		
 		for(PartRing r:rings){
 			r.setArea(rt);
 			r.updateTime(deltaTime);

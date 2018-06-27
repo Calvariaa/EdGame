@@ -36,7 +36,7 @@ public class GLCanvas2D extends BaseCanvas // extends AbstractSRable<CanvasData>
 	}
 	
 	public GLCanvas2D(GLTexture texture,MContext context){
-		this(new BufferedLayer(context,texture));
+		this(new BufferedLayer(context,texture,true));
 	}
 
 	@Override

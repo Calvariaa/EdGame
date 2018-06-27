@@ -71,7 +71,7 @@ public class MainCircleView extends EdView
 		p4.setRadius(radius);
 	}
 
-	public void startOpeningAnim(OnFinishListener l){
+	public void startOpeningAnim(final OnFinishListener l){
 		
 		p1.resetRadius();
 		p2.resetRadius();
@@ -108,7 +108,14 @@ public class MainCircleView extends EdView
 		piecesAnim.transform(radius,600,Easing.OutExpo);
 		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(piecesAnim);
 		ComplexAnimation camin=builder.build();
-		camin.setOnFinishListener(l);
+		camin.setOnFinishListener(new OnFinishListener(){
+				@Override
+				public void onFinish(){
+					// TODO: Implement this method
+					if(l!=null)l.onFinish();
+					setVisiblility(VISIBILITY_GONE);
+				}
+			});
 		camin.start();
 		setAnimation(camin);
 	}

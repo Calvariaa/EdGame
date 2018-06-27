@@ -55,8 +55,11 @@ public class Toolbar extends RelativeContainer implements Hideable
 	
 	private double preTouchTime;
 	
+	public final ToolbarShadow shadow;
+	
 	public Toolbar(MContext c){
 		super(c);
+		shadow=new ToolbarShadow(c);
 		setClickable(true);
 		setAccentColor(Color4.rgba(1,1,1,1f));
 		ColorDrawable cd=new ColorDrawable(c);
@@ -354,7 +357,33 @@ public class Toolbar extends RelativeContainer implements Hideable
 	public void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		super.onDraw(canvas);
-		shadowSprite.setArea(RectF.xywh(0,canvas.getHeight(),canvas.getWidth(),ViewConfiguration.dp(shadowHeight)));
-		shadowSprite.draw(canvas);
+		
+	}
+	
+	public class ToolbarShadow extends EdView{
+		
+		public ToolbarShadow(MContext c){
+			super(c);
+		}
+
+		@Override
+		public float getOffsetX(){
+			// TODO: Implement this method
+			return Toolbar.this.getOffsetX();
+		}
+
+		@Override
+		public float getOffsetY(){
+			// TODO: Implement this method
+			return Toolbar.this.getOffsetY();
+		}
+
+		@Override
+		public void onDraw(BaseCanvas canvas){
+			// TODO: Implement this method
+			super.onDraw(canvas);
+			shadowSprite.setArea(RectF.xywh(0,canvas.getHeight(),canvas.getWidth(),ViewConfiguration.dp(shadowHeight)));
+			shadowSprite.draw(canvas);
+		}
 	}
 }

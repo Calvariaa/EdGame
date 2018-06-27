@@ -1,28 +1,23 @@
 package com.edplan.osulab;
 import com.edplan.framework.MContext;
-import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.ui.EdView;
 import com.edplan.framework.ui.ViewConfiguration;
-import com.edplan.framework.ui.animation.callback.OnFinishListener;
-import com.edplan.framework.ui.layout.EdLayoutParam;
 import com.edplan.framework.ui.layout.Gravity;
 import com.edplan.framework.ui.layout.Param;
-import com.edplan.framework.ui.widget.FrameContainer;
 import com.edplan.framework.ui.widget.RelativeLayout;
-import com.edplan.framework.ui.widget.TestButton;
-import com.edplan.framework.ui.widget.ViewPage;
+import com.edplan.osulab.ui.MainBackground;
+import com.edplan.osulab.ui.MessageList;
 import com.edplan.osulab.ui.OptionList;
 import com.edplan.osulab.ui.SceneOverlay;
 import com.edplan.osulab.ui.UiConfig;
 import com.edplan.osulab.ui.opening.MainCircleView;
-import com.edplan.osulab.ui.toolbar.Toolbar;
-import com.edplan.osulab.ui.pieces.JumpingCircle;
-import com.edplan.osulab.ui.MainBackground;
 import com.edplan.osulab.ui.pieces.BackButton;
-import com.edplan.osulab.ui.MessageList;
-import com.edplan.osulab.ui.scenes.Scenes;
-import com.edplan.osulab.ui.scenes.SceneSelectButtonBar;
+import com.edplan.osulab.ui.pieces.JumpingCircle;
 import com.edplan.osulab.ui.popup.PopupButtonGroup;
+import com.edplan.osulab.ui.popup.RenderStatePopupView;
+import com.edplan.osulab.ui.scenes.SceneSelectButtonBar;
+import com.edplan.osulab.ui.scenes.Scenes;
+import com.edplan.osulab.ui.toolbar.Toolbar;
 
 /**
  *全局的管理类
@@ -165,6 +160,7 @@ public class LabGame
 		mainBackground=new MainBackground(c);
 		scenes=new Scenes(c);
 		backButton=new BackButton(c);
+		toolBar=new Toolbar(c);
 		{
 			RelativeLayout.RelativeParam mparam=new RelativeLayout.RelativeParam();
 			mparam.width=Param.MODE_MATCH_PARENT;
@@ -176,6 +172,14 @@ public class LabGame
 			mparam.width=Param.MODE_MATCH_PARENT;
 			mparam.height=Param.MODE_MATCH_PARENT;
 			mainLayout.addView(scenes,mparam);
+		}
+		
+		{
+			RelativeLayout.RelativeParam param=new RelativeLayout.RelativeParam();
+			param.width=Param.MODE_MATCH_PARENT;
+			param.height=Param.makeUpDP(UiConfig.TOOLBAR_HEIGHT_DP);
+			param.gravity=Gravity.TopCenter;
+			mainLayout.addView(toolBar.shadow,param);
 		}
 		
 		{
@@ -235,7 +239,6 @@ public class LabGame
 		}
 		
 		{
-			toolBar=new Toolbar(c);
 			RelativeLayout.RelativeParam param=new RelativeLayout.RelativeParam();
 			param.width=Param.MODE_MATCH_PARENT;
 			param.height=Param.makeUpDP(UiConfig.TOOLBAR_HEIGHT_DP);
@@ -251,6 +254,8 @@ public class LabGame
 			mainLayout.addView(backButton,mparam);
 		}
 		c.getViewRoot().getRootContainer().setAlpha(0);
+		//mainLayout.setVisiblility(EdView.VISIBILITY_GONE);
+		//(new RenderStatePopupView(c)).show();
 		return mainLayout;
 	}
 	

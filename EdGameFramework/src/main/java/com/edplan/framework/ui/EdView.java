@@ -22,6 +22,7 @@ import com.edplan.framework.ui.drawable.ColorDrawable;
 import com.edplan.framework.ui.layout.Gravity;
 import com.edplan.framework.ui.animation.callback.OnFinishListener;
 import com.edplan.framework.ui.drawable.RoundedRectDrawable;
+import com.edplan.framework.ui.animation.callback.OnProgressListener;
 
 public class EdView implements IRunnableHandler,MainCallBack
 {
@@ -132,6 +133,7 @@ public class EdView implements IRunnableHandler,MainCallBack
 
 	public void setOffsetX(float offsetX){
 		this.offsetX=offsetX;
+		invalidateDraw();
 	}
 
 	public float getOffsetX(){
@@ -140,6 +142,7 @@ public class EdView implements IRunnableHandler,MainCallBack
 
 	public void setOffsetY(float offsetY){
 		this.offsetY=offsetY;
+		invalidateDraw();
 	}
 
 	public float getOffsetY(){
@@ -147,7 +150,19 @@ public class EdView implements IRunnableHandler,MainCallBack
 	}
 	
 	public void invalidate(int flag){
-		getViewRoot().invalidate(flag);
+		if(getParent()!=null){
+			getParent().invalidate(flag);
+		}
+	}
+	
+	public void invalidate(){
+		invalidate(Invalidate.FLAG_INVALIDATE_LAYOUT|Invalidate.FLAG_INVALIDATE_MEASURE);
+	}
+	
+	public void invalidateDraw(){
+		if(getParent()!=null){
+			getParent().invalidateDraw();
+		}
 	}
 	
 	public float getMarginHorizonIfHas(){
@@ -358,6 +373,8 @@ public class EdView implements IRunnableHandler,MainCallBack
 
 	public void setVisiblility(int visiblility){
 		this.visiblility=visiblility;
+		invalidate();
+		invalidateDraw();
 	}
 
 	public int getVisiblility(){
@@ -488,6 +505,7 @@ public class EdView implements IRunnableHandler,MainCallBack
 				onInitialLayouted();
 			}
 		}
+		if(hasChanged)invalidateDraw();
 		return hasChanged;
 	}
 	
@@ -933,6 +951,16 @@ public class EdView implements IRunnableHandler,MainCallBack
 			public void onFinish(){
 				// TODO: Implement this method
 				setVisiblility(code);
+			}
+		};
+	}
+	
+	public OnProgressListener invalideDrawDuringAnimation(){
+		return new OnProgressListener(){
+			@Override
+			public void onProgress(double p){
+				// TODO: Implement this method
+				invalidateDraw();
 			}
 		};
 	}

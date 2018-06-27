@@ -10,7 +10,7 @@ import com.edplan.framework.graphics.opengl.GLWrapped;
 
 public class FrameRenderMonitor extends EdView
 {
-	public static float[] timelist=new float[40];
+	public static float[] timelist=new float[90];
 	
 	public static float avg;
 	
@@ -22,12 +22,14 @@ public class FrameRenderMonitor extends EdView
 	
 	public static int drawCalls;
 	
+	public static int possibleBlockTimes;
+	
 	public static int getFPS(){
 		return (avg!=0)?(int)(1000/avg):0;
 	}
 	
 	public static int getFrameDeltaTimeAvg(){
-		return (int)avg;
+		return Math.round(avg);
 	}
 	
 	public FrameRenderMonitor(MContext context){
@@ -39,6 +41,7 @@ public class FrameRenderMonitor extends EdView
 		layout.update(Tracker.InvalidateMeasureAndLayout.totalTimeMS);
 		drawUI.update(Tracker.DrawUI.totalTimeMS);
 		drawCalls=GLWrapped.frameDrawCalls();
+		possibleBlockTimes=0;
 		float deltaTime=(float)c.getFrameDeltaTime();
 		for(int i=timelist.length-1;i>0;i--){
 			timelist[i]=timelist[i-1];
@@ -57,13 +60,15 @@ public class FrameRenderMonitor extends EdView
 			if(t>max){
 				max=t;
 			}
-			if(t<400){
-				avg_nogc+=t;
-				count_nogc++;
-			}
 		}
 		avg_nogc/=count_nogc;
 		avg/=timelist.length;
+		for(float t:timelist){
+			if(t>avg*3){
+				//认为这帧发生了阻塞
+				possibleBlockTimes++;
+			}
+		}
 	}
 
 	@Override
@@ -124,7 +129,7 @@ public class FrameRenderMonitor extends EdView
 	}
 	
 	public static class Monitor{
-		public float[] timelist=new float[40];
+		public float[] timelist=new float[90];
 
 		public float avg;
 

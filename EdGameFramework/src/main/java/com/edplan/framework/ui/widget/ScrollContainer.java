@@ -40,7 +40,8 @@ public class ScrollContainer extends EdContainer
 				//if(Math.abs(scrollRate-t)>0.00000001)
 				//if(!t.equals(scrollRate)){
 					scrollRate=t;
-					invalidate(FLAG_INVALIDATE_LAYOUT);
+					invalidate();
+					invalidateDraw();
 				//}
 			}
 		});
@@ -386,7 +387,7 @@ public class ScrollContainer extends EdContainer
 	protected void measureVertical(long widthSpec,long heightSpec){
 		final int count=getChildrenCount();
 		float heightUsed=0;
-		final long adjustedSpec=EdMeasureSpec.makeupMeasureSpec(Math.max(EdMeasureSpec.getSize(heightSpec),maxChildrenSize),EdMeasureSpec.MODE_AT_MOST);
+		final long adjustedSpec=EdMeasureSpec.makeupMeasureSpec(Math.max(EdMeasureSpec.getSize(heightSpec),maxChildrenSize),EdMeasureSpec.MODE_NONE);
 		for(int i=0;i<count;i++){
 			final EdView view=getChildAt(i);
 			final EdLayoutParam param=view.getLayoutParam();

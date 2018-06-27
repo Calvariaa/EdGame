@@ -181,7 +181,7 @@ public class FrameBufferObject
 		delete();
 	}
 	
-	public static FrameBufferObject create(GLTexture texture){
+	public static FrameBufferObject create(GLTexture texture,boolean needDepth){
 		FrameBufferObject fbo=createFBO();
 		fbo.permissionToDeleteTexture=false;
 		fbo.width=texture.getWidth();
@@ -190,7 +190,7 @@ public class FrameBufferObject
 		fbo.setCreatedWidth(texture.getHeight());
 		fbo.bind();
 		//if(useDepth){
-			fbo.linkDepthBuffer(DepthBufferObject.create(texture.getHeight(),texture.getWidth()));
+		if(needDepth)fbo.linkDepthBuffer(DepthBufferObject.create(texture.getHeight(),texture.getWidth()));
 		//}
 		fbo.linkColorAttachment(GLTexture.createGPUTexture(texture.getWidth(),texture.getHeight()));
 		fbo.unBind();

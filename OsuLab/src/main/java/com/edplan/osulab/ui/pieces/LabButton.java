@@ -37,8 +37,9 @@ public class LabButton extends RelativeContainer
 	private void onPressAnim(){
 		ComplexAnimationBuilder builder=ComplexAnimationBuilder.start(new FloatQueryAnimation<LabButton>(this,"scale")
 																	  .transform(getScale(),0,Easing.None)
-																	  .transform(0.94f,60,Easing.InQuad));
+																	  .transform(0.9f,60,Easing.InQuad));
 		ComplexAnimation anim=builder.build();
+		//anim.setOnProgressListener(invalideDrawDuringAnimation());
 		anim.start();
 		setAnimation(anim);
 	}
@@ -48,6 +49,7 @@ public class LabButton extends RelativeContainer
 																	  .transform(getScale(),0,Easing.None)
 																	  .transform(1,60,Easing.OutQuad));
 		ComplexAnimation anim=builder.build();
+		//anim.setOnProgressListener(invalideDrawDuringAnimation());
 		anim.start();
 		setAnimation(anim);
 	}
@@ -81,6 +83,7 @@ public class LabButton extends RelativeContainer
 	public void setScale(float scale){
 		this.scale=scale;
 		poster.setScale(scale);
+		invalidateDraw();
 	}
 
 	public float getScale(){

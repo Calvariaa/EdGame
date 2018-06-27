@@ -51,5 +51,6 @@ public class PopupViewLayer extends RelativeContainer implements FrameListener
 				iter.remove();
 			}
 		}
+		invalidateDraw();
 	}
 }

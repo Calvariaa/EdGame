@@ -113,6 +113,7 @@ public class TextView extends EdView
 		if(text==null)text="null";
 		if(!this.text.equals(text)){
 			this.text=text;
+			invalidateDraw();
 			invalidate(FLAG_INVALIDATE_LAYOUT|FLAG_INVALIDATE_MEASURE);
 		}
 	}
@@ -261,7 +262,7 @@ public class TextView extends EdView
 	public void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		super.onDraw(canvas);
-		printer.draw(canvas);
+		if(printer!=null)printer.draw(canvas);
 		/*
 		GLPaint p=new GLPaint();
 		p.setMixColor(Color4.rgb(1,0,0));

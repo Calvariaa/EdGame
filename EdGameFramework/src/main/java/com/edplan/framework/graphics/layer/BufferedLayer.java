@@ -46,7 +46,7 @@ public class BufferedLayer
 		this.context=context;
 		this.width=1;
 		this.height=1;
-		this.hasDepthBuffer=true;
+		this.hasDepthBuffer=false;
 		bufferedPool=DEF_FBOPOOL;
 	}
 	
@@ -59,8 +59,8 @@ public class BufferedLayer
 		bufferedPool=DEF_FBOPOOL;
 	}
 	
-	public BufferedLayer(MContext context,GLTexture texture){
-		this(context,FrameBufferObject.create(texture));
+	public BufferedLayer(MContext context,GLTexture texture,boolean useDepth){
+		this(context,FrameBufferObject.create(texture,useDepth));
 		permissionToTexture=false;
 	}
 
@@ -154,8 +154,8 @@ public class BufferedLayer
 	}
 	
 	public AbstractTexture getTexture(){
-		checkChange();
-		return frameBuffer.getTexture();
+		//checkChange();
+		return frameBuffer!=null?frameBuffer.getTexture():null;
 	}
 	
 	public void bind(){

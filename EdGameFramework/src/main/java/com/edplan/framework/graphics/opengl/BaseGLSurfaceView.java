@@ -28,10 +28,10 @@ public class BaseGLSurfaceView extends GLSurfaceView
 	
 	public BaseGLSurfaceView(Context con,MainRenderer r){
 		super(con);
-		this.setEGLContextClientVersion(2);
+		this.setEGLContextClientVersion(3);
 		this.setEGLConfigChooser(new MSAAConfig());
 		mRenderer=r;
-		mRenderer.setGlVersion(2);
+		mRenderer.setGlVersion(3);
 		mRenderer.register(this);
 		this.setRenderer(mRenderer);
 		//if(mRenderer instanceof OnTouchListener)this.setOnTouchListener((OnTouchListener)mRenderer);

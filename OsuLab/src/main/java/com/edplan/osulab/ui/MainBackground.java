@@ -10,8 +10,9 @@ import com.edplan.framework.ui.drawable.sprite.TextureSprite;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
 import com.edplan.framework.math.RectF;
 import com.edplan.osulab.ui.popup.PopupToast;
+import com.edplan.framework.ui.widget.RelativeLayout;
 
-public class MainBackground extends RelativeContainer
+public class MainBackground extends RelativeLayout
 {
 	private AbstractTexture testTexture;
 	

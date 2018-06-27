@@ -285,6 +285,7 @@ public class SceneSelectButtonBar extends RelativeContainer implements Hideable,
 		leftLayout.setChildrenWrapper(g.leftWrapper);
 		rightLayout.setChildrenWrapper(g.rightWrapper);
 		currentGroup=g;
+		invalidateDraw();
 	}
 	
 	protected void directSwap(String name){
@@ -309,8 +310,9 @@ public class SceneSelectButtonBar extends RelativeContainer implements Hideable,
 					// TODO: Implement this method
 					directSwap(name);
 					currentGroup.show();
+					//PopupToast.toast(getContext(),"swap to "+name).show();
 				}
-			},SceneSelectButton.ANIM_DURATION+20);
+			},SceneSelectButton.ANIM_DURATION);
 	}
 
 	@Override
@@ -337,6 +339,7 @@ public class SceneSelectButtonBar extends RelativeContainer implements Hideable,
 	protected void directHide(){
 		setVisiblility(VISIBILITY_GONE);
 		setAlpha(0);
+		invalidateDraw();
 	}
 	
 	

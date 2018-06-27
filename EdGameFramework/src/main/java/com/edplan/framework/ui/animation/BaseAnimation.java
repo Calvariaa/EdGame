@@ -1,12 +1,15 @@
 package com.edplan.framework.ui.animation;
 import com.edplan.framework.ui.animation.callback.OnFinishListener;
 import com.edplan.framework.ui.animation.callback.OnEndListener;
+import com.edplan.framework.ui.animation.callback.OnProgressListener;
 
 public class BaseAnimation extends AbstractAnimation
 {
 	private OnFinishListener onFinishListener;
 	
 	private OnEndListener onEndListener;
+	
+	private OnProgressListener onProgressListener;
 	
 	private double progress;
 	
@@ -15,6 +18,14 @@ public class BaseAnimation extends AbstractAnimation
 	private LoopType loopType=LoopType.None;
 	
 	private AnimState state=AnimState.Waiting;
+
+	public void setOnProgressListener(OnProgressListener onProgressListener){
+		this.onProgressListener=onProgressListener;
+	}
+
+	public OnProgressListener getOnProgressListener(){
+		return onProgressListener;
+	}
 
 	public void setOnEndListener(OnEndListener onEndListener){
 		this.onEndListener=onEndListener;
@@ -56,6 +67,7 @@ public class BaseAnimation extends AbstractAnimation
 	@Override
 	public void onProgress(double p){
 		// TODO: Implement this method
+		if(onProgressListener!=null)onProgressListener.onProgress(p);
 	}
 
 	@Override

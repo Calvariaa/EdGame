@@ -56,9 +56,10 @@ public class RenderStatePopupView extends PopupView
 	public void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		super.onDraw(canvas);
-		double frameTime=getContext().getFrameDeltaTime();
+		//double frameTime=getContext().getFrameDeltaTime();
 		text.setText(
 			FrameRenderMonitor.getFPS()+"/60fps\n"
+			+"PB:"+FrameRenderMonitor.possibleBlockTimes+"\n"
 			+"DrawCalls:"+FrameRenderMonitor.drawCalls+"\n"
 			+"Total:"+(int)FrameRenderMonitor.frameRenderTime.avg+"ms\n"
 			+"UI:"+(int)FrameRenderMonitor.drawUI.avg+"ms\n"

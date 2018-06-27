@@ -12,6 +12,7 @@ public class PopupView extends RelativeContainer implements Hideable
 	
 	public PopupView(MContext c){
 		super(c);
+		setAlwaysRefresh(true);
 		layer=c.getViewRoot().getPopupViewLayer();
 	}
 	
@@ -32,6 +33,7 @@ public class PopupView extends RelativeContainer implements Hideable
 		// TODO: Implement this method
 		if(isHideWhenBackpress()){
 			hide();
+			return true;
 		}
 		return false;
 	}

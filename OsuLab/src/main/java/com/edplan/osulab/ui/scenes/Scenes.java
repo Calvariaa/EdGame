@@ -37,6 +37,7 @@ public class Scenes extends RelativeContainer implements Hideable,BackQuery.Back
 	
 	public Scenes(MContext c){
 		super(c);
+		setAlwaysRefresh(true);
 		initialRegister();
 	}
 	

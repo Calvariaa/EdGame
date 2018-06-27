@@ -29,6 +29,8 @@ public class GLWrapped
 	
 	public static int GL_MAX_TEXTURE_SIZE;
 	
+	private static boolean enable=true;
+	
 	public static final
 	BooleanSetting depthTest=new BooleanSetting(new Setter<Boolean>(){
 			@Override
@@ -52,6 +54,14 @@ public class GLWrapped
 		false).initial();
 	
 	public static BlendSetting blend=new BlendSetting().setUp();
+
+	public static void setEnable(boolean enable){
+		GLWrapped.enable=enable;
+	}
+
+	public static boolean isEnable(){
+		return enable;
+	}
 	
 	public static void initial(int version){
 		GL_VERSION=version;
@@ -68,12 +78,12 @@ public class GLWrapped
 	
 	private static int drawCalls=0;
 	public static void drawArrays(int mode,int offset,int count){
-		GLES20.glDrawArrays(mode,offset,count);
+		if(enable)GLES20.glDrawArrays(mode,offset,count);
 		drawCalls++;
 	}
 	
 	public static void drawElements(int mode,int count,int type,Buffer b){
-		GLES20.glDrawElements(mode,count,type,b);
+		if(enable)GLES20.glDrawElements(mode,count,type,b);
 		drawCalls++;
 	}
 	
@@ -105,15 +115,15 @@ public class GLWrapped
 	}
 	
 	public static void clearColorBuffer(){
-		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+		if(enable)GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 	}
 	
 	public static void clearDepthBuffer(){
-		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT);
+		if(enable)GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT);
 	}
 	
 	public static void clearDepthAndColorBuffer(){
-		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT|GLES20.GL_DEPTH_BUFFER_BIT);
+		if(enable)GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT|GLES20.GL_DEPTH_BUFFER_BIT);
 	}
 	
 	/*

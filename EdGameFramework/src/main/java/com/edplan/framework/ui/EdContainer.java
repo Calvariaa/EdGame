@@ -30,11 +30,23 @@ public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlp
 	
 	private float pixelScale=1;
 	
+	private boolean alwaysRefresh=false;
+	
+	private boolean needRefresh=true;
+	
 	public EdContainer(MContext c){
 		super(c);
 		layer=new BufferedLayer(c);
 		layerCanvas=new GLCanvas2D(layer);
 		postPaint=new GLPaint();
+	}
+
+	public void setAlwaysRefresh(boolean alwaysRefresh){
+		this.alwaysRefresh=alwaysRefresh;
+	}
+
+	public boolean isAlwaysRefresh(){
+		return alwaysRefresh;
 	}
 
 	public void setPixelScale(float pixelScale){
@@ -55,6 +67,7 @@ public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlp
 	
 	public void setAlpha(float alpha){
 		postPaint.setFinalAlpha(alpha);
+		invalidateDraw();
 	}
 	
 	public float getAlpha(){
@@ -63,6 +76,7 @@ public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlp
 	
 	public void setAccentColor(Color4 c){
 		postPaint.setMixColor(c);
+		invalidateDraw();
 	}
 	
 	public Color4 getAccentColor(){
@@ -89,24 +103,36 @@ public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlp
 	}
 
 	@Override
+	public void invalidateDraw(){
+		// TODO: Implement this method
+		super.invalidateDraw();
+		needRefresh=true;
+	}
+
+	@Override
 	protected void dispatchDraw(BaseCanvas canvas){
 		// TODO: Implement this method
+		/*
 		drawBackground(canvas);
 		drawContainer(canvas);
-		/*
-		updateLayerSize(canvas);
-		updateCanvas(canvas);
-		layerCanvas.prepare();
-		layerCanvas.drawColor(Color4.Alpha);
-		layerCanvas.clearBuffer();
-		drawBackground(layerCanvas);
-		drawContainer(layerCanvas);
-		layerCanvas.unprepare();
-		postLayer(canvas,layer,RectF.xywh(0,0,getWidth(),getHeight()),postPaint);
 		*/
+		
+		if(needRefresh||alwaysRefresh){
+			needRefresh=false;
+			updateLayerSize(canvas);
+			updateCanvas(canvas);
+			layerCanvas.prepare();
+			layerCanvas.drawColor(Color4.Alpha);
+			layerCanvas.clearBuffer();
+			drawBackground(layerCanvas);
+			drawContainer(layerCanvas);
+			layerCanvas.unprepare();
+		}
+		postLayer(canvas,layer,RectF.xywh(0,0,getWidth(),getHeight()),postPaint);
 	}
 	
 	protected void postLayer(BaseCanvas canvas,BufferedLayer layer,RectF area,GLPaint paint){
+		if(layer.getTexture()==null)return;
 		if(layerPoster!=null){
 			layerPoster.postLayer(canvas,layer,area,paint);
 			return;
@@ -222,11 +248,11 @@ public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlp
 			sprite.setTexture(layer.getTexture());
 			sprite.setAccentColor(paint.getMixColor());
 			sprite.setAlpha(paint.getFinalAlpha());
-			sprite.setArea(area);
-			
-			sprite.setRect(
-				RectF.anchorOWH(anchor,org.x,org.y,area.getWidth()*scaleX,area.getHeight()*scaleY)
-			);
+			RectF a=RectF.anchorOWH(anchor,org.x,org.y,area.getWidth()*scaleX,area.getHeight()*scaleY);
+			sprite.setArea(a);
+			sprite.setRect(a);
+			//	RectF.anchorOWH(anchor,org.x,org.y,area.getWidth()*scaleX,area.getHeight()*scaleY)
+			//);
 			canvas.save();
 			canvas.rotate(org.x,org.y,rotation);
 			sprite.draw(canvas);
