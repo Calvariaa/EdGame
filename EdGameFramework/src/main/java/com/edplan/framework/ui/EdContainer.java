@@ -41,6 +41,10 @@ public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlp
 		postPaint=new GLPaint();
 	}
 
+	public boolean isNeedRefresh(){
+		return needRefresh;
+	}
+
 	public void setAlwaysRefresh(boolean alwaysRefresh){
 		this.alwaysRefresh=alwaysRefresh;
 	}
@@ -148,7 +152,7 @@ public abstract class EdContainer extends EdAbstractViewGroup implements IHasAlp
 	}
 
 	@Override
-	public void onDraw(BaseCanvas canvas){
+	protected void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		dispatchDraw(canvas);
 	}

@@ -1,5 +1,5 @@
 package com.edplan.nso.ruleset.std;
-import com.edplan.nso.OsuBeatmap;
+import com.edplan.nso.NsoBeatmap;
 import com.edplan.nso.filepart.PartColours;
 import com.edplan.nso.filepart.PartDifficulty;
 import com.edplan.nso.filepart.PartEditor;
@@ -14,7 +14,7 @@ import com.edplan.nso.ruleset.std.objects.StdSpinner;
 import com.edplan.nso.ruleset.std.objects.StdHitCircle;
 import com.edplan.nso.ruleset.std.objects.StdSlider;
 
-public class StdBeatmap extends OsuBeatmap
+public class StdBeatmap extends NsoBeatmap
 {
 	public static int SUPPORT_VERSION=14;
 

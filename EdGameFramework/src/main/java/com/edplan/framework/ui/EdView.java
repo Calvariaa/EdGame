@@ -23,6 +23,7 @@ import com.edplan.framework.ui.layout.Gravity;
 import com.edplan.framework.ui.animation.callback.OnFinishListener;
 import com.edplan.framework.ui.drawable.RoundedRectDrawable;
 import com.edplan.framework.ui.animation.callback.OnProgressListener;
+import com.edplan.framework.graphics.opengl.objs.GLTexture;
 
 public class EdView implements IRunnableHandler,MainCallBack
 {
@@ -107,12 +108,22 @@ public class EdView implements IRunnableHandler,MainCallBack
 	
 	private int initialId;
 	
+	private boolean debug=false;
+	
 	public EdView(MContext context){
 		this.context=context;
 		if(!checkCurrentThread()){
 			throw new RuntimeException("you can only create a view in main thread!");
 		}
 		initialName();
+	}
+
+	public void setDebug(boolean debug){
+		this.debug=debug;
+	}
+
+	public boolean isDebug(){
+		return debug;
 	}
 
 	public void setOutsideTouchable(boolean outsideTouchable){
@@ -397,19 +408,25 @@ public class EdView implements IRunnableHandler,MainCallBack
 			}
 		}
 	}
+	
+	public final void draw(BaseCanvas canvas){
+		onDraw(canvas);
+		if(debug){
+			canvas.drawTexture(GLTexture.White,RectF.xywh(0,0,canvas.getWidth(),canvas.getHeight()),Color4.White,Color4.White,0.3f);
+		}
+	}
 
-	public void onDraw(BaseCanvas canvas){
+	protected void onDraw(BaseCanvas canvas){
 		defaultDraw(canvas);
 	}
 
-	public void defaultDraw(BaseCanvas canvas){
+	protected void defaultDraw(BaseCanvas canvas){
 		drawBackground(canvas);
 	}
 	
 	protected void drawBackground(BaseCanvas canvas){
 		if(background!=null){
 			int s=canvas.save();
-			//canvas.getMaskMatrix().post(background.getTranslationMatrix());
 			background.draw(canvas);
 			canvas.restoreToCount(s);
 		}
@@ -943,6 +960,10 @@ public class EdView implements IRunnableHandler,MainCallBack
 	
 	public interface OnScrollListener{
 		public void onScroll(ScrollEvent event,EdView view);
+	}
+	
+	public interface OnCheckListener{
+		public void onCheck(boolean c,EdView view);
 	}
 	
 	public OnFinishListener setVisibilityWhenFinish(final int code){

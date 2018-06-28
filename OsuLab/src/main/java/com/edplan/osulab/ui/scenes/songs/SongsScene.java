@@ -17,10 +17,21 @@ public class SongsScene extends BaseScene
 {
 	private BottomBar bottomBar;
 	
+	private SongsListView songsListView;
+	
 	private List<Hideable> hideableContent=new ArrayList<Hideable>();
 	
 	public SongsScene(MContext c){
 		super(c);
+		{
+			songsListView=new SongsListView(c);
+			RelativeLayout.RelativeParam p=new RelativeLayout.RelativeParam();
+			p.width=Param.makeUpDP(SongsListView.WIDTH_DP);
+			p.height=Param.MODE_MATCH_PARENT;
+			p.gravity=Gravity.TopRight;
+			addView(songsListView,p);
+			hideableContent.add(songsListView);
+		}
 		{
 			bottomBar=new BottomBar(c);
 			RelativeLayout.RelativeParam p=new RelativeLayout.RelativeParam();

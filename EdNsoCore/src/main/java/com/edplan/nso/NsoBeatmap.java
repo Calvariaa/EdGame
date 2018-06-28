@@ -2,7 +2,7 @@ package com.edplan.nso;
 import com.edplan.nso.storyboard.Storyboard;
 
 
-public abstract class OsuBeatmap
+public abstract class NsoBeatmap
 {
 	private Storyboard storyboard;
 

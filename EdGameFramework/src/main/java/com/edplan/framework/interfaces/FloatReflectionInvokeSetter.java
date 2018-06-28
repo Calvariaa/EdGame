@@ -43,4 +43,12 @@ public class FloatReflectionInvokeSetter<T> implements FloatInvokeSetter<T>
 			return "set"+Character.toUpperCase(name.charAt(0))+name.substring(1,name.length());
 		}
 	}
+	
+	public static String makeGetMethodName(String name){
+		if(name.startsWith("get")){
+			return name;
+		}else{
+			return "get"+Character.toUpperCase(name.charAt(0))+name.substring(1,name.length());
+		}
+	}
 }

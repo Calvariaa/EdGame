@@ -73,10 +73,10 @@ public class UILooper extends StepLooper implements IRunnableHandler
 		long startTime=Framework.absoluteTimeMillion();
 		ExpensiveTask t;
 		while((t=taskQuery.next())!=null){
-			synchronized(t){
+			synchronized(t.lock){
 				t.run();
 				if(t.isNeedNotify()){
-					t.notify();
+					t.lock.notify();
 				}
 			}
 			if(Framework.absoluteTimeMillion()-startTime>expensiveTaskTime){

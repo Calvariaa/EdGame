@@ -72,7 +72,7 @@ public class FrameRenderMonitor extends EdView
 	}
 
 	@Override
-	public void onDraw(BaseCanvas canvas){
+	protected void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		float deltaTime=(float)getContext().getFrameDeltaTime();
 		GLPaint ntp=new GLPaint();

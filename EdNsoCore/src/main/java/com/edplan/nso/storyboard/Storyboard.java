@@ -3,7 +3,7 @@ import com.edplan.framework.math.Vec2;
 import java.util.HashMap;
 import com.edplan.framework.ui.Anchor;
 import java.util.Map;
-import com.edplan.nso.OsuBeatmap;
+import com.edplan.nso.NsoBeatmap;
 
 public class Storyboard
 {
@@ -16,7 +16,7 @@ public class Storyboard
 		layers.put(Layer.Foreground.name(),Layer.Foreground.createLayer());
 	}
 	
-	public void applyBeatmap(OsuBeatmap beatmap){
+	public void applyBeatmap(NsoBeatmap beatmap){
 		if(beatmap.getStoryboard()!=null){
 			append(beatmap.getStoryboard());
 		}

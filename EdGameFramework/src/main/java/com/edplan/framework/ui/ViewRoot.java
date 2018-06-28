@@ -158,7 +158,7 @@ public class ViewRoot implements MainCallBack
 		
 		if(rootContainer!=null){
 			Tracker.DrawUI.watch();
-			rootContainer.onDraw(canvas);
+			rootContainer.draw(canvas);
 			Tracker.DrawUI.end();
 		}
 	}
@@ -218,7 +218,7 @@ public class ViewRoot implements MainCallBack
 	private void loadView(EdView view,StringBuilder sb,int step){
 		appendStep(sb,step);
 		sb.append("V::").append(view.getClass().getSimpleName())
-		 .append(" ").append((int)view.getWidth()).append("x").append((int)view.getHeight())
+		 .append(" ").append((int)view.getWidth()).append("x").append((int)view.getHeight()).append(" (").append((int)view.getTop()).append(",").append((int)view.getLeft()).append(")")
 		 .append(StringUtil.LINE_BREAK);
 	}
 	
@@ -230,8 +230,11 @@ public class ViewRoot implements MainCallBack
 	
 	private void appendGroup(EdAbstractViewGroup c,StringBuilder sb){
 		sb.append((c instanceof EdContainer)?"C::":"G::").append(c.getClass().getSimpleName())
-			. append(" ").append((int)c.getWidth()).append("x").append((int)c.getHeight());
-		
+			. append(" ").append((int)c.getWidth()).append("x").append((int)c.getHeight())
+			 .append(" (").append((int)c.getTop()).append(",").append((int)c.getLeft()).append(")");
+		if(c instanceof EdContainer){
+			sb.append(" fresh=").append(((EdContainer)c).isNeedRefresh());
+		}
 	}
 	
 	public class InputManager

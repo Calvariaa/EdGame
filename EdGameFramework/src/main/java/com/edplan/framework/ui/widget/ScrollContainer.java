@@ -156,7 +156,7 @@ public class ScrollContainer extends EdContainer
 					try{
 						canvas.translate(view.getLeft(),view.getTop());
 						canvas.clip(view.getWidth(),view.getHeight());
-						view.onDraw(canvas);
+						view.draw(canvas);
 					}finally{
 						canvas.restoreToCount(savedcount);
 					}
@@ -173,7 +173,7 @@ public class ScrollContainer extends EdContainer
 					try{
 						canvas.translate(view.getLeft(),view.getTop());
 						canvas.clip(view.getWidth(),view.getHeight());
-						view.onDraw(canvas);
+						view.draw(canvas);
 					}finally{
 						canvas.restoreToCount(savedcount);
 					}

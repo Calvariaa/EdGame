@@ -2,21 +2,32 @@ package com.edplan.osulab.ui.scenes.songs;
 
 import com.edplan.framework.MContext;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
+import com.edplan.framework.graphics.opengl.objs.Color4;
 import com.edplan.framework.interfaces.Setter;
+import com.edplan.framework.math.FMath;
 import com.edplan.framework.ui.EdContainer;
 import com.edplan.framework.ui.EdView;
+import com.edplan.framework.ui.ViewConfiguration;
+import com.edplan.framework.ui.animation.ComplexAnimation;
+import com.edplan.framework.ui.animation.ComplexAnimationBuilder;
+import com.edplan.framework.ui.animation.Easing;
+import com.edplan.framework.ui.animation.FloatQueryAnimation;
+import com.edplan.framework.ui.animation.callback.OnFinishListener;
+import com.edplan.framework.ui.drawable.RoundedRectDrawable;
 import com.edplan.framework.ui.inputs.ScrollEvent;
 import com.edplan.framework.ui.layout.EdLayoutParam;
 import com.edplan.framework.ui.layout.EdMeasureSpec;
-import com.edplan.framework.ui.layout.Gravity;
 import com.edplan.framework.ui.layout.MarginLayoutParam;
-import com.edplan.framework.ui.layout.Orientation;
+import com.edplan.framework.ui.layout.Param;
+import com.edplan.framework.ui.widget.component.Hideable;
 import com.edplan.framework.ui.widget.component.Scroller;
-import com.edplan.framework.ui.EdAbstractViewGroup;
+import com.edplan.osulab.ui.pieces.SongPanel;
 
-public class SongsListView extends EdAbstractViewGroup
+public class SongsListView extends EdContainer implements Hideable
 {
-	protected float childoffset;
+	public static float WIDTH_DP=350;
+	
+	protected float childoffset=ViewConfiguration.dp(5);
 
 	protected float startOffset;
 
@@ -25,10 +36,31 @@ public class SongsListView extends EdAbstractViewGroup
 	protected float maxChildrenSize=500;
 
 	protected boolean enableGravityCenter=false;
+	
+	private int startIndex=0;
+	
+	private int showItemCount=0;
 
 	public SongsListView(MContext c){
 		super(c);
 		setScrollableFlag(ScrollEvent.DIRECTION_VERTICAL);
+		//setDebug(true);
+		
+		
+		for(int i=0;i<20;i++){
+			MarginLayoutParam p=new MarginLayoutParam();
+			EdView view=new EdView(c);
+			
+			RoundedRectDrawable bg=new RoundedRectDrawable(c);
+			bg.setColor(Color4.rgba(0,0,0,0.5f));
+			bg.setRadius(ViewConfiguration.dp(10));
+			view.setBackground(bg);
+			
+			p.width=Param.makeUpDP(WIDTH_DP);
+			p.height=Param.makeUpDP(WIDTH_DP*0.15f);
+			
+			addView(view,p);
+		}
 	}
 
 	protected Scroller scroller=new Scroller(new Setter<Float>(){
@@ -37,6 +69,7 @@ public class SongsListView extends EdAbstractViewGroup
 				// TODO: Implement this method
 				scrollRate=t;
 				invalidate(FLAG_INVALIDATE_LAYOUT);
+				invalidateDraw();
 			}
 		});
 
@@ -94,47 +127,75 @@ public class SongsListView extends EdAbstractViewGroup
 	public float getChildoffset(){
 		return childoffset;
 	}
+	
+	@Override
+	public void hide(){
+		// TODO: Implement this method
+		ComplexAnimationBuilder b=ComplexAnimationBuilder.
+		//start(FloatQueryAnimation.fadeTo(this,0,ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.None));
+		start(new FloatQueryAnimation<EdView>(this,"offsetX")
+				   .transform(0,0,Easing.None)
+				   .transform(ViewConfiguration.dp(WIDTH_DP),ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.InQuad));
+		ComplexAnimation anim=b.buildAndStart();
+		setAnimation(anim);
+	}
+
+	@Override
+	public void show(){
+		// TODO: Implement this method
+		setAlpha(0);
+		ComplexAnimationBuilder b=ComplexAnimationBuilder.start(FloatQueryAnimation.fadeTo(this,1,ViewConfiguration.DEFAULT_TRANSITION_TIME,Easing.None));
+		b.together(new FloatQueryAnimation<EdView>(this,"offsetX")
+				   .transform(ViewConfiguration.dp(WIDTH_DP),0,Easing.None)
+				   .transform(0,ViewConfiguration.DEFAULT_TRANSITION_TIME*2,Easing.OutQuad));
+		ComplexAnimation anim=b.buildAndStart();
+		setAnimation(anim);
+	}
+	
+
+	@Override
+	public boolean isHidden(){
+		// TODO: Implement this method
+		return getVisiblility()==VISIBILITY_GONE;
+	}
+
+	@Override
+	protected void onDraw(BaseCanvas canvas){
+		// TODO: Implement this method
+		super.onDraw(canvas);
+		
+	}
+	
+	
 
 	protected float getScrollRateMax(){
-		if(getScrollableFlag()==ScrollEvent.DIRECTION_HORIZON){
-			if(latestUsedSpace<getMeasuredWidth()){
-				return 0;
-			}
-			return latestUsedSpace-getMeasuredWidth();
-		}else{
-			if(latestUsedSpace<getMeasuredHeight()){
-				return 0;
-			}
-			return latestUsedSpace-getMeasuredHeight();
-		}
+		return latestUsedSpace-getHeight()/2;
 	}
 
 	protected float getScrollRateMin(){
-		return 0;
+		return -getHeight()/2;
 	}
 
-	/*
 	@Override
 	protected void drawContainer(BaseCanvas canvas){
 		// TODO: Implement this method
 		final int count=getChildrenCount();
 		for(int i=0;i<count;i++){
 			final EdView view=getChildAt(i);
+			if(view.getBottom()<0)continue;
+			if(view.getTop()>getHeight())break;
 			if(view.getVisiblility()==VISIBILITY_SHOW){
-				if(view.getTop()>getMeasuredHeight())break;
-				if(view.getBottom()<0)continue;
 				final int savedcount=canvas.save();
 				try{
 					canvas.translate(view.getLeft(),view.getTop());
 					canvas.clip(view.getWidth(),view.getHeight());
-					view.onDraw(canvas);
+					view.draw(canvas);
 				}finally{
 					canvas.restoreToCount(savedcount);
 				}
 			}
 		}
 	}
-	*/
 
 	@Override
 	public EdLayoutParam adjustParam(EdView view,EdLayoutParam param){
@@ -151,66 +212,25 @@ public class SongsListView extends EdAbstractViewGroup
 	protected void layoutVertical(float left,float top,float right,float bottom){
 		final int count=getChildrenCount();
 
-		final float parentLeft=getPaddingLeft();
 		final float parentTop=getPaddingTop();
-		final float parentBottom=bottom-top-getPaddingBottom();
 		final float parentRight=right-left-getPaddingRight();
+		
 		float heightUsed=parentTop+startOffset-scrollRate;
-		final int gravity=getGravity();
-		if(enableGravityCenter)if(gravity==Gravity.Center){
-				final float cx=(parentLeft+parentRight)/2;
-				heightUsed=(parentTop+parentBottom-latestUsedSpace)/2;
-				for(int i=0;i<count;i++){
-					final EdView view=getChildAt(i);
-					if(view.getVisiblility()!=VISIBILITY_GONE){
-						final MarginLayoutParam param=(MarginLayoutParam)view.getLayoutParam();
-						final float dx=param.xoffset+cx-view.getMeasuredWidth()/2+param.marginLeft;
-						final float dy=param.yoffset+heightUsed+param.marginTop;
-						view.layout(dx,dy,view.getMeasuredWidth()+dx,view.getMeasuredHeight()+dy);
-						heightUsed+=param.getMarginVertical()+view.getMeasuredHeight()+childoffset;
-					}
-				}
-				return;
+		
+		for(int i=0;i<count;i++){
+			final EdView view=getChildAt(i);
+			if(view.getVisiblility()!=VISIBILITY_GONE){
+				final MarginLayoutParam param=(MarginLayoutParam)view.getLayoutParam();
+				
+				final float dy=param.yoffset+heightUsed+param.marginTop;
+				final float yp=(dy+view.getMeasuredHeight()/2)/(bottom-top);
+				final float dx=(1-FMath.sin(yp*FMath.Pi)*0.9f)*(right-left)*0.3f;
+				
+				//FMath.sin(yp*FMath.Pi)*(right-left)*0.3f*0+param.xoffset+parentRight-param.marginRight;
+				
+				view.layout(dx,dy,view.getMeasuredWidth()+dx,view.getMeasuredHeight()+dy);
+				heightUsed+=param.getMarginVertical()+view.getMeasuredHeight()+childoffset;
 			}
-		switch(gravity&Gravity.MASK_HORIZON){
-			case Gravity.RIGHT:{
-					for(int i=0;i<count;i++){
-						final EdView view=getChildAt(i);
-						if(view.getVisiblility()!=VISIBILITY_GONE){
-							final MarginLayoutParam param=(MarginLayoutParam)view.getLayoutParam();
-							final float dx=param.xoffset+parentRight-param.marginRight;
-							final float dy=param.yoffset+heightUsed+param.marginTop;
-							view.layout(dx,dy,view.getMeasuredWidth()+dx,view.getMeasuredHeight()+dy);
-							heightUsed+=param.getMarginVertical()+view.getMeasuredHeight()+childoffset;
-						}
-					}
-				}break;
-			case Gravity.CENTER_HORIZON:{
-					final float cx=(parentLeft+parentRight)/2;
-					for(int i=0;i<count;i++){
-						final EdView view=getChildAt(i);
-						if(view.getVisiblility()!=VISIBILITY_GONE){
-							final MarginLayoutParam param=(MarginLayoutParam)view.getLayoutParam();
-							final float dx=param.xoffset+cx-view.getMeasuredWidth()/2+param.marginLeft;
-							final float dy=param.yoffset+heightUsed+param.marginTop;
-							view.layout(dx,dy,view.getMeasuredWidth()+dx,view.getMeasuredHeight()+dy);
-							heightUsed+=param.getMarginVertical()+view.getMeasuredHeight()+childoffset;
-						}
-					}
-				}break;
-			case Gravity.LEFT:
-			default:{
-					for(int i=0;i<count;i++){
-						final EdView view=getChildAt(i);
-						if(view.getVisiblility()!=VISIBILITY_GONE){
-							final MarginLayoutParam param=(MarginLayoutParam)view.getLayoutParam();
-							final float dx=param.xoffset+parentLeft+param.marginLeft;
-							final float dy=param.yoffset+heightUsed+param.marginTop;
-							view.layout(dx,dy,view.getMeasuredWidth()+dx,view.getMeasuredHeight()+dy);
-							heightUsed+=param.getMarginVertical()+view.getMeasuredHeight()+childoffset;
-						}
-					}
-				}break;
 		}
 	}
 
@@ -221,6 +241,9 @@ public class SongsListView extends EdAbstractViewGroup
 		layoutVertical(left,top,right,bottom);
 	}
 
+	/**
+	 *默认内容在y方向上没有
+	 */
 	protected void measureVertical(long widthSpec,long heightSpec){
 		final int count=getChildrenCount();
 		float heightUsed=0;
@@ -276,5 +299,11 @@ public class SongsListView extends EdAbstractViewGroup
 	protected void onMeasure(long widthSpec,long heightSpec){
 		// TODO: Implement this method
 		measureVertical(widthSpec,heightSpec);
+	}
+	
+	
+	public class Entry{
+		EdView view;
+		int dataIndex;
 	}
 }

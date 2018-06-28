@@ -14,6 +14,8 @@ import com.edplan.framework.test.performance.ui.FrameRenderMonitor;
 
 public class RenderStatePopupView extends PopupView
 {
+	private static RenderStatePopupView instance;
+	
 	TextView text;
 	
 	public RenderStatePopupView(MContext c){
@@ -52,8 +54,16 @@ public class RenderStatePopupView extends PopupView
 		setHideWhenBackpress(false);
 	}
 
+	public static void setInstance(RenderStatePopupView _instance){
+		instance=_instance;
+	}
+
+	public static RenderStatePopupView getInstance(){
+		return instance;
+	}
+
 	@Override
-	public void onDraw(BaseCanvas canvas){
+	protected void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		super.onDraw(canvas);
 		//double frameTime=getContext().getFrameDeltaTime();

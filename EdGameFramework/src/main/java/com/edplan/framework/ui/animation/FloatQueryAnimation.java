@@ -1,14 +1,14 @@
 package com.edplan.framework.ui.animation;
 
 import com.edplan.framework.interfaces.FloatInvokeSetter;
-import com.edplan.framework.interfaces.InvokeSetter;
-import com.edplan.framework.ui.animation.interpolate.RawFloatInterpolator;
-import com.edplan.framework.ui.animation.interpolate.ValueInterpolator;
-import com.edplan.framework.ui.animation.precise.BasePreciseAnimation;
-import java.util.ArrayList;
-import java.util.List;
 import com.edplan.framework.interfaces.FloatReflectionInvokeSetter;
 import com.edplan.framework.ui.animation.interfaces.IHasAlpha;
+import com.edplan.framework.ui.animation.interpolate.RawFloatInterpolator;
+import com.edplan.framework.ui.animation.precise.BasePreciseAnimation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FloatQueryAnimation<T> extends BasePreciseAnimation
 {
@@ -238,4 +238,16 @@ public class FloatQueryAnimation<T> extends BasePreciseAnimation
 		return alpha(t).transform(t.getAlpha(),0,Easing.None).transform(a,duration,e);
 	}
 
+	public static FloatQueryAnimation queryTo(Object target,String name,float endValue,double duration,Easing easing){
+		FloatQueryAnimation anim=new FloatQueryAnimation<Object>(target,name);
+		try{
+			Method get=target.getClass().getMethod(FloatReflectionInvokeSetter.makeGetMethodName(name));
+			float s=get.invoke(target);
+			anim.transform(s,0,Easing.None);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		anim.transform(endValue,duration,easing);
+		return anim;
+	}
 }

@@ -6,8 +6,6 @@ import com.edplan.framework.MContext;
 
 public class NsoCore
 {
-	private static NsoCore instance;
-	
 	private MContext context;
 	
 	private NsoConfig config;

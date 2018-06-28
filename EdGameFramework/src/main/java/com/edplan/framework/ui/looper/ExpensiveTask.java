@@ -15,6 +15,8 @@ public class ExpensiveTask<T>
 	
 	private T data;
 	
+	public Object lock=new Object();
+	
 	public ExpensiveTask(MContext c,Runnable task){
 		this.task=new RunnableWrappedTask<T>(task);
 		this.context=c;
@@ -43,9 +45,9 @@ public class ExpensiveTask<T>
 	
 	public void startAndWait() throws InterruptedException{
 		needNotify=true;
-		synchronized(this){
+		synchronized(lock){
 			post();
-			wait();
+			lock.wait();
 		}
 	}
 	

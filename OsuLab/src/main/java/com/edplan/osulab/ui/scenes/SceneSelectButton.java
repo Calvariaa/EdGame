@@ -196,7 +196,7 @@ public class SceneSelectButton extends LinearLayout implements Hideable
 	}
 
 	@Override
-	public void onDraw(BaseCanvas canvas){
+	protected void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		
 		//widthAddition=isPressed()?maxWidthAddition:0;

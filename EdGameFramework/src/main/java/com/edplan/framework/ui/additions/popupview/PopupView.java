@@ -56,12 +56,14 @@ public class PopupView extends RelativeContainer implements Hideable
 	public final void show(){
 		// TODO: Implement this method
 		getContext().getViewRoot().getPopupViewLayer().register(this);
+		setVisiblility(VISIBILITY_SHOW);
+		invalidateDraw();
 		onShow();
 	}
 
 	@Override
 	public boolean isHidden(){
 		// TODO: Implement this method
-		return getVisiblility()==VISIBILITY_GONE;
+		return getVisiblility()==VISIBILITY_GONE||getParent()==null;
 	}
 }

@@ -1,4 +1,5 @@
 package com.edplan.framework.ui.layout;
+import com.edplan.framework.ui.ViewConfiguration;
 
 public class Param{
 	public static final int SHIFT_SIZE=32;
@@ -23,7 +24,7 @@ public class Param{
 	}
 	
 	public static long makeUpDP(float dp){
-		return makeupParam(dp,DP);
+		return makeupParam(ViewConfiguration.dp(dp),NONE);
 	}
 	
 	public static long makeupScaleOfParentParam(float s){

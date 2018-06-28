@@ -101,6 +101,7 @@ public abstract class MainApplication implements MainCallBack
 		AResource res=mContext.getAssetResource().subResource("font");
 		try{
 			long t=Framework.absoluteTimeMillion();
+			System.out.println("start load font");
 			{
 				BMFont font=BMFont.loadFont(
 					mContext,
@@ -111,6 +112,7 @@ public abstract class MainApplication implements MainCallBack
 				BMFont.addFont(font,font.getInfo().face);
 				BMFont.setDefaultFont(font);
 			}
+			
 			{
 				BMFont font=BMFont.loadFont(
 					mContext,
@@ -118,6 +120,7 @@ public abstract class MainApplication implements MainCallBack
 					"Exo2.0-Regular.fnt");
 				font.setErrCharacter(BMFont.CHAR_NOT_FOUND);
 				BMFont.addFont(font,font.getInfo().face);
+				BMFont.setDefaultFont(font);
 			}
 			{
 				BMFont font=BMFont.loadFont(

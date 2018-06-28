@@ -13,6 +13,7 @@ import com.edplan.framework.ui.text.font.bmfont.BMFont;
 import com.edplan.osulab.ui.BackQuery;
 import java.io.File;
 import java.io.IOException;
+import com.edplan.framework.Framework;
 
 public class LabActivity extends EdMainActivity 
 {
@@ -64,6 +65,7 @@ public class LabActivity extends EdMainActivity
 		@Override
 		public void onGLCreate(){
 			// TODO: Implement this method
+			double s=Framework.relativePreciseTimeMillion();
 			super.onGLCreate();
 			try{
 				{
@@ -84,6 +86,7 @@ public class LabActivity extends EdMainActivity
 				e.printStackTrace();
 				mContext.toast("读取字体osuFont失败："+e.getMessage());
 			}
+			System.out.println("load font cost "+(int)(Framework.relativePreciseTimeMillion()-s)+"ms");
 		}
 	}
 }

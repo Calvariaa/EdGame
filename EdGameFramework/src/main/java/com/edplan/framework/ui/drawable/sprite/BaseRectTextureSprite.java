@@ -5,10 +5,11 @@ import com.edplan.framework.math.IQuad;
 import java.nio.FloatBuffer;
 import com.edplan.framework.graphics.opengl.buffer.BufferUtil;
 import com.edplan.framework.graphics.opengl.BaseCanvas;
+import com.edplan.framework.graphics.opengl.objs.GLTexture;
 
 public abstract class BaseRectTextureSprite<S extends TextureSpriteShader> extends RectSprite<S>
 {
-	private AbstractTexture texture;
+	private AbstractTexture texture=GLTexture.White;
 	
 	private FloatBuffer textureCoordBuffer;
 	

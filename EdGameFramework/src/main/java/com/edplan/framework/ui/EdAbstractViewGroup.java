@@ -82,6 +82,13 @@ public abstract class EdAbstractViewGroup extends EdView
 		return paddingBottom;
 	}
 	
+	public void setPadding(float p){
+		paddingTop=p;
+		paddingRight=p;
+		paddingBottom=p;
+		paddingLeft=p;
+	}
+	
 	public EdLayoutParam getDefaultParam(EdView view){
 		// TODO: Implement this method
 		final EdLayoutParam param=view.getLayoutParam();
@@ -217,7 +224,7 @@ public abstract class EdAbstractViewGroup extends EdView
 					try{
 						canvas.translate(view.getLeft(),view.getTop());
 						canvas.clip(view.getWidth(),view.getHeight());
-						view.onDraw(canvas);
+						view.draw(canvas);
 					}finally{
 						canvas.restoreToCount(savedcount);
 					}
@@ -231,7 +238,7 @@ public abstract class EdAbstractViewGroup extends EdView
 					try{
 						canvas.translate(view.getLeft(),view.getTop());
 						canvas.clip(view.getWidth(),view.getHeight());
-						view.onDraw(canvas);
+						view.draw(canvas);
 					}finally{
 						canvas.restoreToCount(savedcount);
 					}
@@ -242,7 +249,7 @@ public abstract class EdAbstractViewGroup extends EdView
 	}
 
 	@Override
-	public void onDraw(BaseCanvas canvas){
+	protected void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		drawBackground(canvas);
 		dispatchDraw(canvas);

@@ -28,6 +28,8 @@ import com.edplan.framework.ui.widget.component.Hideable;
 import com.edplan.osulab.LabGame;
 import com.edplan.osulab.ui.OptionList;
 import com.edplan.osulab.ui.pieces.TextButton;
+import com.edplan.osulab.ui.pieces.SongPanel;
+import com.edplan.osulab.ui.popup.PopupToast;
 
 public class Toolbar extends RelativeContainer implements Hideable
 {
@@ -130,7 +132,27 @@ public class Toolbar extends RelativeContainer implements Hideable
 				ToolBarButton msgShowButton=new ToolBarButton(c);
 				msgShowButton.setGravity(Gravity.Center);
 				msgShowButton.setIcon(FontAwesome.fa_music.getTexture());
-				
+				msgShowButton.setOnClickListener(new OnClickListener(){
+						@Override
+						public void onClick(EdView view){
+							// TODO: Implement this method
+							SongPanel panel=SongPanel.getInstance();
+							if(panel==null){
+								panel=new SongPanel(getContext());
+								SongPanel.setInstance(panel);
+								panel.show();
+								//PopupToast.toast(getContext(),"create show").show();
+							}else{
+								//PopupToast.toast(getContext(),""+panel.isHidden()).show();
+								if(panel.isHidden()){
+									panel.show();
+								}else{
+									panel.hide();
+									//SongPanel.setInstance(null);
+								}
+							}
+						}
+					});
 				MarginLayoutParam lparam=new MarginLayoutParam();
 				lparam.width=Param.makeUpDP(50);
 				lparam.height=Param.MODE_MATCH_PARENT;
@@ -354,7 +376,7 @@ public class Toolbar extends RelativeContainer implements Hideable
 	}
 
 	@Override
-	public void onDraw(BaseCanvas canvas){
+	protected void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		super.onDraw(canvas);
 		
@@ -379,7 +401,7 @@ public class Toolbar extends RelativeContainer implements Hideable
 		}
 
 		@Override
-		public void onDraw(BaseCanvas canvas){
+		protected void onDraw(BaseCanvas canvas){
 			// TODO: Implement this method
 			super.onDraw(canvas);
 			shadowSprite.setArea(RectF.xywh(0,canvas.getHeight(),canvas.getWidth(),ViewConfiguration.dp(shadowHeight)));

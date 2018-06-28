@@ -55,7 +55,7 @@ public class TestButton extends EdView
 	}
 
 	@Override
-	public void onDraw(BaseCanvas canvas){
+	protected void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		GLPaint paint=new GLPaint();
 		if(isPressed()){

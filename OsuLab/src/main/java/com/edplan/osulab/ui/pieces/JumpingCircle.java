@@ -390,7 +390,9 @@ public class JumpingCircle extends EdView
 			.transform(0,0,Easing.None)
 			.transform(1,300,Easing.InQuad));
 		getContext().getViewRoot().getRootContainer().setAnimation(builder2.buildAndStart());
-		(new RenderStatePopupView(getContext())).show();
+		RenderStatePopupView r=new RenderStatePopupView(getContext());
+		r.show();
+		RenderStatePopupView.setInstance(r);
 	}
 
 	@Override
@@ -431,7 +433,7 @@ public class JumpingCircle extends EdView
 	public static double shadowClock;
 	public static float glowProgress;
 	@Override
-	public void onDraw(BaseCanvas canvas){
+	protected void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		super.onDraw(canvas);
 		

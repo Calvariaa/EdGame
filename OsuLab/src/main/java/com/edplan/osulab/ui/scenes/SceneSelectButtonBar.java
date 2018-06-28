@@ -438,7 +438,7 @@ public class SceneSelectButtonBar extends RelativeContainer implements Hideable,
 	}
 
 	@Override
-	public void onDraw(BaseCanvas canvas){
+	protected void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		
 		float shadowScale=0.5f+JumpingCircle.glowProgress/2;

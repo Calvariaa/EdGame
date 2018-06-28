@@ -45,7 +45,7 @@ public class TextureView extends EdView
 	}
 
 	@Override
-	public void onDraw(BaseCanvas canvas){
+	protected void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		super.onDraw(canvas);
 		if(sprite.getTexture()!=null){

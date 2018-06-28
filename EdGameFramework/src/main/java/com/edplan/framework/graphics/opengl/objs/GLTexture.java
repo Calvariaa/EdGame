@@ -27,6 +27,7 @@ import com.edplan.framework.graphics.opengl.ShaderManager;
 import android.util.Log;
 import com.edplan.framework.math.Quad;
 import com.edplan.framework.math.IQuad;
+import com.edplan.framework.Framework;
 
 public class GLTexture extends AbstractTexture
 {
@@ -231,7 +232,10 @@ public class GLTexture extends AbstractTexture
 	}
 	
 	public static GLTexture decodeStream(InputStream in){
-		return create(BitmapFactory.decodeStream(in,null,DEF_CREATE_OPTIONS),true);
+		//double time=Framework.relativePreciseTimeMillion();
+		Bitmap bmp=BitmapFactory.decodeStream(in,null,DEF_CREATE_OPTIONS);
+		//System.out.println("decode bitmap cost "+(int)(Framework.relativePreciseTimeMillion()-time)+"ms");
+		return create(bmp,true);
 	}
 	
 	public static GLTexture decodeStream(InputStream in,boolean ifClose) throws IOException{

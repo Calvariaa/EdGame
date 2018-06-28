@@ -30,15 +30,9 @@ public class TextView extends EdView
 	
 	private int textWidth;
 	
-	private TextBlock[] blocks;
-	
 	private String[] breaked;
 	
-	private TextBuffer buffer;
-	
-	private Color4 textColor=Color4.ONE.copyNew();
-	
-	private float alpha=1;
+	private GLPaint paint=new GLPaint();
 	
 	private TextPrinter printer;
 	
@@ -47,6 +41,12 @@ public class TextView extends EdView
 	public TextView(MContext c){
 		super(c);
 		font=BMFont.getDefaultFont();
+		//setDebug(true);
+	}
+
+	public void setTextColor(Color4 textColor){
+		this.paint.setMixColor(textColor);
+		invalidateDraw();
 	}
 
 	public void setPaddingLeft(float paddingLeft){
@@ -150,7 +150,7 @@ public class TextView extends EdView
 		prew=width;
 		pres=text;
 		
-		printer=new TextPrinter(font,0,0,new GLPaint());
+		printer=new TextPrinter(font,0,0,paint);
 		printer.setTextSize(textSize);
 		printer.addOffset(pleft,getPaddingTop());
 		printer.addOffsetRaw(0,font.getCommon().base);
@@ -259,7 +259,7 @@ public class TextView extends EdView
 	}
 
 	@Override
-	public void onDraw(BaseCanvas canvas){
+	protected void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		super.onDraw(canvas);
 		if(printer!=null)printer.draw(canvas);

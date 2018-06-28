@@ -78,7 +78,7 @@ class RoundedShadowShader extends RoundedShader{
 											"    vec4 inner=vec4(u_Rect.x+r,u_Rect.y+r,u_Rect.z-r,u_Rect.w-r);",
 											"    float v=distanceFromRoundedRect(f_Position.xy,inner,r);",
 											"    float a=clamp(v,0.0,u_ShadowWidth)/u_ShadowWidth;",
-											"    vec4 c=f_Color*getTextureColor()*smoothstep(-0.5,0.0,v)*mix(u_ShadowStart,u_ShadowEnd,a);",
+											"    vec4 c=f_Color*getTextureColor()*smoothstep(-1.0,0.0,v)*(1.0-smoothstep(0.0,1.0,v-u_ShadowWidth))*mix(u_ShadowStart,u_ShadowEnd,a);",
 											"    @include <discard>",
 											"    gl_FragColor=c;",
 											"}"

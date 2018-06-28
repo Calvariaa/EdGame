@@ -49,7 +49,7 @@ public class TestScroller extends EdView
 	}
 
 	@Override
-	public void onDraw(BaseCanvas canvas){
+	protected void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		//scroll=(ScrollContainer.MAIN_SCROLL)*getHeight()*0.999f;
 		float offset=(scroll>0)?(scroll%getHeight()):(getHeight()-((-scroll)%getHeight()));

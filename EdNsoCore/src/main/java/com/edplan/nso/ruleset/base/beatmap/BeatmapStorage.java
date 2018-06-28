@@ -4,8 +4,9 @@ import com.edplan.nso.NsoCore;
 
 public class BeatmapStorage extends NsoCoreBased
 {
+	
+	
 	public BeatmapStorage(NsoCore core){
 		super(core);
 	}
-	
 }

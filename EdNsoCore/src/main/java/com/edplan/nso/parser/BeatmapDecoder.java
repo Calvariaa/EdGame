@@ -2,7 +2,7 @@ package com.edplan.nso.parser;
 import android.util.Log;
 import com.edplan.nso.NsoBeatmapParsingException;
 import com.edplan.nso.NsoException;
-import com.edplan.nso.OsuBeatmap;
+import com.edplan.nso.NsoBeatmap;
 import com.edplan.nso.OsuFilePart;
 import com.edplan.nso.ParsingBeatmap;
 import com.edplan.nso.filepart.PartColours;
@@ -191,7 +191,7 @@ public class BeatmapDecoder extends BaseDecoder implements StringMakeable
 		}
 	}
 	
-	public OsuBeatmap makeupBeatmap(){
+	public NsoBeatmap makeupBeatmap(){
 		switch(generalParser.getPart().getMode()){
 			case ModeManager.MODE_STD:
 				StdBeatmap stdbeatmap=new StdBeatmap();
@@ -211,7 +211,7 @@ public class BeatmapDecoder extends BaseDecoder implements StringMakeable
 	}
 	
 	
-	public <T extends OsuBeatmap> T makeupBeatmap(Class<T> klass){
+	public <T extends NsoBeatmap> T makeupBeatmap(Class<T> klass){
 		return (T)makeupBeatmap();
 	}
 

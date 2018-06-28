@@ -134,7 +134,7 @@ public class MessageList extends ScrollContainer implements Hideable
 	}
 
 	@Override
-	public void onDraw(BaseCanvas canvas){
+	protected void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		super.onDraw(canvas);
 		shadowSprite.setArea(RectF.anchorOWH(Anchor.TopRight,0,0,ViewConfiguration.dp(9),canvas.getHeight()));

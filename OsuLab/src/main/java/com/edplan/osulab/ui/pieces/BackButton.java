@@ -199,7 +199,7 @@ public class BackButton extends EdView implements Hideable
 	}
 
 	@Override
-	public void onDraw(BaseCanvas canvas){
+	protected void onDraw(BaseCanvas canvas){
 		// TODO: Implement this method
 		super.onDraw(canvas);
 		float r=Math.min(canvas.getWidth(),canvas.getHeight());

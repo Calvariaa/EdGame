@@ -128,8 +128,9 @@ public class BMFont
 			LoadedPage loadedPage=new LoadedPage();
 			loadedPage.id=pageOffset+page.id;
 			try {
-				loadedPage.texture=ExpensiveTask.loadTextureSync(context,res,page.file);
-				//res.loadTexture(page.file);
+				loadedPage.texture=
+				//ExpensiveTask.loadTextureSync(context,res,page.file);
+				res.loadTexture(page.file);
 				pages.add(loadedPage);
 			} catch (IOException e) {
 				throw new BMFontException("err io: "+e.getMessage(),e);
