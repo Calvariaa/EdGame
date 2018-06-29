@@ -29,7 +29,7 @@ public class Scroller
 	
 	private float currentValue;
 	
-	private int state;
+	private int state=STATE_STOPED;
 	
 	private double[] recodeArray=new double[RECODE_ARRAY_SIZE*2];
 	private int idx;

@@ -85,7 +85,7 @@ public class SceneOverlay extends RelativeContainer implements Hideable
 	protected void updateText(){
 		String t=getContext().getViewRoot().loadViewTreeStruct();
 		text.setText(t);
-		System.out.println(t);
+		//System.out.println(t);
 	}
 
 	@Override

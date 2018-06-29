@@ -12,10 +12,13 @@ import com.edplan.osulab.ScenesName;
 import com.edplan.osulab.ui.scenes.BaseScene;
 import java.util.ArrayList;
 import java.util.List;
+import com.edplan.osulab.ui.UiConfig;
 
 public class SongsScene extends BaseScene
 {
 	private BottomBar bottomBar;
+	
+	private DetailsPanel detailsPanel;
 	
 	private SongsListView songsListView;
 	
@@ -29,8 +32,21 @@ public class SongsScene extends BaseScene
 			p.width=Param.makeUpDP(SongsListView.WIDTH_DP);
 			p.height=Param.MODE_MATCH_PARENT;
 			p.gravity=Gravity.TopRight;
+			p.marginTop=ViewConfiguration.dp(UiConfig.TOOLBAR_HEIGHT_DP);
+			p.marginBottom=ViewConfiguration.dp(BottomBar.HEIGHT_DP);
 			addView(songsListView,p);
 			hideableContent.add(songsListView);
+		}
+		{
+			detailsPanel=new DetailsPanel(c);
+			RelativeLayout.RelativeParam p=new RelativeLayout.RelativeParam();
+			p.width=Param.makeUpDP(DetailsPanel.WIDTH_DP);
+			p.height=Param.MODE_MATCH_PARENT;
+			p.marginTop=ViewConfiguration.dp(UiConfig.TOOLBAR_HEIGHT_DP);
+			p.marginBottom=ViewConfiguration.dp(BottomBar.HEIGHT_DP);
+			p.gravity=Gravity.TopLeft;
+			addView(detailsPanel,p);
+			hideableContent.add(detailsPanel);
 		}
 		{
 			bottomBar=new BottomBar(c);

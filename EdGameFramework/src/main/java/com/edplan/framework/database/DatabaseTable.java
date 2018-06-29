@@ -6,6 +6,10 @@ import com.edplan.framework.database.annotation.SQLAddition;
 import com.edplan.framework.database.annotation.TableName;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import android.database.sqlite.SQLiteDatabase;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Collections;
 
 public class DatabaseTable
 {
@@ -13,7 +17,7 @@ public class DatabaseTable
 	
 	private LineNode[] lineNodes;
 	
-	private String createTableIfExistSQL;
+	private String createTableIfNotExistSQL;
 	
 	private String updateSQL;
 	
@@ -21,10 +25,11 @@ public class DatabaseTable
 	
 	private String selectLastInsertRowid;
 	
+	private SQLiteDatabase database;
 	
-	
-	
-	
+	public DatabaseTable(SQLiteDatabase db){
+		this.database=db;
+	}
 	
 	public void initial(Class<? extends DatabaseLine> klass){
 		tableName=klass.getAnnotation(TableName.class).value();
@@ -38,9 +43,10 @@ public class DatabaseTable
 			if(field.isAnnotationPresent(DBIgnore.class)){
 				continue;
 			}
+			if(!field.isAnnotationPresent(DatabaseIndex.class))continue;
+			final int index=field.getAnnotation(DatabaseIndex.class).value();
 			final Class dclass=field.getType();
 			final DataType dataType;
-			System.out.println("@"+field.getName()+":"+dclass);
 			if(dclass.equals(int.class)||dclass.equals(Integer.class)){
 				dataType=DataType.Int;
 			}else if(dclass.equals(long.class)){
@@ -54,12 +60,25 @@ public class DatabaseTable
 				continue;
 			}
 			final LineNode n=new LineNode();
+			n.index=index;
 			n.isPrimaryKeyAutoIncrement=field.isAnnotationPresent(PrimaryKeyAutoIncrement.class);
 			hasPrimaryKey|=n.isPrimaryKeyAutoIncrement;
 			n.field=field;
 			n.type=dataType;
 			n.name=field.getName();
 			nodes.add(n);
+			
+		}
+		
+		Collections.sort(nodes,new Comparator<LineNode>(){
+				@Override
+				public int compare(DatabaseTable.LineNode p1,DatabaseTable.LineNode p2){
+					// TODO: Implement this method
+					return p1.index-p2.index;
+				}
+			});
+			
+		for(final LineNode n:nodes){
 			checkedFields++;
 			if(checkedFields!=1){
 				createTable.append(',');
@@ -70,17 +89,18 @@ public class DatabaseTable
 				hasAppendValue=true;
 			}
 			createTable.append(String.format("%s %s",n.name,n.type.SQLType));
-			if(field.isAnnotationPresent(PrimaryKeyAutoIncrement.class)){
+			if(n.field.isAnnotationPresent(PrimaryKeyAutoIncrement.class)){
 				createTable.append(" PRIMARY KEY AUTOINCREMENT");
 			}
-			if(field.isAnnotationPresent(SQLAddition.class)){
-				createTable.append(String.format(" %s",field.getAnnotation(SQLAddition.class).value()));
+			if(n.field.isAnnotationPresent(SQLAddition.class)){
+				createTable.append(String.format(" %s",n.field.getAnnotation(SQLAddition.class).value()));
 			}
-			selectLastInsertRowid=String.format("select last_insert_rowid() from %s",tableName);
 		}
 		
+		selectLastInsertRowid=String.format("select last_insert_rowid() from %s",tableName);
+		
 		createTable.append(')');
-		createTableIfExistSQL=createTable.toString();
+		createTableIfNotExistSQL=createTable.toString();
 		
 		insert.append(") values(");
 		int values=checkedFields+(hasPrimaryKey?-1:0);
@@ -92,14 +112,16 @@ public class DatabaseTable
 		insertSQL=insert.toString();
 		
 		
+		database.execSQL(createTableIfNotExistSQL);
 		
 		System.out.println(String.format("Load table Reflections @%s",tableName));
-		System.out.println(String.format(" createSQLb:%s",createTableIfExistSQL));
+		System.out.println(String.format(" createSQL:%s",createTableIfNotExistSQL));
 		System.out.println(String.format("     insert:%s",insertSQL));
 		System.out.println(String.format("     update:%s",updateSQL));
 	}
 	
 	public class LineNode{
+		public int index;
 		public boolean isPrimaryKeyAutoIncrement;
 		public String name;
 		public DataType type;

@@ -18,6 +18,7 @@ import com.edplan.osulab.ui.popup.RenderStatePopupView;
 import com.edplan.osulab.ui.scenes.SceneSelectButtonBar;
 import com.edplan.osulab.ui.scenes.Scenes;
 import com.edplan.osulab.ui.toolbar.Toolbar;
+import com.edplan.nso.NsoCore;
 
 /**
  *全局的管理类
@@ -45,6 +46,16 @@ public class LabGame
 	private BackButton backButton;
 	
 	private MContext context;
+	
+	private NsoCore nsoCore;
+
+	public void setNsoCore(NsoCore nsoCore){
+		this.nsoCore=nsoCore;
+	}
+
+	public NsoCore getNsoCore(){
+		return nsoCore;
+	}
 
 	public void setSceneSelectButtonBar(SceneSelectButtonBar sceneSelectButtonBar){
 		this.sceneSelectButtonBar=sceneSelectButtonBar;
@@ -147,8 +158,15 @@ public class LabGame
 		jumpingCircle.exitAnimation();
 	}
 	
+	private void initialNsoCore(MContext c){
+		nsoCore=new NsoCore(c,null);
+	}
+	
 	public EdView createContentView(MContext c){
 		this.context=c;
+		
+		initialNsoCore(c);
+		
 		RelativeLayout mainLayout=new RelativeLayout(c);
 		RelativeLayout.RelativeParam mp=new RelativeLayout.RelativeParam();
 		mp.gravity=Gravity.TopLeft;

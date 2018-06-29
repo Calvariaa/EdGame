@@ -1,10 +1,9 @@
-package com.edplan.nso.ruleset.base;
-import com.edplan.nso.NsoCore;
+package com.edplan.nso;
 
 public class NsoCoreBased
 {
 	private NsoCore core;
-	
+
 	public NsoCoreBased(NsoCore core){
 		this.core=core;
 	}

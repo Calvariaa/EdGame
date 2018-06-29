@@ -22,6 +22,7 @@ import com.edplan.framework.ui.layout.Param;
 import com.edplan.framework.ui.widget.component.Hideable;
 import com.edplan.framework.ui.widget.component.Scroller;
 import com.edplan.osulab.ui.pieces.SongPanel;
+import com.edplan.framework.ui.widget.RelativeContainer;
 
 public class SongsListView extends EdContainer implements Hideable
 {
@@ -41,6 +42,8 @@ public class SongsListView extends EdContainer implements Hideable
 	
 	private int showItemCount=0;
 
+	private float anchorY=0;
+	
 	public SongsListView(MContext c){
 		super(c);
 		setScrollableFlag(ScrollEvent.DIRECTION_VERTICAL);
@@ -49,7 +52,7 @@ public class SongsListView extends EdContainer implements Hideable
 		
 		for(int i=0;i<20;i++){
 			MarginLayoutParam p=new MarginLayoutParam();
-			EdView view=new EdView(c);
+			RelativeContainer view=new RelativeContainer(c);
 			
 			RoundedRectDrawable bg=new RoundedRectDrawable(c);
 			bg.setColor(Color4.rgba(0,0,0,0.5f));

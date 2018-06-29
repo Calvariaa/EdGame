@@ -38,8 +38,8 @@ public class LabActivity extends EdMainActivity
 		app=new LabApplication();
 		app.setUpActivity(this);
 		
-		DatabaseTable table=new DatabaseTable();
-		table.initial(TestDBLine.class);
+		//DatabaseTable table=new DatabaseTable();
+		//table.initial(TestDBLine.class);
 	}
 	
 	public class LabApplication extends MainApplication
