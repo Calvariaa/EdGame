@@ -8,6 +8,10 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/EdGameFramework" />
+            <option value="$PROJECT_DIR$/EdNsoCore" />
+            <option value="$PROJECT_DIR$/OsbPlayer" />
+            <option value="$PROJECT_DIR$/OsuLab" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>

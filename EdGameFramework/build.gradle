@@ -1,11 +1,10 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.1.0"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
-        applicationId "com.edplan.framework"
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 1

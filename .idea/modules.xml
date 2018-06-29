@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MyGame.iml" filepath="$PROJECT_DIR$/MyGame.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EdGame-master_workplace_widget2.iml" filepath="$PROJECT_DIR$/EdGame-master_workplace_widget2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EdGameFramework/EdGameFramework.iml" filepath="$PROJECT_DIR$/EdGameFramework/EdGameFramework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EdNsoCore/EdNsoCore.iml" filepath="$PROJECT_DIR$/EdNsoCore/EdNsoCore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OsbPlayer/OsbPlayer.iml" filepath="$PROJECT_DIR$/OsbPlayer/OsbPlayer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OsuLab/OsuLab.iml" filepath="$PROJECT_DIR$/OsuLab/OsuLab.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

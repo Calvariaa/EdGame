@@ -236,16 +236,18 @@ public class ViewRoot implements MainCallBack
 			sb.append(" fresh=").append(((EdContainer)c).isNeedRefresh());
 		}
 	}
-	
+
+	public static final Comparator<EdMotionEvent> COMP=new Comparator<EdMotionEvent>(){
+		@Override
+		public int compare(EdMotionEvent p1,EdMotionEvent p2){
+			// TODO: Implement this method
+			return (int)Math.signum(p1.time-p2.time);
+		}
+	};
+
 	public class InputManager
 	{
-		public static final Comparator<EdMotionEvent> COMP=new Comparator<EdMotionEvent>(){
-			@Override
-			public int compare(EdMotionEvent p1,EdMotionEvent p2){
-				// TODO: Implement this method
-				return (int)Math.signum(p1.time-p2.time);
-			}
-		};
+
 		
 		public int focusedPointer=-1;
 

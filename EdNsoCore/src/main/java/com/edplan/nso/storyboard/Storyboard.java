@@ -66,7 +66,7 @@ public class Storyboard
 			if(s.length()==0)return null;
 			char f=s.charAt(0);
 			if(f>='0'&&f<='6'){
-				return EventObjType.$VALUES[f-'0'];
+				return EventObjType.values()[f-'0'];
 			}else{
 				return EventObjType.valueOf(s);
 			}
@@ -95,7 +95,7 @@ public class Storyboard
 			if(s.length()==0)return null;
 			char f=s.charAt(0);
 			if(f>='0'&&f<='3'){
-				return Layer.$VALUES[f-'0'];
+				return Layer.values()[f-'0'];
 			}else{
 				return Layer.valueOf(s);
 			}

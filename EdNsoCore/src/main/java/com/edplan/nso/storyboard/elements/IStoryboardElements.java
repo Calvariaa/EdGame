@@ -9,7 +9,7 @@ public interface IStoryboardElements
 	
 	public String getPath();
 	
-	public String[] getTexturePaths()
+	public String[] getTexturePaths();
 	
 	public BaseDrawableSprite createDrawable(PlayingStoryboard storyboard);
 	

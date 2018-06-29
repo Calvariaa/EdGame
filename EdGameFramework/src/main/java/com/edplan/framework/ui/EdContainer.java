@@ -11,7 +11,6 @@ import com.edplan.framework.ui.animation.interfaces.IHasAlpha;
 import com.edplan.framework.ui.drawable.sprite.RoundedRectSprite;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
 import com.edplan.framework.ui.drawable.sprite.RoundedShadowSprite;
-import com.edplan.framework.ui.drawable.sprite.RoundedShadowShader;
 import com.edplan.framework.graphics.opengl.BlendType;
 
 

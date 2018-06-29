@@ -9,16 +9,12 @@ import com.edplan.framework.ui.animation.FloatQueryAnimation;
 import com.edplan.framework.ui.animation.callback.OnFinishListener;
 import com.edplan.framework.ui.drawable.ColorDrawable;
 import com.edplan.framework.ui.widget.RelativeContainer;
-import com.edplan.osulab.ui.toolbar.Toolbar;
-import com.edplan.framework.ui.widget.TestButton;
 import com.edplan.framework.ui.widget.RelativeLayout;
 import com.edplan.framework.ui.layout.Param;
 import com.edplan.framework.ui.layout.Gravity;
 import com.edplan.framework.ui.EdView;
 import com.edplan.framework.ui.widget.component.Hideable;
 import com.edplan.framework.ui.widget.TextView;
-import com.edplan.framework.ui.drawable.sprite.CircleShader;
-import com.edplan.framework.graphics.opengl.fast.FastShader;
 import com.edplan.framework.ui.widget.ScrollContainer;
 import com.edplan.framework.ui.layout.Orientation;
 import com.edplan.osulab.ui.pieces.LabButton;
@@ -85,7 +81,7 @@ public class SceneOverlay extends RelativeContainer implements Hideable
 	protected void updateText(){
 		String t=getContext().getViewRoot().loadViewTreeStruct();
 		text.setText(t);
-		//System.out.println(t);
+		System.out.println(t);
 	}
 
 	@Override

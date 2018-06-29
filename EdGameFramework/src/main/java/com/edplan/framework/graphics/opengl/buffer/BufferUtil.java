@@ -50,19 +50,19 @@ public class BufferUtil
 	}
 	
 	public static FloatBuffer createFloatBuffer(int floatCount){
-		ByteBuffer bb=ByteBuffer.allocateDirect(floatCount*Float.BYTES);
+		ByteBuffer bb=ByteBuffer.allocateDirect(floatCount*4);
 		bb.order(ByteOrder.nativeOrder());
 		return bb.asFloatBuffer();
 	}
 	
 	public static ShortBuffer createShortBuffer(int shortCount){
-		ByteBuffer bb=ByteBuffer.allocateDirect(shortCount*Short.BYTES);
+		ByteBuffer bb=ByteBuffer.allocateDirect(shortCount*2);
 		bb.order(ByteOrder.nativeOrder());
 		return bb.asShortBuffer();
 	}
 	
 	public static IntBuffer createIntBuffer(int intCount){
-		ByteBuffer bb=ByteBuffer.allocateDirect(intCount*Integer.BYTES);
+		ByteBuffer bb=ByteBuffer.allocateDirect(intCount*4);
 		bb.order(ByteOrder.nativeOrder());
 		return bb.asIntBuffer();
 	}

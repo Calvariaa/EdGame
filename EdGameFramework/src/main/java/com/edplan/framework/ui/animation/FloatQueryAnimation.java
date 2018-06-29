@@ -242,7 +242,7 @@ public class FloatQueryAnimation<T> extends BasePreciseAnimation
 		FloatQueryAnimation anim=new FloatQueryAnimation<Object>(target,name);
 		try{
 			Method get=target.getClass().getMethod(FloatReflectionInvokeSetter.makeGetMethodName(name));
-			float s=get.invoke(target);
+			float s=(float)get.invoke(target);
 			anim.transform(s,0,Easing.None);
 		}catch(Exception e){
 			e.printStackTrace();

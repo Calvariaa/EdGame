@@ -54,7 +54,7 @@ public class Scenes extends RelativeContainer implements Hideable,BackQuery.Back
 			Method isSingleInstance=klass.getMethod(STATIC_IS_SINGLE_INSTANCE,new Class[0]);
 			try{
 				name=(String)getSceneName.invoke(null,new Object[0]);
-				singleInstance=isSingleInstance.invoke(null,new Object[0]);
+				singleInstance=(boolean)isSingleInstance.invoke(null,new Object[0]);
 			}catch(Exception e){
 				e.printStackTrace();
 				return;

@@ -10,7 +10,7 @@ public class ArrayExt
 				r[i]=raw[i];
 			}
 			if(constructor!=null)for(int i=raw.length;i<targetSize;i++){
-				r[i]=constructor.createNewObject(null);
+				r[i]=constructor.createNewObject();
 			}
 			return r;
 		}else{

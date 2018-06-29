@@ -7,5 +7,5 @@ public abstract class Vec4Pointer
 		set(c.r,c.g,c.b,c.a);
 	}
 	
-	public abstract void set(float r,float g,float b,float a)
+	public abstract void set(float r,float g,float b,float a);
 }

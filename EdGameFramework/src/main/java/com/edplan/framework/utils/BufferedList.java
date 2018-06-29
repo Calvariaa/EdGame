@@ -16,7 +16,7 @@ public class BufferedList<T extends Setable> implements Iterable<T>
 		this.arrayConstructor=arrayConstructor;
 		ary=arrayConstructor.create(initialSize);
 		for(int i=0;i<initialSize;i++){
-			ary[i]=constructor.createNewObject(null);
+			ary[i]=constructor.createNewObject();
 		}
 	}
 	
@@ -29,7 +29,7 @@ public class BufferedList<T extends Setable> implements Iterable<T>
 			ary[i]=pre[i];
 		}
 		for(int i=prel;i<size;i++){
-			ary[i]=constructor.createNewObject(null);
+			ary[i]=constructor.createNewObject();
 		}
 	}
 

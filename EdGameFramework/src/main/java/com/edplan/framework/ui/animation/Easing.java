@@ -43,10 +43,10 @@ public enum Easing
 	public final int id;
 	
 	Easing(){
-		id=$ordinal;
+		id=ordinal();
 	}
 	
 	public static Easing getEasing(int ord){
-		return $VALUES[ord];
+		return values()[ord];
 	}
 }
