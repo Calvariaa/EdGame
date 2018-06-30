@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 public abstract class AResource
 {
-	
 	public BufferedReader openBufferedReader(String path) throws IOException{
 		InputStream in=openInput(path);
 		if(in==null)return null;
