@@ -47,7 +47,7 @@ public abstract class EdAbstractViewGroup extends EdView
 	
 	public void setChildrenWrapper(ChildrenWrapper w){
 		childrenWrapper=w;
-		invalidate(FLAG_INVALIDATE_LAYOUT|FLAG_INVALIDATE_MEASURE);
+		invalidate();
 	}
 
 	@Override

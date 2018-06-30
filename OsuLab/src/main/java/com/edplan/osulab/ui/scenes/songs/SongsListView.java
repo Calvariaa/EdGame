@@ -23,6 +23,8 @@ import com.edplan.framework.ui.widget.component.Hideable;
 import com.edplan.framework.ui.widget.component.Scroller;
 import com.edplan.osulab.ui.pieces.SongPanel;
 import com.edplan.framework.ui.widget.RelativeContainer;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class SongsListView extends EdContainer implements Hideable
 {
@@ -41,13 +43,17 @@ public class SongsListView extends EdContainer implements Hideable
 	private int startIndex=0;
 	
 	private int showItemCount=0;
-
-	private float anchorY=0;
+	
+	private ArrayList<EdView> contents=new ArrayList<EdView>();
+	
+	private LinkedList<EdView> showContent=new LinkedList<EdView>();
 	
 	public SongsListView(MContext c){
 		super(c);
 		setScrollableFlag(ScrollEvent.DIRECTION_VERTICAL);
 		//setDebug(true);
+		
+		scroller.setEnableOverscroll(false);
 		
 		
 		for(int i=0;i<20;i++){
@@ -61,8 +67,11 @@ public class SongsListView extends EdContainer implements Hideable
 			
 			p.width=Param.makeUpDP(WIDTH_DP);
 			p.height=Param.makeUpDP(WIDTH_DP*0.15f);
-			
+			view.setLayoutParam(p);
+			contents.add(view);
+			/*
 			addView(view,p);
+			*/
 		}
 	}
 
@@ -71,7 +80,7 @@ public class SongsListView extends EdContainer implements Hideable
 			public void set(Float t){
 				// TODO: Implement this method
 				scrollRate=t;
-				invalidate(FLAG_INVALIDATE_LAYOUT);
+				invalidate();
 				invalidateDraw();
 			}
 		});
@@ -244,9 +253,6 @@ public class SongsListView extends EdContainer implements Hideable
 		layoutVertical(left,top,right,bottom);
 	}
 
-	/**
-	 *默认内容在y方向上没有
-	 */
 	protected void measureVertical(long widthSpec,long heightSpec){
 		final int count=getChildrenCount();
 		float heightUsed=0;

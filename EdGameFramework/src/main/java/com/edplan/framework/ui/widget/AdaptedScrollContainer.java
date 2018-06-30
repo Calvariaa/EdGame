@@ -40,7 +40,7 @@ public class AdaptedScrollContainer extends EdContainer
 				//if(Math.abs(scrollRate-t)>0.00000001)
 				//if(!t.equals(scrollRate)){
 				scrollRate=t;
-				invalidate(FLAG_INVALIDATE_LAYOUT);
+				invalidate();
 				//}
 			}
 		});

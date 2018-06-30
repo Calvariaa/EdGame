@@ -58,7 +58,7 @@ public class FrameContainer extends EdContainer
 			}
 			currentPage=p;
 			currentPage.onSwapShow();
-			invalidate(FLAG_INVALIDATE_MEASURE|FLAG_INVALIDATE_LAYOUT);
+			invalidate();
 			return true;
 		}else{
 			return false;

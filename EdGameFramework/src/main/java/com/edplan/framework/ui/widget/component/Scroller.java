@@ -21,6 +21,8 @@ public class Scroller
 	
 	public static final int STATE_STOPED=4;
 	
+	private boolean enableOverscroll=true;
+	
 	private Setter<Float> setter;
 	
 	private float clampWidth=200;
@@ -36,6 +38,14 @@ public class Scroller
 
 	public Scroller(Setter<Float> s){
 		setter=s;
+	}
+
+	public void setEnableOverscroll(boolean enableOverscroll){
+		this.enableOverscroll=enableOverscroll;
+	}
+
+	public boolean isEnableOverscroll(){
+		return enableOverscroll;
 	}
 	
 	public void setStartValue(float startValue){
@@ -74,23 +84,37 @@ public class Scroller
 	}
 	
 	protected void addValue(float v){
-		if(currentValue<startValue){
-			final float curoffset=startValue-currentValue;
-			if(v>0){
-				currentValue+=v*(2-edageFunction(curoffset/clampWidth));
-			}else{
-				currentValue=startValue-curoffset+v*edageFunction(curoffset/clampWidth);
+		float p=currentValue;
+		b:{
+			if(!enableOverscroll){
+				currentValue+=v;
+				currentValue=Math.min(endValue,Math.max(startValue,currentValue));
+				break b;
 			}
-		}else if(currentValue>endValue){
-			final float curoffset=currentValue-endValue;
-			if(v<0){
-				currentValue+=v*(2-edageFunction(curoffset/clampWidth));
+			if(currentValue<startValue){
+				final float curoffset=startValue-currentValue;
+				if(v>0){
+					currentValue+=v*(2-edageFunction(curoffset/clampWidth));
+				}else{
+					currentValue=startValue-curoffset+v*edageFunction(curoffset/clampWidth);
+				}
+			}else if(currentValue>endValue){
+				final float curoffset=currentValue-endValue;
+				if(v<0){
+					currentValue+=v*(2-edageFunction(curoffset/clampWidth));
+				}else{
+					currentValue=endValue+curoffset+v*edageFunction(curoffset/clampWidth);
+				}
 			}else{
-				currentValue=endValue+curoffset+v*edageFunction(curoffset/clampWidth);
+				currentValue+=v;
 			}
-		}else{
-			currentValue+=v;
 		}
+		
+		/*
+		if(state!=STATE_SCROLLING&&state!=STATE_SCROLL_BACK&&Math.abs(p-currentValue)<0.1){
+			state=STATE_STOPED;
+		}
+		*/
 	}
 	
 	public void end(){
