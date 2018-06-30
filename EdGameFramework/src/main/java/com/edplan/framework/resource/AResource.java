@@ -9,6 +9,8 @@ import java.nio.ByteBuffer;
 import java.io.BufferedInputStream;
 import java.nio.ByteOrder;
 import com.edplan.framework.graphics.opengl.objs.GLTexture;
+import com.edplan.framework.utils.StringUtil;
+
 import java.util.ArrayList;
 
 public abstract class AResource
@@ -37,18 +39,16 @@ public abstract class AResource
 	}
 	
 	public String loadText(String path) throws IOException{
-		/*
 		BufferedReader r=openBufferedReader(path);
 		if(r==null)return null;
 		StringBuilder sb=new StringBuilder();
 		String s;
 		while((s=r.readLine())!=null){
-			sb.append(s).append("\n");
+			sb.append(s).append(StringUtil.LINE_BREAK);
 		}
 		r.close();
 		return sb.toString();
-		*/
-		return new String(readFully(path));
+		//return new String(readFully(path));
 	}
 	
 	public ByteBuffer loadBuffer(String path) throws IOException{
