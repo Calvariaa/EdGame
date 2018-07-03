@@ -18,7 +18,9 @@ import com.edplan.framework.ui.inputs.ScrollEvent;
 import com.edplan.framework.ui.layout.EdLayoutParam;
 import com.edplan.framework.ui.layout.EdMeasureSpec;
 import com.edplan.framework.ui.layout.MarginLayoutParam;
+import com.edplan.framework.ui.layout.MeasureCore;
 import com.edplan.framework.ui.layout.Param;
+import com.edplan.framework.ui.widget.AbsoluteContainer;
 import com.edplan.framework.ui.widget.component.Hideable;
 import com.edplan.framework.ui.widget.component.Scroller;
 import com.edplan.osulab.ui.pieces.SongPanel;
@@ -46,7 +48,7 @@ public class SongsListView extends EdContainer implements Hideable
 	
 	private ArrayList<EdView> contents=new ArrayList<EdView>();
 	
-	private LinkedList<EdView> showContent=new LinkedList<EdView>();
+	private LinkedList<EntryContainer> showContent=new LinkedList<EntryContainer>();
 	
 	public SongsListView(MContext c){
 		super(c);
@@ -128,10 +130,6 @@ public class SongsListView extends EdContainer implements Hideable
 		return startOffset;
 	}
 
-	public float getLatestUsedSpace(){
-		return latestUsedSpace;
-	}
-
 	public void setChildoffset(float childoffset){
 		this.childoffset=childoffset;
 	}
@@ -181,7 +179,7 @@ public class SongsListView extends EdContainer implements Hideable
 	
 
 	protected float getScrollRateMax(){
-		return latestUsedSpace-getHeight()/2;
+		return getHeight()/2;
 	}
 
 	protected float getScrollRateMin(){
@@ -219,13 +217,57 @@ public class SongsListView extends EdContainer implements Hideable
 		}
 	}
 
-	private float latestUsedSpace;
+	private boolean hasPreviousEntry(EntryContainer entry){
+		return false;
+	}
+
+
+	private boolean hasNextEntry(EntryContainer entry){
+		return false;
+	}
+
+	private EntryContainer previousEntry(EntryContainer entry){
+		return null;
+	}
+
+	private EntryContainer nextEntry(EntryContainer entry){
+		return null;
+	}
+
+	private EntryContainer gainEntryAtStart(){
+		EntryContainer e=showContent.getFirst();
+		if(e==null){
+			return null;
+		}
+
+		if(e.getTop()<0)return null;
+		EntryContainer p=previousEntry(e);
+		if(p==null)return null;
+
+		showContent.addFirst(p);
+		return  p;
+	}
+
+	private EntryContainer gainEntryAtEnd(){
+		return null;
+	}
+
+	private boolean isInitialLayout=true;
+
 
 	protected void layoutVertical(float left,float top,float right,float bottom){
 		final int count=getChildrenCount();
 
 		final float parentTop=getPaddingTop();
 		final float parentRight=right-left-getPaddingRight();
+
+
+
+
+
+
+
+		/*
 		
 		float heightUsed=parentTop+startOffset-scrollRate;
 		
@@ -244,6 +286,8 @@ public class SongsListView extends EdContainer implements Hideable
 				heightUsed+=param.getMarginVertical()+view.getMeasuredHeight()+childoffset;
 			}
 		}
+
+		*/
 	}
 
 	@Override
@@ -253,31 +297,34 @@ public class SongsListView extends EdContainer implements Hideable
 		layoutVertical(left,top,right,bottom);
 	}
 
+	private void measureEntry(EntryContainer view){
+		final EdLayoutParam param=view.getLayoutParam();
+		final float marginVertical=(param instanceof MarginLayoutParam)?(((MarginLayoutParam)param).getMarginVertical()):0;
+		measureChildWithMarginIgnorePadding(view, EdMeasureSpec.makeupMeasureSpec(getWidth(),EdMeasureSpec.MODE_DEFINEDED),EdMeasureSpec.makeupMeasureSpec(getWidth(),EdMeasureSpec.MODE_NONE),getPaddingHorizon(),0);
+	}
+
 	protected void measureVertical(long widthSpec,long heightSpec){
+		//对内容的measure在layout的时候进行
+		/*
 		final int count=getChildrenCount();
-		float heightUsed=0;
 		final long adjustedSpec=EdMeasureSpec.makeupMeasureSpec(Math.max(EdMeasureSpec.getSize(heightSpec),maxChildrenSize),EdMeasureSpec.MODE_AT_MOST);
 		for(int i=0;i<count;i++){
 			final EdView view=getChildAt(i);
 			final EdLayoutParam param=view.getLayoutParam();
 			final float marginVertical=(param instanceof MarginLayoutParam)?(((MarginLayoutParam)param).getMarginVertical()):0;
 			if(view.getVisiblility()!=VISIBILITY_GONE){
-				measureChildWithMarginIgnorePadding(view,widthSpec,adjustedSpec,getPaddingHorizon(),heightUsed);
-				heightUsed+=view.getMeasuredHeight()+marginVertical;
-				if(i!=count-1)heightUsed+=childoffset;
+				measureChildWithMarginIgnorePadding(view,widthSpec,adjustedSpec,getPaddingHorizon(),0);
 			}
 		}
-		latestUsedSpace=heightUsed;
-		float xd;
+		*/
+		float xd=EdMeasureSpec.getSize(widthSpec);;
 		float yd;
+		/*
 		{
 			final int mmode=EdMeasureSpec.getMode(widthSpec);
 			switch(mmode){
 				case EdMeasureSpec.MODE_DEFINEDED:
 					xd=EdMeasureSpec.getSize(widthSpec);
-					break;
-				case EdMeasureSpec.MODE_AT_MOST:
-					xd=Math.min(EdMeasureSpec.getSize(widthSpec),getPaddingHorizon()+getDefaultMaxChildrenMeasuredWidthWithMargin());
 					break;
 				case EdMeasureSpec.MODE_NONE:
 				default:
@@ -285,18 +332,16 @@ public class SongsListView extends EdContainer implements Hideable
 					break;
 			}
 		}
+		*/
 		{
 			final int mmode=EdMeasureSpec.getMode(heightSpec);
 			switch(mmode){
 				case EdMeasureSpec.MODE_DEFINEDED:
 					yd=EdMeasureSpec.getSize(heightSpec);
 					break;
-				case EdMeasureSpec.MODE_AT_MOST:
-					yd=Math.min(EdMeasureSpec.getSize(heightSpec),getPaddingVertical()+heightUsed);
-					break;
 				case EdMeasureSpec.MODE_NONE:
 				default:
-					yd=Math.max(getPaddingHorizon()+heightUsed,EdMeasureSpec.getSize(heightSpec));
+					yd=Math.max(getPaddingHorizon(),EdMeasureSpec.getSize(heightSpec));
 					break;
 			}
 		}
@@ -311,8 +356,52 @@ public class SongsListView extends EdContainer implements Hideable
 	}
 	
 	
-	public class Entry{
-		EdView view;
-		int dataIndex;
+	public class EntryContainer extends AbsoluteContainer{
+
+		private Object adaptedObject;
+
+		private int adaptedIndex;
+
+		private boolean isSelectedItem=false;
+
+		private EdView content;
+
+		public EntryContainer(MContext c){
+			super(c);
+		}
+
+		public Object getAdaptedObject() {
+			return adaptedObject;
+		}
+
+		public void setAdaptedObject(Object adaptedObject) {
+			this.adaptedObject = adaptedObject;
+		}
+		@Override
+		public int getChildrenCount() {
+			return content==null?0:1;
+		}
+
+		@Override
+		public EdView getChildAt(int i) {
+			if(i==0)return content;
+			return null;
+		}
+
+		public EdView getContent() {
+			return content;
+		}
+
+		public void setContent(EdView content) {
+			this.content = content;
+		}
+
+		public int getAdaptedIndex() {
+			return adaptedIndex;
+		}
+
+		public void setAdaptedIndex(int adaptedIndex) {
+			this.adaptedIndex = adaptedIndex;
+		}
 	}
 }
